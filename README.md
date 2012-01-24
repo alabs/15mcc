@@ -1,7 +1,7 @@
 How to setup the environment
 ============================
 
-First of all you need to install Ruby Version Manager (RVM). You can find all that you need in this url http://beginrescueend.com/rvm/install/
+First of all you need to install [Ruby Version Manager (RVM)](http://beginrescueend.com/rvm/install/).
 
 Once you have RVM installed open a system terminal window, there we have to intall ruby interpreter as follow:
 
