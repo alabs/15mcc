@@ -5,24 +5,26 @@ First of all you need to install Ruby Version Manager (RVM). You can find all th
 
 Once you have RVM installed open a system terminal window, there we have to intall ruby interpreter as follow:
 
-  $ rvm install ruby-1.9.2-p136
-  /Users/erubion/.rvm/rubies/ruby-1.9.2-p136, this may take a while depending on your cpu(s)...
+```shell
+$ rvm install ruby-1.9.2-p136
+/Users/erubion/.rvm/rubies/ruby-1.9.2-p136, this may take a while depending on your cpu(s)...
 
-  ruby-1.9.2-p136 - #fetching 
-  ruby-1.9.2-p136 - #downloading ruby-1.9.2-p136, this may take a while depending on your connection...
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                   Dload  Upload   Total   Spent    Left  Speed
-  100 8612k  100 8612k    0     0  60863      0  0:02:24  0:02:24 --:--:-- 59281
-  ruby-1.9.2-p136 - #extracting ruby-1.9.2-p136 to /Users/erubion/.rvm/src/ruby-1.9.2-p136
-  ruby-1.9.2-p136 - #extracted to /Users/erubion/.rvm/src/ruby-1.9.2-p136
-  ruby-1.9.2-p136 - #configuring 
-  ruby-1.9.2-p136 - #compiling 
-  ruby-1.9.2-p136 - #installing 
-  ruby-1.9.2-p136 - updating #rubygems for /Users/erubion/.rvm/gems/ruby-1.9.2-p136@global
-  ruby-1.9.2-p136 - updating #rubygems for /Users/erubion/.rvm/gems/ruby-1.9.2-p136
-  ruby-1.9.2-p136 - adjusting #shebangs for (gem).
-  ruby-1.9.2-p136 - #importing default gemsets (/Users/erubion/.rvm/gemsets/)
-  Install of ruby-1.9.2-p136 - #complete 
+ruby-1.9.2-p136 - #fetching 
+ruby-1.9.2-p136 - #downloading ruby-1.9.2-p136, this may take a while depending on your connection...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 8612k  100 8612k    0     0  60863      0  0:02:24  0:02:24 --:--:-- 59281
+ruby-1.9.2-p136 - #extracting ruby-1.9.2-p136 to /Users/erubion/.rvm/src/ruby-1.9.2-p136
+ruby-1.9.2-p136 - #extracted to /Users/erubion/.rvm/src/ruby-1.9.2-p136
+ruby-1.9.2-p136 - #configuring 
+ruby-1.9.2-p136 - #compiling 
+ruby-1.9.2-p136 - #installing 
+ruby-1.9.2-p136 - updating #rubygems for /Users/erubion/.rvm/gems/ruby-1.9.2-p136@global
+ruby-1.9.2-p136 - updating #rubygems for /Users/erubion/.rvm/gems/ruby-1.9.2-p136
+ruby-1.9.2-p136 - adjusting #shebangs for (gem).
+ruby-1.9.2-p136 - #importing default gemsets (/Users/erubion/.rvm/gemsets/)
+Install of ruby-1.9.2-p136 - #complete 
+```
 
 Now we have to set this ruby version as used and default, for this we have to run next command:
 
