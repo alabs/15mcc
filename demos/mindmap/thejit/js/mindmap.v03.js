@@ -131,7 +131,7 @@ function init(){
           color: "#000"
       },
       Edge: {
-          lineWidth: 2,
+          lineWidth: 1,
           color: "#088"
       },
       //Attach event handlers and add text to the
@@ -156,7 +156,6 @@ function init(){
           } else if(node._depth == 2){
               style.fontSize = "0.7em";
               style.color = "#555";
-
           } else {
               style.display = 'none';
           }
@@ -170,7 +169,7 @@ function init(){
           
           //Build the right column relations list.
           var node = ht.graph.getClosestNodeToOrigin("current");
-          var html = "<h4>" + node.name + "</h4><b>Connections:</b>";
+          var html = "<h4>" + node.name + "</h4><b>Conexiones:</b>";
           html += "<ul>";
           node.eachAdjacency(function(adj){
               var child = adj.nodeTo;
