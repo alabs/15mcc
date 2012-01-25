@@ -9,6 +9,10 @@
         <span class="error-message"><%= @video.errors[:url].to_sentence %></span>
       <% end %>
     </div>
+    <div class="form-field">
+      <%= f.label 'Tags' %>
+      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span10' %>
+    </div>
     <div id="form-actions">
       <%= f.submit 'Enviar video', :class => 'btn primary' %>
       <%= link_to 'Cancelar', texts_path, :class => 'btn danger' %>
