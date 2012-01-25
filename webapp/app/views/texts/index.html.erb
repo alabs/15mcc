@@ -1,21 +1,39 @@
-<h1>Listing texts</h1>
+<div class="row" style="margin-top:20px;">
+  <%= render :partial => 'partials/sidebar_bank' %>
+  <div class="span13">
+    <h2>Últimos textos</h2>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="bordered-table zebra-striped">
 
-<% @texts.each do |text| %>
-  <tr>
-    <td><%= link_to 'Show', text %></td>
-    <td><%= link_to 'Edit', edit_text_path(text) %></td>
-    <td><%= link_to 'Destroy', text, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @texts.each do |text| %>
+      <tr>
+        <td><%= link_to text.title, text %></td>
+        <td><%= text.created_at %></td>
+        <td>
+          <%= link_to 'Mostrar', text %>
+          <%= link_to 'Editar', edit_text_path(text) %>
+          <%= link_to 'Eliminar', text, confirm: '¿Estas segura?', method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+
+
 </table>
 
 <br />
 
-<%= link_to 'New Text', new_text_path %>
+<%= link_to 'Introducir nuevo texto', new_text_path %>
+  </div>
+</div>
+
+

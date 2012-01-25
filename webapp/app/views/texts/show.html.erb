@@ -1,5 +1,14 @@
-<p id="notice"><%= notice %></p>
+<div class="row" style="margin-top:20px;">
+  <%= render :partial => 'partials/sidebar_bank' %>
+  <div class="span13">
+    <h2><%= @text.title %></h2>
+    <p><%= @text.body %></p>
+    <p><strong>Tags:</strong> <%= @text.tags %></p>
+    <p><%= link_to 'Volver', texts_path %>
+  </div>
+</div>
 
 
-<%= link_to 'Edit', edit_text_path(@text) %> |
-<%= link_to 'Back', texts_path %>
+
+
+

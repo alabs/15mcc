@@ -1,0 +1,21 @@
+<div class="span3">
+  <div class="row" id="bank-links">
+    <ul>
+      <li><%= link_to 'Mapa', bank_path %></li>
+      <li><%= link_to 'Tags', '#' %></li>
+      <li><%= link_to 'FAQ', '#' %></li>
+    </ul>
+  </div>
+  <div class="row" id="icons-sections">
+    <%= link_to image_tag('icon-texts.png'), texts_path, title: 'Textos' %>
+    &nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;
+    <%= link_to image_tag('icon-photos.png'), images_path, title: 'Fotos' %>
+    <br />
+    <br />
+    <%= link_to image_tag('icon-videos.png'), videos_path, title: 'Vídeos' %>
+    &nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;
+    <%= link_to image_tag('icon-audios.png'), '#', title: 'Audios' %>
+  </div>
+</div>
