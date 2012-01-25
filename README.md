@@ -9,3 +9,4 @@ La programación de esta página web está planteada como una creación abierta 
 
 Desde el 15 de mayo de 2012 esta página contendrá las obras en diversos formatos y permitirá mantener viva la experiencia del 15M. La idea es que este espacio pueda seguir creciendo incluso después de la presentación del libro y el documental.
 
+Si quieres ayudarnos en el desarrollo de esta web puede suscribirte a la [lista de correo de programación de 15m.cc](https://listas.alabs.es/mailman/listinfo/15mcc-dev).
