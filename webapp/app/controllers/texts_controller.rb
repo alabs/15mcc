@@ -2,7 +2,7 @@ class TextsController < ApplicationController
   # GET /texts
   # GET /texts.json
   def index
-    @texts = Text.all
+    @texts = Text.all.desc(:created_at)
 
     respond_to do |format|
       format.html # index.html.erb

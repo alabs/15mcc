@@ -3,6 +3,7 @@ Webapp::Application.routes.draw do
   resources :videos
   resources :images
   resources :texts
+  get 'bank' => 'pages#bank'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
