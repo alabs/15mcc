@@ -1,10 +1,12 @@
 How to setup the environment
+============================
 
-First of all you need to install Ruby Version Manager (RVM). You can find all that you need in this url http://beginrescueend.com/rvm/install/
+First of all you need to install [Ruby Version Manager (RVM)](http://beginrescueend.com/rvm/install/).
 
 Once you have RVM installed open a system terminal window, there we have to intall ruby interpreter as follow:
 
-erubion$ rvm install ruby-1.9.2-p136
+```shell
+$ rvm install ruby-1.9.2-p136
 /Users/erubion/.rvm/rubies/ruby-1.9.2-p136, this may take a while depending on your cpu(s)...
 
 ruby-1.9.2-p136 - #fetching 
@@ -22,18 +24,25 @@ ruby-1.9.2-p136 - updating #rubygems for /Users/erubion/.rvm/gems/ruby-1.9.2-p13
 ruby-1.9.2-p136 - adjusting #shebangs for (gem).
 ruby-1.9.2-p136 - #importing default gemsets (/Users/erubion/.rvm/gemsets/)
 Install of ruby-1.9.2-p136 - #complete 
+```
 
 Now we have to set this ruby version as used and default, for this we have to run next command:
 
-erubion$ rvm use 1.9.2 --default
+```shell
+$ rvm use 1.9.2 --default
 Using /Users/erubion/.rvm/gems/ruby-1.9.2-p136
+```
+
 We can check if we made it in the right way checking ruby version as follow.
-erubion$ ruby -v
+```shell
+$ ruby -v
 ruby 1.9.2p136 (2010-12-25 revision 30365) [x86_64-darwin10.8.0]
+```
 
 Once we have the correct ruby version we have to install rails...
 
-erubion$ gem install rails
+```shell
+$ gem install rails
 Fetching: multi_json-1.0.4.gem (100%)
 Fetching: activesupport-3.1.3.gem (100%)
 Fetching: builder-3.0.0.gem (100%)
@@ -62,8 +71,11 @@ Fetching: rack-ssl-1.3.2.gem (100%)
 Fetching: json-1.6.4.gem (100%)
 Building native extensions.  This could take a while...
 Fetching: rdoc-3.12.gem (100%)
+```
+
 Depending on your version of ruby, you may need to install ruby rdoc/ri data:
 
+```shell
 <= 1.8.6 : unsupported
  = 1.8.7 : gem install rdoc-data; rdoc-data --install
  = 1.9.1 : gem install rdoc-data; rdoc-data --install
@@ -166,11 +178,13 @@ Installing RDoc documentation for rdoc-3.12...
 Installing RDoc documentation for railties-3.1.3...
 Installing RDoc documentation for bundler-1.0.21...
 Installing RDoc documentation for rails-3.1.3...
+```
 
 Then we have to be sure that we are in the correct folder(webapp folder of the project) and run bundle install to install all needed gems
 
-erubion$ cd webapp/
-erubion$ bundle install
+```shell
+$ cd webapp/
+$ bundle install
 Fetching source index for https://rubygems.org/
 Using rake (0.9.2.2) 
 Using i18n (0.6.0) 
@@ -220,37 +234,41 @@ Installing sass-rails (3.2.3)
 Installing uglifier (1.2.2) 
 Installing unicorn (4.1.1) with native extensions 
 Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
+```
 
 Once this finishes we can start our rails server, in my case i get an error due to mysql2 and I had to make a little change in my local configuration
 
-erubion$ rails server
+```shell
+$ rails server
 /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2.rb:9:in `require': dlopen(/Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2/mysql2.bundle, 9): Library not loaded: libmysqlclient.16.dylib (LoadError)
-  Referenced from: /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2/mysql2.bundle
-  Reason: image not found - /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2/mysql2.bundle
-  from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2.rb:9:in `<top (required)>'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:68:in `require'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:68:in `block (2 levels) in require'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:66:in `each'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:66:in `block in require'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:55:in `each'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:55:in `require'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler.rb:122:in `require'
-	from /Users/erubion/Documents/projects/15mcc/webapp/config/application.rb:13:in `<top (required)>'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:53:in `require'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:53:in `block in <top (required)>'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:50:in `tap'
-	from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:50:in `<top (required)>'
-	from script/rails:6:in `require'
-	from script/rails:6:in `<main>'
-
-
+Referenced from: /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2/mysql2.bundle
+Reason: image not found - /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2/mysql2.bundle
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/mysql2-0.3.11/lib/mysql2.rb:9:in `<top (required)>'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:68:in `require'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:68:in `block (2 levels) in require'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:66:in `each'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:66:in `block in require'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:55:in `each'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler/runtime.rb:55:in `require'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/bundler-1.0.21/lib/bundler.rb:122:in `require'
+from /Users/erubion/Documents/projects/15mcc/webapp/config/application.rb:13:in `<top (required)>'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:53:in `require'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:53:in `block in <top (required)>'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:50:in `tap'
+from /Users/erubion/.rvm/gems/ruby-1.9.2-p136/gems/railties-3.2.0.rc2/lib/rails/commands.rb:50:in `<top (required)>'
+from script/rails:6:in `require'
+from script/rails:6:in `<main>'
+```
 
 I fixed this problem running this.	
-erubion$ export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
+```shell
+$ export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
+```
 
 And finally we can start our server. 
 
-erubion$ rails server
+```shell
+$ rails server
 => Booting WEBrick
 => Rails 3.2.0.rc2 application starting in development on http://0.0.0.0:3000
 => Call with -d to detach
@@ -262,6 +280,7 @@ to generate one run: rails generate mongoid:config
 [2012-01-14 20:06:09] INFO  WEBrick 1.3.1
 [2012-01-14 20:06:09] INFO  ruby 1.9.2 (2010-12-25) [x86_64-darwin10.8.0]
 [2012-01-14 20:06:09] INFO  WEBrick::HTTPServer#start: pid=26706 port=3000
+```
 
 
 And that's it.
