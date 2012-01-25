@@ -6,14 +6,14 @@
       <%= f.label 'Título' %>
       <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span10' %>
       <% unless @text.errors[:title].blank? %>
-        <span class="error-message"><%= @text.errros[:title].to_sentence %></span>
+        <span class="error-message"><%= @text.errors[:title].to_sentence %></span>
       <% end %>
     </div>
     <div class="form-field">
       <%= f.label 'Texto' %>
       <%= f.text_area :body, rows: 6, required: true, placeholder: 'Cuerpo del texto', :class => 'span10' %>
       <% unless @text.errors[:body].blank? %>
-        <span class="error-message"><%= @text.errros[:body].to_sentence %></span>
+        <span class="error-message"><%= @text.errors[:body].to_sentence %></span>
       <% end %>
     </div>
     <div class="form-field">

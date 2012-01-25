@@ -1,5 +1,9 @@
-<p id="notice"><%= notice %></p>
-
-
-<%= link_to 'Edit', edit_video_path(@video) %> |
-<%= link_to 'Back', videos_path %>
+<div class="row" style="margin-top:20px;">
+  <%= render :partial => 'partials/sidebar_bank' %>
+  <div class="span13">
+    <h2><%= @video.title %></h2>
+    <%= raw @video.embed_html %>
+    <p><strong>Tags:</strong> <%= @video.tags %></p>
+    <p><%= link_to 'Volver', videos_path %>
+  </div>
+</div>

@@ -2,7 +2,7 @@ class VideosController < ApplicationController
   # GET /videos
   # GET /videos.json
   def index
-    @videos = Video.all
+    @videos = Video.all.desc(:created_at)
 
     respond_to do |format|
       format.html # index.html.erb

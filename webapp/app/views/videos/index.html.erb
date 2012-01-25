@@ -1,24 +1,33 @@
 <div class="row" style="margin-top:20px;">
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span13">
+    <h2>Últimos videos</h2>
+
+<table class="bordered-table zebra-striped">
+
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @videos.each do |video| %>
+      <tr>
+        <td><%= link_to video.title, video %></td>
+        <td><%= video.created_at %></td>
+        <td>
+          <%= link_to 'Mostrar', video %>
+          <%= link_to 'Editar', edit_video_path(video) %>
+          <%= link_to 'Eliminar', video, confirm: '¿Estas segura?', method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 
 
-<h1>Listing videos</h1>
-
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @videos.each do |video| %>
-  <tr>
-    <td><%= link_to 'Show', video %></td>
-    <td><%= link_to 'Edit', edit_video_path(video) %></td>
-    <td><%= link_to 'Destroy', video, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
 </table>
 
 <br />

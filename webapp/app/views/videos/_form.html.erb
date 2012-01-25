@@ -1,17 +1,18 @@
+<div class="form-stacked main-form">
 <%= form_for(@video) do |f| %>
-  <% if @video.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@video.errors.count, "error") %> prohibited this video from being saved:</h2>
-
-      <ul>
-      <% @video.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+  <fieldset>
+    <legend>Introducir nuevo video</legend>
+    <div class="form-field">
+      <%= f.label 'URL' %>
+      <%= f.text_field :url, required: true, placeholder: 'URL del video', :class => 'span10' %>
+      <% unless @video.errors[:url].blank? %>
+        <span class="error-message"><%= @video.errors[:url].to_sentence %></span>
       <% end %>
-      </ul>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div id="form-actions">
+      <%= f.submit 'Enviar video', :class => 'btn primary' %>
+      <%= link_to 'Cancelar', texts_path, :class => 'btn danger' %>
+    </div>
+    </fieldset>
 <% end %>
+</div>

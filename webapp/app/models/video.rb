@@ -14,7 +14,7 @@ class Video
   validates_presence_of :url
   validates_uniqueness_of :url
   
-  after_save :generate_metadata
+  before_save :generate_metadata
 
 
   protected
