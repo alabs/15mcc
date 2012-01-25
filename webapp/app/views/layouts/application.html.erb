@@ -8,6 +8,58 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <%= yield %>
+    <div id="header">
+      <div class="container">
+        <div class="row">
+          <div class="span8" id="topmenu">
+            <ul>
+              <li><%= link_to 'nuevo usuario', '#' %></li>
+              <li>/</li>
+              <li><%= link_to 'inciar sesión', '#' %></li>
+              <li></li>
+              <li></li>
+              <li><%= link_to 'english', '#' %></li>
+            </ul>
+          </div><!-- topmenu -->
+          <div class="span8" id="logo">
+            <%= link_to image_tag('logo.png'), root_path %>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid" id="mainnav">
+        <div class="container">
+          <div class="row">
+            <div class="span16">
+              <ul>
+                <li><%= link_to 'Qué es 15M.cc', '#' %> |</li>
+                <li><%= link_to 'Cómo colaborar', '#' %> |</li>
+                <li><%= link_to 'Quiénes somos', '#' %> |</li>
+                <li><%= link_to 'Blog', '#' %> |</li>
+                <li><%= link_to 'Contacto', '#' %> |</li>
+                <li><%= link_to 'Donar', '#', :class => 'strong' %></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div><!-- mainnav -->
+    </div><!-- header -->
+    <div class="container" id="content">
+      <%= yield %>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="span13" id="footer-logo">
+            <%= link_to image_tag('logo-footer.png'), root_path %>
+            <div id="footer-line">
+              &nbsp;
+            </div>
+          </div>
+          <div class="span3" id="license">
+            <%= link_to image_tag('license.png'), 'http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES'  %>
+          </div>
+        </div>
+      </div>
+    </div><!-- footer -->
   </body>
 </html>
