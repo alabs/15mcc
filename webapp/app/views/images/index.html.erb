@@ -1,27 +1,38 @@
 <div class="row" style="margin-top:20px;">
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span13">
-<h1>Listing images</h1>
+<h2>Últimas imágenes</h2>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="bordered-table zebra-striped">
 
-<% @images.each do |image| %>
-  <tr>
-    <td><%= link_to 'Show', image %></td>
-    <td><%= link_to 'Edit', edit_image_path(image) %></td>
-    <td><%= link_to 'Destroy', image, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @images.each do |image| %>
+      <tr>
+        <td><%= link_to image.title, image %></td>
+        <td><%= image.created_at %></td>
+        <td>
+          <%= link_to 'Mostrar', image %>
+          <%= link_to 'Editar', edit_image_path(image) %>
+          <%= link_to 'Eliminar', image, confirm: '¿Estas segura?', method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+
+
 </table>
 
 <br />
 
-<%= link_to 'New Image', new_image_path %>
+<%= link_to 'Subir nueva imágen', new_image_path %>
   </div>
 </div>
 

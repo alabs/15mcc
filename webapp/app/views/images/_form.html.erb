@@ -1,17 +1,23 @@
-<%= form_for(@image) do |f| %>
-  <% if @image.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@image.errors.count, "error") %> prohibited this image from being saved:</h2>
-
-      <ul>
-      <% @image.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<div class="form-stacked main-form">
+<%= form_for(@image, :html => { :multipart => true }) do |f| %>
+  <fieldset>
+    <legend>Subir nueva imágen</legend>
+    <div class="form-field">
+      <%= f.label 'Título' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span10' %>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="form-field">
+      <%= f.label 'Fichero' %>
+      <%= f.file_field :img, required: true %>
+    </div>
+    <div class="form-field">
+      <%= f.label 'Tags' %>
+      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span10' %>
+    </div>
+    <div id="form-actions">
+      <%= f.submit 'Enviar imágen', :class => 'btn primary' %>
+      <%= link_to 'Cancelar', images_path, :class => 'btn danger' %>
+    </div>
+  </fieldset>
 <% end %>
+</div>
