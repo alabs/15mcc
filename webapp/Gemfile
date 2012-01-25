@@ -40,3 +40,6 @@ gem 'unicorn'
 # For MongoDB
 gem 'mongoid'
 gem 'bson_ext'
+
+# Para los tags en los recursos
+gem 'mongoid_taggable'
