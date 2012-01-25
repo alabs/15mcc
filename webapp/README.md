@@ -265,6 +265,23 @@ I fixed this problem running this.
 $ export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 ```
 
+Another thing to do is creating the mongoid configuration:
+
+```shell
+rails generate mongoid:config
+```
+
+For the database server we use [mongoDB](http://www.mongodb.org/).
+
+MongoDB is included in several different package managers.
+
+* For MacPorts, see the mongodb package.
+* For Homebrew, see the mongodb formula.
+* For FreeBSD, see the mongodb and mongodb-devel ports.
+* For ArchLinux, see the mongodb package in the AUR.
+* For Debian and Ubuntu, see [Ubuntu and Debian packages](http://www.mongodb.org/display/DOCS/Ubuntu+and+Debian+packages).
+* For Fedora and CentOS, see [CentOS and Fedora packages](http://www.mongodb.org/display/DOCS/CentOS+and+Fedora+Packages).
+
 And finally we can start our server. 
 
 ```shell
@@ -273,15 +290,10 @@ $ rails server
 => Rails 3.2.0.rc2 application starting in development on http://0.0.0.0:3000
 => Call with -d to detach
 => Ctrl-C to shutdown server
-
-Mongoid config not found. Create a config file at: config/mongoid.yml
-to generate one run: rails generate mongoid:config
-
 [2012-01-14 20:06:09] INFO  WEBrick 1.3.1
 [2012-01-14 20:06:09] INFO  ruby 1.9.2 (2010-12-25) [x86_64-darwin10.8.0]
 [2012-01-14 20:06:09] INFO  WEBrick::HTTPServer#start: pid=26706 port=3000
 ```
-
 
 And that's it.
 
