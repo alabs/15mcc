@@ -4,6 +4,7 @@ Webapp::Application.routes.draw do
   resources :images
   resources :texts
   get 'bank' => 'pages#bank'
+  get 'tags/search' => 'tags#search'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
