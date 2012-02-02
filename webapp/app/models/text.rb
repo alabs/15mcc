@@ -25,4 +25,9 @@ class Text
     "#{self.street}, #{self.city}, #{self.country}" 
   end
 
+  def gmaps4rails_infowindow
+    # TODO: extend this - put more information
+    "<h1>#{ title }</h1>"
+  end
+
 end
