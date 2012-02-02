@@ -11,9 +11,12 @@
       <p><strong>Longitud:</strong> <%= @text.longitude %></p>
       <p><strong>Tags:</strong> <%= @text.tags %></p>
     </div>
+    <div class="well">
+      <p><strong>Publicado:</strong> <%= @text.created_at.to_s %></p>
+      <p><strong>Ha ocurrido:</strong> <%= @text.happened_at.to_s %></p>
+    </div>
     <p><%= link_to 'Volver', texts_path %>
   </div>
 </div>
 
 <%= gmaps4rails(@map) %>
-

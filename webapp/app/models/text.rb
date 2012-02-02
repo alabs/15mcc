@@ -7,6 +7,7 @@ class Text
 
   field :title, type: String
   field :body, type: String
+  field :happened_at, type: Time
 
   validates_presence_of :title
   validates_uniqueness_of :title

@@ -22,6 +22,15 @@
     </div>
     <div class="well">
       <div class="form-field">
+        <%= f.label 'Fecha' %>
+        <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span10' %>
+        <% unless @text.errors[:street].blank? %>
+          <span class="error-message"><%= @text.errors[:happened_at].to_sentence %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="well">
+      <div class="form-field">
         <%= f.label 'Dirección' %>
         <%= f.text_field :street, placeholder: 'Dirección completa', :class => 'span10' %>
         <% unless @text.errors[:street].blank? %>
