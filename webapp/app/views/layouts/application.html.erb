@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>15M.cc</title>
+    <%= yield :head %>
     <%= stylesheet_link_tag 'application', :media => 'all' %>
     <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
@@ -61,5 +62,6 @@
         </div>
       </div>
     </div><!-- footer -->
+    <%= yield :scripts %>
   </body>
 </html>

@@ -3,6 +3,7 @@ class TextsController < ApplicationController
   # GET /texts.json
   def index
     @texts = Text.all.desc(:created_at)
+    @map = Text.all.to_gmaps4rails
 
     respond_to do |format|
       format.html # index.html.erb
