@@ -1,7 +1,6 @@
 //= require jquery-ui-1.8.17.custom.min
 //= require jquery.tagit
 //= require jquery-ui-timepicker-addon
-//= require bootstrap-popover
 //
 // gmaps4rails
 //= require gmaps4rails/googlemaps.js
