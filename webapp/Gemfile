@@ -54,3 +54,5 @@ group :development do
   gem 'pry-rails' # a better ruby console
 end
 
+# Para los mapas
+gem 'gmaps4rails'
