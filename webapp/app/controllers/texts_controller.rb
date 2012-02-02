@@ -15,6 +15,7 @@ class TextsController < ApplicationController
   # GET /texts/1.json
   def show
     @text = Text.find(params[:id])
+    @map = @text.to_gmaps4rails
 
     respond_to do |format|
       format.html # show.html.erb
