@@ -10,8 +10,9 @@
   </head>
   <body>
     <% flash.each do |name, msg| %>
-      <div class="flash-messages">
-        <%= content_tag :p, msg, :class => "#{name}" %>
+      <div class="alert alert-<%= name %>" data-dismiss="alert">
+        <a href="#" class="close">x</a>
+        <%= msg %>
       </div>
     <% end %>
     <div id="header">
@@ -19,9 +20,15 @@
         <div class="row">
           <div class="span8" id="topmenu">
             <ul>
-              <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
-              <li>/</li>
-              <li><%= link_to 'inciar sesión', new_user_session_path %></li>
+              <% unless user_signed_in? %>
+                <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
+                <li>/</li>
+                <li><%= link_to 'inciar sesión', new_user_session_path %></li>
+              <% else %>
+                <li><%= link_to 'mi cuenta',  edit_user_registration_path %></li>
+                <li>/</li>
+                <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
+              <% end %>
               <li></li>
               <li></li>
               <li><%= link_to 'english', '#' %></li>
