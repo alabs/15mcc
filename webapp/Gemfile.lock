@@ -201,12 +201,8 @@ DEPENDENCIES
   mongoid-paperclip
   mongoid_taggable
   pry-rails
-<<<<<<< HEAD
   rails (= 3.2.1)
-=======
-  rails (= 3.2.0)
   recaptcha
->>>>>>> 03dcb358b90b290850c1135ad03c2254c735e394
   ruby-debug19
   sass-rails (~> 3.2.3)
   uglifier (>= 1.0.3)
