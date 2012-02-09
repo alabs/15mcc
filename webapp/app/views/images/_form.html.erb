@@ -10,10 +10,9 @@
       <%= f.label 'Fichero' %>
       <%= f.file_field :img, required: true %>
     </div>
-    <div class="form-field">
-      <%= f.label 'Tags' %>
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span10' %>
-    </div>
+
+    <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @image} %>
+
     <div id="form-actions">
       <%= f.submit 'Enviar imágen', :class => 'btn primary' %>
       <%= link_to 'Cancelar', images_path, :class => 'btn danger' %>

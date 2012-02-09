@@ -9,6 +9,8 @@
     <tr>
       <th>Título</th>
       <th>Fecha</th>
+      <th>Ciudad</th>
+      <th>País</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -17,7 +19,9 @@
     <% @videos.each do |video| %>
       <tr>
         <td><%= link_to video.title, video %></td>
-        <td><%= video.created_at %></td>
+        <td><%= video.happened_at %></td>
+        <td><%= video.city %></td>
+        <td><%= video.country %></td>
         <td>
           <%= link_to 'Mostrar', video %>
           <%= link_to 'Editar', edit_video_path(video) %>
@@ -35,3 +39,6 @@
 <%= link_to 'New Video', new_video_path %>
 </div>
 </div>
+
+<%= gmaps4rails(@map) %>
+

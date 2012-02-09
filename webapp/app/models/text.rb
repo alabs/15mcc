@@ -31,4 +31,13 @@ class Text
     "<h1>#{ title }</h1>"
   end
 
+  def gmaps4rails_marker_picture
+    {
+     "picture" => "/assets/icon-texts-small.png",
+     "width" => "20",
+     "height" => "20",
+     "marker_anchor" => [ 5, 10]
+    }
+  end   
+
 end

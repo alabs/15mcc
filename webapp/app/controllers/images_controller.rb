@@ -3,6 +3,7 @@ class ImagesController < ApplicationController
   # GET /images.json
   def index
     @images = Image.all.desc(:created_at)
+    @map = Image.all.to_gmaps4rails
 
     respond_to do |format|
       format.html # index.html.erb

@@ -9,6 +9,8 @@
     <tr>
       <th>Título</th>
       <th>Fecha</th>
+      <th>Ciudad</th>
+      <th>País</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -17,7 +19,9 @@
     <% @images.each do |image| %>
       <tr>
         <td><%= link_to image.title, image %></td>
-        <td><%= image.created_at %></td>
+        <td><%= image.happened_at %></td>
+        <td><%= image.city %></td>
+        <td><%= image.country %></td>
         <td>
           <%= link_to 'Mostrar', image %>
           <%= link_to 'Editar', edit_image_path(image) %>
@@ -36,7 +40,4 @@
   </div>
 </div>
 
-
-
-
-
+<%= gmaps4rails(@map) %>
