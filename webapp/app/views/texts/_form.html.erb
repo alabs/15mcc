@@ -3,6 +3,8 @@
   <fieldset>
     <legend>Introducir nuevo texto</legend>
 
+<%= render :partial => "partials/copyright_notice" %>
+
 <% if @text.errors.any? %>
    <% @text.errors.full_messages.each do |msg| %>
      <div class="alert alert-error"><%= msg %></div>

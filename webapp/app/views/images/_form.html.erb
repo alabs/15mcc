@@ -3,6 +3,8 @@
   <fieldset>
     <legend>Subir nueva imágen</legend>
 
+<%= render :partial => "partials/copyright_notice" %>
+
 <% if @image.errors.any? %>
    <% @image.errors.full_messages.each do |msg| %>
      <div class="alert alert-error"><%= msg %></div>
