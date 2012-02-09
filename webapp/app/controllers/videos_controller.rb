@@ -2,7 +2,7 @@ class VideosController < ApplicationController
   # GET /videos
   # GET /videos.json
   def index
-    @videos = Video.all.desc(:created_at)
+    @videos = Video.desc(:created_at).page(params[:page])
     @map = Video.all.to_gmaps4rails
 
     respond_to do |format|

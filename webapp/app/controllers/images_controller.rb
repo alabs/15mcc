@@ -2,7 +2,7 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    @images = Image.all.desc(:created_at)
+    @images = Image.desc(:created_at).page(params[:page])
     @map = Image.all.to_gmaps4rails
 
     respond_to do |format|

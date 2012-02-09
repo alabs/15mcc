@@ -56,3 +56,6 @@ end
 
 # Para los mapas
 gem 'gmaps4rails'
+
+# Para la paginacion
+gem 'kaminari'
