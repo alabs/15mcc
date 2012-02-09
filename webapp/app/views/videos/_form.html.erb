@@ -4,7 +4,7 @@
     <legend>Introducir nuevo video</legend>
     <div class="form-field">
       <%= f.label 'URL' %>
-      <%= f.text_field :url, required: true, placeholder: 'URL del video', :class => 'span10' %>
+      <%= f.text_field :url, required: true, placeholder: 'URL del video', :class => 'span8' %>
       <% unless @video.errors[:url].blank? %>
         <span class="error-message"><%= @video.errors[:url].to_sentence %></span>
       <% end %>

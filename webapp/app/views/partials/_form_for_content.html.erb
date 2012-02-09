@@ -1,31 +1,31 @@
     <div class="form-field">
       <%= f.label 'Tags' %>
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span10' %>
+      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' %>
     </div>
     <div class="well">
       <div class="form-field">
         <%= f.label 'Fecha' %>
-        <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span10' %>
+        <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8' %>
       </div>
     </div>
     <div class="well">
       <div class="form-field">
         <%= f.label 'Dirección' %>
-        <%= f.text_field :street, placeholder: 'Dirección completa', :class => 'span10' %>
+        <%= f.text_field :street, placeholder: 'Dirección completa', :class => 'span8' %>
         <% unless content.errors[:street].blank? %>
           <span class="error-message"><%= content.errors[:street].to_sentence %></span>
         <% end %>
       </div>
       <div class="form-field">
         <%= f.label 'Ciudad' %>
-        <%= f.text_field :city, placeholder: 'Ciudad', :class => 'span10' %>
+        <%= f.text_field :city, placeholder: 'Ciudad', :class => 'span8' %>
         <% unless content.errors[:city].blank? %>
           <span class="error-message"><%= content.errors[:city].to_sentence %></span>
         <% end %>
       </div>
       <div class="form-field">
         <%= f.label 'País' %>
-        <%= f.text_field :country, placeholder: 'País', :class => 'span10' %>
+        <%= f.text_field :country, placeholder: 'País', :class => 'span8' %>
         <% unless content.errors[:country].blank? %>
           <span class="error-message"><%= content.errors[:country].to_sentence %></span>
         <% end %>

@@ -1,4 +1,4 @@
-@import "bootstrap.1.4.0.min"
+@import "bootstrap.2.0.0"
 @import "jquery-ui-1.8.17.custom"
 @import "jquery.tagit"
 @import "gmaps4rails"
@@ -25,8 +25,9 @@ p, h1, h2, h3
       color: #000
 
 #logo
-  margin-bottom: -5px
+  margin-bottom: -4px
   text-align: right
+  float: right
 
 #mainnav
   background-color: #000
@@ -83,7 +84,12 @@ p, h1, h2, h3
       font-size: 1.3em
     input, textarea
       padding: 10px
-  
+
+// fix for googlemaps + bootstrap
+// https://github.com/twitter/bootstrap/issues/1552
+.map_container img 
+  max-width: none
+
 #footer
   margin-top: 40px
   #footer-logo
