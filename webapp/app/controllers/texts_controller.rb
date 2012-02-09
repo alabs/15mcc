@@ -45,7 +45,8 @@ class TextsController < ApplicationController
     @text = Text.new(params[:text])
 
     respond_to do |format|
-      if @text.save
+      # TODO: or current_user not anonymous
+      if verify_recaptcha(:model => @text) and @text.save
         format.html { redirect_to @text, notice: 'Text was successfully created.' }
         format.json { render json: @text, status: :created, location: @text }
       else
