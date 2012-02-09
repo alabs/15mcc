@@ -59,3 +59,9 @@ gem 'gmaps4rails'
 
 # Para los usuarios
 gem 'devise'
+
+# Para la paginacion
+gem 'kaminari'
+
+# Recaptcha
+gem "recaptcha", :require => "recaptcha/rails"

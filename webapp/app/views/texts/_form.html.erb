@@ -2,6 +2,15 @@
 <%= form_for(@text) do |f| %>
   <fieldset>
     <legend>Introducir nuevo texto</legend>
+
+<%= render :partial => "partials/copyright_notice" %>
+
+<% if @text.errors.any? %>
+   <% @text.errors.full_messages.each do |msg| %>
+     <div class="alert alert-error"><%= msg %></div>
+   <% end %>
+<% end %>
+
     <div class="form-field">
       <%= f.label 'Título' %>
       <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span8' %>

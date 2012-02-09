@@ -2,7 +2,7 @@ class VideosController < ApplicationController
   # GET /videos
   # GET /videos.json
   def index
-    @videos = Video.all.desc(:created_at)
+    @videos = Video.desc(:created_at).page(params[:page])
     @map = Video.all.to_gmaps4rails
 
     respond_to do |format|
@@ -44,7 +44,7 @@ class VideosController < ApplicationController
     @video = Video.new(params[:video])
 
     respond_to do |format|
-      if @video.save
+      if verify_recaptcha(:model => @video) and @video.save
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render json: @video, status: :created, location: @video }
       else

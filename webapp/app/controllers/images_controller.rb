@@ -2,7 +2,7 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    @images = Image.all.desc(:created_at)
+    @images = Image.desc(:created_at).page(params[:page])
     @map = Image.all.to_gmaps4rails
 
     respond_to do |format|
@@ -44,7 +44,7 @@ class ImagesController < ApplicationController
     @image = Image.new(params[:image])
 
     respond_to do |format|
-      if @image.save
+      if verify_recaptcha(:model => @image) and @image.save
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
         format.json { render json: @image, status: :created, location: @image }
       else
