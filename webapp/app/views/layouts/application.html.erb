@@ -12,7 +12,7 @@
     <% flash.each do |name, msg| %>
       <div class="alert alert-<%= name %>" data-dismiss="alert">
         <a href="#" class="close">x</a>
-        <%= msg %>
+        <strong><%= msg %></strong>
       </div>
     <% end %>
     <div id="header">
