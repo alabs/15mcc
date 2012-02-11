@@ -24,5 +24,21 @@ class Ability
     #   can :update, Article, :published => true
     #
     # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
+
+    if current_user.admin?
+      can :manage, :all
+
+    elsif current_user.role?('editor')
+      can :read, :all
+      can :create, :all
+      can :update, :all
+      can :destroy, :all
+
+    elsif current_user.role?('user')
+      can :read, :all
+
+    else
+      can :read, :all
+    end
   end
 end

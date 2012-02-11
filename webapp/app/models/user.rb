@@ -39,4 +39,16 @@ class User
 
   ## Token authenticatable
   # field :authentication_token, :type => String
+
+  field :role, :type => String, :default => 'user'
+  
+  ROLES = %w[admin editor user]
+  
+  def role?(base_role)
+    ROLES.index(base_role.to_s) <= ROLES.index(role)
+  end
+
+  def admin?
+    role == 'admin'
+  end
 end
