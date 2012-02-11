@@ -39,8 +39,10 @@
 <%= link_to 'New Video', new_video_path %>
 
 <%= paginate @videos %>
+
+<%= gmaps4rails(@map) %>
+
 </div>
 </div>
 
-<%= gmaps4rails(@map) %>
 
