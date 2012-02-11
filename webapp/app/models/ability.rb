@@ -25,16 +25,18 @@ class Ability
     #
     # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
 
-    if current_user.admin?
+    user ||= User.new
+
+    if user.admin?
       can :manage, :all
 
-    elsif current_user.role?('editor')
+    elsif user.role?('editor')
       can :read, :all
       can :create, :all
       can :update, :all
       can :destroy, :all
 
-    elsif current_user.role?('user')
+    elsif user.role?('user')
       can :read, :all
 
     else

@@ -15,6 +15,7 @@ class VideosController < ApplicationController
   # GET /videos/1.json
   def show
     @video = Video.find(params[:id])
+    authorize! :read, @video
 
     respond_to do |format|
       format.html # show.html.erb
