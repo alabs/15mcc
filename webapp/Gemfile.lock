@@ -50,7 +50,7 @@ GEM
       execjs
     coffee-script-source (1.2.0)
     columnize (0.3.6)
-    devise (2.0.0)
+    devise (2.0.1)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
       railties (~> 3.1)
@@ -148,7 +148,7 @@ GEM
       ruby-debug-base19 (>= 0.11.19)
     ruby_core_source (0.1.5)
       archive-tar-minitar (>= 0.5.2)
-    sass (3.1.14)
+    sass (3.1.15)
     sass-rails (3.2.4)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
