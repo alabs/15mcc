@@ -65,3 +65,6 @@ gem 'kaminari'
 
 # Recaptcha
 gem "recaptcha", :require => "recaptcha/rails"
+
+# authorization
+gem 'cancan'

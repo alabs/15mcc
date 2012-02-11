@@ -40,6 +40,7 @@ GEM
     bson_ext (1.5.2)
       bson (= 1.5.2)
     builder (3.0.0)
+    cancan (1.6.7)
     cocaine (0.2.1)
     coderay (1.0.5)
     coffee-rails (3.2.2)
@@ -192,6 +193,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_unvlogable
   bson_ext
+  cancan
   coffee-rails (~> 3.2.1)
   devise
   gmaps4rails
