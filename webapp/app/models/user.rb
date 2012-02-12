@@ -42,7 +42,7 @@ class User
 
   field :role, :type => String, :default => 'user'
   
-  ROLES = %w[admin editor user]
+  ROLES = %w[admin editor user anonymous]
   
   def role?(base_role)
     ROLES.index(base_role.to_s) <= ROLES.index(role)

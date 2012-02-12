@@ -25,22 +25,29 @@ class Ability
     #
     # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
 
-    user ||= User.new
+    user ||= User.new(:role => 'anonymous')
 
     if user.admin?
       can :manage, :all
+    end
 
-    elsif user.role?('editor')
+    if user.role?('editor')
       can :read, :all
       can :create, :all
       can :update, :all
       can :destroy, :all
+    end
 
-    elsif user.role?('user')
-      can :read, :all
-
-    else
-      can :read, :all
+    if user.role?('user')
+      can :index, Video
+    end
+    
+    if user.role?('anonymous')
+      can :index, Video
+      can :show, Video
+      cannot :create, Video
+      cannot :update, Video
+      cannot :destroy, Video
     end
   end
 end
