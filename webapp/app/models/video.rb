@@ -17,7 +17,7 @@ class Video
   validates_uniqueness_of :url
   
   belongs_to :user
-  field user_id: Integer
+  field :user_id, type: String
   
   before_save :generate_metadata
 

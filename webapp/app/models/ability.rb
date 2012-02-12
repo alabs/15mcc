@@ -43,7 +43,7 @@ class Ability
         can :show, klass
         can :new, klass
         can :create, klass
-        cannot :update, klass, :user_id => user.id
+        can :update, klass, :user_id => user.id
         cannot :destroy, klass
       end
     end

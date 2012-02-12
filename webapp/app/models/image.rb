@@ -18,7 +18,7 @@ class Image
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
 
   belongs_to :user
-  field user_id: Integer
+  field :user_id, type: String
 
   field :street, type: String
   field :city, type: String

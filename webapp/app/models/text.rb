@@ -23,7 +23,7 @@ class Text
   field :gmaps, type: Boolean
   
   belongs_to :user
-  field user_id: Integer
+  field :user_id, type: String
 
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
