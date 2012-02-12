@@ -52,8 +52,10 @@ class ImagesController < ApplicationController
     @image = Image.new(params[:image])
     authorize! :create, @image
 
+    @image.user = current_user || nil
+
     respond_to do |format|
-      if verify_recaptcha(:model => @image) and @image.save
+      if verify_captcha(@image) and @image.save
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
         format.json { render json: @image, status: :created, location: @image }
       else

@@ -52,8 +52,10 @@ class VideosController < ApplicationController
     @video = Video.new(params[:video])
     authorize! :create, @video
 
+    @video.user = current_user || nil
+
     respond_to do |format|
-      if verify_recaptcha(:model => @video) and @video.save
+      if verify_captcha(@video) && @video.save
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render json: @video, status: :created, location: @video }
       else
