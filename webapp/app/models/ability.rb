@@ -46,6 +46,7 @@ class Ability
         cannot :update, klass
         can :update, klass, :user => { :id => user.id }
         cannot :destroy, klass
+        can :destroy, klass, :user => { :id => user.id }
       end
     end
     
