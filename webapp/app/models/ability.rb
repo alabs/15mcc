@@ -32,22 +32,31 @@ class Ability
     end
 
     if user.role?('editor')
-      can :read, :all
-      can :create, :all
-      can :update, :all
-      can :destroy, :all
+      can :manage, :all
     end
+      
+    klasses = [Image, Text, Video]
 
     if user.role?('user')
-      can :index, Video
+      klasses.each do |klass|
+        can :index, klass
+        can :show, klass
+        cannot :new, klass
+        cannot :create, klass
+        cannot :update, klass
+        cannot :destroy, klass
+      end
     end
     
     if user.role?('anonymous')
-      can :index, Video
-      can :show, Video
-      cannot :create, Video
-      cannot :update, Video
-      cannot :destroy, Video
+      klasses.each do |klass|
+        can :index, klass
+        can :show, klass
+        cannot :new, klass
+        cannot :create, klass
+        cannot :update, klass
+        cannot :destroy, klass
+      end
     end
   end
 end
