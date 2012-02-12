@@ -17,6 +17,9 @@ class Image
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
 
+  belongs_to :user
+  field user_id: Integer
+
   field :street, type: String
   field :city, type: String
   field :country, type: String

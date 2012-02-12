@@ -21,6 +21,9 @@ class Text
   field :latitude, type: Float
   field :longitude, type: Float
   field :gmaps, type: Boolean
+  
+  belongs_to :user
+  field user_id: Integer
 
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 

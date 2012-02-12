@@ -41,9 +41,9 @@ class Ability
       klasses.each do |klass|
         can :index, klass
         can :show, klass
-        cannot :new, klass
-        cannot :create, klass
-        cannot :update, klass
+        can :new, klass
+        can :create, klass
+        cannot :update, klass, :user_id => user.id
         cannot :destroy, klass
       end
     end
@@ -52,8 +52,8 @@ class Ability
       klasses.each do |klass|
         can :index, klass
         can :show, klass
-        cannot :new, klass
-        cannot :create, klass
+        can :new, klass
+        can :create, klass
         cannot :update, klass
         cannot :destroy, klass
       end

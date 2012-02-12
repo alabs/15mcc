@@ -5,6 +5,10 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :trackable, :validatable
 
+  has_many :images
+  has_many :texts
+  has_many :videos
+
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
   field :encrypted_password, :type => String, :null => false, :default => ""
