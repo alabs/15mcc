@@ -31,9 +31,6 @@ gem 'jquery-rails'
 # Use unicorn as the web server
 gem 'unicorn'
 
-# Deploy with Capistrano
-# gem 'capistrano'
-
 # To use debugger
 gem 'ruby-debug19', :require => 'ruby-debug'
 
@@ -52,6 +49,7 @@ gem 'acts_as_unvlogable'
 
 group :development do
   gem 'pry-rails' # a better ruby console
+  gem 'capistrano'
 end
 
 # Para los mapas
