@@ -39,7 +39,7 @@
 <%= link_to 'Subir nueva imágen', new_image_path %>
 
 <%= paginate @images %>
+<%= gmaps4rails(@map) %>
   </div>
 </div>
 
-<%= gmaps4rails(@map) %>

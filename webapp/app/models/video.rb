@@ -16,6 +16,9 @@ class Video
   validates_presence_of :url
   validates_uniqueness_of :url
   
+  belongs_to :user
+  field :user_id, type: String
+  
   before_save :generate_metadata
 
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails

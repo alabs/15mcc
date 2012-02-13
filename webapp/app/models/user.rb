@@ -5,6 +5,10 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :trackable, :validatable
 
+  has_many :images
+  has_many :texts
+  has_many :videos
+
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
   field :encrypted_password, :type => String, :null => false, :default => ""
@@ -39,4 +43,16 @@ class User
 
   ## Token authenticatable
   # field :authentication_token, :type => String
+
+  field :role, :type => String, :default => 'user'
+  
+  ROLES = %w[admin editor user anonymous]
+  
+  def role?(base_role)
+    ROLES.index(base_role.to_s) <= ROLES.index(role)
+  end
+
+  def admin?
+    role == 'admin'
+  end
 end

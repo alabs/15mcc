@@ -1,8 +1,13 @@
 class VideosController < ApplicationController
+  
+  check_authorization
+
   # GET /videos
   # GET /videos.json
   def index
     @videos = Video.desc(:created_at).page(params[:page])
+    authorize! :index, @videos
+
     @map = Video.all.to_gmaps4rails
 
     respond_to do |format|
@@ -15,6 +20,7 @@ class VideosController < ApplicationController
   # GET /videos/1.json
   def show
     @video = Video.find(params[:id])
+    authorize! :show, @video
 
     respond_to do |format|
       format.html # show.html.erb
@@ -26,6 +32,7 @@ class VideosController < ApplicationController
   # GET /videos/new.json
   def new
     @video = Video.new
+    authorize! :create, @video
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,15 +43,19 @@ class VideosController < ApplicationController
   # GET /videos/1/edit
   def edit
     @video = Video.find(params[:id])
+    authorize! :update, @video
   end
 
   # POST /videos
   # POST /videos.json
   def create
     @video = Video.new(params[:video])
+    authorize! :create, @video
+
+    @video.user = current_user || nil
 
     respond_to do |format|
-      if verify_recaptcha(:model => @video) and @video.save
+      if verify_captcha(@video) && @video.save
         format.html { redirect_to @video, notice: 'Video was successfully created.' }
         format.json { render json: @video, status: :created, location: @video }
       else
@@ -58,6 +69,7 @@ class VideosController < ApplicationController
   # PUT /videos/1.json
   def update
     @video = Video.find(params[:id])
+    authorize! :update, @video
 
     respond_to do |format|
       if @video.update_attributes(params[:video])
@@ -74,6 +86,7 @@ class VideosController < ApplicationController
   # DELETE /videos/1.json
   def destroy
     @video = Video.find(params[:id])
+    authorize! :destroy, @video
     @video.destroy
 
     respond_to do |format|

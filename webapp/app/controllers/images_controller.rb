@@ -1,8 +1,13 @@
 class ImagesController < ApplicationController
+
+  check_authorization
+
   # GET /images
   # GET /images.json
   def index
     @images = Image.desc(:created_at).page(params[:page])
+    authorize! :index, @images
+
     @map = Image.all.to_gmaps4rails
 
     respond_to do |format|
@@ -15,6 +20,7 @@ class ImagesController < ApplicationController
   # GET /images/1.json
   def show
     @image = Image.find(params[:id])
+    authorize! :show, @image
 
     respond_to do |format|
       format.html # show.html.erb
@@ -26,6 +32,7 @@ class ImagesController < ApplicationController
   # GET /images/new.json
   def new
     @image = Image.new
+    authorize! :create, @image
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,15 +43,19 @@ class ImagesController < ApplicationController
   # GET /images/1/edit
   def edit
     @image = Image.find(params[:id])
+    authorize! :update, @image
   end
 
   # POST /images
   # POST /images.json
   def create
     @image = Image.new(params[:image])
+    authorize! :create, @image
+
+    @image.user = current_user || nil
 
     respond_to do |format|
-      if verify_recaptcha(:model => @image) and @image.save
+      if verify_captcha(@image) and @image.save
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
         format.json { render json: @image, status: :created, location: @image }
       else
@@ -58,6 +69,7 @@ class ImagesController < ApplicationController
   # PUT /images/1.json
   def update
     @image = Image.find(params[:id])
+    authorize! :update, @image
 
     respond_to do |format|
       if @image.update_attributes(params[:image])
@@ -74,6 +86,7 @@ class ImagesController < ApplicationController
   # DELETE /images/1.json
   def destroy
     @image = Image.find(params[:id])
+    authorize! :destroy, @image
     @image.destroy
 
     respond_to do |format|

@@ -1,8 +1,13 @@
 class TextsController < ApplicationController
+
+  check_authorization
+
   # GET /texts
   # GET /texts.json
   def index
     @texts = Text.desc(:created_at).page(params[:page])
+    authorize! :index, @texts
+
     @map = Text.all.to_gmaps4rails
 
     respond_to do |format|
@@ -15,6 +20,8 @@ class TextsController < ApplicationController
   # GET /texts/1.json
   def show
     @text = Text.find(params[:id])
+    authorize! :show, @text
+
     @map = @text.to_gmaps4rails
 
     respond_to do |format|
@@ -27,6 +34,7 @@ class TextsController < ApplicationController
   # GET /texts/new.json
   def new
     @text = Text.new
+    authorize! :create, @text
 
     respond_to do |format|
       format.html # new.html.erb
@@ -37,16 +45,19 @@ class TextsController < ApplicationController
   # GET /texts/1/edit
   def edit
     @text = Text.find(params[:id])
+    authorize! :update, @text
   end
 
   # POST /texts
   # POST /texts.json
   def create
     @text = Text.new(params[:text])
+    authorize! :create, @text
+
+    @text.user = current_user || nil
 
     respond_to do |format|
-      # TODO: or current_user not anonymous
-      if verify_recaptcha(:model => @text) and @text.save
+      if verify_captcha(@text) and @text.save
         format.html { redirect_to @text, notice: 'Text was successfully created.' }
         format.json { render json: @text, status: :created, location: @text }
       else
@@ -60,6 +71,7 @@ class TextsController < ApplicationController
   # PUT /texts/1.json
   def update
     @text = Text.find(params[:id])
+    authorize! :update, @text
 
     respond_to do |format|
       if @text.update_attributes(params[:text])
@@ -76,6 +88,7 @@ class TextsController < ApplicationController
   # DELETE /texts/1.json
   def destroy
     @text = Text.find(params[:id])
+    authorize! :destroy, @text
     @text.destroy
 
     respond_to do |format|

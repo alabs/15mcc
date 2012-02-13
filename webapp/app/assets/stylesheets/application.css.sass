@@ -18,8 +18,15 @@ p, h1, h2, h3
 .alert-notice
   @extend .alert-info
 
-.alert
-  /* que se sobreponga al contenido de abajo */
+#flash-message
+  position: fixed
+  top: 0
+  left: 0
+  right: 0 
+
+.disclaimer
+  @extend .alert
+  @extend .alert-info
 
 #header
   margin-top: 10px
