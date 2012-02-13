@@ -2,6 +2,7 @@ require "bundler/capistrano"
 
 set :scm,             :git
 set :repository,      "git://github.com/alabs/15mcc.git"
+set :deploy_subdir, "15mcc/webapp"
 set :branch,          "origin/master"
 set :migrate_target,  :current
 set :ssh_options,     { :forward_agent => true }
