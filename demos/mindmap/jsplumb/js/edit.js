@@ -1,7 +1,11 @@
-function jsplumb_init() {
+function jsplumb_edit_init() {
 
   jsPlumb.Defaults.Endpoint = ["Dot", { radius: 2 } ];
   jsPlumb.Defaults.HoverPaintStyle = { strokeStyle: "#FF0000", lineWidth: 2 };
+  jsPlumb.Defaults.Connector = ["StateMachine", { curviness: 20 }];
+  jsPlumb.Defaults.Anchor = "Continuous";
+  jsPlumb.Defaults.PaintStyle = { lineWidth : 2, strokeStyle : "#737373" },
+  jsPlumb.Defaults.MaxConnections = -1;
 
   jsPlumb.Defaults.ConnectionOverlays = [
     ["Arrow", { location: 1, id: "arrow", length: 14, foldback: 0.8 }],
@@ -17,13 +21,7 @@ function jsplumb_init() {
   $(".ep").each(function (i, e) {
     var p = $(e).parent();
     jsPlumb.makeSource($(e), {
-      parent: p,
-      endpoint: {
-        anchor: "Continuous",
-        connector: ["StateMachine", { curviness: 20 }],
-        connectorStyle: { strokeStyle: "#737373", lineWidth: 2 },
-        maxConnections: -1
-      }
+      parent: p
     });
   });
 
@@ -36,12 +34,14 @@ function jsplumb_init() {
     var confirm_remove = confirm("¿Quieres borrar esta conexión?");
     if ( confirm_remove === true ){ 
       jsPlumb.detach(c);
-    } else {
-      var confirm_rename = confirm("¿Quieres nombrar esta conexión?");
-      if ( confirm_rename === true ){ 
-        var connection_name = prompt("¿Nombre de la conexion?", "");
-        c.setLabel(connection_name);
-      }
+    }
+  });
+
+  jsPlumb.bind("contextmenu", function (c) {
+    var confirm_rename = confirm("¿Quieres nombrar esta conexión?");
+    if ( confirm_rename === true ){ 
+      var connection_name = prompt("¿Nombre de la conexion?", "");
+      c.setLabel(connection_name);
     }
   });
 
@@ -62,7 +62,8 @@ function jsplumb_init() {
 
 $(function () {
 
-  jsplumb_init();
+  jsplumb_edit_init();
+
   $('#modal_node_name').hide();
 
   $("#create_node").click(function () {
