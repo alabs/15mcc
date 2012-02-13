@@ -37,4 +37,4 @@ end
 
 set :strategy, RemoteCacheSubdir.new(self)
 
-require 'deploy/assets'
+load 'deploy/assets'
