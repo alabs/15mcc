@@ -65,3 +65,7 @@ gem "recaptcha", :require => "recaptcha/rails"
 
 # authorization
 gem 'cancan'
+
+# para los assets
+gem 'execjs'
+gem 'therubyracer'
