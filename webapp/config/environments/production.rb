@@ -70,6 +70,12 @@ Webapp::Application.configure do
     :enable_starttls_auto => false
   }
   
+  # Para notificar excepciones
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[15mcc exception] ",
+    :sender_address => %{"notifier" <notifier@alabs.es>},
+    :exception_recipients => %w{debug@alabs.es}
+  
   # Para devise
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 end
