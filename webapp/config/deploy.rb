@@ -57,7 +57,7 @@ after "deploy:update_code", "deploy:config_symlink"
 namespace :deploy do
 
   task :config_symlink do
-    run "ln -s #{shared_path}/mongoid.yml #{release_path}/config/mongoid.yml"
+    #run "ln -s #{shared_path}/mongoid.yml #{release_path}/config/mongoid.yml"
   end
 end
 
