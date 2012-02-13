@@ -2,8 +2,8 @@ require "bundler/capistrano"
 
 set :scm,             :git
 set :repository,      "git://github.com/alabs/15mcc.git"
-set :deploy_subdir, "15mcc/webapp"
 set :branch,          "origin/master"
+set :subdir, "webapp"
 set :migrate_target,  :current
 set :ssh_options,     { :forward_agent => true }
 set :rails_env,       "production"
@@ -35,11 +35,18 @@ default_environment["RUBY_VERSION"] = "ruby-1.9.2-p290"
 
 default_run_options[:shell] = 'bash'
 
+after "deploy:update_code", "deploy:checkout_subdir"
+
 namespace :deploy do
   desc "Deploy your application"
   task :default do
     update
     restart
+  end
+
+  desc "Checkout subdirectory and delete all the other stuff"
+  task :checkout_subdir do
+    run "mv #{current_release}/#{subdir}/ /tmp && rm -rf #{current_release}/* && mv /tmp/#{subdir}/* #{current_release}"
   end
 
   desc "Setup your git-based deployment app"
