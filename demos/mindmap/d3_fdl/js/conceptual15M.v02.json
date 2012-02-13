@@ -1,0 +1,138 @@
+{"nodes":[
+          {"name":"Acampadasol","group":1, "id":0},
+          
+          {"name":"Se difunde y organiza","group":2, "id":1},
+          
+          {"name":"Online","group":3, "id":2},
+          {"name":"Facebook","group":3, "id":3},
+          {"name":"Webs y blogs. Tomalaplaza.net","group":3, "id":4},
+          {"name":"Twitter","group":3, "id":5},
+          {"name":"Streaming","group":3, "id":6},
+          
+          {"name":"Presencial","group":3, "id":7},
+          
+          {"name":"En","group":5, "id":8},
+          
+          {"name":"Grupos de trabajo temáticos","group":4, "id":9},
+          {"name":"Asambleas","group":4, "id":10},
+          {"name":"Comisiones","group":4, "id":11},
+          
+          {"name":"Cosas que han pasado antes","group":4, "id":12},
+          {"name":"en","group":5, "id":13},
+          {"name":"por","group":5, "id":14},
+          {"name":"contra","group":5, "id":15},
+
+          {"name":"Grecia","group":4, "id":16},
+          {"name":"Argentina - 19 y 20 diciembre 2001 - corralito","group":4, "id":17},
+          {"name":"Tunez","group":4, "id":18},
+          {"name":"Movimiento zapatista","group":4, "id":19},
+          {"name":"No a la guerra","group":4, "id":20},
+          {"name":"Movimiento obrero","group":4, "id":21},
+          {"name":"Egipto","group":4, "id":22},
+          {"name":"Islandia","group":4, "id":23},
+          {"name":"Insumición","group":4, "id":24},
+          {"name":"Anonymous","group":4, "id":25},
+          {"name":"V de Vivienda","group":4, "id":26},
+          {"name":"WikiLeaks","group":4, "id":27},
+
+          {"name":"Nuevo periodismo","group":4, "id":28},
+          {"name":"rebelion.org","group":4, "id":29},
+          {"name":"proyecto matrix","group":4, "id":30},
+          {"name":"sistema digital","group":4, "id":31},
+          {"name":"tercera información","group":4, "id":32},
+          {"name":"kaos en la red","group":4, "id":33},
+
+          {"name":"Luchas de las mujeres","group":4, "id":34},
+          {"name":"Centros sociales okupados","group":4, "id":35},
+          {"name":"Acampadas por el 0,7","group":4, "id":36},
+          {"name":"Mayo del 68","group":4, "id":37},
+          {"name":"Huelga general (septiembre)","group":4, "id":38},
+          {"name":"la ley Sinde","group":4, "id":39},
+          {"name":"Juventud sin futuro (abril)","group":4, "id":40},
+
+          {"name":"Manifiestos","group":4, "id":41},
+          {"name":"Indignaos","group":4, "id":42},
+          {"name":"Reacciona","group":4, "id":43},
+          {"name":"La crisis que viene","group":4, "id":44},
+
+          {"name":"Plan Bolonia","group":4, "id":45},
+          {"name":"13-M","group":4, "id":46},
+          {"name":"Revoluciones pacíficas: Gandhi","group":4, "id":47},
+          {"name":"Irlanda","group":4, "id":48},
+          {"name":"Luchas indígenas","group":4, "id":49},
+          {"name":"Portugal","group":4, "id":50},
+          {"name":"Tiananmen","group":4, "id":51},
+
+          {"name":"tiene que ver con","group":5, "id":52},
+
+          {"name":"malestares en la vida personal","group":3, "id":53},
+          {"name":"hago lo que no quiero hacer","group":3, "id":54},
+          {"name":"sigo normas que no quiero seguir","group":3, "id":55},
+          {"name":"curro en lo que no me gusta","group":3, "id":56},
+          {"name":"soy infeliz","group":3, "id":57}
+          
+          ],
+ "links":[
+          {"source":0,"target":1,"value":1},
+          {"source":1,"target":2,"value":1},
+          {"source":1,"target":7,"value":1},
+          {"source":2,"target":3,"value":1},
+          {"source":2,"target":4,"value":1},
+          {"source":2,"target":5,"value":1},
+          {"source":2,"target":6,"value":1},
+          
+          {"source":7,"target":8,"value":1},
+          
+          {"source":8,"target":9,"value":1},
+          {"source":8,"target":10,"value":1},
+          {"source":8,"target":11,"value":1},
+
+          {"source":0,"target":52,"value":1},
+          {"source":52,"target":12,"value":1},
+          {"source":52,"target":53,"value":1},
+
+          {"source":12,"target":13,"value":1},
+          {"source":13,"target":16,"value":1},
+          {"source":13,"target":17,"value":1},
+          {"source":13,"target":19,"value":1},
+          {"source":13,"target":20,"value":1},
+          {"source":13,"target":21,"value":1},
+          {"source":13,"target":22,"value":1},
+          {"source":13,"target":23,"value":1},
+          {"source":13,"target":24,"value":1},
+          {"source":13,"target":25,"value":1},
+          {"source":13,"target":26,"value":1},
+          {"source":13,"target":27,"value":1},
+
+          {"source":13,"target":28,"value":1},
+          {"source":28,"target":29,"value":1},
+          {"source":28,"target":30,"value":1},
+          {"source":28,"target":31,"value":1},
+          {"source":28,"target":32,"value":1},
+
+          {"source":13,"target":33,"value":1},
+          {"source":13,"target":34,"value":1},
+          {"source":13,"target":35,"value":1},
+          {"source":13,"target":36,"value":1},
+          {"source":13,"target":37,"value":1},
+          {"source":13,"target":38,"value":1},
+          {"source":13,"target":39,"value":1},
+
+          {"source":13,"target":40,"value":1},
+          {"source":40,"target":41,"value":1},
+          {"source":40,"target":42,"value":1},
+          {"source":40,"target":43,"value":1},
+
+          {"source":13,"target":44,"value":1},
+          {"source":13,"target":46,"value":1},
+          {"source":13,"target":47,"value":1},
+          {"source":13,"target":48,"value":1},
+          {"source":13,"target":49,"value":1},
+          {"source":13,"target":50,"value":1},
+
+          {"source":12,"target":15,"value":1},
+          {"source":15,"target":18,"value":1},
+          {"source":15,"target":45,"value":1}
+
+          ]
+}

@@ -1,0 +1,31 @@
+/* mindmap */
+
+.node { 
+  background-color: white;
+  border: 0.1em dotted #000000;
+  color: black;
+  font-family: helvetica,sans;
+  font-size: 0.9em;
+  height: 3em;
+  opacity: 0.8;
+  padding: 0.5em;
+  position: absolute;
+  text-align: center;
+  width: 12em;
+  z-index: 20;
+}
+
+.ep, .update_node, .remove_node {
+  cursor:pointer;
+}
+
+
+#create_node{
+  margin: 1em;
+}
+
+/* FIXME: esto es un hack muy feo, deberíamos darle una clase a las conexiones */
+
+._jsPlumb_overlay{
+  background: white;
+}

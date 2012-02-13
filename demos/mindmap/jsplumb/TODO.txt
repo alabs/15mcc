@@ -1,0 +1,7 @@
+
+* Mejorar el css del label
+* Mejorar el flow de borrar / editar conexion
+
+* hacer index.html con un mapa de ejemplo navegable.
+* trabajar en el zoom ( https://github.com/jaukia/zoomooz/ ¿?) 
+* que al hacer hover sobre un elemento resalte las conexiones
