@@ -1,6 +1,6 @@
 
 var w = 960,
-     h = 1000,
+     h = 500,
      fill = d3.scale.category20();
  
  var vis = d3.select("#chart").append("svg")
@@ -10,7 +10,7 @@ var w = 960,
 
  
 
-	d3.json("./js/conceptual15M.json", function(json) {
+	d3.json("./js/conceptual15M.v01.json", function(json) {
 	
 	
 		var force = d3.layout.force()
