@@ -25,7 +25,8 @@ set :use_sudo, false
 set :scm, :git
 set :repository, "git://github.com/alabs/15mcc.git"
 set :branch, "master"
-set :deploy_subdir, "15mcc/webapp"
+#set :deploy_subdir, "15mcc/webapp"
+set :deploy_subdir, "webapp"
 set :git_enable_submodules, 1
 set :keep_releases, 5
 
