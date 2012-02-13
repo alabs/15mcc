@@ -68,3 +68,6 @@ gem 'cancan'
 
 # notificación de excepciones
 gem 'exception_notification', :require => 'exception_notifier'
+
+gem 'execjs'
+gem 'therubyracer'
