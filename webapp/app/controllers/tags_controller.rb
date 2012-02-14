@@ -1,5 +1,16 @@
 class TagsController < ApplicationController
 
+  # GET /tags/tagcloud
+  # GET /tags/tagcloud.json
+  def tagcloud
+    @tagcloud = Text.tags_with_weight
+
+    respond_to do |format|
+      format.html # tagcloud.html.erb
+      format.json { render json: @tagcloud }
+    end
+  end
+
   # GET /tags/search.json
   # GET /tags/search.json?term="bla"
   def search
