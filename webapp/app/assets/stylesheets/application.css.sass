@@ -1,5 +1,5 @@
 @import "bootstrap.2.0.0"
-@import "jquery-ui-1.8.17.custom"
+@import "jquery-ui-1.8.16.custom"
 @import "jquery.tagit"
 @import "gmaps4rails"
 
@@ -142,3 +142,10 @@ p, h1, h2, h3
 
 .hide 
   display: none
+
+// fix para jquery-ui-bootstrap
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight 
+  margin-bottom: 0px
+
+ul.tagit input[type="text"]
+  width: 50em
