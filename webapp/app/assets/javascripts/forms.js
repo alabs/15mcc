@@ -1,7 +1,7 @@
 $(function(){
 
   // date and time picker for Fecha
-  $('#text_happened_at').datetimepicker({
+  $('#text_happened_at, #image_happened_at, #video_happened_at').datetimepicker({
     dateFormat: 'yy-mm-dd',
     timeFormat: 'hh:mm:ss'
   });
