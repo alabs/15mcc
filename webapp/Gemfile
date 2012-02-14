@@ -66,6 +66,8 @@ gem "recaptcha", :require => "recaptcha/rails"
 # authorization
 gem 'cancan'
 
-# para los assets
+# notificación de excepciones
+gem 'exception_notification', :require => 'exception_notifier'
+
 gem 'execjs'
 gem 'therubyracer'

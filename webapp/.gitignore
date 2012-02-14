@@ -16,6 +16,5 @@
 
 .rvmrc
 config/database.yml
-config/mongoid.yml
 public/system
 config/initializers/recaptcha.rb
