@@ -1,25 +1,45 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<div class="span10 mt1">
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
+  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => "form-horizontal" }) do |f| %>
+    <legend>Editar usuario</legend>
 
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email %></div>
+    <%= devise_error_messages! %>
 
-  <div><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-  <%= f.password_field :password %></div>
+    <div class="control-group">
+      <%= f.label :email, "Correo electrónico", :class => "control-label" %>
+      <div class="controls">
+        <%= f.email_field :email %>
+      </div>
+    </div>
 
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
+    <div class="control-group">
+      <%= f.label :current_password, "Contraseña actual", :class => "control-label" %> 
+      <div class="controls">
+        <%= f.password_field :current_password %>
+        <i>(necesitamos tu contraseña para confirmar tus cambios)</i>
+      </div>
+    </div>
 
-  <div><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-  <%= f.password_field :current_password %></div>
+    <div class="control-group">
+      <%= f.label :password, "Contraseña nueva", :class => "control-label" %>
+      <div class="controls">
+        <%= f.password_field :password %>
+        <i>(dejar en blanco si no quieres cambiarla)</i>
+      </div>
+    </div>
 
-  <div><%= f.submit "Update" %></div>
-<% end %>
+    <div class="control-group">
+      <%= f.label :password_confirmation, "Confirmar contraseña nueva", :class => "control-label" %>
+      <div class="controls">
+        <%= f.password_field :password_confirmation %>
+      </div>
+    </div>
 
-<h3>Cancel my account</h3>
+    <div class="form-actions"><%= f.submit "Actualizar", :class => "btn btn-primary" %></div>
+  <% end %>
 
-<p>Unhappy? <%= link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete %>.</p>
+  <legend>Borrar mi cuenta</legend>
 
-<%= link_to "Back", :back %>
+  <p>¿No te gustamos? <%= link_to "Cancelar mi cuenta", registration_path(resource_name), :confirm => "¿Estás seguro?", :method => :delete, :class => "btn" %></p>
+
+</div>

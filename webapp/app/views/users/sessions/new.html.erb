@@ -1,17 +1,29 @@
-<h2>Conectar</h2>
+<div class="span10 mt1">
 
-<div class="form-vertical">
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div class="form-field">
-    <%= f.label :email %>
-    <%= f.email_field :email %>
-  </div>
-  <div class="form-field">
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-  </div>
-  <div><%= f.submit "Sign in", :class => 'btn btn-large' %></div>
-<% end %>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"} ) do |f| %>
+    <legend>Iniciar sesión</legend>
+  
+    <div class="control-group">
+      <%= f.label :email, "Correo electrónico", :class => "control-label" %>
+      <div class="controls">
+        <%= f.email_field :email %>
+      </div>
+    </div>
+  
+    <div class="control-group">
+      <%= f.label :password, "Contraseña", :class => "control-label" %>
+      <div class="controls">
+        <%= f.password_field :password %>
+      </div>
+    </div>
+  
+    <% if devise_mapping.rememberable? -%>
+      <div><%= f.check_box :remember_me %> <%= f.label :remember_me, "Recordarme" %></div>
+    <% end -%>
+  
+    <div class="form-actions"><%= f.submit "Iniciar sesión", :class => "btn btn-primary" %></div>
+  <% end %>
+  
+  <%= render "links" %>
+
 </div>
-
-<%= render "links" %>
