@@ -1,4 +1,45 @@
+function mapmind_fullscreen(){
+
+  $('#node-info').remove();
+  $('#mindmap-demo-wrapper').css('overflow', 'inherit');
+  $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').hide();
+
+  $('#header, #footer, .span3').hide('slow', function(){ 
+    jsPlumb.repaintEverything();
+    $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').show(); 
+  });
+  $('#control')
+    .addClass('well span3')
+    .attr('id','control-fullscreen')
+    .append('<div id="node-info" class="hide"></div>')
+    .draggable()
+    .resizable();
+
+};
+
+function mapmind_undo_fullscreen(){
+  console.log('yeah');
+
+  //$('#node-info').remove();
+  $('#mindmap-demo-wrapper').css('overflow', 'auto');
+  $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').hide();
+
+  $('#header, #footer, .span3').show('slow', function(){ 
+    jsPlumb.repaintEverything();
+    $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').show(); 
+  });
+  $('#control')
+    .removeClass('well span3')
+    .addClass('span1')
+    .attr('id','control')
+    .draggable()
+    .resizable();
+
+};
+
+
 var _getAllConnections = function(id) {
+  // consigue todas las conexiones para un nodo dado, devuelve un array
   var cons = jsPlumb.getConnections({target:id }),
   cons2 = jsPlumb.getConnections({source:id });
   Array.prototype.push.apply(cons, cons2);
@@ -6,9 +47,11 @@ var _getAllConnections = function(id) {
 };
 
 var _highlightTweet = function(id, hl) {
+  // para todas las conexiones de un nodo dado agrega una clase hl (highlight)  
 
   var cons = _getAllConnections(id);
   $('#' + id).addClass('hlhigh');
+
   for(var i = 0; i < cons.length; i++) {
     cons[i].setHover(hl);
     if (hl) {
@@ -31,6 +74,7 @@ var _highlightTweet = function(id, hl) {
 };
 
 var unhl = function(id, ignoreOpacity) {
+  // quita todos los hls
   _highlightTweet(id, false);
   $('.hlhigh').removeClass('hlhigh');
 };
@@ -93,21 +137,17 @@ $(function () {
 
   jsplumb_show_init();
 
-//  connect_nodes("node0001", "node0002", "en" );
-//  connect_nodes("node0002", "node0003", "con" );
-//  connect_nodes("node0001", "node0004", "durante" );
-//  connect_nodes("node0001", "node0005", "cuando" );
-connect_nodes('node0001', 'node0002', 'formada por');
-connect_nodes('node0002', 'node0003', 'que se autoconvocan');
-connect_nodes('node0003', 'node0004', 'para hacer');
-connect_nodes('node0001', 'node0007', 'se difunde y se organiza');
-connect_nodes('node0007', 'node0008', 'en');
-connect_nodes('node0007', 'node0009', 'en');
-connect_nodes('node0007', 'node0010', 'en');
-connect_nodes('node0007', 'node0011', 'en'); 
-connect_nodes('node0002', 'node0006', 'unidas por un'); 
-connect_nodes('node0006', 'node0012', 'contra'); 
-connect_nodes('node0006', 'node0013', 'contra'); 
+  connect_nodes('node0001', 'node0002', 'formada por');
+  connect_nodes('node0002', 'node0003', 'que se autoconvocan');
+  connect_nodes('node0003', 'node0004', 'para hacer');
+  connect_nodes('node0001', 'node0007', 'se difunde y se organiza');
+  connect_nodes('node0007', 'node0008', 'en');
+  connect_nodes('node0007', 'node0009', 'en');
+  connect_nodes('node0007', 'node0010', 'en');
+  connect_nodes('node0007', 'node0011', 'en'); 
+  connect_nodes('node0002', 'node0006', 'unidas por un'); 
+  connect_nodes('node0006', 'node0012', 'contra'); 
+  connect_nodes('node0006', 'node0013', 'contra'); 
 
   $(".node").hover(function() {
     hl($(this).attr("id"));
@@ -118,28 +158,12 @@ connect_nodes('node0006', 'node0013', 'contra');
 
   $('#zoom-in').click(function(e){
     e.preventDefault();
-    //#demo { zoom: 1; -moz-transform: scale(1); -moz-transform-origin: 0 0}
-    var $zoom = $('#zoom-level');
-    var zoom_level = parseFloat($zoom.html()) + 0.1;
-    zoom_level = zoom_level.toFixed(1);
-    $('#mindmap-demo').css('zoom', zoom_level)
-      .css('-moz-transform', 'scale(' + zoom_level + ')')
-      .css('-moz-transform-origin', '0 0'); 
-    $zoom.html(zoom_level);
-    jsPlumb.repaintEverything();
+    zoom('up');
   })
 
   $('#zoom-out').click(function(e){
     e.preventDefault();
-    //#demo { zoom: 1; -moz-transform: scale(1); -moz-transform-origin: 0 0}
-    var $zoom = $('#zoom-level');
-    var zoom_level = parseFloat($zoom.html()) - 0.1;
-    zoom_level = zoom_level.toFixed(1);
-    $('#mindmap-demo').css('zoom', zoom_level)
-      .css('-moz-transform', 'scale(' + zoom_level + ')')
-      .css('-moz-transform-origin', '0 0'); 
-    $zoom.html(zoom_level);
-    jsPlumb.repaintEverything();
+    zoom('down');
   })
 
   $('.node').click(function(e){
@@ -151,4 +175,91 @@ connect_nodes('node0006', 'node0013', 'contra');
   
   $('.well').draggable();
 
+  $('#mapmind-fullscreen').click(function(e){
+    e.preventDefault();
+    mapmind_fullscreen();
+    $(this).attr('id', 'mapmind-undo-fullscreen');
+    $(this).children('i').attr('class', 'icon-resize-small');
+  });
+
+  $('#mapmind-undo-fullscreen').click(function(e){
+    e.preventDefault();
+    mapmind_undo_fullscreen();
+    $(this).attr('id', 'mapmind-fullscreen');
+    $(this).children('i').attr('class', 'icon-resize-full');
+  });
+
+
 });
+
+function zoom(dir){
+  var $zoom = $('#zoom-level');
+  var result = parseFloat($zoom.html());
+  var zoom_level = 0;
+  switch(dir){
+    case 'up':
+      zoom_level = result + 0.05;
+      break;
+    case 'down':
+      zoom_level = result - 0.05;
+      break;
+  }
+  zoom_level = zoom_level.toFixed(2);
+  $('#mindmap-demo').css('zoom', zoom_level)
+    .css('-moz-transform', 'scale(' + zoom_level + ')')
+    .css('-moz-transform-origin', '0 0'); 
+  $zoom.html(zoom_level);
+  jsPlumb.repaintEverything();
+
+}
+
+/* 
+
+$('#footer, #header, .span3, .span1').hide('slow'); 
+
+$('#mindmap-demo-wrapper').css('overflow', 'inherit');
+
+    $('body')
+        .bind('mousewheel', function(event, delta) {
+            var dir = delta > 0 ? 'up' : 'down',
+                vel = Math.abs(delta);
+
+  switch(dir){
+    case 'up':
+      zoom('up');
+      break;
+    case 'down':
+      zoom('down');
+      break;
+  }
+
+            return false;
+        });
+
+    jsPlumb.repaintEverything();
+
+
+
+  var gesturesY = 0;
+    var startPosition = 0;
+    var isMouseDown = false;
+
+    $(document.body).mousemove( function (e) {
+        gesturesY = parseInt(e.pageY, 10);
+        if (isMouseDown) {
+            window.scrollBy(0, startPosition - gesturesY);
+            return false;
+        }
+    });
+
+    $(document.body).mousedown( function() {
+        startPosition = gesturesY;
+        isMouseDown = true;
+    });
+
+    $(document.body).mouseup( function() {
+        isMouseDown = false;
+        return false;
+    });
+
+*/
