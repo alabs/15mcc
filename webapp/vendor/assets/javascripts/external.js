@@ -12,6 +12,7 @@
 // require gmaps4rails/all_apis.js
 
 //= require bootstrap-alert
+//= require bootstrap-modal
 
 // for mind-map
 //= require jsplumb/jsBezier-0.3
