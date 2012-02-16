@@ -1,3 +1,4 @@
+/*
 function mapmind_fullscreen(){
 
   $('#node-info').remove();
