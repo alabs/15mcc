@@ -21,3 +21,4 @@
 //= require jsplumb/jsPlumb-connectors-statemachine-1.3.6-RC1
 //= require jsplumb/jsPlumb-renderers-svg-1.3.6-RC1
 //= require jsplumb/jquery.jsPlumb-1.3.6-RC1
+//= require underscore

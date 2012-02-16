@@ -1,3 +1,11 @@
+// rails and underscore both use <%= bla => for templates
+// so instead we change it to {{= }}
+_.templateSettings = {
+  interpolate: /\{\{\=(.+?)\}\}/g,
+  evaluate: /\{\{(.+?)\}\}/g
+};
+
+
 function jsplumb_edit_init() {
 
   jsPlumb.Defaults.Endpoint = ["Dot", { radius: 2 } ];
@@ -70,7 +78,10 @@ $(function () {
     //$('#modal_node_name').modal('show');
     var node_name = prompt("¿Nombre del nodo?", "");
     if ( !(node_name === null)){ 
-      $("#mapmind-editor").append('<div class="node"><span class="node_name">' + node_name + '</span><br /><i class="icon-pencil update_node"></i><i class="icon-repeat ep"></i><i class="icon-remove remove_node"></i>');
+      var tmplMarkup = $('#tmpl-node').html();
+      var compiledTmpl = _.template(tmplMarkup, { name: node_name });
+      $('#mapmind-editor').append(compiledTmpl);
+      // $("#mapmind-editor").append('<div class="node"><span class="node_name">' + node_name + '</span><br /><i class="icon-pencil update_node"></i><i class="icon-repeat ep"></i><i class="icon-remove remove_node"></i>');
       jsplumb_edit_init();
     }
   });
