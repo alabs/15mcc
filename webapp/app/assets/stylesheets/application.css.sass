@@ -121,13 +121,18 @@ p, h1, h2, h3
     height: 1.5em
 
 #mapmind-editor
+  #control
+    z-index: 999
+    position: fixed
   .node
     height: 3em
 
 #mindmap-demo-wrapper, #mapmind-editor
   .node
     background-color: white
-    border: 0.1em dotted #000000
+    border: 0.1em outset #000000
+    border-radius: 5em
+    -moz-border-radius: 5em
     color: black
     font-family: helvetica,sans
     font-size: 0.9em

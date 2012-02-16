@@ -5,44 +5,60 @@ _.templateSettings = {
   evaluate: /\{\{(.+?)\}\}/g
 };
 
+var _getAllConnections = function(id) {
+  // consigue todas las conexiones para un nodo dado, devuelve un array
+  var cons = jsPlumb.getConnections({target:id }),
+  cons2 = jsPlumb.getConnections({source:id });
+  Array.prototype.push.apply(cons, cons2);
+  return cons;
+};
+
+function connections_clean(){
+  var node_id = $('.hl').attr('id');
+  connections = _getAllConnections(node_id);
+
+  for(var i=0; i<connections.length; i++) {
+    var value = connections[i];
+    jsPlumb.detach(value);
+  }
+
+}
+
 
 function jsplumb_edit_init() {
 
+  // opciones por defecto de jsplumb
   jsPlumb.Defaults.Endpoint = ["Dot", { radius: 2 } ];
   jsPlumb.Defaults.HoverPaintStyle = { strokeStyle: "#FF0000", lineWidth: 2 };
   jsPlumb.Defaults.Connector = ["StateMachine", { curviness: 20 }];
   jsPlumb.Defaults.Anchor = "Continuous";
   jsPlumb.Defaults.PaintStyle = { lineWidth : 2, strokeStyle : "#737373" },
   jsPlumb.Defaults.MaxConnections = -1;
-
   jsPlumb.Defaults.ConnectionOverlays = [
     ["Arrow", { location: 1, id: "arrow", length: 14, foldback: 0.8 }],
     ["Label", { id: "label" }]
   ];
 
+  // permitir que los nodos se arrastren
   jsPlumb.draggable($(".node"));
 
-  jsPlumb.bind("jsPlumbConnection", function (conn) {
-    conn.connection.setPaintStyle({ strokeStyle: "#737373" });
-  });
-
-  $(".ep").each(function (i, e) {
+  // conectar los node-connect con los nodos
+  $(".node-connect").each(function (i, e) {
     var p = $(e).parent();
-    jsPlumb.makeSource($(e), {
-      parent: p
-    });
+    jsPlumb.makeSource($(e), { parent: p });
   });
-
   jsPlumb.makeTarget($(".node"), {
     dropOptions: { hoverClass: "dragHover" },
     endpoint: { anchor: "Continuous" }
   });
 
+  // INTERACTIVIDAD CRUD
   jsPlumb.bind("click", function (c) {
-    var confirm_remove = confirm("¿Quieres borrar esta conexión?");
-    if ( confirm_remove === true ){ 
-      jsPlumb.detach(c);
-    }
+    $(this).addClass('hl');
+//    var confirm_remove = confirm("¿Quieres borrar esta conexión?");
+//    if ( confirm_remove === true ){ 
+//      jsPlumb.detach(c);
+//    }
   });
 
   jsPlumb.bind("contextmenu", function (c) {
@@ -53,36 +69,55 @@ function jsplumb_edit_init() {
     }
   });
 
-  $(".remove_node").bind('click', function () {
-    var confirm_remove = confirm("¿Quieres borrar este nodo?");
-    if ( confirm_remove === true ){ 
-      $(this).parent().fadeOut(300, function() { $(this).remove() });
-    }
+  $('.node').on('click', function(e){
+    e.preventDefault();
+    $('.hl').removeClass('hl');
+    $(this).addClass('hl');
+    $('.node-selected').show('slow');
   });
 
-  $(".update_node").bind('click', function () {
-    var node_name = prompt("¿Nombre del nodo?", "");
-    if ( !(node_name === null)){ 
-      $(this).parent().children('.node_name').replaceWith(node_name);
-    }
+  $('.hl').on('click', function(e){
+    e.preventDefault();
+    $(this).removeClass('hl');
+    $('.node-selected').hide('slow');
   });
+
 }
 
 $(function () {
 
   jsplumb_edit_init();
 
-//  $('#modal_node_name').hide();
+  $('#footer').hide();
+  $('#mapmind-editor #control').draggable();
 
-  $("#create_node").click(function () {
-    //$('#modal_node_name').modal('show');
+  $("#node-create").click(function () {
     var node_name = prompt("¿Nombre del nodo?", "");
-    if ( !(node_name === null)){ 
+    if ( !(node_name === "")){ 
+      $('.hl').removeClass('hl');
+      $('.node-selected').show('slow');
       var tmplMarkup = $('#tmpl-node').html();
-      var compiledTmpl = _.template(tmplMarkup, { name: node_name });
+      var compiledTmpl = _.template(tmplMarkup, { name : node_name });
       $('#mapmind-editor').append(compiledTmpl);
-      // $("#mapmind-editor").append('<div class="node"><span class="node_name">' + node_name + '</span><br /><i class="icon-pencil update_node"></i><i class="icon-repeat ep"></i><i class="icon-remove remove_node"></i>');
       jsplumb_edit_init();
+    }
+  });
+
+  $("#node-remove").on('click', function () {
+    var confirm_remove = confirm("¿Quieres borrar este nodo?");
+    if ( confirm_remove === true ){ 
+      $('.hl').fadeOut(300, function() { $(this).remove() });
+      $('.node-selected').hide('slow');
+      connections_clean();
+    }
+  });
+
+  $("#node-update").click( function (e) {
+    e.preventDefault();
+    var node_name = prompt("¿Nombre del nodo?", "");
+    if ( !(node_name === "")){ 
+      $('.hl').children('.node_name').replaceWith(node_name);
+      $('.node-selected').hide('slow');
     }
   });
 

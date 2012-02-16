@@ -2,19 +2,23 @@
 
   <legend>Editando mapa conceptual</legend>
 
-  <a href="#" id="create_node" class="btn" data-toggle="modal"><i class="icon-plus"></i><b>Agregar nodo</b></a>
-  <div id="edit_connection"></div>
-
   <div id="mapmind-editor">
+    <div id="control" class="well">
+      <ul>
+        <li><a href="#" id="node-create" class="btn"><i class="icon-plus"></i><b>Agregar nodo</b></a><br/>
+        <li><a href="#" id="mapmind-update" class="btn btn-success"><i class="icon-plus"></i><b>Guardar mapa</b></a>
+        <li class="node-selected hide"><a href="#" id="node-update" class="btn btn-primary"><i class="icon-pencil"></i><b>Cambiar nombre</b></a>
+        <li class="node-selected hide"><a href="#" id="node-remove" class="btn btn-danger"><i class="icon-remove"></i><b>Borrar nodo</b></a>
+
+      </ul>
+    </div>
   </div>
 
   <script id='tmpl-node' type='text/template'>
-    <div class="node">
+    <div class="node hl">
       <span class="node_name">{{= name }}</span>
       <br />
-      <i class="icon-pencil update_node"></i>
-      <i class="icon-repeat ep"></i>
-      <i class="icon-remove remove_node"></i>
+      <i class="icon-repeat node-connect"></i>
     </div>
   </script>
 
