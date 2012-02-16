@@ -8,24 +8,31 @@
     <div class="control-group">
       <%= f.label :email, "Correo electrónico", :class => "control-label" %>
       <div class="controls">
-        <%= f.email_field :email %>
+        <%= f.email_field :email, :required => true %>
       </div>
     </div>
   
     <div class="control-group">
       <%= f.label :password, "Contraseña", :class => "control-label" %>
       <div class="controls">
-        <%= f.password_field :password %>
+        <%= f.password_field :password, :required => true %>
       </div>
     </div>
   
     <div class="control-group">
       <%= f.label :password_confirmation, "Confirmación de contraseña", :class => "control-label" %>
       <div class="controls">
-        <%= f.password_field :password_confirmation %>
+        <%= f.password_field :password_confirmation, :required => true %>
       </div>
     </div>
-  
+
+    <div class="control-group">
+      <%= label "user_terms", "Acepto las condiciones de uso", :class => "control-label" %>
+      <div class="controls">
+        <%= check_box_tag("user[terms]", true, false) %>
+      </div>
+    </div>
+
     <div class="form-actions"><%= f.submit "Registrarse", :class => "btn btn-primary" %></div>
   <% end %>
 

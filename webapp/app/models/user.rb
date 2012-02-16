@@ -9,6 +9,13 @@ class User
   has_many :texts
   has_many :videos
 
+  attr_accessible :email, :password, :password_confirmation, :accept_tos
+
+  # FIXME: Ticket #24 esto no termina de funcionar bien
+  validates :terms, :acceptance => true
+
+  field :terms, :type => Boolean
+
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
   field :encrypted_password, :type => String, :null => false, :default => ""

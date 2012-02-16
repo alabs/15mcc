@@ -1,5 +1,16 @@
 
-en:
+es:
+  mongoid:
+    errors:
+      models:
+        user:
+          attributes:
+            password:
+              too_short: "La contraseña es muy corta"
+            email:
+              taken: "Ese correo ya se está utilizando"
+            terms:
+              blank: "Debes aceptar las condiciones de uso"
   views:
     pagination:
       first: "&laquo; Inicio"
@@ -7,3 +18,6 @@ en:
       previous: "&lsaquo; Anterior"
       next: "Siguiente &rsaquo;"
       truncate: "..."
+
+
+
