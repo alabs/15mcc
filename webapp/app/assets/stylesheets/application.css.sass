@@ -131,13 +131,20 @@ p, h1, h2, h3
 
 #mindmap-demo-wrapper, #mapmind-editor
   .node
+    background-image: linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -o-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -moz-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -webkit-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -ms-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.12, rgb(48,48,48)), color-stop(0.56, rgb(0,0,0)), color-stop(0.82, rgb(0,0,0)))
     background-color: white
     border: 0.1em outset #000000
     border-radius: 5em
     -moz-border-radius: 5em
-    color: black
+    color: white
     font-family: helvetica,sans
     font-size: 0.9em
+    font-weight: bold
     opacity: 0.8
     padding: 0.5em
     position: relative

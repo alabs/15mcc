@@ -1,9 +1,12 @@
-// rails and underscore both use <%= bla => for templates
-// so instead we change it to {{= }}
+// rails y underscore.js usan los dos <%= bla => para las plantillas
+// con esto lo cambiamos a {{= }}
 _.templateSettings = {
   interpolate: /\{\{\=(.+?)\}\}/g,
   evaluate: /\{\{(.+?)\}\}/g
 };
+
+
+////*** JSPLUMB - start ****////
 
 var _getAllConnections = function(id) {
   // consigue todas las conexiones para un nodo dado, devuelve un array
@@ -26,26 +29,35 @@ function connections_clean(){
 
 }
 
-function jsplumb_init(){
-  // opciones por defecto de jsplumb
-  jsPlumb.Defaults.Endpoint = ["Dot", { radius: 2 } ];
-  jsPlumb.Defaults.HoverPaintStyle = { strokeStyle: "#FF0000", lineWidth: 2 };
-  jsPlumb.Defaults.Connector = ["StateMachine", { curviness: 20 }];
-  jsPlumb.Defaults.Anchor = "Continuous";
-  jsPlumb.Defaults.PaintStyle = { lineWidth : 2, strokeStyle : "#737373" },
-  jsPlumb.Defaults.MaxConnections = -1;
-  jsPlumb.Defaults.ConnectionOverlays = [
-    ["Arrow", { location: 1, id: "arrow", length: 14, foldback: 0.8 }],
-    ["Label", { id: "label" }]
-  ];
+// opciones por defecto de jsplumb
+jsPlumb.Defaults.Endpoint = ["Dot", { radius: 2 } ];
+jsPlumb.Defaults.HoverPaintStyle = { strokeStyle: "#FF0000", lineWidth: 2 };
+jsPlumb.Defaults.Connector = ["StateMachine", { curviness: 20 }];
+jsPlumb.Defaults.Anchor = "Continuous";
+jsPlumb.Defaults.PaintStyle = { lineWidth : 2, strokeStyle : "#737373" },
+jsPlumb.Defaults.MaxConnections = -1;
+jsPlumb.Defaults.ConnectionOverlays = [
+  ["Arrow", { location: 1, id: "arrow", length: 14, foldback: 0.8 }],
+  ["Label", { id: "label" }]
+];
+
+function jsplumb_show_init(){
+  // opciones especificas solo para la navegacion con jsplumb
+
+  jsPlumb.makeTarget($(".node"), {
+    dropOptions: { hoverClass: "dragHover" },
+    endpoint: { anchor: "Continuous" }
+  });
+
 }
 
 function jsplumb_edit_init() {
-
-  jsplumb_init();
+  // opciones especificas para la edicion con jsplumb
 
   // permitir que los nodos se arrastren
   jsPlumb.draggable($(".node")); //, {containment: "#mapmind-editor"});
+  // TODO: Tiene que dejar en algun lado para que lo levante 
+  // el ajax_update_nodes
 
   // conectar los node-connect con los nodos
   $(".node-connect").each(function (i, e) {
@@ -59,21 +71,25 @@ function jsplumb_edit_init() {
 
   // INTERACTIVIDAD CRUD
   jsPlumb.bind("click", function (c) {
+    // TODO: agregar una clase a la conexion selecionada
+    //       mostrar las opciones en el controls
+    
     $(this).attr('stroke','#FFF');
+  });
+
 //    var confirm_remove = confirm("¿Quieres borrar esta conexión?");
 //    if ( confirm_remove === true ){ 
 //      jsPlumb.detach(c);
 //    }
-  });
+//  jsPlumb.bind("contextmenu", function (c) {
+//    var confirm_rename = confirm("¿Quieres nombrar esta conexión?");
+//    if ( confirm_rename === true ){ 
+//      var connection_name = prompt("¿Nombre de la conexion?", "");
+//      c.setLabel(connection_name);
+//    }
+//  });
 
-  jsPlumb.bind("contextmenu", function (c) {
-    var confirm_rename = confirm("¿Quieres nombrar esta conexión?");
-    if ( confirm_rename === true ){ 
-      var connection_name = prompt("¿Nombre de la conexion?", "");
-      c.setLabel(connection_name);
-    }
-  });
-
+// FIXME: toggle o algo mas chulo q esto q tiene bugs
   $('.node').on('click', function(e){
     e.preventDefault();
     $('.hl').removeClass('hl');
@@ -90,7 +106,52 @@ function jsplumb_edit_init() {
 
 }
 
+function get_all_plumbs(){
+
+  var all_conns = [];
+  var connections = jsPlumb.getConnections();
+  
+  for (var i=0; i<connections.length; i++){
+    var conn = connections[i];
+    all_conns.push({'source': conn.sourceId, 'target': conn.targetId});
+  }
+  
+  return all_conns;
+}
+
+function draw_connect_nodes(properties){
+  // pinta las uniones entre los nodos
+  // recibe un objeto de este tipo:
+  // {source: node._id, target:node._id, label:str}
+
+  var endpoint_options = {
+    anchor: "Continuous",
+    connector: ["StateMachine", { curviness: 20 }],
+    connectorStyle: { strokeStyle: "#737373", lineWidth: 2 },
+    maxConnections: -1
+  }          
+
+  jsPlumb.addEndpoint(properties.source, endpoint_options);
+  jsPlumb.addEndpoint(properties.target, endpoint_options);
+  
+  if (properties.label == null){
+    jsPlumb.connect({ source:properties.source, target:properties.target });
+  } else {
+    jsPlumb.connect({ source:properties.source, target:properties.target})
+      .setLabel(properties.label);
+  }
+
+}
+
+////*** JSPLUMB - end ****////
+
+function ajax_update_nodes(){
+  // TODO: actualiza nombres, cambios de posiciones o deletes de nodos
+
+}
+
 function ajax_save_nodes(){
+  // guarda los nodos nuevos por AJAX
   $('.node-new').each(function(){
     var $node = $(this);
     var label = $node.children('span').text();
@@ -102,7 +163,9 @@ function ajax_save_nodes(){
       // guardar las conexiones del JSPlumb
       $node.attr('id', resp._id);
     });
+
     // trata las conexiones
+    // conns = get_all_plumbs();
   });
 }
 
@@ -120,7 +183,7 @@ function draw_node(properties){
     var data = { "id": properties.id, "label": properties.label, "pos_left": properties.pos_left + 'px', "pos_top": properties.pos_top + 'px'};
   }
   var compiledTmpl = _.template(tmplMarkup, data);
-  $('#mapmind-editor').append(compiledTmpl);
+  $('#mapmind-editor, #mapmind').append(compiledTmpl);
 }
 
 function ajax_load_nodes(){
@@ -133,25 +196,10 @@ function ajax_load_nodes(){
       draw_node({id: node._id, label: node.label, pos_left: node.pos_left, pos_right: node.pos_top});
     }
 
-    $('.hl').removeClass('hl');
-
   });
 
 }
 
-function get_all_plumbs(){
-
-  var all_conns = [];
-  var connections = jsPlumb.getConnections();
-  
-  for (var i=0; i<connections.length; i++){
-    var conn = connections[i];
-    all_conns.push({'source': conn.sourceId, 'target': conn.targetId});
-  }
-  
-  console.log(all_conns[1] === all_conns[2]);
-
-}
 
 $(function () {
 
@@ -178,6 +226,8 @@ $(function () {
       $('.hl').fadeOut(300, function() { $(this).remove() });
       $('.node-selected').hide('slow');
       connections_clean();
+      // TODO: lo tiene que dejar en algun lado para que lo levante 
+      // el ajax_update_nodes
     }
   });
 
@@ -188,6 +238,8 @@ $(function () {
     if ( !(node_name === "")){ 
       $('.hl').children('.node_name').replaceWith(node_name);
       $('.node-selected').hide('slow');
+      // TODO: Tiene que dejar en algun lado para que lo levante 
+      // el ajax_update_nodes
     }
   });
 
