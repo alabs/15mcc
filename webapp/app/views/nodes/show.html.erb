@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Label:</b>
+  <%= @node.label %>
+</p>
+
+<p>
+  <b>Pos left:</b>
+  <%= @node.pos_left %>
+</p>
+
+<p>
+  <b>Pos top:</b>
+  <%= @node.pos_top %>
+</p>
+
+
+<%= link_to 'Edit', edit_node_path(@node) %> |
+<%= link_to 'Back', nodes_path %>
