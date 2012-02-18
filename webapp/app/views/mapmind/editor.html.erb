@@ -13,20 +13,28 @@
         </li>
         <li class="mt1">
           <a href="#" id="mapmind-update" class="btn btn-success">
-            <i class="icon-plus"></i>
+            <i class="icon-tick"></i>
             <b>Guardar mapa</b>
           </a>
         </li>
+        <li class="mt1">
+          <a href="#" id="mapmind-cancel" class="btn btn-danger">
+            <i class="icon-cancel"></i>
+            <b>Cancelar cambios</b>
+          </a>
+        </li>
+        <hr />
+        <div id="node-title" class="hide mt1 node-selected fake-node hl"></div>
         <li class="node-selected hide mt1">
           <a href="#" id="node-update" class="btn btn-primary">
             <i class="icon-pencil"></i>
-            <b>Cambiar nombre</b>
+            <b>Nombre</b>
           </a>
         </li>
           <li class="node-selected hide mt1">
-          <a href="#" id="node-tags" class="btn btn-info">
+          <a href="#" id="node-tags" class="btn btn-info" href="#">
             <i class="icon-tags"></i>
-            <b>Agregar etiquetas</b>
+            <b>Etiquetas</b>
           </a>
         </li>
         <li class="conn-selected hide mt1">
@@ -44,7 +52,7 @@
         <li class="node-selected hide mt1">
           <a href="#" id="node-remove" class="btn btn-danger">
             <i class="icon-remove"></i>
-            <b>Borrar nodo</b>
+            <b>Borrar</b>
           </a>
         </li>
 
@@ -67,5 +75,22 @@
       <i class="icon-repeat node-connect"></i>
     </div>
   </script>
+
+  <div class="modal hide" id="modal-node-tags">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>Cambiando tags</h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <%= label "node_tags", 'Tags' %>
+        <input type="text" id="node_tags" placeholder='Tags separados por comas' class='span8'>
+      </div>
+      </div>
+    <div class="modal-footer">
+      <a href="#" class="btn btn-primary node-tags-save">Save changes</a>
+      <a href="#" class="btn" data-dismiss="modal">Close</a>
+    </div>
+  </div>
 
 </div>
