@@ -1,4 +1,14 @@
 class ConnectionsController < ApplicationController
+
+  # GET /connections/search.json
+  def search
+    @connection = Connection.where(source_id: params[:source], target_id: params[:target])
+
+    respond_to do |format|
+      format.json { render json: @connection }
+    end
+  end
+
   # GET /connections
   # GET /connections.json
   def index

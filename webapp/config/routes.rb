@@ -1,5 +1,6 @@
 Webapp::Application.routes.draw do
 
+  get 'connections/search' => 'connections#search'
   resources :connections
 
   resources :nodes

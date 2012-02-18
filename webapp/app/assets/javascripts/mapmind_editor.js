@@ -70,16 +70,31 @@ function jsplumb_edit_init() {
 
   // INTERACTIVIDAD CRUD
   jsPlumb.bind("click", function (c) {
-    // TODO: agregar una clase a la conexion selecionada
-    //       mostrar las opciones en el controls
     var connection_name = prompt("¿Nombre de la conexion?", "");
-    c.setLabel(connection_name);
+    /// TODO DRY
+    var data = "source=" + c.sourceId + "&target=" + c.targetId;
+    var update = data + "&label=" + connection_name
+    // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo 
+    // y por ultimo borrarla
+    $.get("/connections/search.json", data, function(resp){
+      var conn_id = resp[0]._id;
+      console.log(update);
+      $.ajax({ type: "PUT", url: '/connections/' + conn_id, data: update });
+      c.setLabel(connection_name);
+    })
   });
 
   jsPlumb.bind("contextmenu", function (c) {
     var confirm_remove = confirm("¿Quieres borrar esta conexión?");
     if ( confirm_remove === true ){ 
-      jsPlumb.detach(c);
+      var data = "source=" + c.sourceId + "&target=" + c.targetId;
+      // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo 
+      // y por ultimo borrarla
+      $.get("/connections/search.json", data, function(resp){
+        var conn_id = resp[0]._id;
+        $.ajax({ type: "DELETE", url: '/connections/' + conn_id + '.json', dataType: "json" });
+        jsPlumb.detach(c);
+      });
     }
   });
 
@@ -121,7 +136,6 @@ function draw_connection(properties){
   // pinta las uniones entre los nodos
   // recibe un objeto de este tipo:
   // {source: node._id, target:node._id, label:str}
-  console.log(properties);
 
   var endpoint_options = {
     anchor: "Continuous",
@@ -132,11 +146,11 @@ function draw_connection(properties){
 
   jsPlumb.addEndpoint(properties.source, endpoint_options);
   jsPlumb.addEndpoint(properties.target, endpoint_options);
-  
+
   if (properties.label == null){
-    jsPlumb.connect({ source:properties.source, target:properties.target});
+    jsPlumb.connect({ source:properties.source, target:properties.target, fireEvent: properties.fireEvent});
   } else {
-    jsPlumb.connect({ source:properties.source, target:properties.target})
+    jsPlumb.connect({ source:properties.source, target:properties.target, fireEvent: properties.fireEvent})
       .setLabel(properties.label);
   }
 
@@ -188,7 +202,9 @@ function ajax_load_mapmind(mode){
 
   $.getJSON("/connections.json", function(d){ 
     for(var i=0; i<d.length; i++){
-      draw_connection({ source: d[i].source_id, target: d[i].target_id });
+      if (d[i].label === null) { 
+        draw_connection({ source: d[i].source_id, target: d[i].target_id, fireEvent: false });
+      } else { console.log(d[i].label) }
     }
   });
 
@@ -234,7 +250,7 @@ $(function () {
       $('.node-selected').hide('slow');
       connections_clean();
       var node_id = $('.hl').attr('id');
-      $.ajax({ type: "DELETE", url: '/nodes/' + node_id });
+      $.ajax({ type: "DELETE", url: '/nodes/' + node_id + '.json', dataType: "json" });
       // TODO: lo tiene que dejar en algun lado para que lo levante 
       // el ajax_update_nodes
     }
