@@ -1,1 +1,8 @@
-<%= gmaps4rails(@map) %>
+<div class="row" style="margin-top:20px;">
+  <%= render :partial => 'partials/sidebar_bank' %>
+  <div class="span8">
+    <h1>Mapa geográfico</h1>
+    <hr />
+    <%= gmaps4rails(@map) %>
+  </div>
+</div>
