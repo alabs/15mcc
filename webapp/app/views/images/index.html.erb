@@ -12,7 +12,12 @@
 <ul class="thumbnails">
   <% @images.each do |image| %>
     <li class="span3">
-      <%= link_to image_tag(image.img.url(:small)), image %>
+      <div class="thumbnail">
+        <%= link_to image_tag(image.img.url(:small)), image %>
+        <div class="caption">
+          <h5><%= link_to image.title, image %>
+        </div>
+      </div>
     </li>
   <% end %>
 </ul>
