@@ -1,0 +1,13 @@
+
+    <div class="well">
+      <p><strong>Dirección:</strong> <%= content.street %></p>
+      <p><strong>Ciudad:</strong> <%= content.city %></p>
+      <p><strong>País:</strong> <%= content.country %></p>
+      <p><strong>Latitud:</strong> <%= content.latitude %></p>
+      <p><strong>Longitud:</strong> <%= content.longitude %></p>
+      <p><strong>Tags:</strong> <%= content.tags %></p>
+    </div>
+    <div class="well">
+      <p><strong>Publicado:</strong> <%= content.created_at.to_s %></p>
+      <p><strong>Ha ocurrido:</strong> <%= content.happened_at.to_s %></p>
+    </div>

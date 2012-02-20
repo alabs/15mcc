@@ -3,8 +3,9 @@
   <div class="span9">
     <h2><%= @image.title %></h2>
     <%= image_tag(@image.img.url) %>
-    <p><strong>Tags:</strong> <%= @image.tags %></p>
+    <%= render :partial => "partials/metadata", :locals => { :content => @image } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
+    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
     <p><%= link_to 'Volver', images_path %>
   </div>
 </div>

@@ -3,21 +3,10 @@
   <div class="span9">
     <h2><%= @text.title %></h2>
     <p><%= @text.body %></p>
-    <div class="well">
-      <p><strong>Dirección:</strong> <%= @text.street %></p>
-      <p><strong>Ciudad:</strong> <%= @text.city %></p>
-      <p><strong>País:</strong> <%= @text.country %></p>
-      <p><strong>Latitud:</strong> <%= @text.latitude %></p>
-      <p><strong>Longitud:</strong> <%= @text.longitude %></p>
-      <p><strong>Tags:</strong> <%= @text.tags %></p>
-    </div>
-    <div class="well">
-      <p><strong>Publicado:</strong> <%= @text.created_at.to_s %></p>
-      <p><strong>Ha ocurrido:</strong> <%= @text.happened_at.to_s %></p>
-    </div>
-    <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
+    <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
+    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
     <p><%= link_to 'Volver', texts_path %>
   </div>
 </div>
 
-<%= gmaps("map_options" => { "zoom" => -4},"markers" => { "data" => @map }) %>

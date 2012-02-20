@@ -22,6 +22,8 @@ class VideosController < ApplicationController
     @video = Video.find(params[:id])
     authorize! :show, @video
 
+    @map = @video.to_gmaps4rails
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @video }
