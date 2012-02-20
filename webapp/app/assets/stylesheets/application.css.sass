@@ -114,17 +114,40 @@ p, h1, h2, h3
     background-color: #9c9e9f
     margin-top: -4px
 
-
-#mindmap-demo-wrapper
+#mindmap-wrapper
   overflow: auto
   height: 500px
   .node
+    height: 1.5em
+
+#mindmap-editor
+  #control
+    z-index: 999
+    position: fixed
+    right: 5em
+    top: 3em
+  .node
+    height: 3em
+  ._jsPlumb_connector 
+    cursor: pointer
+
+// FIXME: esto es muy mejorable
+#mindmap-wrapper, #mindmap-editor
+  .node
+    background-image: linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -o-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -moz-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -webkit-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -ms-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.12, rgb(48,48,48)), color-stop(0.56, rgb(0,0,0)), color-stop(0.82, rgb(0,0,0)))
     background-color: white
-    border: 0.1em dotted #000000
-    color: black
+    border: 0.1em outset #000000
+    border-radius: 5em
+    -moz-border-radius: 5em
+    color: white
     font-family: helvetica,sans
     font-size: 0.9em
-    height: 1.5em
+    font-weight: bold
     opacity: 0.8
     padding: 0.5em
     position: relative
@@ -132,13 +155,46 @@ p, h1, h2, h3
     width: 12em
     z-index: 20
     cursor: pointer
+  .fake-node
+    background-image: linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -o-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -moz-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -webkit-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -ms-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.43, rgb(59,0,59)), color-stop(0.72, rgb(36,0,36)), color-stop(0.86, rgb(46,0,46)))
+    background-color: white
+    border: 0.1em outset #000000
+    border-radius: 5em
+    -moz-border-radius: 5em
+    color: white
+    font-family: helvetica,sans
+    font-size: 0.9em
+    font-weight: bold
+    opacity: 0.8
+    padding: 0.5em
+    position: relative
+    text-align: center
+    width: 12em
+    z-index: 20
+    cursor: pointer
+    cursor: auto
+    height: 1.5em
   .hl 
-    background-color: green
+    background-image: linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -o-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -moz-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -webkit-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -ms-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.43, rgb(59,0,59)), color-stop(0.72, rgb(36,0,36)), color-stop(0.86, rgb(46,0,46)))
   .hlhigh
     background-color: yellow
   ._jsPlumb_overlay 
     background-color: white
     font-size: 0.8em
+
+#modal-node-tags
+  .ui-autocomplete-input
+    width: 39em
 
 .hide 
   display: none

@@ -1,0 +1,27 @@
+<h1>Listing connections</h1>
+
+<table>
+  <tr>
+    <th>Label</th>
+    <th>Source</th>
+    <th>Target</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @connections.each do |connection| %>
+  <tr>
+    <td><%= connection.label %></td>
+    <td><%= connection.source_id %></td>
+    <td><%= connection.target_id %></td>
+    <td><%= link_to 'Show', connection %></td>
+    <td><%= link_to 'Edit', edit_connection_path(connection) %></td>
+    <td><%= link_to 'Destroy', connection, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Connection', new_connection_path %>

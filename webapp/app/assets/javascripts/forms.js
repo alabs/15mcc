@@ -43,7 +43,7 @@ $(function(){
   });
 
   // autocomplete for tags
-  $('#text_tags, #video_tags, #image_tags').tagit({ 
+  $('#text_tags, #video_tags, #image_tags, #node_tags').tagit({ 
     tagSource: "/tags/search.json",
     removeConfirmation: true,
     allowSpaces: true
