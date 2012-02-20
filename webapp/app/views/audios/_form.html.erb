@@ -13,7 +13,7 @@
 
     <div class="form-field">
       <%= f.label 'Título' %>
-      <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span8' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título del audio', :class => 'span8' %>
       <% unless @audio.errors[:title].blank? %>
         <span class="error-message"><%= @audio.errors[:title].to_sentence %></span>
       <% end %>
