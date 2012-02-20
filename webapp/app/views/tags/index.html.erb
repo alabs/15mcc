@@ -1,7 +1,8 @@
 <div class="row" style="margin-top:20px;">
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span9">
-    <h2>Tags</h2>
+    <h1>Nube de tags</h1>
+    <hr />
     <ul id="tagcloud">
       <% @tagcloud.each do |tag| %>
         <li class="<%= tag_weight_css(tag[1]) %>"><a href="#"><%= tag[0] %></a></li>

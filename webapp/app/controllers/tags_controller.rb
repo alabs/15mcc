@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 
   # GET /tags/tagcloud
   # GET /tags/tagcloud.json
-  def tagcloud
+  def index
     @tagcloud = Text.tags_with_weight
 
     respond_to do |format|

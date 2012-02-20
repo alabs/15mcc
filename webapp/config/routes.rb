@@ -7,7 +7,7 @@ Webapp::Application.routes.draw do
   resources :texts
   get 'bank' => 'pages#bank'
   get 'tags/search' => 'tags#search'
-  get 'tags' => 'tags#tagcloud'
+  get 'tags' => 'tags#index'
   get 'maps' => 'maps#index'
 
   # The priority is based upon order of creation:
