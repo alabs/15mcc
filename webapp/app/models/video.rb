@@ -7,6 +7,7 @@ class Video
   
   field :url, type: String
   field :title, type: String
+  field :happened_at, type: Time
   field :service, type: String
   field :thumbnail, type: String
   field :embed_url, type: String
