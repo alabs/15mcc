@@ -3,6 +3,6 @@
   <div class="span8">
     <h1>Mapa geográfico</h1>
     <hr />
-    <%= gmaps4rails(@map) %>
+    <%= gmaps("markers" => { "data" => @map, "options" => { "randomize" => true } } ) %>
   </div>
 </div>

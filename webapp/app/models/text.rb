@@ -30,8 +30,13 @@ class Text
   end
 
   def gmaps4rails_infowindow
-    # TODO: extend this - put more information
-    "<h1>#{ title }</h1>"
+    "
+    <h5><a href='/texts/#{ id }'> ##{ERB::Util.html_escape title} </a></h5>
+    <p>
+      #{ERB::Util.html_escape body}
+    </p>
+    <b>Etiquetado con</b>: #{ tags }
+    "
   end
 
   def gmaps4rails_marker_picture

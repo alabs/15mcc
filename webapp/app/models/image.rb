@@ -14,7 +14,8 @@ class Image
   
   has_mongoid_attached_file :img,
     :styles => {
-      :small => ['260x180', :jpg]
+      :small => ['260x180', :jpg],
+      :marker => ['20x20', :jpg]
     }
 
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
@@ -35,8 +36,22 @@ class Image
   end
 
   def gmaps4rails_infowindow
-    # TODO: extend this - put more information
-    "<h1>#{ title }</h1>"
+    "
+    <a href='/images/#{ id }'>
+      <h5>#{ERB::Util.html_escape title}</h5>
+      <img class='infowindow-thumb' src='#{ img.url(:small) }' />
+    </a>
+    <b>Etiquetado con</b>: #{ tags }
+    "
   end
+
+  def gmaps4rails_marker_picture
+    {
+     "picture" => img.url(:marker),
+     "width" => "20",
+     "height" => "20",
+     "marker_anchor" => [ 5, 10]
+    }
+  end   
 
 end

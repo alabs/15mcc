@@ -37,9 +37,25 @@ class Video
   end
 
   def gmaps4rails_infowindow
-    # TODO: extend this - put more information
-    "<h1>#{ title }</h1>"
+    # queda mal con el tamañao  #{ embed_html }
+    "
+    <a href='/videos/#{ id }'>
+      <h5>#{ERB::Util.html_escape title}</h5>
+      <img class='infowindow-thumb' src='#{ thumbnail }' />
+    </a>
+    <b>Etiquetado con</b>: #{ tags }
+    "
   end
+
+  def gmaps4rails_marker_picture
+    # FIXME: este thumb no tiene el tamaño correcto :S...
+    {
+     "picture" => thumbnail,
+     "width" => "20",
+     "height" => "20",
+     "marker_anchor" => [ 5, 10]
+    }
+  end   
 
 
   protected
@@ -52,4 +68,5 @@ class Video
     self.embed_url = vid.embed_url
     self.embed_html = vid.embed_html(600)
   end
+
 end
