@@ -4,6 +4,7 @@
     <h2><%= @image.title %></h2>
     <%= image_tag(@image.img.url) %>
     <p><strong>Tags:</strong> <%= @image.tags %></p>
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
     <p><%= link_to 'Volver', images_path %>
   </div>
 </div>

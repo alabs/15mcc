@@ -15,6 +15,7 @@
       <p><strong>Publicado:</strong> <%= @text.created_at.to_s %></p>
       <p><strong>Ha ocurrido:</strong> <%= @text.happened_at.to_s %></p>
     </div>
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
     <p><%= link_to 'Volver', texts_path %>
   </div>
 </div>
