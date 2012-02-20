@@ -47,7 +47,8 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         // consigue todas las conexiones para un nodo dado
         var targets = jsPlumb.getConnections({target:options.node});
         var sources = jsPlumb.getConnections({source:options.node});
-        return Array.prototype.push.apply(sources, targets);
+        var cons = targets.concat(sources);
+        return cons
       }
     },
 
@@ -66,9 +67,15 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       });
     
       $("body").click(function(evt) {
-         console.log('bla');
          $(this).zoomTo({targetsize:1.0});
          evt.stopPropagation();
+      });
+
+      $(".node").hover(function() {
+        $.simpleMM.hl($(this).attr("id"));
+      }, function() {
+        hlid = $(this).attr("id");
+        hlint = window.setTimeout(function() { $.simpleMM.unhl(hlid); }, 100);
       });
     
     },
@@ -81,12 +88,11 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       // permitir que los nodos se arrastren
       jsPlumb.draggable($(".node"), {
         stop: function() {
+          // al mover el nodo lo actualizamos tambien en el servidor, ajax al rescate :) 
           var data = $.simpleMM.nodeToData($(this));
           var node_id = $(this).attr('id');
           $.ajax({ type: "PUT", url: '/nodes/' + node_id, data: data, dataType: "json" });
       }}); //, {containment: "#mapmind-editor"});
-      // TODO: Tiene que dejar en algun lado para que lo levante 
-      // el ajax_update_nodes
     
       // conectar los node-connect con los nodos
       $(".node-connect").each(function (i, e) {
@@ -99,6 +105,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       });
     
       jsPlumb.bind("jsPlumbConnection", function (c) {
+        // al crear la conexion la creamos tambien en el servidor, ajax al rescate :) 
         var data = 'connection[source_id]=' + c.sourceId + '&connection[target_id]=' + c.targetId;
         $.post('/connections.json', data);
       });
@@ -108,13 +115,12 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         var connection_name = prompt("¿Nombre de la conexion?", "");
         /// TODO DRY
         var data = "source=" + c.sourceId + "&target=" + c.targetId;
-        var update = data + "&label=" + connection_name
+        var update = "connection[label]=" + connection_name;
         // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo 
         // y por ultimo borrarla
         $.get("/connections/search.json", data, function(resp){
           var conn_id = resp[0]._id;
-          console.log(update);
-          $.ajax({ type: "PUT", url: '/connections/' + conn_id, data: update });
+          $.ajax({ type: "PUT", url: '/connections/' + conn_id, data: update, dataType: "html" });
           c.setLabel(connection_name);
         })
       });
@@ -140,13 +146,8 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     // FIXME: toggle o algo mas chulo q esto q tiene bugs
       $('.node').click( function(e){
         e.preventDefault();
-        var title = $(this).children('span').html();
-        $('#node-title').html(title);
-        $('.hl').removeClass('hl');
-        $(this).toggleClass('hl');
-        $('.node-selected').show('slow');
+        $.simpleMM.controlShow($(this));
       });
-    
     
       $('.hl').bind('click', function(e){
         e.preventDefault();
@@ -154,7 +155,14 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         $('.node-selected').hide('slow');
       });
     
-    
+    },
+
+    controlShow: function($node){
+      var title = $node.children('span').html();
+      $('#node-title').html(title);
+      $('.hl').removeClass('hl');
+      $node.addClass('hl');
+      $('.node-selected').show('slow');
     },
 
     nodeToData: function($node){
@@ -227,9 +235,10 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     
       $.getJSON("/connections.json", function(d){ 
         for(var i=0; i<d.length; i++){
-          if (d[i].label === null) { 
-            $.simpleMM.drawConnection({ source: d[i].source_id, target: d[i].target_id, fireEvent: false });
-          } else { console.log(d[i].label) }
+          var data = { source: d[i].source_id, target: d[i].target_id, fireEvent: false }
+          // label puede estar o no 
+          if (d[i].label != null) { data.label = d[i].label }
+          $.simpleMM.drawConnection(data);
         }
       });
     },
@@ -237,13 +246,12 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     createNode: function(){
       var node_name = prompt("¿Nombre del nodo?", "");
       if ( !(node_name === "")){ 
-        $('.hl').removeClass('hl');
-        $('.node-selected').show('slow');
         var data = "node[label]=" + node_name;
         $.post('/nodes.json', data, function(resp){
           // actualizamos los IDs de los nodos, los necesitamos para guardar las conexiones del JSPlumb
           $.simpleMM.drawNode({id: resp._id, label: node_name, pos_left: 0, pos_top: 0});
           $.simpleMM.initEdit();
+          $.simpleMM.controlShow($('#' + resp._id));
         });
       }
     },
@@ -256,8 +264,6 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         $.simpleMM.connectionsClean();
         var node_id = $('.hl').attr('id');
         $.ajax({ type: "DELETE", url: '/nodes/' + node_id + '.json', dataType: "json" });
-        // TODO: lo tiene que dejar en algun lado para que lo levante 
-        // el ajax_update_nodes
       }
     },
 
@@ -271,8 +277,85 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         var node_id = $('.hl').attr('id');
         $.ajax({ type: "PUT", url: '/nodes/' + node_id, data: data, dataType: "json" });
       }
-    }
+    },
 
+    fullscreen: function(){
+
+      $('#node-info').remove();
+      $('#mindmap-demo-wrapper').css('overflow', 'inherit');
+      $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').hide();
+    
+      $('#header, #footer, .span3').hide('slow', function(){ 
+        jsPlumb.repaintEverything();
+        $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').show(); 
+      });
+      $('#control')
+        .addClass('well span3')
+        .attr('id','control-fullscreen')
+        .append('<div id="node-info" class="hide"></div>')
+        .draggable()
+        .resizable();
+    },
+
+    fullscreenUndo: function(){
+
+      //$('#node-info').remove();
+      $('#mindmap-demo-wrapper').css('overflow', 'auto');
+      $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').hide();
+
+      $('#header, #footer, .span3').show('slow', function(){ 
+        jsPlumb.repaintEverything();
+        $('._jsPlumb_connector, ._jsPlumb_endpoint, ._jsPlumb_overlay').show(); 
+      });
+      $('#control')
+        .removeClass('well span3')
+        .addClass('span1')
+        .attr('id','control')
+        .draggable()
+        .resizable();
+
+    },
+
+    _highlightTweet: function(id, hl) {
+      // para todas las conexiones de un nodo dado agrega una clase hl (highlight)  
+      // sacado de tweetplumb
+
+      var cons = this._getAllConnections({ node: id});
+      $('#' + id).addClass('hlhigh');
+
+      for(var i = 0; i < cons.length; i++) {
+        cons[i].setHover(hl);
+        if (hl) {
+          cons[i].source.addClass("hl");					
+          cons[i].target.addClass("hl");
+        } else {
+          cons[i].source.removeClass("hl");					
+          cons[i].target.removeClass("hl");
+        }
+      }
+      
+      if (hl) {
+        $("#" + id).addClass("hl");					
+        $("#" + id).addClass("hl");
+      } else {
+        $("#" + id).removeClass("hl");					
+        $("#" + id).removeClass("hl");
+      }
+
+    },
+
+    unhl: function(id, ignoreOpacity) {
+      // quita todos los hls
+      this._highlightTweet(id, false);
+      $('.hlhigh').removeClass('hlhigh');
+    },
+    
+    hl: function(id) {
+     // window.clearTimeout(hlint);
+     // if (hlid) unhl(hlid,true);
+     // hlid = null;
+      this._highlightTweet(id, true);				
+    }
     
   };
 
