@@ -1,0 +1,12 @@
+<div class="row" style="margin-top:20px;">
+  <%= render :partial => 'partials/sidebar_bank' %>
+  <div class="span9">
+    <h1>Contenidos con etiqueta <%= @tag %></h1>
+    <hr />
+    <% @contents.each do |con| %>
+      <%= con.title %>
+    <% end %>
+  </div>
+
+  <%= link_to "Volver", tags_path %>
+</div>

@@ -1,13 +1,26 @@
 class TagsController < ApplicationController
 
-  # GET /tags/tagcloud
-  # GET /tags/tagcloud.json
+  # GET /tags
+  # GET /tags.json
   def index
     @tagcloud = Text.tags_with_weight
 
     respond_to do |format|
       format.html # tagcloud.html.erb
       format.json { render json: @tagcloud }
+    end
+  end
+
+
+  # GET /tags/show/<tagname>
+  # GET /tags/show/<tagname>.json
+  def show
+    @tag = params['tag']
+    @contents = Text.tagged_with(@tag) || Video.tagged_with(@tag) || Image.tagged_with(@tag)
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @contents }
     end
   end
 
