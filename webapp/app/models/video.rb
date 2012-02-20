@@ -49,6 +49,6 @@ class Video
     self.service = vid.service
     self.thumbnail = vid.thumbnail
     self.embed_url = vid.embed_url
-    self.embed_html = vid.embed_html
+    self.embed_html = vid.embed_html(600)
   end
 end

@@ -21,6 +21,8 @@ Webapp::Application.routes.draw do
   get 'maps' => 'maps#index'
   get 'timeline' => 'timeline#index'
 
+  match '/profile/:username' => 'pages#profile'
+
   root :to => 'pages#index'
 
 end
