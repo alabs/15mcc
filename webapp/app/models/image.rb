@@ -12,7 +12,10 @@ class Image
   validates_presence_of :title
   validates_uniqueness_of :title
   
-  has_mongoid_attached_file :img
+  has_mongoid_attached_file :img,
+    :styles => {
+      :small => ['260x180', :jpg]
+    }
 
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
