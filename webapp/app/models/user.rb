@@ -9,12 +9,18 @@ class User
   has_many :texts
   has_many :videos
 
-  attr_accessible :email, :password, :password_confirmation, :accept_tos
+  attr_accessible :username, :email, :password, :password_confirmation, :accept_tos
 
   # FIXME: Ticket #24 esto no termina de funcionar bien
   validates :terms, :acceptance => true
 
   field :terms, :type => Boolean
+
+  field :username, :type => String
+  validates_length_of :username, minimun: 3, maximum: 10
+  validates_uniqueness_of :username
+
+  attr_accessor :login
 
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
@@ -52,6 +58,11 @@ class User
   # field :authentication_token, :type => String
 
   field :role, :type => String, :default => 'user'
+
+  def self.find_for_database_authentication(conditions)
+    login = conditions.delete(:login)
+    self.any_of({ :username => login }, { :email => login }).first
+  end
   
   ROLES = %w[admin editor user anonymous]
   

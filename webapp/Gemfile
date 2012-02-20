@@ -48,7 +48,7 @@ group :development do
   gem 'pry-rails' # a better ruby console
   gem 'capistrano'
   # To use debugger
-  gem 'ruby-debug19', :require => 'ruby-debug'
+  #gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
 # Para los mapas

@@ -33,7 +33,6 @@ GEM
       xml-simple
       youtube_it
     addressable (2.2.6)
-    archive-tar-minitar (0.5.2)
     arel (3.0.0)
     bcrypt-ruby (3.0.1)
     bson (1.5.2)
@@ -56,7 +55,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.2.0)
-    columnize (0.3.6)
     devise (2.0.1)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -88,8 +86,6 @@ GEM
       railties (>= 3.0.0)
     kgio (2.7.2)
     libv8 (3.3.10.4)
-    linecache19 (0.5.12)
-      ruby_core_source (>= 0.1.4)
     mail (2.4.1)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -156,16 +152,6 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     recaptcha (0.3.4)
-    ruby-debug-base19 (0.11.25)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug19 (0.11.6)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby-debug-base19 (>= 0.11.19)
-    ruby_core_source (0.1.5)
-      archive-tar-minitar (>= 0.5.2)
     sass (3.1.15)
     sass-rails (3.2.4)
       railties (~> 3.2.0)
@@ -227,7 +213,6 @@ DEPENDENCIES
   pry-rails
   rails (= 3.2.1)
   recaptcha
-  ruby-debug19
   sass-rails (~> 3.2.3)
   therubyracer
   uglifier (>= 1.0.3)
