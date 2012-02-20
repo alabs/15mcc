@@ -10,6 +10,7 @@ test:
 production:
   host: localhost
   database: 15mcc_production
+  logger: false
   #host: <%= ENV['MONGOID_HOST'] %>
   #port: <%= ENV['MONGOID_PORT'] %>
   #username: <%= ENV['MONGOID_USERNAME'] %>
