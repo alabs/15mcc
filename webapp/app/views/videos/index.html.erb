@@ -3,6 +3,12 @@
   <div class="span9">
     <h2>Últimos videos</h2>
 
+<div class="span9 add-content">
+  <div class="btn btn-large">
+    <i class="icon-film"></i><%= link_to 'Introducir nuevo video', new_video_path %>
+  </div>
+</div>
+
 <table class="table table-striped table-bordered table-condensed">
 
   <thead>
@@ -35,8 +41,6 @@
 </table>
 
 <br />
-
-<%= link_to 'New Video', new_video_path %>
 
 <%= paginate @videos %>
 

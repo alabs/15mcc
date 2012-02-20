@@ -3,6 +3,12 @@
   <div class="span9">
 <h2>Últimas imágenes</h2>
 
+<div class="span9 add-content">
+  <div class="btn btn-large">
+    <i class="icon-picture"></i><%= link_to 'Subir nueva imagen', new_image_path %>
+  </div>
+</div>
+
 <table class="table table-striped table-bordered table-condensed">
 
   <thead>
@@ -35,8 +41,6 @@
 </table>
 
 <br />
-
-<%= link_to 'Subir nueva imágen', new_image_path %>
 
 <%= paginate @images %>
 <%= gmaps4rails(@map) %>
