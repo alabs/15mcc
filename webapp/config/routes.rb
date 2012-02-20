@@ -9,6 +9,7 @@ Webapp::Application.routes.draw do
   get 'tags/search' => 'tags#search'
   get 'tags' => 'tags#index'
   get 'maps' => 'maps#index'
+  get 'timeline' => 'timeline#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
