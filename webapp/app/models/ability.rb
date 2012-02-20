@@ -35,7 +35,7 @@ class Ability
       can :manage, :all
     end
       
-    klasses = [Image, Text, Video]
+    klasses = [Image, Text, Video, Audio]
 
     if user.role?('user')
       klasses.each do |klass|
