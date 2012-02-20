@@ -1,0 +1,17 @@
+  <div class="span1" id="control">
+    <a href="#" id="mapmind-fullscreen"><i class="icon-resize-full"></i></a>
+    <a href="#" id="zoom-in"><i class="icon-zoom-in"></i></a>
+    <a href="#" id="zoom-out"><i class="icon-zoom-out"></i></a>
+    <span id="zoom-level">1</span>
+  </div>
+
+  <div id="mindmap-wrapper" class="span9">
+    <div id="mindmap">
+    </div><!-- mindmap-demo -->
+  </div><!-- mindmap-demo-wrapper -->
+
+  <script id='tmpl-node' type='text/template'>
+    <div id="{{= id }}" class="node" style="left: {{= pos_left }}; top: {{= pos_top }}">
+      <span class="node_name">{{= label }}</span>
+    </div>
+  </script>

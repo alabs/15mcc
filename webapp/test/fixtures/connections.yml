@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  label: MyString
+  source_id: MyString
+  target_id: MyString
+
+two:
+  label: MyString
+  source_id: MyString
+  target_id: MyString
