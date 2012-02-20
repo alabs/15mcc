@@ -34,9 +34,9 @@
     </div>
 
     <div class="control-group">
-      <%= label "user_terms", "Acepto las condiciones de uso", :class => "control-label" %>
+      <%= f.label :terms, "Acepto las condiciones de uso", :class => "control-label" %>
       <div class="controls">
-        <%= check_box_tag("user[terms]", true, false) %>
+        <%= f.check_box :terms, :required => true %>
       </div>
     </div>
 

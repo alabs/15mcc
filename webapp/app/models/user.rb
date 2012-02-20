@@ -9,18 +9,14 @@ class User
   has_many :texts
   has_many :videos
 
-  attr_accessible :username, :email, :password, :password_confirmation, :accept_tos
+  attr_accessible :username, :email, :password, :password_confirmation, :terms
+  attr_accessor :terms, :login
 
-  # FIXME: Ticket #24 esto no termina de funcionar bien
-  validates :terms, :acceptance => true
-
-  field :terms, :type => Boolean
-
-  field :username, :type => String
   validates_length_of :username, minimun: 3, maximum: 10
   validates_uniqueness_of :username
+  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
-  attr_accessor :login
+  field :username, :type => String
 
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
