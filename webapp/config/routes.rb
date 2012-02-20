@@ -10,9 +10,11 @@ Webapp::Application.routes.draw do
   resources :videos
   resources :images
   resources :texts
+
   get 'bank' => 'pages#bank'
+  get 'bank/editor' => 'mapmind#editor'
+
   get 'tags/search' => 'tags#search'
-  get 'mapmind/editor' => 'mapmind#editor'
   get 'maps' => 'maps#index'
 
   # The priority is based upon order of creation:

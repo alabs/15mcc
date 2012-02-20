@@ -76,7 +76,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     initEdit: function() {
       // opciones especificas para la edicion con jsplumb
     
-      $("#footer").hide();
+      $("#footer, #header").hide();
 
       // permitir que los nodos se arrastren
       jsPlumb.draggable($(".node"), {
@@ -119,7 +119,8 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         })
       });
     
-      jsPlumb.bind("contextmenu", function (c) {
+      jsPlumb.bind("contextmenu", function (c, e) {
+        e.preventDefault();
         var confirm_remove = confirm("¿Quieres borrar esta conexión?");
         if ( confirm_remove === true ){ 
           var data = "source=" + c.sourceId + "&target=" + c.targetId;
@@ -131,6 +132,8 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
             jsPlumb.detach(c);
           });
         }
+
+        return false
       });
     
     
@@ -162,7 +165,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       return data;
     },
 
-    drawConnection: function (properties){
+    drawConnection: function (params){
       // pinta las uniones entre los nodos
       // recibe un objeto de este tipo:
       // {source: node._id, target:node._id, label:str}
@@ -174,14 +177,17 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         maxConnections: -1
       }          
     
-      jsPlumb.addEndpoint(properties.source, endpoint_options);
-      jsPlumb.addEndpoint(properties.target, endpoint_options);
+      // comprobamos que se encuentren los IDs de los nodos
+      if ( $('#' + params.source).length != 0 && $('#' + params.target).length != 0 ) {
+        jsPlumb.addEndpoint(params.source, endpoint_options);
+        jsPlumb.addEndpoint(params.target, endpoint_options);
     
-      if (properties.label == null){
-        jsPlumb.connect({ source:properties.source, target:properties.target, fireEvent: properties.fireEvent});
-      } else {
-        jsPlumb.connect({ source:properties.source, target:properties.target, fireEvent: properties.fireEvent})
-          .setLabel(properties.label);
+        if (params.label == null){
+          jsPlumb.connect({ source:params.source, target:params.target, fireEvent: params.fireEvent});
+        } else {
+          jsPlumb.connect({ source:params.source, target:params.target, fireEvent: params.fireEvent})
+            .setLabel(params.label);
+        }
       }
     
     },
@@ -199,7 +205,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         var data = { "id": properties.id, "label": properties.label, "pos_left": properties.pos_left + 'px', "pos_top": properties.pos_top + 'px'};
       }
       var compiledTmpl = _.template(tmplMarkup, data);
-      $('#mapmind-editor, #mapmind').append(compiledTmpl);
+      $('#mindmap-editor, #mindmap').append(compiledTmpl);
     },
 
     loadMap: function(mode){
@@ -247,7 +253,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       if ( confirm_remove === true ){ 
         $('.hl').fadeOut(300, function() { $(this).remove() });
         $('.node-selected').hide('slow');
-        $.simpleMM.connections_clean();
+        $.simpleMM.connectionsClean();
         var node_id = $('.hl').attr('id');
         $.ajax({ type: "DELETE", url: '/nodes/' + node_id + '.json', dataType: "json" });
         // TODO: lo tiene que dejar en algun lado para que lo levante 

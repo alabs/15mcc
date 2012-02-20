@@ -7,7 +7,14 @@ _.templateSettings = {
 
 $(function () {
 
-  $.simpleMM.loadMap("editable");
+
+  if ($('#mindmap-editor').length != 0){
+    $.simpleMM.loadMap("editable");
+  }
+
+  if ($('#mindmap').length != 0){
+    $.simpleMM.loadMap("navegable");
+  }
 
   $('#mapmind-editor #control').draggable();
 
