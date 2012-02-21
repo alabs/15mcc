@@ -47,9 +47,9 @@ class Audio
 
   def gmaps4rails_marker_picture
     {
-     "picture" => "/assets/icon-texts-small.png",
-     "width" => "20",
-     "height" => "20",
+     "picture" => "/assets/icon-audios-small.png",
+     "width" => "15",
+     "height" => "16",
      "marker_anchor" => [ 5, 10]
     }
   end   

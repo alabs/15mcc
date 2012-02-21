@@ -46,9 +46,9 @@ class Video
   end
 
   def gmaps4rails_infowindow
-    # queda mal con el tamañao  #{ embed_html }
+    # FIXME: queda mal con el tamañao  #{ embed_html }
     "
-    <a href='/videos/#{ id }'>
+    <a href='/videos/#{ slug }'>
       <h5>#{ERB::Util.html_escape title}</h5>
       <img class='infowindow-thumb' src='#{ thumbnail }' />
     </a>
@@ -57,15 +57,13 @@ class Video
   end
 
   def gmaps4rails_marker_picture
-    # FIXME: este thumb no tiene el tamaño correcto :S...
     {
-     "picture" => thumbnail,
+     "picture" => "/assets/icon-videos-small.png",
      "width" => "20",
-     "height" => "20",
-     "marker_anchor" => [ 5, 10]
+     "height" => "15",
+     "marker_anchor" => [ 5, 10 ]
     }
   end   
-
 
   protected
 
