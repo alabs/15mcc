@@ -13,6 +13,7 @@ class Video
   field :embed_url, type: String
   field :embed_html, type: String
   field :happened_at, type: Time
+  field :slug, type: String
   
   validates_presence_of :url
   validates_uniqueness_of :url
@@ -20,7 +21,7 @@ class Video
   belongs_to :user
   field :user_id, type: String
   
-  before_save :generate_metadata
+  before_save :generate_metadata, :generate_slug
 
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
@@ -31,6 +32,14 @@ class Video
   field :latitude, type: Float
   field :longitude, type: Float
   field :gmaps, type: Boolean
+
+  def self.find_by_slug(slug)
+    where(:slug => slug).first
+  end
+
+  def to_param
+    slug
+  end
 
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
@@ -69,4 +78,7 @@ class Video
     self.embed_html = vid.embed_html(600)
   end
 
+  def generate_slug
+    self.slug = self.title.parameterize
+  end
 end

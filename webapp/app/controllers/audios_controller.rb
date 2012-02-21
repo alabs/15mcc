@@ -19,7 +19,7 @@ class AudiosController < ApplicationController
   # GET /audios/1
   # GET /audios/1.json
   def show
-    @audio = Audio.find(params[:id])
+    @audio = Audio.find_by_slug(params[:id])
     authorize! :show, @audio
 
     @map = @audio.to_gmaps4rails
@@ -44,7 +44,7 @@ class AudiosController < ApplicationController
 
   # GET /audios/1/edit
   def edit
-    @audio = Audio.find(params[:id])
+    @audio = Audio.find_by_slug(params[:id])
     authorize! :update, @audio
   end
 
@@ -70,7 +70,7 @@ class AudiosController < ApplicationController
   # PUT /audios/1
   # PUT /audios/1.json
   def update
-    @audio = Audio.find(params[:id])
+    @audio = Audio.find_by_slug(params[:id])
     authorize! :update, @audio
 
     respond_to do |format|
@@ -87,7 +87,7 @@ class AudiosController < ApplicationController
   # DELETE /audios/1
   # DELETE /audios/1.json
   def destroy
-    @audio = Audio.find(params[:id])
+    @audio = Audio.find_by_slug(params[:id])
     authorize! :destroy, @audio
     @audio.destroy
 

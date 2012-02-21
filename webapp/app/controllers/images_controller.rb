@@ -19,7 +19,7 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
-    @image = Image.find(params[:id])
+    @image = Image.find_by_slug(params[:id])
     authorize! :show, @image
 
     @map = @image.to_gmaps4rails
@@ -44,7 +44,7 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    @image = Image.find(params[:id])
+    @image = Image.find_by_slug(params[:id])
     authorize! :update, @image
   end
 
@@ -70,7 +70,7 @@ class ImagesController < ApplicationController
   # PUT /images/1
   # PUT /images/1.json
   def update
-    @image = Image.find(params[:id])
+    @image = Image.find_by_slug(params[:id])
     authorize! :update, @image
 
     respond_to do |format|
@@ -87,7 +87,7 @@ class ImagesController < ApplicationController
   # DELETE /images/1
   # DELETE /images/1.json
   def destroy
-    @image = Image.find(params[:id])
+    @image = Image.find_by_slug(params[:id])
     authorize! :destroy, @image
     @image.destroy
 
