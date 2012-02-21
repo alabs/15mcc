@@ -19,6 +19,7 @@ Webapp::Application.routes.draw do
   get 'timeline' => 'timeline#index'
   match '/profile/:username' => 'pages#profile'
   get 'admin/users' => 'admin/users#index'
+  get 'admin/users/search' => 'admin/users#search'
   put 'admin/users/:username/update' => 'admin/users#update', :as => 'admin_users_update'
   root :to => 'pages#index'
 

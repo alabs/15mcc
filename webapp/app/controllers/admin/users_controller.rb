@@ -14,6 +14,15 @@ class Admin::UsersController < ApplicationController
     respond_with @user
   end
 
+  def search
+    @users = User.where(:username => /#{params[:username]}/)
+
+    respond_to do |format|
+      format.json { render :json => @users }
+    end
+  end
+
+
   protected
 
   def check_role
@@ -22,4 +31,5 @@ class Admin::UsersController < ApplicationController
       redirect_to root_path
     end
   end
+
 end
