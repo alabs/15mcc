@@ -10,6 +10,7 @@ class User
   has_many :videos
 
   attr_accessible :username, :email, :password, :password_confirmation, :terms
+  attr_accessible :username, :email, :role, :as => :admin
   attr_accessor :terms, :login
 
   validates_length_of :username, minimun: 3, maximum: 10

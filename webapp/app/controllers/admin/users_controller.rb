@@ -7,9 +7,9 @@ class Admin::UsersController < ApplicationController
   end
 
   respond_to :html, :json
-  def update_role
+  def update
     @user = User.where(:username => params[:username]).first
-    @user.role = params[:user][:role]
+    @user.assign_attributes(params[:user], :as => :admin)
     @user.save
     respond_with @user
   end
