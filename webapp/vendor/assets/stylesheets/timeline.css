@@ -122,27 +122,27 @@ div.timeline-navigation-new, div.timeline-navigation-delete,
 }
 
 div.timeline-navigation-new {
-  background: url('img/16/new.png') no-repeat center;
+  background: url('timeline/16/new.png') no-repeat center;
 }
 
 div.timeline-navigation-delete {
   padding: 0px;
   padding-left: 5px;
-  background: url('img/16/delete.png') no-repeat center;
+  background: url('timeline/16/delete.png') no-repeat center;
 }
 
 div.timeline-navigation-zoom-in {
-  background: url('img/16/zoomin.png') no-repeat center;
+  background: url('timeline/16/zoomin.png') no-repeat center;
 }
 
 div.timeline-navigation-zoom-out {
-  background: url('img/16/zoomout.png') no-repeat center;
+  background: url('timeline/16/zoomout.png') no-repeat center;
 }
 
 div.timeline-navigation-move-left {
-  background: url('img/16/moveleft.png') no-repeat center;
+  background: url('timeline/16/moveleft.png') no-repeat center;
 }
 
 div.timeline-navigation-move-right {
-  background: url('img/16/moveright.png') no-repeat center;
+  background: url('timeline/16/moveright.png') no-repeat center;
 }

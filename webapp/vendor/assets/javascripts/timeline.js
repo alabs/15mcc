@@ -4400,10 +4400,10 @@ links.Timeline.StepDate.prototype.isMajor = function() {
  * @return {string}    minor axislabel
  */ 
 links.Timeline.StepDate.prototype.getLabelMinor = function(date) {
-  var MONTHS_SHORT = new Array("Jan", "Feb", "Mar", 
-                                "Apr", "May", "Jun", 
-                                "Jul", "Aug", "Sep", 
-                                "Oct", "Nov", "Dec");
+  var MONTHS_SHORT = new Array("Ene", "Feb", "Mar", 
+                                "Abr", "May", "Jun", 
+                                "Jul", "Ago", "Sep", 
+                                "Oct", "Nov", "Dic");
 
   if (date == undefined) {
     date = this.current;
@@ -4433,12 +4433,12 @@ links.Timeline.StepDate.prototype.getLabelMinor = function(date) {
  * @return {string}    major axislabel
  */ 
 links.Timeline.StepDate.prototype.getLabelMajor = function(date) {
-  var MONTHS = new Array("January", "February", "March", 
-                         "April", "May", "June", 
-                         "July", "August", "September", 
-                         "October", "November", "December");
-  var DAYS = new Array("Sunday", "Monday", "Tuesday", 
-                       "Wednesday", "Thursday", "Friday", "Saturday");  
+  var MONTHS = new Array("Enero", "Febrero", "Marzo", 
+                         "Abril", "Mayo", "Junio", 
+                         "Julio", "Agosto", "Septiembre", 
+                         "Octubre", "Noviembre", "Diciembre");
+  var DAYS = new Array("Domingo", "Lunes", "Martes", 
+                       "Miércoles", "Jueves", "Viernes", "Sábado");  
 
   if (date == undefined) {
     date = this.current;

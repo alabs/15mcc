@@ -16,7 +16,7 @@ class TagsController < ApplicationController
   # GET /tags/show/<tagname>.json
   def show
     @tag = params['tag']
-    @contents = Text.tagged_with(@tag) || Video.tagged_with(@tag) || Image.tagged_with(@tag)
+    @contents = Text.tagged_with(@tag) | Video.tagged_with(@tag) | Image.tagged_with(@tag) | Audio.tagged_with(@tag)
 
     respond_to do |format|
       format.html # show.html.erb
