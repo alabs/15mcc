@@ -55,24 +55,20 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     initShow: function(){
       // opciones especificas solo para la navegacion con jsplumb
     
-      $('#mindmap-wrapper').scroll( function(){ jsPlumb.repaintEverything(); });
+      $('#mindmap-wrapper')
+        .scroll( function(){ jsPlumb.repaintEverything(); })
+        .resizable({ resize: function(){ jsPlumb.repaintEverything(); } });
     
-      $('.node').click( function(e){
-        e.preventDefault();
-        $(this).zoomTo({ targetsize: 0.2 });
-      });
-    
-      $("body").click(function(evt) {
-         $(this).zoomTo({targetsize:1.0});
-         evt.stopPropagation();
-      });
+      $('.node')
+        .click( function(e){ e.preventDefault(); $(this).zoomTo({ targetsize: 0.2 }); })
+        .hover(function() {
+            $.simpleMM.hl($(this).attr("id"));
+          }, function() {
+            hlid = $(this).attr("id");
+            hlint = window.setTimeout(function() { $.simpleMM.unhl(hlid); }, 100);
+        });
 
-      $(".node").hover(function() {
-        $.simpleMM.hl($(this).attr("id"));
-      }, function() {
-        hlid = $(this).attr("id");
-        hlint = window.setTimeout(function() { $.simpleMM.unhl(hlid); }, 100);
-      });
+      $("body").click(function(evt) { $(this).zoomTo({targetsize:1.0}); evt.stopPropagation(); });
     
     },
 
