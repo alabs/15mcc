@@ -22,6 +22,11 @@ class Audio
   
   validates_presence_of :title
   validates_uniqueness_of :title
+
+  # FIXME: subir un OGG no funciona con esto- WTF?
+#  validates_attachment_content_type :archive,
+#      :content_type => [ 'audio/mpeg', 'audio/x-mpeg', 'audio/mp3', 'audio/x-mp3', 'audio/mpeg3', 'audio/x-mpeg3', 'audio/mpg', 'audio/x-mpg', 'audio/x-mpegaudio', 'audio/ogg', 'application/ogg' ],
+#      :message => "El tipo de audio no esta soportado. Tiene que ser del tipo OGG o MP3."
   
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
