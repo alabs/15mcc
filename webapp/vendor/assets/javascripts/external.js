@@ -3,6 +3,8 @@
 //= require jquery-ui-1.8.17.custom.min
 //= require jquery.tagit
 //= require jquery-ui-timepicker-addon
+//= require jquery.purr
+//= require best_in_place
 
 // gmaps4rails
 //= require gmaps4rails/googlemaps.js
@@ -13,6 +15,7 @@
 
 // require bootstrap-alert
 // require bootstrap-modal
+// require bootstrap-typeahead
 
 // for mind-map
 //= require jsplumb/jsBezier-0.3
@@ -26,3 +29,5 @@
 //= require purecssmatrix
 //= require jquery.animtrans
 //= require jquery.zoomooz
+
+//= require timeline

@@ -69,9 +69,10 @@ gem 'cancan'
 # notificación de excepciones
 gem 'exception_notification', :require => 'exception_notifier'
 
+# Para compilar assets
 gem 'execjs'
 gem 'therubyracer'
-
-#metadata
-
+#exif info from images
 gem 'exifr'
+# Para editar campos al vuelo
+gem 'best_in_place'

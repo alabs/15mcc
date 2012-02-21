@@ -35,6 +35,9 @@ GEM
     addressable (2.2.6)
     arel (3.0.0)
     bcrypt-ruby (3.0.1)
+    best_in_place (1.0.6)
+      jquery-rails
+      rails (~> 3.1)
     bson (1.5.2)
     bson_ext (1.5.2)
       bson (= 1.5.2)
@@ -197,6 +200,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_unvlogable
+  best_in_place
   bson_ext
   cancan
   capistrano

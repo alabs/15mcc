@@ -1,0 +1,15 @@
+<div class="row" style="margin-top:20px;">
+  <%= render :partial => 'partials/sidebar_bank' %>
+  <div class="span9">
+    <h2><%= @audio.title %></h2>
+    <audio controls="controls">
+      <source src="<%= @audio.archive.url %>" type ="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+    <%= render :partial => "partials/metadata", :locals => { :content => @audio } %>
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @audio } %>
+    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
+    <p><%= link_to 'Volver', audios_path %>
+  </div>
+</div>
+

@@ -1,0 +1,37 @@
+<div class="form-stacked main-form">
+  <%= form_for(@audio, :html => { :multipart => true }) do |f| %>
+  <fieldset>
+    <legend>Introducir nuevo audio</legend>
+
+<%= render :partial => "partials/copyright_notice" %>
+
+<% if @audio.errors.any? %>
+   <% @audio.errors.full_messages.each do |msg| %>
+     <div class="alert alert-error"><%= msg %></div>
+   <% end %>
+<% end %>
+
+    <div class="form-field">
+      <%= f.label 'Título' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título del audio', :class => 'span8' %>
+      <% unless @audio.errors[:title].blank? %>
+        <span class="error-message"><%= @audio.errors[:title].to_sentence %></span>
+      <% end %>
+    </div>
+    <div class="form-field">
+      <%= f.label 'Audio' %>
+      <%= f.file_field :archive, required: true %>
+      <% unless @audio.errors[:archive].blank? %>
+        <span class="error-message"><%= @audio.errors[:archive].to_sentence %></span>
+      <% end %>
+    </div>
+
+    <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @audio} %>
+
+    <div id="form-actions">
+      <%= f.submit 'Enviar audio', :class => 'btn primary' %>
+      <%= link_to 'Cancelar', audios_path, :class => 'btn danger' %>
+    </div>
+    </fieldset>
+<% end %>
+</div>

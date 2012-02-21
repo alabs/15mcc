@@ -1,6 +1,8 @@
 // modal para la primera vez que se accede a la beta. 
 
 // http://jquery-howto.blogspot.com/2010/09/jquery-cookies-getsetdelete-plugin.html
+//
+/*
 function setCookie(name,value,days) {
   if (days) {
     var date = new Date();
@@ -29,9 +31,9 @@ function deleteCookie(name) {
 $(function(){
 
   if (getCookie('welcome-beta') === null) {
-    console.log('primera vez');
     $('#modal-welcome-beta').modal();
     setCookie('welcome-beta', 'beta', 5);
   }
 
 });
+*/

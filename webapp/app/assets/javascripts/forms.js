@@ -37,13 +37,13 @@ $(function(){
 
   $.timepicker.setDefaults($.timepicker.regional['es']);
 
-  $('#text_happened_at, #image_happened_at, #video_happened_at').datetimepicker({
+  $('#text_happened_at, #image_happened_at, #audio_happened_at, #video_happened_at').datetimepicker({
     dateFormat: 'yy-mm-dd',
     timeFormat: 'hh:mm:ss'
   });
 
   // autocomplete for tags
-  $('#text_tags, #video_tags, #image_tags, #node_tags').tagit({ 
+  $('#text_tags, #video_tags, #image_tags, #audio_tags, #node_tags').tagit({ 
     tagSource: "/tags/search.json",
     removeConfirmation: true,
     allowSpaces: true

@@ -55,11 +55,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     initShow: function(){
       // opciones especificas solo para la navegacion con jsplumb
     
-      jsPlumb.makeTarget($(".node"), {
-        dropOptions: { hoverClass: "dragHover" },
-        endpoint: { anchor: "Continuous" }
-      });
-    
+      $('#mindmap-wrapper').scroll( function(){ jsPlumb.repaintEverything(); });
     
       $('.node').click( function(e){
         e.preventDefault();
@@ -111,35 +107,14 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       });
     
       // INTERACTIVIDAD CRUD
-      jsPlumb.bind("click", function (c) {
-        var connection_name = prompt("¿Nombre de la conexion?", "");
-        /// TODO DRY
-        var data = "source=" + c.sourceId + "&target=" + c.targetId;
-        var update = "connection[label]=" + connection_name;
-        // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo 
-        // y por ultimo borrarla
-        $.get("/connections/search.json", data, function(resp){
-          var conn_id = resp[0]._id;
-          $.ajax({ type: "PUT", url: '/connections/' + conn_id, data: update, dataType: "html" });
-          c.setLabel(connection_name);
-        })
+      jsPlumb.bind("click", function (c, e) {
+        e.preventDefault();
+        $.simpleMM.updateConnection(c);
       });
     
       jsPlumb.bind("contextmenu", function (c, e) {
         e.preventDefault();
-        var confirm_remove = confirm("¿Quieres borrar esta conexión?");
-        if ( confirm_remove === true ){ 
-          var data = "source=" + c.sourceId + "&target=" + c.targetId;
-          // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo 
-          // y por ultimo borrarla
-          $.get("/connections/search.json", data, function(resp){
-            var conn_id = resp[0]._id;
-            $.ajax({ type: "DELETE", url: '/connections/' + conn_id + '.json', dataType: "json" });
-            jsPlumb.detach(c);
-          });
-        }
-
-        return false
+        $.simpleMM.removeConnection(c);
       });
     
     
@@ -178,24 +153,12 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
       // recibe un objeto de este tipo:
       // {source: node._id, target:node._id, label:str}
     
-      var endpoint_options = {
-        anchor: "Continuous",
-        connector: ["StateMachine", { curviness: 20 }],
-        connectorStyle: { strokeStyle: "#737373", lineWidth: 2 },
-        maxConnections: -1
-      }          
-    
       // comprobamos que se encuentren los IDs de los nodos
       if ( $('#' + params.source).length != 0 && $('#' + params.target).length != 0 ) {
-        jsPlumb.addEndpoint(params.source, endpoint_options);
-        jsPlumb.addEndpoint(params.target, endpoint_options);
-    
-        if (params.label == null){
-          jsPlumb.connect({ source:params.source, target:params.target, fireEvent: params.fireEvent});
-        } else {
-          jsPlumb.connect({ source:params.source, target:params.target, fireEvent: params.fireEvent})
-            .setLabel(params.label);
-        }
+        jsPlumb.addEndpoint(params.source);
+        jsPlumb.addEndpoint(params.target);
+        var connect = jsPlumb.connect({ source:params.source, target:params.target, fireEvent: params.fireEvent});
+        if (params.label != null){ connect.setLabel(params.label); }
       }
     
     },
@@ -245,7 +208,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     
     createNode: function(){
       var node_name = prompt("¿Nombre del nodo?", "");
-      if ( !(node_name === "")){ 
+      if ( node_name !== null){ 
         var data = "node[label]=" + node_name;
         $.post('/nodes.json', data, function(resp){
           // actualizamos los IDs de los nodos, los necesitamos para guardar las conexiones del JSPlumb
@@ -270,12 +233,37 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
     updateNode: function(){
       var node_name_old = $('.hl').children('.node_name').text();
       var node_name = prompt("¿Nombre del nodo?", node_name_old);
-      if ( !(node_name === "")){ 
+      if ( node_name !== null){ 
         $('.hl').children('.node_name').html(node_name);
         $('.node-selected').hide('slow');
         var data = $.simpleMM.nodeToData($('.hl'));
         var node_id = $('.hl').attr('id');
         $.ajax({ type: "PUT", url: '/nodes/' + node_id, data: data, dataType: "json" });
+      }
+    },
+
+    removeConnection: function(c){
+      var confirm_remove = confirm("¿Quieres borrar esta conexión?");
+      if ( confirm_remove === true ){ 
+        var data = "source=" + c.sourceId + "&target=" + c.targetId;
+        // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo y por ultimo borrarla
+        $.get("/connections/search.json", data, function(resp){
+          $.ajax({ type: "DELETE", url: '/connections/' + resp[0]._id + '.json', dataType: "json" });
+          jsPlumb.detach(c);
+        });
+      }
+    },
+
+    updateConnection: function(c){
+      var connection_name_old = c.getLabel();
+      var connection_name = prompt("¿Nombre de la conexion?", connection_name_old);
+      if ( connection_name !== null){ 
+        var data = "source=" + c.sourceId + "&target=" + c.targetId;
+        // como no tenemos un ID primero tenemos que buscar la conexion en la BBDD, conseguirlo y por ultimo borrarla
+        $.get("/connections/search.json", data, function(resp){
+          $.ajax({ type: "PUT", url: '/connections/' + resp[0]._id, data: "connection[label]=" + connection_name, dataType: "html" });
+          c.setLabel(connection_name);
+        })
       }
     },
 

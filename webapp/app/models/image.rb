@@ -14,7 +14,8 @@ class Image
   
   has_mongoid_attached_file :img,
     :styles => {
-      :small => ['260x180', :jpg]
+      :small => ['260x180', :jpg],
+      :marker => ['20x20', :jpg]
     }
 
   after_img_post_process  :process_metadata
@@ -31,15 +32,48 @@ class Image
   field :latitude, type: Float
   field :longitude, type: Float
   field :gmaps, type: Boolean
+  field :slug, type: String
+
+  before_save :generate_slug
+
+  def self.find_by_slug(slug)
+    where(:slug => slug).first
+  end
+
+  def to_param
+    slug
+  end
 
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
   end
 
   def gmaps4rails_infowindow
-    # TODO: extend this - put more information
-    "<h1>#{ title }</h1>"
+    "
+    <a href='/images/#{ id }'>
+      <h5>#{ERB::Util.html_escape title}</h5>
+      <img class='infowindow-thumb' src='#{ img.url(:small) }' />
+    </a>
+    <b>Etiquetado con</b>: #{ tags }
+    "
   end
+
+  def gmaps4rails_marker_picture
+    {
+     "picture" => img.url(:marker),
+     "width" => "20",
+     "height" => "20",
+     "marker_anchor" => [ 5, 10]
+    }
+  end   
+
+  protected
+
+  def generate_slug
+    self.slug = self.title.parameterize
+  end
+
+  private
 
   def process_metadata
 

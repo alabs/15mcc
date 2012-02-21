@@ -1,0 +1,9 @@
+<% @users.each do |user| %>
+  <tr>
+    <td><%= best_in_place user, :username, :path => admin_users_update_path(user.username) %></td>
+    <td><%= best_in_place user, :email, :path => admin_users_update_path(user.username) %></td>
+    <td><%= best_in_place user, :role, :type => :select, :collection => build_roles, :path => admin_users_update_path(user.username) %></td>
+    <td><%= user.last_sign_in_at %></td>
+  </tr>
+<% end %>
+

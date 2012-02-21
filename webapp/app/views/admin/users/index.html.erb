@@ -1,0 +1,37 @@
+<div class="span10 mt1">
+  <div class="row">
+    <div class="span5">
+      <h1>Administrar usuarios</h1>
+      <p>Pulsa sobre los campos para editar</p>
+    </div>
+    <div class="span5" style="margin-top: 6px; text-align: right;">
+      <form id="user-search-form" action="#" method="post">
+        <label>Buscar usuario:</label>
+        <input type="text" id="user-search" data-provide="typeahead" />
+      </form>
+    </div>
+  </div><!-- row -->
+  <br />
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Última conexión</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= best_in_place user, :username, :path => admin_users_update_path(user.username) %></td>
+          <td><%= best_in_place user, :email, :path => admin_users_update_path(user.username) %></td>
+          <td><%= best_in_place user, :role, :type => :select, :collection => build_roles, :path => admin_users_update_path(user.username) %></td>
+          <td><%= user.last_sign_in_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br />
+  <%= paginate @users %>
+</div>

@@ -21,17 +21,33 @@ class Text
   field :latitude, type: Float
   field :longitude, type: Float
   field :gmaps, type: Boolean
+  field :slug, type: String
   
   belongs_to :user
   field :user_id, type: String
+
+  before_save :generate_slug
+
+  def self.find_by_slug(slug)
+    where(:slug => slug).first
+  end
+
+  def to_param
+    slug
+  end
 
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
   end
 
   def gmaps4rails_infowindow
-    # TODO: extend this - put more information
-    "<h1>#{ title }</h1>"
+    "
+    <h5><a href='/texts/#{ id }'> ##{ERB::Util.html_escape title} </a></h5>
+    <p>
+      #{ERB::Util.html_escape body}
+    </p>
+    <b>Etiquetado con</b>: #{ tags }
+    "
   end
 
   def gmaps4rails_marker_picture
@@ -43,4 +59,9 @@ class Text
     }
   end   
 
+  protected
+
+  def generate_slug
+    self.slug = self.title.parameterize
+  end
 end
