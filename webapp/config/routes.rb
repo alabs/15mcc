@@ -6,10 +6,12 @@ Webapp::Application.routes.draw do
   resources :images
   resources :texts
   resources :audios
-  resources :connections
   resources :nodes
 
-  get 'connections/search' => 'connections#search'
+  resources :connections do
+    get 'search', :on => :collection
+  end
+
   get 'bank' => 'pages#bank'
   get 'bank/editor' => 'mapmind#editor'
   get 'tags/search' => 'tags#search'
@@ -18,9 +20,11 @@ Webapp::Application.routes.draw do
   get 'maps' => 'maps#index'
   get 'timeline' => 'timeline#index'
   match '/profile/:username' => 'pages#profile'
+
   get 'admin/users' => 'admin/users#index'
   get 'admin/users/search' => 'admin/users#search'
   put 'admin/users/:username/update' => 'admin/users#update', :as => 'admin_users_update'
+
   root :to => 'pages#index'
 
 end
