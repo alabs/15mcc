@@ -15,9 +15,10 @@ class Admin::UsersController < ApplicationController
   end
 
   def search
-    @users = User.where(:username => /#{params[:username]}/)
+    @users = User.where(:username => /#{params[:get]}/) | User.where(:email => /#{params[:get]}/) 
 
     respond_to do |format|
+      format.html { render :layout => false }
       format.json { render :json => @users }
     end
   end
