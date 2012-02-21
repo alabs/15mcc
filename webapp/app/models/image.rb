@@ -5,6 +5,9 @@ class Image
   include Mongoid::Taggable
   include Mongoid::Paperclip
   include Gmaps4rails::ActsAsGmappable
+  
+  attr_accessor :terms
+  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
   field :title, type: String
   field :happened_at, type: Time
