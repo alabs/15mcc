@@ -1,7 +1,7 @@
 $(function(){
   $('.best_in_place').best_in_place();
 
-  $('#usersearch').keyup(function(){
+  $('#user-search').keyup(function(){
     $("tr.hide").removeClass('hide');  
     $.get('/admin/users/search', 'get=' + $(this).val(), function(resp){
       $('tbody tr').hide()
@@ -10,5 +10,6 @@ $(function(){
     });
   });
 
+  $('#user-search-form').submit( function(e) { e.preventDefault() });
 
 });
