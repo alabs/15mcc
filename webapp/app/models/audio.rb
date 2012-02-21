@@ -14,6 +14,7 @@ class Audio
   field :longitude, type: Float
   field :gmaps, type: Boolean
   field :slug, type: String
+  field :priority, type: Boolean, :default => false
 
   attr_accessor :terms
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"

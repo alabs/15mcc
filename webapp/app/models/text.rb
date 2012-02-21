@@ -25,6 +25,7 @@ class Text
   field :longitude, type: Float
   field :gmaps, type: Boolean
   field :slug, type: String
+  field :priority, type: Boolean, :default => false
   
   belongs_to :user
   field :user_id, type: String

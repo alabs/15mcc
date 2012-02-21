@@ -34,6 +34,7 @@ class Image
   field :longitude, type: Float
   field :gmaps, type: Boolean
   field :slug, type: String
+  field :priority, type: Boolean, :default => false
 
   before_save :generate_slug
 
