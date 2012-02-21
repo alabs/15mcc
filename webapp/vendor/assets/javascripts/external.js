@@ -15,6 +15,7 @@
 
 // require bootstrap-alert
 // require bootstrap-modal
+//= require bootstrap-typeahead
 
 // for mind-map
 //= require jsplumb/jsBezier-0.3

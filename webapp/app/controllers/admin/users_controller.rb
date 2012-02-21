@@ -3,7 +3,7 @@ class Admin::UsersController < ApplicationController
   before_filter :check_role
 
   def index
-    @users = User.desc(:created_at)
+    @users = User.asc(:username).page(params[:page])
   end
 
   respond_to :html, :json
