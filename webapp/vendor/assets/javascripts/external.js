@@ -29,3 +29,5 @@
 //= require purecssmatrix
 //= require jquery.animtrans
 //= require jquery.zoomooz
+
+//= require timeline
