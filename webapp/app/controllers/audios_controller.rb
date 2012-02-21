@@ -96,4 +96,20 @@ class AudiosController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # POST /audios/1/priority
+  def priority
+    @audio = Audio.find(params[:id])
+    authorize! :priority, @audio
+
+    case params["priority-action"]  
+    when "add"
+      @audio.priority = true
+    when "remove"
+      @audio.priority = false
+    end
+
+    @audio.save
+    render :text => "OK"
+  end
 end

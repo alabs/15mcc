@@ -3,6 +3,7 @@
   <div class="span9">
     <h2><%= @text.title %></h2>
     <p><%= @text.body %></p>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
