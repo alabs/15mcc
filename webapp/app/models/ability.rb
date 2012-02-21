@@ -25,7 +25,7 @@ class Ability
     #
     # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
 
-    user ||= User.new(:role => 'anonymous')
+    user ||= User.new {|u| u.role = 'anonymous' }
 
     if user.admin?
       can :manage, :all

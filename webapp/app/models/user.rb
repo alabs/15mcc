@@ -63,13 +63,13 @@ class User
   
   ROLES = %w[admin editor user anonymous]
   
-  #def role?(base_role)
-  #  ROLES.index(base_role.to_s) <= ROLES.index(role)
-  #end
-  
-  def role?(role)
-    self.role == role
+  def role?(base_role)
+    ROLES.index(base_role.to_s) <= ROLES.index(role)
   end
+  
+  #def role?(role)
+  #  self.role == role
+  #end
 
   def admin?
     role == 'admin'

@@ -15,6 +15,9 @@ class Video
   field :happened_at, type: Time
   field :slug, type: String
   
+  attr_accessor :terms
+  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
+  
   validates_presence_of :url
   validates_uniqueness_of :url
   

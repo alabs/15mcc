@@ -15,6 +15,9 @@ class Audio
   field :gmaps, type: Boolean
   field :slug, type: String
 
+  attr_accessor :terms
+  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
+
   belongs_to :user
   field :user_id, type: String
 
