@@ -14,7 +14,7 @@ class Video
   field :embed_html, type: String
   field :happened_at, type: Time
   field :slug, type: String
-  field :priority, type: String, :default => false
+  field :priority, type: Boolean, :default => false
   
   attr_accessor :terms
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
