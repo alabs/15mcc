@@ -112,4 +112,16 @@ class AudiosController < ApplicationController
     @audio.save
     render :text => "OK"
   end
+
+  def search
+    @audios = Audio.fulltext_search(params[:query])
+    authorize! :search, @audios
+
+    @map = @audios.to_gmaps4rails
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @audios }
+    end
+  end
 end

@@ -4,18 +4,22 @@ Webapp::Application.routes.draw do
 
   resources :videos do 
     post 'priority', :on => :member
+    post 'search' => 'videos#search', :on => :collection
   end
 
   resources :images do 
     post 'priority', :on => :member
+    post 'search' => 'images#search', :on => :collection
   end
 
   resources :texts do 
     post 'priority', :on => :member
+    post 'search' => 'texts#search', :on => :collection
   end
 
   resources :audios do 
     post 'priority', :on => :member
+    post 'search' => 'audios#search', :on => :collection
   end
 
   resources :nodes

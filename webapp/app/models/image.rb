@@ -4,6 +4,7 @@ class Image
   include Mongoid::Timestamps
   include Mongoid::Taggable
   include Mongoid::Paperclip
+  include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
   
   attr_accessor :terms
@@ -37,6 +38,8 @@ class Image
   field :priority, type: Boolean, :default => false
 
   before_save :generate_slug
+  
+  fulltext_search_in :title, :street, :city, :country
 
   def self.find_by_slug(slug)
     where(:slug => slug).first

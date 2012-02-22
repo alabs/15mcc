@@ -112,4 +112,16 @@ class TextsController < ApplicationController
     @text.save
     render :text => "OK"
   end
+
+  def search
+    @texts = Text.fulltext_search(params[:query])
+    authorize! :search, @texts
+
+    @map = @texts.to_gmaps4rails
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @texts }
+    end
+  end
 end

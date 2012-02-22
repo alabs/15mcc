@@ -3,6 +3,7 @@ class Text
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Taggable
+  include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
 
   attr_accessor :terms
@@ -31,6 +32,8 @@ class Text
   field :user_id, type: String
 
   before_save :generate_slug
+
+  fulltext_search_in :title, :body, :street, :city, :country
 
   def self.find_by_slug(slug)
     where(:slug => slug).first

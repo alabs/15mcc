@@ -2,7 +2,7 @@
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span9">
     <div class="span4">
-      <h2>Últimos textos</h2>
+      <h2>Resultados de la búsqueda</h2>
     </div>
     <div class="span4">
       <form id="search-texts-form" action="/texts/search" method="post">
@@ -50,7 +50,6 @@
 </table>
 
 <br />
-<%= paginate @texts %>  
 
 <%= gmaps4rails(@map) %>
   </div>
