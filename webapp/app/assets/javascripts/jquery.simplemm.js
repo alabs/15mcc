@@ -5,6 +5,7 @@ jquery.simplemm.js
 
 Simple MindMap for jQuery using jsPlumb and underscore.js
 
+
 */
 (function ($) {
 
@@ -54,22 +55,29 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
 
     initShow: function(){
       // opciones especificas solo para la navegacion con jsplumb
+      
+      jsPlumb.Defaults.HoverPaintStyle = { strokeStyle: "#3B5323", lineWidth: 2 };
     
       $('#mindmap-wrapper')
         .scroll( function(){ jsPlumb.repaintEverything(); })
-        .resizable({ resize: function(){ jsPlumb.repaintEverything(); } });
+        .overscroll();
+        //.resizable({ resize: function(){ jsPlumb.repaintEverything(); } });
     
       $('.node')
-        .click( function(e){ e.preventDefault(); $(this).zoomTo({ targetsize: 0.2 }); })
+        .click( function(e){ 
+          e.preventDefault(); 
+          $('#infobox').hide();
+          var tmplMarkup = $('#tmpl-infobox').html();
+          var data = { "label": $(this).children("span").html() };
+          var compiledTmpl = _.template(tmplMarkup, data);
+          $('#content').prepend(compiledTmpl);
+          // TODO: mostrar infobox
+        })
         .hover(function() {
             $.simpleMM.hl($(this).attr("id"));
           }, function() {
-            hlid = $(this).attr("id");
-            hlint = window.setTimeout(function() { $.simpleMM.unhl(hlid); }, 100);
+            $.simpleMM.unhl($(this).attr("id"));
         });
-
-      $("body").click(function(evt) { $(this).zoomTo({targetsize:1.0}); evt.stopPropagation(); });
-    
     },
 
     initEdit: function() {
@@ -113,8 +121,6 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         $.simpleMM.removeConnection(c);
       });
     
-    
-    // FIXME: toggle o algo mas chulo q esto q tiene bugs
       $('.node').click( function(e){
         e.preventDefault();
         $.simpleMM.controlShow($(this));
@@ -125,7 +131,7 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
         $(this).removeClass('hl');
         $('.node-selected').hide('slow');
       });
-    
+
     },
 
     controlShow: function($node){

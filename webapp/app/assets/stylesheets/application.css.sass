@@ -135,14 +135,15 @@ p, h1, h2, h3
 
 // FIXME: esto es muy mejorable
 #mindmap-wrapper, #mindmap-editor
-  padding: 100px
   .node
-    background-image: linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
-    background-image: -o-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
-    background-image: -moz-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
-    background-image: -webkit-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
-    background-image: -ms-linear-gradient(bottom, rgb(48,48,48) 12%, rgb(0,0,0) 56%, rgb(0,0,0) 82%)
-    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.12, rgb(48,48,48)), color-stop(0.56, rgb(0,0,0)), color-stop(0.82, rgb(0,0,0)))
+    background: rgb(125,126,125)
+    background: -moz-linear-gradient(top,  rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%)
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,126,125,1)), color-stop(100%,rgba(14,14,14,1)))
+    background: -webkit-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%)
+    background: -o-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%)
+    background: -ms-linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%)
+    background: linear-gradient(top,  rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%)
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 )
     background-color: white
     border: 0.1em outset #000000
     border-radius: 5em
@@ -183,17 +184,34 @@ p, h1, h2, h3
     cursor: auto
     height: 1.5em
   .hl 
-    background-image: linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -o-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -moz-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -webkit-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -ms-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.43, rgb(59,0,59)), color-stop(0.72, rgb(36,0,36)), color-stop(0.86, rgb(46,0,46)))
+    background: rgb(164,179,87)
+    background: -moz-linear-gradient(top,  rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%)
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(164,179,87,1)), color-stop(100%,rgba(117,137,12,1)))
+    background: -webkit-linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    background: -o-linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    background: -ms-linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    background: linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 )
   .hlhigh
-    background-color: yellow
+    background: rgb(98,125,77)
+    background: -moz-linear-gradient(top,  rgba(98,125,77,1) 0%, rgba(31,59,8,1) 100%) 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(98,125,77,1)), color-stop(100%,rgba(31,59,8,1)))
+    background: -webkit-linear-gradient(top,  rgba(98,125,77,1) 0%,rgba(31,59,8,1) 100%)
+    background: -o-linear-gradient(top,  rgba(98,125,77,1) 0%,rgba(31,59,8,1) 100%)
+    background: -ms-linear-gradient(top,  rgba(98,125,77,1) 0%,rgba(31,59,8,1) 100%)
+    background: linear-gradient(top,  rgba(98,125,77,1) 0%,rgba(31,59,8,1) 100%)
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#627d4d', endColorstr='#1f3b08',GradientType=0 )
   ._jsPlumb_overlay 
     background-color: white
     font-size: 0.8em
+
+#infobox
+  position: absolute
+  height: 32em
+  left: 4em
+  margin-top: 1em
+  width: 18em
+
 
 #modal-node-tags
   .ui-autocomplete-input

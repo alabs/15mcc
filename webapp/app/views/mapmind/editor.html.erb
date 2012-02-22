@@ -62,6 +62,16 @@
     </div>
   </script>
 
+  <script id="tmpl-tags" type="text/template">
+    <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all">
+      <span class="tagit-label">{{= label }}</span>
+      <a class="tagit-close">
+        <span class="text-icon">×</span>
+        <span class="ui-icon ui-icon-close"></span>
+      </a>
+    </li>
+  </script>
+
   <div class="modal hide" id="modal-node-tags">
     <div class="modal-header">
       <a class="close" data-dismiss="modal">×</a>
@@ -74,8 +84,8 @@
       </div>
       </div>
     <div class="modal-footer">
-      <a href="#" class="btn btn-primary node-tags-save">Save changes</a>
-      <a href="#" class="btn" data-dismiss="modal">Close</a>
+      <a href="#" class="btn btn-primary" id="node-tags-save">Guardar</a>
+      <a href="#" class="btn" data-dismiss="modal">Cerrar</a>
     </div>
   </div>
 
