@@ -40,6 +40,7 @@ $(function () {
       tags = [];
       $('.tagit-label').each(function(){ tags.push($(this).html()); })
       $.ajax({ type: "PUT", url: '/nodes/' + $('.hl').attr('id'), data: "node[tags]=" + tags, dataType: "json" });
+      $("#modal-node-tags").modal('hide');
     });
 
     $('#text_tags, #video_tags, #image_tags, #node_tags').tagit({ 
