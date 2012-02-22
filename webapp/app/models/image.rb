@@ -18,7 +18,7 @@ class Image
       :marker => ['20x20', :jpg]
     }
 
-  after_img_post_process  :process_metadata
+  #after_img_post_process  :process_metadata
 
   # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
@@ -71,20 +71,27 @@ class Image
 
   def generate_slug
     self.slug = self.title.parameterize
+    #Exif metadata
+    extract_metadata()
   end
+
 
   private
 
-  def process_metadata
+  def extract_metadata
 
     exif_info = EXIFR::JPEG.new(img.queued_for_write[:original].path)
-    logger.debug "Exif INFO #{exif_info}"
+
     return unless exif_info.exif?
-    #Save exif metadata
+    logger.debug 'escribiendo metadatos exif'
+    self.happened_at = exif_info.date_time
+    logger.debug "fecha: #{exif_info.date_time}"
+    #datos gps
+    return if exif_info.gps.nil?
     self.latitude  = exif_info.gps.latitude
-    logger.debug "Latitude #{self.latitude}"
+    logger.debug "Latitud: #{exif_info.gps.latitude}"
     self.longitude = exif_info.gps.longitude
-    logger.debug "Longitude #{self.longitude}"
+    logger.debug "Longitud: #{exif_info.gps.longitude}"
 
   end
 
