@@ -41,13 +41,18 @@
     width: 12em
     z-index: 20
     cursor: pointer
+    -moz-box-shadow: 10px 10px 5px #888
+    -webkit-box-shadow: 10px 10px 5px #888
+    box-shadow: 10px 10px 5px #888
   .fake-node
-    background-image: linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -o-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -moz-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -webkit-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -ms-linear-gradient(bottom, rgb(59,0,59) 43%, rgb(36,0,36) 72%, rgb(46,0,46) 86%)
-    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.43, rgb(59,0,59)), color-stop(0.72, rgb(36,0,36)), color-stop(0.86, rgb(46,0,46)))
+    background: rgb(164,179,87)
+    background: -moz-linear-gradient(top,  rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%)
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(164,179,87,1)), color-stop(100%,rgba(117,137,12,1)))
+    background: -webkit-linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    background: -o-linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    background: -ms-linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    background: linear-gradient(top,  rgba(164,179,87,1) 0%,rgba(117,137,12,1) 100%)
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 )
     background-color: white
     border: 0.1em outset #000000
     border-radius: 5em
@@ -65,6 +70,9 @@
     cursor: pointer
     cursor: auto
     height: 1.5em
+    -moz-box-shadow: 10px 10px 5px #888
+    -webkit-box-shadow: 10px 10px 5px #888
+    box-shadow: 10px 10px 5px #888
   .hl 
     background: rgb(164,179,87)
     background: -moz-linear-gradient(top,  rgba(164,179,87,1) 0%, rgba(117,137,12,1) 100%)
@@ -93,4 +101,7 @@
   left: 4em
   margin-top: 1em
   width: 18em
-
+  #node-label
+    float: left
+  #infobox-close
+    float: right

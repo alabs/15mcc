@@ -78,6 +78,9 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
               $('#node-tags').prepend(compiledTmpl);
             }
           });
+          $('#infobox-close').click(function(){
+              $(this).parent().parent().hide('slow');
+          });
         })
         .hover(function() {
             $.simpleMM.hl($(this).attr("id"));

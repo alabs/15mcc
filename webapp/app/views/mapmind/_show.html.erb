@@ -12,7 +12,10 @@
 
   <script id="tmpl-infobox" type="text/template">
     <div id="infobox" class="well">
-      <div id="node-label">{{= label }}</span>
+      <div class="span3">
+        <h3 id="node-label">{{= label }}</h3>
+        <a href="#" id="infobox-close"><i class="icon-remove"></i></a>
+      </div>
       <h4>Etiquetas</h4>
       <ul id="node-tags"></ul>
     </div>
