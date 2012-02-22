@@ -19,5 +19,19 @@ class PagesController < ApplicationController
     @texts = Text.where(:user_id => @user.id).all
     @images = Image.where(:user_id => @user.id).all
     @videos = Video.where(:user_id => @user.id).all
+    @audios = Audio.where(:user_id => @user.id).all
   end
+
+  def show 
+    @page = Page.find(params[:id])
+  end
+
+  def mercury_update  
+    page = Page.find(params[:id])  
+    puts params
+    page.content = params[:content][:page_body][:value]  
+    page.save!  
+    render text: ""  
+  end  
+
 end
