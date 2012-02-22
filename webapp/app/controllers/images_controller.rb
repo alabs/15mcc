@@ -96,4 +96,20 @@ class ImagesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # POST /images/1/priority
+  def priority
+    @image = Image.find(params[:id])
+    authorize! :priority, @image
+
+    case params["priority-action"]  
+    when "add"
+      @image.priority = true
+    when "remove"
+      @image.priority = false
+    end
+
+    @image.save
+    render :text => "OK"
+  end
 end

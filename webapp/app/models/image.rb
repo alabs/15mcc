@@ -5,6 +5,9 @@ class Image
   include Mongoid::Taggable
   include Mongoid::Paperclip
   include Gmaps4rails::ActsAsGmappable
+  
+  attr_accessor :terms
+  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
   field :title, type: String
   field :happened_at, type: Time
@@ -33,6 +36,7 @@ class Image
   field :longitude, type: Float
   field :gmaps, type: Boolean
   field :slug, type: String
+  field :priority, type: Boolean, :default => false
 
   before_save :generate_slug
 

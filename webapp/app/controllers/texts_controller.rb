@@ -96,4 +96,20 @@ class TextsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # POST /texts/1/priority
+  def priority
+    @text = Text.find(params[:id])
+    authorize! :priority, @text
+
+    case params["priority-action"]  
+    when "add"
+      @text.priority = true
+    when "remove"
+      @text.priority = false
+    end
+
+    @text.save
+    render :text => "OK"
+  end
 end

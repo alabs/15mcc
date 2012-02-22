@@ -31,3 +31,5 @@
 //= require jquery.zoomooz
 
 //= require timeline
+
+//= require jwplayer

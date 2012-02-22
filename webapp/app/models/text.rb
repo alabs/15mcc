@@ -5,6 +5,9 @@ class Text
   include Mongoid::Taggable
   include Gmaps4rails::ActsAsGmappable
 
+  attr_accessor :terms
+  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
+
   field :title, type: String
   field :body, type: String
   field :happened_at, type: Time
@@ -22,6 +25,7 @@ class Text
   field :longitude, type: Float
   field :gmaps, type: Boolean
   field :slug, type: String
+  field :priority, type: Boolean, :default => false
   
   belongs_to :user
   field :user_id, type: String

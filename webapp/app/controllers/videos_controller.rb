@@ -96,4 +96,20 @@ class VideosController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  # POST /videos/1/priority
+  def priority
+    @video = Video.find(params[:id])
+    authorize! :priority, @video
+
+    case params["priority-action"]  
+    when "add"
+      @video.priority = true
+    when "remove"
+      @video.priority = false
+    end
+
+    @video.save
+    render :text => "OK"
+  end
 end

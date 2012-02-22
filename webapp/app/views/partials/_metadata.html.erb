@@ -1,4 +1,10 @@
 
+    <% if content.priority == true %>
+      <p><%= link_to image_tag("priority-ok.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "remove", "data-type" => content.class.to_s %></p>
+    <% else %>
+      <p><%= link_to image_tag("priority-ko.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "add", "data-type" => content.class.to_s %></p>
+    <% end %>
+
     <div class="well">
       <p><strong>Dirección:</strong> <%= content.street %></p>
       <p><strong>Ciudad:</strong> <%= content.city %></p>

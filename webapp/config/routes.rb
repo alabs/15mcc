@@ -2,10 +2,22 @@ Webapp::Application.routes.draw do
 
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }
 
-  resources :videos
-  resources :images
-  resources :texts
-  resources :audios
+  resources :videos do 
+    post 'priority', :on => :member
+  end
+
+  resources :images do 
+    post 'priority', :on => :member
+  end
+
+  resources :texts do 
+    post 'priority', :on => :member
+  end
+
+  resources :audios do 
+    post 'priority', :on => :member
+  end
+
   resources :nodes
 
   resources :connections do
