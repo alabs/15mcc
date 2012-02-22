@@ -3,6 +3,7 @@ class Video
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Taggable
+  include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
   
   field :url, type: String
@@ -36,6 +37,8 @@ class Video
   field :latitude, type: Float
   field :longitude, type: Float
   field :gmaps, type: Boolean
+  
+  fulltext_search_in :title, :street, :city, :country
 
   def self.find_by_slug(slug)
     where(:slug => slug).first

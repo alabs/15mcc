@@ -112,4 +112,16 @@ class ImagesController < ApplicationController
     @image.save
     render :text => "OK"
   end
+
+  def search
+    @images = Image.fulltext_search(params[:query])
+    authorize! :search, @images
+
+    @map = @images.to_gmaps4rails
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @images }
+    end
+  end
 end
