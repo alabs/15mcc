@@ -71,7 +71,13 @@ Simple MindMap for jQuery using jsPlumb and underscore.js
           var data = { "label": $(this).children("span").html() };
           var compiledTmpl = _.template(tmplMarkup, data);
           $('#content').prepend(compiledTmpl);
-          // TODO: mostrar infobox
+          $.get('/nodes/' + $('.hlhigh').attr('id') + '.json', function(resp){
+            var tags = resp.tags_array ; 
+            for (var i=0; i<tags.length; i++){
+              var compiledTmpl = _.template($('#tmpl-infobox-tag').html(), { "label": tags[i] });
+              $('#node-tags').prepend(compiledTmpl);
+            }
+          });
         })
         .hover(function() {
             $.simpleMM.hl($(this).attr("id"));
