@@ -43,7 +43,7 @@
  *
  * Require any localizations you wish to support
  * Example: es.locale, or fr.locale -- regional dialects are in each language file so never en_US for instance.
- * require mercury/locales/swedish_chef.locale
+ *= require mercury/locales/es.locale
  *
  * Add all requires for plugins that extend or change the behavior of Mercury Editor.
  * require mercury/plugins/save_as_xml/plugin.js
@@ -125,12 +125,7 @@ window.Mercury = {
         insertLink:            ['Link', 'Insert Link', { modal: '/mercury/modals/link.html', regions: ['editable', 'markupable'] }],
         insertMedia:           ['Media', 'Insert Media (images and videos)', { modal: '/mercury/modals/media.html', regions: ['editable', 'markupable'] }],
         insertTable:           ['Table', 'Insert Table', { modal: '/mercury/modals/table.html', regions: ['editable', 'markupable'] }],
-        insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character.html', regions: ['editable', 'markupable'] }],
-        snippetPanel:          ['Snippet', 'Snippet Panel', { panel: '/mercury/panels/snippets.html' }],
-        sep2:                  ' ',
-        historyPanel:          ['History', 'Page Version History', { panel: '/mercury/panels/history.html' }],
-        sep3:                  ' ',
-        notesPanel:            ['Notes', 'Page Notes', { panel: '/mercury/panels/notes.html' }]
+        insertCharacter:       ['Character', 'Special Characters', { modal: '/mercury/modals/character.html', regions: ['editable', 'markupable'] }]
         },
 
       editable: {
@@ -311,8 +306,8 @@ window.Mercury = {
     //
     // preferredLocale: If a client doesn't support the locales you've included, this is used as a fallback.
     localization: {
-      enabled: false,
-      preferredLocale: 'swedish_chef-BORK'
+      enabled: true,
+      preferredLocale: 'es'
       },
 
 
@@ -470,9 +465,6 @@ window.Mercury = {
   // place to add or change functionality.
   onload: function() {
     //Mercury.PageEditor.prototype.iframeSrc = function(url) { return '/testing'; }
-    var link = $('#mercury_iframe').contents().find('#edit_link');  
-    Mercury.saveURL = link.data('save-url');  
-    link.hide();  
   },
 
 };

@@ -79,4 +79,5 @@ gem 'therubyracer'
 # Para editar campos al vuelo
 gem 'best_in_place'
 
+# Para la edicion de paginas semi estaticas
 gem 'mercury-rails'
