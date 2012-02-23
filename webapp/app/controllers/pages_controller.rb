@@ -28,7 +28,6 @@ class PagesController < ApplicationController
 
   def mercury_update  
     page = Page.find(params[:id])  
-    puts params
     page.content = params[:content][:page_body][:value]  
     page.save!  
     render text: ""  
