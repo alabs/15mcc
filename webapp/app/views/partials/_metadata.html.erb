@@ -4,6 +4,9 @@
     <% else %>
       <p><%= link_to image_tag("priority-ko.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "add", "data-type" => content.class.to_s %></p>
     <% end %>
+    
+    <a class="btn btn-danger" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
+    <p/>
 
     <div class="well">
       <p><strong>Dirección:</strong> <%= content.street %></p>
@@ -21,4 +24,25 @@
       <% end %>
       <p><strong>Publicado:</strong> <%= content.created_at.to_s %></p>
       <p><strong>Ha ocurrido:</strong> <%= content.happened_at.to_s %></p>
+    </div>
+
+    <div class="modal" id="abuse-modal" style="display:none;">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h3>Denunciar contenido inapropiado</h3>
+      </div>
+      <form method="post" action="<%= request.url + "/abuse" %>">
+        <div class="modal-body">
+          <% unless user_signed_in? %>
+            <label>Correo eletrónico</label>
+            <input type="text" name="from" />
+          <% end %>
+          <label>Mensaje</label>
+          <textarea cols="300" rows="10" name="message" rows="10" style="width: 80%;"></textarea>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-primary" value="Enviar" />
+          <a href="#" class="btn">Cancelar</a>
+        </div>
+      </form>
     </div>

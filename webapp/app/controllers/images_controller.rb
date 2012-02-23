@@ -1,6 +1,7 @@
 class ImagesController < ApplicationController
 
   check_authorization
+  skip_authorization_check :only => :abuse
 
   # GET /images
   # GET /images.json
@@ -123,5 +124,13 @@ class ImagesController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @images }
     end
+  end
+
+  def abuse
+    from = user_signed_in? ? current_user.email : params[:from]
+    url = request.url.gsub(/\/abuse/, '')
+    Mailman.abuse(from, params[:message], url).deliver
+    flash[:notice] = "Tu mensaje a sido enviado a los editores de 15m.cc para ser revisado"
+    redirect_to url
   end
 end
