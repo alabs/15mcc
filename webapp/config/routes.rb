@@ -5,23 +5,35 @@ Webapp::Application.routes.draw do
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }
 
   resources :videos do 
-    post 'priority', :on => :member
     post 'search' => 'videos#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :images do 
-    post 'priority', :on => :member
     post 'search' => 'images#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :texts do 
-    post 'priority', :on => :member
     post 'search' => 'texts#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :audios do 
-    post 'priority', :on => :member
     post 'search' => 'audios#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :nodes
