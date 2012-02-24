@@ -13,7 +13,6 @@ class Image
 
   #callbacks
   before_save :generate_slug, :reverse_geocode
-  after_validation :geocode
 
   #accessors
   attr_accessor :terms
@@ -43,8 +42,6 @@ class Image
   fulltext_search_in :title, :street, :city, :country
   #paperclip
   has_mongoid_attached_file :img,:styles => {:small => ['260x180', :jpg],:marker => ['20x20', :jpg]}
- 
-  before_save :generate_slug
 
   #geocoding
   geocoded_by :address_from_components
