@@ -1,6 +1,7 @@
 class VideosController < ApplicationController
   
   check_authorization
+  skip_authorization_check :only => :abuse
 
   # GET /videos
   # GET /videos.json
@@ -111,5 +112,25 @@ class VideosController < ApplicationController
 
     @video.save
     render :text => "OK"
+  end
+
+  def search
+    @videos = Video.fulltext_search(params[:query])
+    authorize! :search, @videos
+
+    @map = @videos.to_gmaps4rails
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @videos }
+    end
+  end
+
+  def abuse
+    from = user_signed_in? ? current_user.email : params[:from]
+    url = request.url.gsub(/\/abuse/, '')
+    Mailman.abuse(from, params[:message], url).deliver
+    flash[:notice] = "Tu mensaje a sido enviado a los editores de 15m.cc para ser revisado"
+    redirect_to url
   end
 end

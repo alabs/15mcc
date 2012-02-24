@@ -35,6 +35,9 @@ gem 'unicorn'
 gem 'mongoid'
 gem 'bson_ext'
 
+# Para el buscador
+gem 'mongoid_fulltext'
+
 # Para los tags en los recursos
 gem 'mongoid_taggable'
 
@@ -78,3 +81,6 @@ gem 'geocoder'
 
 # Para editar campos al vuelo
 gem 'best_in_place'
+
+# Para la edicion de paginas semi estaticas
+gem 'mercury-rails'

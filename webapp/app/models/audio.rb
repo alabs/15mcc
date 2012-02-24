@@ -3,6 +3,7 @@ class Audio
   include Mongoid::Timestamps
   include Mongoid::Taggable
   include Mongoid::Paperclip
+  include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
 
   field :title, :type => String
@@ -36,6 +37,8 @@ class Audio
   acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
 
   before_save :generate_slug
+  
+  fulltext_search_in :title, :street, :city, :country
 
   def self.find_by_slug(slug)
     where(:slug => slug).first

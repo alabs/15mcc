@@ -6,6 +6,8 @@ class Image
   include Mongoid::Taggable
   include Mongoid::Paperclip
 
+  include Mongoid::FullTextSearch
+  
   include Gmaps4rails::ActsAsGmappable
   include Geocoder::Model::Mongoid
 
@@ -38,8 +40,11 @@ class Image
   field :title, type: String
   field :happened_at, type: Time
 
+  fulltext_search_in :title, :street, :city, :country
   #paperclip
   has_mongoid_attached_file :img,:styles => {:small => ['260x180', :jpg],:marker => ['20x20', :jpg]}
+ 
+  before_save :generate_slug
 
   #geocoding
   geocoded_by :address_from_components

@@ -1,25 +1,41 @@
 Webapp::Application.routes.draw do
 
+  Mercury::Engine.routes
+
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }
 
   resources :videos do 
-    post 'priority', :on => :member
+    post 'search' => 'videos#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :images do
+    post 'search' => 'images#search', :on => :collection
     member do
       post 'priority'
+      post 'abuse'
       get 'new_step'
       put 'create_step'
     end
   end
 
   resources :texts do 
-    post 'priority', :on => :member
+    post 'search' => 'texts#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :audios do 
-    post 'priority', :on => :member
+    post 'search' => 'audios#search', :on => :collection
+    member do
+      post 'priority'
+      post 'abuse'
+    end
   end
 
   resources :nodes
@@ -36,11 +52,13 @@ Webapp::Application.routes.draw do
   get 'maps' => 'maps#index'
   get 'timeline' => 'timeline#index'
   match '/profile/:username' => 'pages#profile'
-
   get 'admin/users' => 'admin/users#index'
   get 'admin/users/search' => 'admin/users#search'
   put 'admin/users/:username/update' => 'admin/users#update', :as => 'admin_users_update'
-
   root :to => 'pages#index'
+
+  resources :pages do  
+    member { post :mercury_update }  
+  end  
 
 end
