@@ -6,8 +6,12 @@ Webapp::Application.routes.draw do
     post 'priority', :on => :member
   end
 
-  resources :images do 
-    post 'priority', :on => :member
+  resources :images do
+    member do
+      post 'priority'
+      get 'new_step'
+      put 'create_step'
+    end
   end
 
   resources :texts do 

@@ -1,7 +1,7 @@
 <div class="form-stacked main-form">
 <%= form_for(@image, :html => { :multipart => true }) do |f| %>
   <fieldset>
-    <legend>Editar imagen</legend>
+    <legend>Subir nueva imagen</legend>
 
 <%= render :partial => "partials/copyright_notice" %>
 
@@ -36,7 +36,7 @@
     <% end %>
 
     <div id="form-actions">
-      <%= f.submit 'Enviar imágen', :class => 'btn primary' %>
+      <%= f.submit 'Siguiente', :class => 'btn primary' %>
       <%= link_to 'Cancelar', images_path, :class => 'btn danger' %>
     </div>
   </fieldset>

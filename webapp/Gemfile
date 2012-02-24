@@ -74,5 +74,7 @@ gem 'execjs'
 gem 'therubyracer'
 #exif info from images
 gem 'exifr'
+gem 'geocoder'
+
 # Para editar campos al vuelo
 gem 'best_in_place'
