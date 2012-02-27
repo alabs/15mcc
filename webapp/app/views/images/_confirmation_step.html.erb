@@ -1,0 +1,52 @@
+<div class="form-stacked main-form">
+<%= form_for(@image, :url =>{ :action => 'create_step'}, :html => { :multipart => true }) do |f| %>
+  <fieldset>
+    <legend>Revisar datos imagen</legend>
+
+<%= render :partial => "partials/copyright_notice" %>
+
+<% if @image.errors.any? %>
+   <% @image.errors.full_messages.each do |msg| %>
+     <div class="alert alert-error"><%= msg %></div>
+   <% end %>
+<% end %>
+
+    <div class="well">
+      <div class="form-field">
+        <%= f.label 'Fecha' %>
+        <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8' %>
+      </div>
+    </div>
+
+    <div class="well">
+      <div class="form-field">
+        <%= f.label 'Dirección' %>
+        <%= f.text_field :street, placeholder: 'Dirección completa', :class => 'span8' %>
+        <% unless @image.errors[:street].blank? %>
+          <span class="error-message"><%= @image.errors[:street].to_sentence %></span>
+        <% end %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label 'Ciudad' %>
+        <%= f.text_field :city, placeholder: 'Ciudad', :class => 'span8' %>
+        <% unless @image.errors[:city].blank? %>
+          <span class="error-message"><%= @image.errors[:city].to_sentence %></span>
+        <% end %>
+      </div>
+
+      <div class="form-field">
+        <%= f.label 'País' %>
+        <%= f.text_field :country, placeholder: 'País', :class => 'span8' %>
+        <% unless @image.errors[:country].blank? %>
+          <span class="error-message"><%= @image.errors[:country].to_sentence %></span>
+        <% end %>
+      </div>
+    </div>
+
+    <div id="form-actions">
+      <%= f.submit 'Enviar imagen', :class => 'btn primary' %>
+    </div>
+  </fieldset>
+<% end %>
+</div>

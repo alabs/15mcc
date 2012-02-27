@@ -32,14 +32,57 @@ class ImagesController < ApplicationController
   end
 
   # GET /images/new
-  # GET /images/new.json
   def new
     @image = Image.new
     authorize! :create, @image
+  end
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @image }
+  # GET /images/1/new_step
+  def new_step
+    @image = Image.find_by_slug(params[:id])
+    @image.step session[:order_step]
+    authorize! :create, @image
+    render 'new'
+  end
+
+  # POST /images/1/create_step
+  def create_step
+    @image              = Image.find_by_slug(params[:id])
+    @image.step session[:order_step]
+    authorize! :create, @image
+    #
+    if @image.update_attributes(params[:image])
+      #
+      unless @image.last_step?
+        @image.next_step
+        session[:order_step] = @image.current_step
+        redirect_to new_step_image_url(@image.slug)
+      #
+      else
+        session[:order_step] = nil
+        redirect_to @image, notice: 'Imagen creada correctamente'
+      end
+    #
+    else
+      render action: 'new'
+    end
+  end
+
+  # POST /images
+  def create
+    @image = Image.new(params[:image])
+    authorize! :create, @image
+    #
+    @image.user = current_user || nil
+    #
+    if verify_captcha(@image) and @image.save
+      @image.next_step
+      session[:order_step] = @image.current_step
+      redirect_to new_step_image_url(@image.slug)
+    #
+    else
+      session[:order_step] = nil
+      render action: 'new'
     end
   end
 
@@ -47,25 +90,6 @@ class ImagesController < ApplicationController
   def edit
     @image = Image.find_by_slug(params[:id])
     authorize! :update, @image
-  end
-
-  # POST /images
-  # POST /images.json
-  def create
-    @image = Image.new(params[:image])
-    authorize! :create, @image
-
-    @image.user = current_user || nil
-
-    respond_to do |format|
-      if verify_captcha(@image) and @image.save
-        format.html { redirect_to @image, notice: 'Image was successfully created.' }
-        format.json { render json: @image, status: :created, location: @image }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PUT /images/1
@@ -76,7 +100,7 @@ class ImagesController < ApplicationController
 
     respond_to do |format|
       if @image.update_attributes(params[:image])
-        format.html { redirect_to @image, notice: 'Image was successfully updated.' }
+        format.html { redirect_to @image, notice: 'Imagen actualizada correctamente.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

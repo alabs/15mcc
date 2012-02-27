@@ -12,11 +12,13 @@ Webapp::Application.routes.draw do
     end
   end
 
-  resources :images do 
+  resources :images do
     post 'search' => 'images#search', :on => :collection
     member do
       post 'priority'
       post 'abuse'
+      get 'new_step'
+      put 'create_step'
     end
   end
 

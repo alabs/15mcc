@@ -75,6 +75,9 @@ gem 'exception_notification', :require => 'exception_notifier'
 # Para compilar assets
 gem 'execjs'
 gem 'therubyracer'
+#exif info from images
+gem 'exifr'
+gem 'geocoder'
 
 # Para editar campos al vuelo
 gem 'best_in_place'
