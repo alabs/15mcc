@@ -8,28 +8,20 @@
         <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8' %>
       </div>
     </div>
-    <div class="well">
+    <div>
+    <legend> Localización </legend>
       <div class="form-field">
-        <%= f.label 'Dirección' %>
-        <%= f.text_field :street, placeholder: 'Dirección completa', :class => 'span8' %>
+        <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span7' %>
+        <a href="#" id="maps_search" class="btn">
+          <i class='icon-search'></i>
+          Buscar
+        </a>
         <% unless content.errors[:street].blank? %>
           <span class="error-message"><%= content.errors[:street].to_sentence %></span>
         <% end %>
       </div>
-      <div class="form-field">
-        <%= f.label 'Ciudad' %>
-        <%= f.text_field :city, placeholder: 'Ciudad', :class => 'span8' %>
-        <% unless content.errors[:city].blank? %>
-          <span class="error-message"><%= content.errors[:city].to_sentence %></span>
-        <% end %>
-      </div>
-      <div class="form-field">
-        <%= f.label 'País' %>
-        <%= f.text_field :country, placeholder: 'País', :class => 'span8' %>
-        <% unless content.errors[:country].blank? %>
-          <span class="error-message"><%= content.errors[:country].to_sentence %></span>
-        <% end %>
-      </div>
+      <%= gmaps("map_options" => {"center_longitude" => -3.700, "center_latitude" => 40.41, "zoom" => 3, "auto_adjust" => false, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+
     </div>
 
     <% unless user_signed_in? %>

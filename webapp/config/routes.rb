@@ -48,6 +48,7 @@ Webapp::Application.routes.draw do
   get 'tags' => 'tags#index'
   match '/tags/show/:tag' => "tags#show"
   get 'maps' => 'maps#index'
+  match '/maps/search/:address' => "maps#search"
   get 'timeline' => 'timeline#index'
   match '/profile/:username' => 'pages#profile'
   get 'admin/users' => 'admin/users#index'

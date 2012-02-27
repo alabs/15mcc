@@ -35,6 +35,8 @@ class TextsController < ApplicationController
   # GET /texts/new.json
   def new
     @text = Text.new
+    @map = @text.to_gmaps4rails
+
     authorize! :create, @text
 
     respond_to do |format|

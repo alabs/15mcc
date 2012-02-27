@@ -12,5 +12,12 @@ class MapsController < ApplicationController
     end
   end
 
+  def search
+    # search for an address, return JSON with result
+    require 'gmaps4rails/geocoding'
+    @result = Gmaps4rails.geocode params[:address]
+    render :json => @result
+  end
+
 end
 
