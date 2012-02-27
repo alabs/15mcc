@@ -23,9 +23,7 @@ class PagesController < ApplicationController
   end
 
   def show 
-    puts "tryin"
     @page = Page.find_by_slug(params[:id])
-    puts @page
   end
 
   def mercury_update  
