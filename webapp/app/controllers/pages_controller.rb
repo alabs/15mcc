@@ -23,12 +23,14 @@ class PagesController < ApplicationController
   end
 
   def show 
-    @page = Page.find(params[:id])
+    puts "tryin"
+    @page = Page.find_by_slug(params[:id])
+    puts @page
   end
 
   def mercury_update  
-    page = Page.find(params[:id])  
-    page.content = params[:content][:page_body][:value]  
+    page = Page.find_by_slug(params[:id])  
+    page.body = params[:content][:page_body][:value]  
     page.save!  
     render text: ""  
   end  
