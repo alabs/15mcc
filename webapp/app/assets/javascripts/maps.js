@@ -1,34 +1,35 @@
 $(function(){
-  if ( $("#new_text").length != 0 ) {
+  if ( $(".content-form").length != 0 ) {
     // https://github.com/apneadiving/Google-Maps-for-Rails/wiki/Javascript-goodies
     // manejo del mapa en el formulario con click y drag de marker y busqueda
     var markersArray = [];
     // On click, clear markers, place a new one, update coordinates in the form
-    Gmaps.map.callback = function() {
-        google.maps.event.addListener(Gmaps.map.map, 'click', function(event) {
-          clearOverlays();
-          placeMarker(event.latLng);
-          updateFormLocation(event.latLng);
-        });
-    };
+    // TODO: actualizar en el cuadro de busqueda
+    // Gmaps.map.callback = function() {
+    //     google.maps.event.addListener(Gmaps.map.map, 'click', function(event) {
+    //       clearOverlays();
+    //       placeMarker(event.latLng);
+    //       updateFormLocation(event.latLng);
+    //     });
+    // };
     // Update form attributes with given coordinates
     function updateFormLocation(latLng) {
-        $('location_attributes_latitude').value = latLng.lat();
-        $('location_attributes_longitude').value = latLng.lng();
-        $('location_attributes_gmaps_zoom').value = Gmaps.map.map.getZoom();
+        $('.location_attributes_latitude').val(latLng.lat());
+        $('.location_attributes_longitude').val(latLng.lng());
     }
     // Add a marker with an open infowindow
     function placeMarker(latLng) {
         var marker = new google.maps.Marker({
             position: latLng, 
-            map: Gmaps.map.map,
-            draggable: true
+            map: Gmaps.map.map
+        //    draggable: true
         });
         markersArray.push(marker);
+        // TODO: actualizar en cuadro de busqueda
         // Listen to drag & drop
-        google.maps.event.addListener(marker, 'dragend', function() {
-            updateFormLocation(this.getPosition());
-        });
+        //google.maps.event.addListener(marker, 'dragend', function() {
+        //    updateFormLocation(this.getPosition());
+        //});
     }
     // Removes the overlays from the map
     function clearOverlays() {
@@ -41,7 +42,7 @@ $(function(){
     }
 
     // Busqueda de un nodo
-    var $street = $("#text_street"); 
+    var $street = $(".map-street"); 
     function searchMap() {
       $("body").css("cursor", "progress");
       $.getJSON('/maps/search/' + $street.val() , function(data){
@@ -53,7 +54,7 @@ $(function(){
         $("body").css("cursor", "auto");
       });
     }
-    $('#maps_search').click(function(e){
+    $('#map-search').click(function(e){
       e.preventDefault();
       searchMap();
     });

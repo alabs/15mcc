@@ -11,8 +11,10 @@
     <div>
     <legend> Localización </legend>
       <div class="form-field">
-        <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span7' %>
-        <a href="#" id="maps_search" class="btn">
+        <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
+        <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
+        <%= f.text_field :longitude, :class => 'location_attributes_longitude', :style => "display:none" %>
+        <a href="#" id="map-search" class="btn">
           <i class='icon-search'></i>
           Buscar
         </a>
@@ -20,7 +22,11 @@
           <span class="error-message"><%= content.errors[:street].to_sentence %></span>
         <% end %>
       </div>
-      <%= gmaps("map_options" => {"center_longitude" => -3.700, "center_latitude" => 40.41, "zoom" => 3, "auto_adjust" => false, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+      <% if @map == "[]" %>
+        <%= gmaps("map_options" => {"center_longitude" => -3.700, "center_latitude" => 40.41, "zoom" => 3, "auto_adjust" => false, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+      <% else %>
+        <%= gmaps("map_options" => {"auto_adjust" => true, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+      <% end %>
 
     </div>
 

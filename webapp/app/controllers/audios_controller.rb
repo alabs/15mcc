@@ -7,10 +7,8 @@ class AudiosController < ApplicationController
   # GET /audios.json
   def index
     @audios = Audio.desc(:created_at).page(params[:page])
-    authorize! :index, @audios
-
     @map = Audio.all.to_gmaps4rails
-
+    authorize! :index, @audios
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @audios }
@@ -21,10 +19,8 @@ class AudiosController < ApplicationController
   # GET /audios/1.json
   def show
     @audio = Audio.find_by_slug(params[:id])
-    authorize! :show, @audio
-
     @map = @audio.to_gmaps4rails
-
+    authorize! :show, @audio
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @audio }
@@ -35,6 +31,7 @@ class AudiosController < ApplicationController
   # GET /audios/new.json
   def new
     @audio = Audio.new
+    @map = @audio.to_gmaps4rails
     authorize! :create, @audio
 
     respond_to do |format|
@@ -46,6 +43,7 @@ class AudiosController < ApplicationController
   # GET /audios/1/edit
   def edit
     @audio = Audio.find_by_slug(params[:id])
+    @map = @audio.to_gmaps4rails
     authorize! :update, @audio
   end
 

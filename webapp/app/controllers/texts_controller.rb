@@ -36,9 +36,7 @@ class TextsController < ApplicationController
   def new
     @text = Text.new
     @map = @text.to_gmaps4rails
-
     authorize! :create, @text
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @text }
@@ -48,6 +46,7 @@ class TextsController < ApplicationController
   # GET /texts/1/edit
   def edit
     @text = Text.find_by_slug(params[:id])
+    @map = @text.to_gmaps4rails
     authorize! :update, @text
   end
 

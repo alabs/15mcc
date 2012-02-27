@@ -21,10 +21,8 @@ class VideosController < ApplicationController
   # GET /videos/1.json
   def show
     @video = Video.find_by_slug(params[:id])
-    authorize! :show, @video
-
     @map = @video.to_gmaps4rails
-
+    authorize! :show, @video
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @video }
@@ -35,6 +33,7 @@ class VideosController < ApplicationController
   # GET /videos/new.json
   def new
     @video = Video.new
+    @map = @video.to_gmaps4rails
     authorize! :create, @video
 
     respond_to do |format|
@@ -46,6 +45,7 @@ class VideosController < ApplicationController
   # GET /videos/1/edit
   def edit
     @video = Video.find_by_slug(params[:id])
+    @map = @video.to_gmaps4rails
     authorize! :update, @video
   end
 
