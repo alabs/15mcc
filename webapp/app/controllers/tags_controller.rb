@@ -33,6 +33,21 @@ class TagsController < ApplicationController
     end
   end
 
+  # GET /tags/small/<tagname>
+  # GET /tags/small/<tagname>.json
+  def small
+    @tags = params['tags']
+    @texts = Text.tagged_with_any(@tags) 
+    @videos = Video.tagged_with_any(@tags) 
+    @images = Image.tagged_with_any(@tags) 
+    @audios = Audio.tagged_with_any(@tags)
+
+    respond_to do |format|
+      format.html { render :layout => false } # small.html.erb
+      format.json { render json: [@texts, @videos, @images, @audios] }
+    end
+  end
+
   # GET /tags/search.json
   # GET /tags/search.json?term="bla"
   def search

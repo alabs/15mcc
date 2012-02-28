@@ -1,0 +1,57 @@
+<div class="row" style="margin-top:20px;">
+  <div class="span4">
+    <p>Etiquetas <%= @tags %></p>
+
+    <% if @videos.exists? %>
+      <b> Vídeos </b>
+    <ul class="span3">
+      <% @videos.each do |video| %>
+        <li class="thumbnail span2">
+          <%= link_to image_tag(video.thumbnail), video %>
+          <div class="caption">
+            <h5><%= link_to video.title, video %></h5>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+    <% end %>
+    <div class="clearfix"></div>
+
+    <% if @images.exists? %>
+      <b> Imágenes </b>
+    <ul class="span3">
+      <% @images.each do |image| %>
+      <li class="thumbnail span3">
+        <%= link_to image_tag(image.img.url(:small)), image %>
+        <div class="caption">
+          <h5><%= link_to image.title, image %></h5>
+        </div>
+      </li>
+      <% end %>
+    </ul>
+    <% end %>
+
+    <% if @audios.exists? %>
+      <b> Audios </b>
+    <ul class="span3">
+      <% @audios.each do |audio| %>
+        <%= audio %>
+        <li><h5><%= link_to audio.title, audio %></h5>
+      <% end %>
+    <% end %>
+
+    <% if @texts.exists? %>
+      <b> Textos </b>
+    <ul class="span3">
+      <% @texts.each do |text| %>
+        <li><h5><%= link_to text.title, text %></h5>
+      <% end %>
+    <% end %>
+
+    <% if not @texts.exists? and not @images.exists? and not @audios.exists? and not @videos.exists? %>
+      No hay contenidos con esta etiqueta.
+    <% end %>
+
+  </div>
+
+</div>
