@@ -1,0 +1,2 @@
+class Mapmind
+end

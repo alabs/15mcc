@@ -19,5 +19,7 @@
     &nbsp;&nbsp;&nbsp;
     <%= link_to image_tag('icon-audios.png'), audios_path, title: 'Audios' %>
   </div>
-  <%= link_to "Editar mapa", bank_editor_path, :class => "label" %>
+  <% if can? :editor, Mapmind %>
+    <%= link_to "Editar mapa", bank_editor_path, :class => "label" %>
+  <% end %>
 </div>
