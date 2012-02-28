@@ -1,5 +1,7 @@
 class PagesController < ApplicationController
 
+  check_authorization
+
   def index
   end
 
@@ -24,11 +26,13 @@ class PagesController < ApplicationController
 
   def show 
     @page = Page.find_by_slug(params[:id])
+    authorize! :show, @page
   end
 
   def mercury_update  
     page = Page.find_by_slug(params[:id])  
     page.body = params[:content][:page_body][:value]  
+    authorize! :update, page
     page.save!  
     render text: ""  
   end  

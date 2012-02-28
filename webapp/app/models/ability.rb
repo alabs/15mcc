@@ -48,10 +48,10 @@ class Ability
         cannot :destroy, klass
         can :destroy, klass, :user => { :id => user.id }
       end
-      can :show, [Node, Connection]
+      can :show, [Node, Connection, Page]
       cannot :create, [Node, Connection]
       cannot :destroy, [Node, Connection]
-      cannot :update, [Node, Connection]
+      cannot :update, [Node, Connection, Page]
       cannot :editor, Mapmind
     end
     
@@ -64,10 +64,10 @@ class Ability
         cannot :update, klass
         cannot :destroy, klass
       end
-      can :show, [Node, Connection]
+      can :show, [Node, Connection, Page]
       cannot :create, [Node, Connection]
       cannot :destroy, [Node, Connection]
-      cannot :update, [Node, Connection]
+      cannot :update, [Node, Connection, Page]
       cannot :editor, Mapmind
     end
   end
