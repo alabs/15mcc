@@ -49,6 +49,9 @@ class Ability
         can :destroy, klass, :user => { :id => user.id }
       end
       can :show, [Node, Connection, Page]
+      can :index, Page
+      can :bank, Page
+      can :profile, Page
       cannot :create, [Node, Connection]
       cannot :destroy, [Node, Connection]
       cannot :update, [Node, Connection, Page]
@@ -65,6 +68,9 @@ class Ability
         cannot :destroy, klass
       end
       can :show, [Node, Connection, Page]
+      can :index, Page
+      can :bank, Page
+      can :profile, Page
       cannot :create, [Node, Connection]
       cannot :destroy, [Node, Connection]
       cannot :update, [Node, Connection, Page]

@@ -3,9 +3,11 @@ class PagesController < ApplicationController
   check_authorization
 
   def index
+    authorize! :index, Page
   end
 
   def bank
+    authorize! :bank, Page
   end
 
   # método para mostrar el contenido generardo por
@@ -13,6 +15,7 @@ class PagesController < ApplicationController
   def profile
     @user = User.where(:username => params[:username]).first
     
+    authorize! :profile, Page
     unless @user
       render :text => "404 Not Found", :status => 404
       return
