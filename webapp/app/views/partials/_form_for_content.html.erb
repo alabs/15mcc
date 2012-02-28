@@ -1,14 +1,11 @@
     <div class="form-field">
       <%= f.label 'Tags' %>
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' %>
+      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8', :required => "true" %>
     </div>
-    <div class="well">
-      <div class="form-field">
-        <%= f.label 'Fecha' %>
-        <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8' %>
-      </div>
+    <div class="form-field">
+      <%= f.label 'Fecha' %>
+      <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8', :required => "true" %>
     </div>
-    <div>
     <legend> Localización </legend>
       <div class="form-field">
         <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
@@ -27,8 +24,6 @@
       <% else %>
         <%= gmaps("map_options" => {"auto_adjust" => true, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
       <% end %>
-
-    </div>
 
     <% unless user_signed_in? %>
 
