@@ -61,7 +61,7 @@ class Video
   def gmaps4rails_infowindow
     # FIXME: queda mal con el tamañao  #{ embed_html }
     "
-    <a href='/videos/#{ slug }'>
+    <a href='#{ get_absolute_url }'>
       <h5>#{ERB::Util.html_escape title}</h5>
       <img class='infowindow-thumb' src='#{ thumbnail }' />
     </a>
