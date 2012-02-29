@@ -59,12 +59,15 @@ class Video
   end
 
   def gmaps4rails_infowindow
-    # FIXME: queda mal con el tamañao  #{ embed_html }
+    # Idealmente lo hariamos asi, pero no funciona...
+    # #{ embed_html(300,172) }
     "
     <a href='#{ get_absolute_url }'>
       <h5>#{ERB::Util.html_escape title}</h5>
-      <img class='infowindow-thumb' src='#{ thumbnail }' />
     </a>
+    <p>
+      <object width='300' height='172'><param name='movie' value='#{ embed_url }'></param><param name='allowFullScreen' value='true'></param><param name='allowscriptaccess' value='always'></param><embed src='#{ embed_url }' type='application/x-shockwave-flash' allowscriptaccess='always' allowfullscreen='true' width='300' height='172'></embed></object>
+    </p>
     <b>Etiquetado con</b>: #{ tags }
     "
   end
