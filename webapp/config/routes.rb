@@ -53,6 +53,7 @@ Webapp::Application.routes.draw do
   get 'timeline' => 'timeline#index'
 
   get 'search' => 'search#search'
+  get 'search/ajax' => 'search#ajax'
 
   match '/profile/:username' => 'pages#profile'
   get 'admin/users' => 'admin/users#index'
