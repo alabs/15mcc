@@ -2,7 +2,7 @@
 
 // http://jquery-howto.blogspot.com/2010/09/jquery-cookies-getsetdelete-plugin.html
 //
-/*
+
 function setCookie(name,value,days) {
   if (days) {
     var date = new Date();
@@ -36,4 +36,4 @@ $(function(){
   }
 
 });
-*/
+

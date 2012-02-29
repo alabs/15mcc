@@ -59,8 +59,13 @@ class Audio
   end
 
   def gmaps4rails_infowindow
-    # TODO: extend this - put more information
-    "<h1>#{ title }</h1>"
+    "
+    <a href='#{ get_absolute_url }'> 
+      <h5>##{ERB::Util.html_escape title}</h5>
+      <p><img src='/assets/icon-audios.png'></p>
+    </a>
+    <b>Etiquetado con</b>: #{ tags }
+    "
   end
 
   def gmaps4rails_marker_picture

@@ -72,7 +72,7 @@ class Image
 
   def gmaps4rails_infowindow
     "
-    <a href='/images/#{ id }'>
+    <a href='#{ get_absolute_url }'>
       <h5>#{ERB::Util.html_escape title}</h5>
       <img class='infowindow-thumb' src='#{ img.url(:small) }' />
     </a>
