@@ -5,6 +5,8 @@ class Video
   include Mongoid::Taggable
   include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
+
+  enable_tags_index!
   
   field :url, type: String
   field :title, type: String

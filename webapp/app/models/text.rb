@@ -5,6 +5,8 @@ class Text
   include Mongoid::Taggable
   include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
+  
+  enable_tags_index!
 
   attr_accessor :terms
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
