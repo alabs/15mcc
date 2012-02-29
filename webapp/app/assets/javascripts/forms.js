@@ -38,8 +38,13 @@ $(function(){
   $.timepicker.setDefaults($.timepicker.regional['es']);
 
   $('#text_happened_at, #image_happened_at, #audio_happened_at, #video_happened_at').datetimepicker({
+    defaultDate: new Date(2011, 03, 15, 0, 0),
+    numberOfMonths: 3,
+    showButtonPanel: true,
     dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mm:ss'
+    timeFormat: 'hh:mm:ss',
+    hourGrid: 2,
+    minuteGrid: 5 
   });
 
   // autocomplete for tags
