@@ -1,5 +1,8 @@
 Webapp::Application.routes.draw do
 
+  get "contact" => 'contact#index'
+  post "contact" => 'contact#create'
+
   Mercury::Engine.routes
 
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }
