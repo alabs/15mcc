@@ -43,6 +43,7 @@ class Ability
         can :show, klass
         can :new, klass
         can :create, klass
+        cannot :priority, klass
         cannot :update, klass
         can :update, klass, :user => { :id => user.id }
         cannot :destroy, klass
@@ -64,6 +65,7 @@ class Ability
         can :show, klass
         can :new, klass
         can :create, klass
+        cannot :priority, klass
         cannot :update, klass
         cannot :destroy, klass
       end
