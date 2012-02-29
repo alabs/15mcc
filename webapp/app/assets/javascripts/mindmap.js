@@ -52,6 +52,9 @@ $(function () {
   }
 
   // estamos en modo navegable
-  if ($('#mindmap').length != 0){ $.simpleMM.loadMap("navegable"); }
+  if ($('#mindmap').length != 0){ $.simpleMM.loadMap("navegable");
+   // fix para los nodos con mucho texto
+    $('.node_name').each( function(){ if ( $(this).text().length > 20 ) { $(this).parent().css('height', '40px'); } })
+  }
 
 });
