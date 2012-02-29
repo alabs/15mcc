@@ -48,6 +48,10 @@ class Video
     slug
   end
 
+  def get_absolute_url
+    "/videos/" + slug
+  end
+
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
   end

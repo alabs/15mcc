@@ -48,6 +48,10 @@ class Audio
     slug
   end
   
+  def get_absolute_url
+    "/audios/" + slug
+  end
+
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
   end

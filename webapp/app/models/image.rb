@@ -95,6 +95,10 @@ class Image
     slug
   end
 
+  def get_absolute_url
+    "/images/" + slug
+  end
+
   protected
 
   def generate_slug

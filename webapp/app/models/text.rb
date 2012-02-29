@@ -43,6 +43,10 @@ class Text
     slug
   end
 
+  def get_absolute_url
+    "/texts/" + slug
+  end
+
   def gmaps4rails_address
     "#{self.street}, #{self.city}, #{self.country}" 
   end
