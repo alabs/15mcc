@@ -28,7 +28,7 @@
               <% unless user_signed_in? %>
                 <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
                 <li>/</li>
-                <li><%= link_to 'inciar sesión', new_user_session_path %></li>
+                <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
               <% else %>
                 <li><%= link_to 'mi cuenta',  "/profile/#{current_user.username}" %></li>
                 <% if current_user.role == 'admin' %>
