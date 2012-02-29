@@ -5,6 +5,8 @@ class Audio
   include Mongoid::Paperclip
   include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
+  
+  enable_tags_index!
 
   field :title, :type => String
   field :happened_at, :type => Time

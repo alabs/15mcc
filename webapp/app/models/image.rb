@@ -10,6 +10,8 @@ class Image
   
   include Gmaps4rails::ActsAsGmappable
   include Geocoder::Model::Mongoid
+  
+  enable_tags_index!
 
   #callbacks
   before_save :generate_slug, :reverse_geocode

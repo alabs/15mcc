@@ -4,6 +4,7 @@ class TagsController < ApplicationController
   # GET /tags.json
   def index
     tags = Text.tags_with_weight + Image.tags_with_weight + Video.tags_with_weight + Audio.tags_with_weight
+    logger.info('DEBUG 15M.CC: ' + tags.inspect)
     @tagcloud = {}
     tags.each do |t|
       if @tagcloud[t[0]] == nil then @tagcloud[t[0]] = t[1]
