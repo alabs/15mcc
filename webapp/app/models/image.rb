@@ -118,7 +118,7 @@ class Image
     exif_info = EXIFR::JPEG.new(img.queued_for_write[:original].path)
 
     return unless exif_info.exif?
-    logger.debug 'escribiendo metadatos exif'
+    #logger.debug 'escribiendo metadatos exif'
     self.happened_at = exif_info.date_time
     logger.debug "fecha: #{exif_info.date_time}"
     #datos gps
