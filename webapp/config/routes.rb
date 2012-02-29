@@ -56,6 +56,8 @@ Webapp::Application.routes.draw do
   match '/maps/search/:address' => "maps#search"
   get 'timeline' => 'timeline#index'
 
+  get 'search' => 'search#search'
+
   match '/profile/:username' => 'pages#profile'
   get 'admin/users' => 'admin/users#index'
   get 'admin/users/search' => 'admin/users#search'

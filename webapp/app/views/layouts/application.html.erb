@@ -43,6 +43,18 @@
           <div class="span4" id="logo">
             <%= link_to image_tag('logo.png'), root_path %>
           </div>
+          <div class="span4">
+            <div class="control-group">
+              <div class="controls">
+                <div class="input-prepend">
+                  <form id="search-form" action="/search" method="get">
+                    <span class="add-on"> <i class="icon-search"></i> </span>
+                    <input type="search" class="span3" placeholder="Buscar" name="q" id="search"/>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="container-fluid" id="mainnav">

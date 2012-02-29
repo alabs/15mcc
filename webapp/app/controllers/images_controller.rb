@@ -138,18 +138,6 @@ class ImagesController < ApplicationController
     render :text => "OK"
   end
 
-  def search
-    @images = Image.fulltext_search(params[:query])
-    authorize! :search, @images
-
-    @map = @images.to_gmaps4rails
-    
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @images }
-    end
-  end
-
   def abuse
     from = user_signed_in? ? current_user.email : params[:from]
     url = request.url.gsub(/\/abuse/, '')
