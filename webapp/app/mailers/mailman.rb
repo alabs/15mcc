@@ -10,6 +10,9 @@ class Mailman < ActionMailer::Base
     @message = message
     @url = url
     subject = '[15m.cc] Denuncia de contenido inapropiado'
-    mail to: 'apardo@alabs.es', reply_to: from, subject: subject
+    mail to: 'contacto@15m.cc', reply_to: from, subject: subject
+  end
+
+  def send_contact_message(message)
   end
 end
