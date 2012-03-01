@@ -1,5 +1,6 @@
 class Admin::UsersController < ApplicationController
 
+  before_filter :authenticate_user!
   before_filter :check_role
 
   def index
