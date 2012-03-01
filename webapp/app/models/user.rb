@@ -65,7 +65,7 @@ class User
   
   def role?(base_role)
     #ROLES.index(base_role.to_s) <= ROLES.index(role)
-    self.role.present? && ROLES.index(base_role.to_s) <= ROLES.index(role)
+    self.role.present? && ROLES.index(base_role.to_s) <= ROLES.index(self.role)
   end
   
   #def role?(role)
