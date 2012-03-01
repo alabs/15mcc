@@ -120,7 +120,7 @@ class Image
     return unless exif_info.exif?
     #logger.debug 'escribiendo metadatos exif'
     self.happened_at = exif_info.date_time
-    logger.debug "fecha: #{exif_info.date_time}"
+    #logger.debug "fecha: #{exif_info.date_time}"
     #datos gps
     return if exif_info.gps.nil?
     self.coordinates = [exif_info.gps.longitude,exif_info.gps.latitude]
