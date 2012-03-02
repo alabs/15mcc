@@ -77,5 +77,5 @@ Webapp::Application.configure do
     :exception_recipients => %w{debug@alabs.es}
   
   # Para devise
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'beta.15m.cc' }
 end
