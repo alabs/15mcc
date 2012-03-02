@@ -84,3 +84,6 @@ gem 'best_in_place'
 
 # Para la edicion de paginas semi estaticas
 gem 'mercury-rails'
+
+# para el markdown ed Text 
+gem 'redcarpet'

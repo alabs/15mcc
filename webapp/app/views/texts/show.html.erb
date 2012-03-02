@@ -2,7 +2,10 @@
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span9">
     <h2><%= @text.title %></h2>
-    <p><%= @text.body %></p>
+    <p>
+      <%= @text.to_html(@text.body).html_safe %> 
+    </p>
+
 
     <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>

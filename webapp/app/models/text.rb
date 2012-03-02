@@ -72,6 +72,12 @@ class Text
     }
   end   
 
+  def to_html(field)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+        :autolink => true, :space_after_headers => true)
+    markdown.render(field)
+  end
+
   protected
 
   def generate_slug

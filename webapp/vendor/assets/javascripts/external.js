@@ -26,3 +26,7 @@
 //= require underscore
 //= require jquery.overscroll
 
+//= require Markdown.Converter
+//= require Markdown.Editor
+//= require Markdown.Sanitizer
+
