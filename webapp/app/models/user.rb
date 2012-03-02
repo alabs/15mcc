@@ -65,7 +65,7 @@ class User
   
   def role?(base_role='anonymous')
     if self.role.present?
-      ROLES.index(base_role.to_s) <= ROLES.index(self.role)
+      ROLES.index(base_role) <= ROLES.index(self.role)
     end
   end
   
