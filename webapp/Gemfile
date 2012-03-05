@@ -87,3 +87,6 @@ gem 'mercury-rails'
 
 # para el markdown ed Text 
 gem 'redcarpet'
+
+# para el sitemap
+gem 'sitemap_generator'
