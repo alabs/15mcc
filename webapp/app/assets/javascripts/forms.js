@@ -54,4 +54,22 @@ $(function(){
     allowSpaces: true
   });
 
+  // markdown
+  var converter = Markdown.getSanitizingConverter();
+  var editor = new Markdown.Editor(converter);
+  editor.run();
+
+  $(".show_markdown_help").click( function(event){
+     event.preventDefault();
+     if ( $(this).hasClass("hide_markdown_help") ){
+       $(this).text("ver ayuda de marcado");
+       $(this).removeClass("hide_markdown_help");
+     } else {
+       $(this).addClass("hide_markdown_help");
+       $(this).text("esconder ayuda de marcado");
+     }
+     $(this).next().slideToggle("slow", "linear");
+   });
+
+
 });
