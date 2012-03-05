@@ -54,10 +54,13 @@ $(function(){
     allowSpaces: true
   });
 
-  // markdown
-  var converter = Markdown.getSanitizingConverter();
-  var editor = new Markdown.Editor(converter);
-  editor.run();
+
+  if ( $('#wmd-input').length > 0 ) {
+    // markdown
+    var converter = Markdown.getSanitizingConverter();
+    var editor = new Markdown.Editor(converter);
+    editor.run();
+  } 
 
   $(".show_markdown_help").click( function(event){
      event.preventDefault();
