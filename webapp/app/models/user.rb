@@ -63,9 +63,8 @@ class User
   
   ROLES = %w[admin editor user anonymous]
   
-  def role?(base_role='anonymous')
+  def role?(base_role = :anonymous)
     if self.role.present?
-      logger.info('DEBUG 15M.CC: ' + base_role + " " + self.role)
       return ROLES.index(base_role.to_s) <= ROLES.index(self.role)
     end
     return false

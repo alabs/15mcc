@@ -31,13 +31,13 @@ class Ability
       can :manage, :all
     end
 
-    if user.role?('editor')
+    if user.role? :editor
       can :manage, :all
     end
       
     klasses = [Image, Text, Video, Audio]
 
-    if user.role?('user')
+    if user.role? :user
       klasses.each do |klass|
         can :index, klass
         can :show, klass
@@ -59,7 +59,7 @@ class Ability
       cannot :editor, Mapmind
     end
     
-    if user.role?('anonymous')
+    if user.role? :anonymous
       klasses.each do |klass|
         can :index, klass
         can :show, klass
