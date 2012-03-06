@@ -65,7 +65,7 @@ class User
   
   def role?(base_role = :anonymous)
     if self.role.present?
-      return ROLES.index(base_role.to_s) <= ROLES.index(self.role)
+      return ROLES.index(base_role.to_s || 'anonymous') <= ROLES.index(self.role)
     end
     return false
   end
