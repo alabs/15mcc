@@ -29,10 +29,12 @@ class Ability
 
     if user.admin?
       can :manage, :all
+      return
     end
 
     if user.role?('editor')
       can :manage, :all
+      return
     end
       
     klasses = [Image, Text, Video, Audio]
@@ -57,6 +59,7 @@ class Ability
       cannot :destroy, [Node, Connection]
       cannot :update, [Node, Connection, Page]
       cannot :editor, Mapmind
+      return
     end
     
     if user.role?('anonymous')
@@ -77,6 +80,7 @@ class Ability
       cannot :destroy, [Node, Connection]
       cannot :update, [Node, Connection, Page]
       cannot :editor, Mapmind
+      return
     end
   end
 end
