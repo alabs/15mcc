@@ -60,7 +60,7 @@ class ImagesController < ApplicationController
       #
       else
         session[:order_step] = nil
-        redirect_to @image, notice: 'Imagen creada correctamente'
+        redirect_to @image, notice: 'La imagen se ha creado'
       end
     #
     else
@@ -100,7 +100,7 @@ class ImagesController < ApplicationController
 
     respond_to do |format|
       if @image.update_attributes(params[:image])
-        format.html { redirect_to @image, notice: 'Imagen actualizada correctamente.' }
+        format.html { redirect_to @image, notice: 'La imagen se ha actualizado.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

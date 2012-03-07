@@ -60,7 +60,7 @@ class TextsController < ApplicationController
 
     respond_to do |format|
       if verify_captcha(@text) and @text.save
-        format.html { redirect_to @text, notice: 'Text was successfully created.' }
+        format.html { redirect_to @text, notice: 'El texto se ha creado.' }
         format.json { render json: @text, status: :created, location: @text }
       else
         format.html { render action: "new" }
@@ -77,7 +77,7 @@ class TextsController < ApplicationController
 
     respond_to do |format|
       if @text.update_attributes(params[:text])
-        format.html { redirect_to @text, notice: 'Text was successfully updated.' }
+        format.html { redirect_to @text, notice: 'El texto se ha actualizado.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

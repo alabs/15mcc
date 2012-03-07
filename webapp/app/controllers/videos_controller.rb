@@ -59,7 +59,7 @@ class VideosController < ApplicationController
 
     respond_to do |format|
       if verify_captcha(@video) && @video.save
-        format.html { redirect_to @video, notice: 'Video was successfully created.' }
+        format.html { redirect_to @video, notice: 'El vídeo se ha creado.' }
         format.json { render json: @video, status: :created, location: @video }
       else
         format.html { render action: "new" }
@@ -76,7 +76,7 @@ class VideosController < ApplicationController
 
     respond_to do |format|
       if @video.update_attributes(params[:video])
-        format.html { redirect_to @video, notice: 'Video was successfully updated.' }
+        format.html { redirect_to @video, notice: 'El vídeo se ha actualizado.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

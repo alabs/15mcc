@@ -57,7 +57,7 @@ class AudiosController < ApplicationController
 
     respond_to do |format|
       if @audio.save
-        format.html { redirect_to @audio, notice: 'Audio was successfully created.' }
+        format.html { redirect_to @audio, notice: 'El audio se ha creado.' }
         format.json { render json: @audio, status: :created, location: @audio }
       else
         format.html { render action: "new" }
@@ -74,7 +74,7 @@ class AudiosController < ApplicationController
 
     respond_to do |format|
       if @audio.update_attributes(params[:audio])
-        format.html { redirect_to @audio, notice: 'Audio was successfully updated.' }
+        format.html { redirect_to @audio, notice: 'El audio se ha actualizado.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
