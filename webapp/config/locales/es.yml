@@ -18,6 +18,5 @@ es:
       previous: "&lsaquo; Anterior"
       next: "Siguiente &rsaquo;"
       truncate: "..."
-
-
-
+  unauthorized:
+    default: "No estás autorizado a acceder a esta página"
