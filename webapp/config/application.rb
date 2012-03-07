@@ -33,6 +33,7 @@ module Webapp
 
     config.time_zone = 'Madrid'
     config.i18n.default_locale = :es
+    config.i18n.locale = :es
     config.encoding = "utf-8"
 
     config.filter_parameters += [:password]
