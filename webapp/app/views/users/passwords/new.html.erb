@@ -1,16 +1,8 @@
 <div class="span10 mt1">
 
-  <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form-horizontal" }) do |f| %>
+  <%= bootstrap_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form-horizontal" }) do |f| %>
   <legend>¿Has olvidado tu contraseña?</legend>
-    <%= devise_error_messages! %>
-
-    <div class="control-group">
-      <%= f.label :email, "Correo electrónico", :class => "control-label" %>
-      <div class="controls">
-        <%= f.email_field :email %>
-      </div>
-    </div>
-
+    <%= f.email_field :email %>
     <div class="form-actions"><%= f.submit "Enviarme las instrucciones para cambiar mi contraseña", :class => "btn btn-primary" %></div>
   <% end %>
 

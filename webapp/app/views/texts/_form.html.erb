@@ -1,41 +1,23 @@
 <div class="form-stacked main-form">
-  <%= form_for(@text, :html => {:class => "content-form"} ) do |f| %>
+  <%= bootstrap_form_for(@text, :html => {:class => "content-form"} ) do |f| %>
   <fieldset>
     <legend>Introducir nuevo texto</legend>
-
-<%= render :partial => "partials/copyright_notice" %>
-
-<% if @text.errors.any? %>
-   <% @text.errors.full_messages.each do |msg| %>
-     <div class="alert alert-error"><%= msg %></div>
-   <% end %>
-<% end %>
-
+    <%= render :partial => "partials/copyright_notice" %>
     <div class="form-field">
-      <%= f.label 'Título' %>
       <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span8' %>
-      <% unless @text.errors[:title].blank? %>
-        <span class="error-message"><%= @text.errors[:title].to_sentence %></span>
+        <div class="wmd-panel">
+          <%= f.text_area :body, rows: 6, required: true, placeholder: 'Cuerpo del texto', :class => 'span8 wmd-input', :id => 'wmd-input' do %>
+          <div id="wmd-button-bar"></div>
+        <p>
+          <a href="#" class="show_markdown_help">ver ayuda de estilos</a>
+        </p>
+        <div class="markdown_help" style="display:none;">
+          <%= render :partial => 'partials/markdown_help' %>
+        </div>
       <% end %>
-    </div>
-
-    <div class="form-field">
-      <%= f.label 'Texto' %>
-      <div class="wmd-panel">
-        <div id="wmd-button-bar"></div>
-        <%= f.text_area :body, rows: 6, required: true, placeholder: 'Cuerpo del texto', :class => 'span8 wmd-input', :id => 'wmd-input' %>
-        <% unless @text.errors[:body].blank? %>
-          <span class="error-message"><%= @text.errors[:body].to_sentence %></span>
-        <% end %>
-      </div>
-      <a href="#" class="show_markdown_help">ver ayuda de marcado</a>
-      <div class="markdown_help" style="display:none;">
-        <%= render :partial => 'partials/markdown_help' %>
       </div>
     </div>
-
     <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @text} %>
-
     <div id="form-actions">
       <%= f.submit 'Enviar texto', :class => 'btn primary' %>
       <%= link_to 'Cancelar', texts_path, :class => 'btn danger' %>

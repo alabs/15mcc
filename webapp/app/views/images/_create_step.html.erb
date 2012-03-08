@@ -12,16 +12,14 @@
 <% end %>
 
     <div class="form-field">
-      <%= f.label 'Título' %>
       <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span8' %>
     </div>
+
     <div class="form-field">
-      <%= f.label 'Fichero' %>
       <%= f.file_field :img, required: true %>
     </div>
 
     <div class="form-field">
-      <%= f.label 'Tags' %>
       <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' %>
     </div>
 

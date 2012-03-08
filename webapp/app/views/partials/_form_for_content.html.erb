@@ -1,20 +1,21 @@
-    <div class="form-field">
-      <%= f.label 'Tags' %>
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8', :required => "true" %>
-    </div>
-    <div class="form-field">
-      <%= f.label 'Fecha' %>
-      <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8', :required => "true" %>
-    </div>
-    <legend> Localización </legend>
+  <div class="form-field">
+    <%= f.text_field :tags, placeholder: 'Etiquetas separadas por comas', class: 'span6', :required => "true" %>
+    <%= f.text_field :happened_at, placeholder: 'Fecha en la que ha ocurrido', :class => 'span6', :required => "true" %>
+  </div>
+
       <div class="form-field">
-        <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
+        <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' do %>
+          <a href="#" id="map-search" class="btn">
+            <i class='icon-search'></i>
+            Buscar
+          </a>
+        <% end %>
+
+      <div class="hide">
         <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
         <%= f.text_field :longitude, :class => 'location_attributes_longitude', :style => "display:none" %>
-        <a href="#" id="map-search" class="btn">
-          <i class='icon-search'></i>
-          Buscar
-        </a>
+      </div>
+
         <% unless content.errors[:street].blank? %>
           <span class="error-message"><%= content.errors[:street].to_sentence %></span>
         <% end %>

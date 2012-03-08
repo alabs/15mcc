@@ -2,37 +2,16 @@
 <%= form_for(@image, :html => { :multipart => true }) do |f| %>
   <fieldset>
     <legend>Editar imagen</legend>
-
-<%= render :partial => "partials/copyright_notice" %>
-
-<% if @image.errors.any? %>
-   <% @image.errors.full_messages.each do |msg| %>
-     <div class="alert alert-error"><%= msg %></div>
-   <% end %>
-<% end %>
-
-    <div class="form-field">
-      <%= f.label 'Título' %>
+      <%= render :partial => "partials/copyright_notice" %>
       <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span8' %>
-    </div>
-    <div class="form-field">
-      <%= f.label 'Fichero' %>
       <%= f.file_field :img, required: true %>
-    </div>
-
-    <div class="form-field">
-      <%= f.label 'Tags' %>
       <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' %>
-    </div>
 
     <% if current_user.blank? %>
-
       <div class="alert alert-info">
         No te has registrado, por lo que tendrás que confirmar que eres un humano completando las palabras que ves más abajo en el cuadro. Si no quieres tener que hacer esto cada vez que subas algo tendrás que <%= link_to "registrarte", new_user_registration_path %> o sí ya tienes un usuario <%= link_to "iniciar sesión", new_user_session_path %>.
       </div>
-
       <%= recaptcha_tags %>
-
     <% end %>
 
     <div id="form-actions">

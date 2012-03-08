@@ -1,25 +1,10 @@
 <div class="span10 mt1">
 
-  <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "form-horizontal" }) do |f| %>
+  <%= bootstrap_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, :class => "form-horizontal" }) do |f| %>
     <legend>Cambiar tu contraseña</legend>
-    <%= devise_error_messages! %>
-    <%= f.hidden_field :reset_password_token %>
-  
-    <div class="control-group">
-      <%= f.label :password, "Nueva contraseña", :class => "control-label" %>
-      <div class="controls">
-        <%= f.password_field :password %>
-      </div>
-    </div>
-  
-    <div class="control-group">
-      <%= f.label :password_confirmation, "Confirmar nueva contraseña", :class => "control-label" %>
-      <div class="controls">
-        <%= f.password_field :password_confirmation %>
-      </div>
-    </div>
-
-  
+      <%= f.hidden_field :reset_password_token %>
+      <%= f.password_field :password %>
+      <%= f.password_field :password_confirmation %>
     <div class="form-actions"><%= f.submit "Cambiar mi contraseña", :class => "btn btn-primary" %></div>
   <% end %>
   

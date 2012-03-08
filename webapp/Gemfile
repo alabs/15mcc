@@ -90,3 +90,6 @@ gem 'redcarpet'
 
 # para el sitemap
 gem 'sitemap_generator'
+
+# para los estilos con bootsrap
+gem 'nokogiri'
