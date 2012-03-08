@@ -1,62 +1,19 @@
-class Audio
+class Audio < Content
+
   include Mongoid::Document
-  include Mongoid::Timestamps
-  include Mongoid::Taggable
   include Mongoid::Paperclip
-  include Mongoid::FullTextSearch
-  include Gmaps4rails::ActsAsGmappable
-  
-  enable_tags_index!
-
-  field :title, :type => String
-  field :happened_at, :type => Time
-  field :street, :type => String
-  field :city, :type => String
-  field :country, :type => String
-  field :latitude, type: Float
-  field :longitude, type: Float
-  field :gmaps, type: Boolean
-  field :slug, type: String
-  field :priority, type: Boolean, :default => false
-
-  attr_accessor :terms
-  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
-
-  belongs_to :user
-  field :user_id, type: String
 
   has_mongoid_attached_file :archive
   
-  validates_presence_of :title
-  validates_uniqueness_of :title
-
-  # video/ogg no es un bug, es que o sino por lo menos el firefox 10.0.2 no lo deja subir
+ # video/ogg no es un bug, es que o sino por lo menos el firefox 10.0.2 no lo deja subir
   # em, si, aunque un file -i muestre que es audio/ogg al subirlo se "convierte" a video/ogg (???)
   validates_attachment_content_type :archive,
     :content_type => %w(application/ogg audio/ogg video/ogg audio/mpeg audio/x-mpeg audio/mp3 audio/x-mp3 audio/mpeg3 audio/x-mpeg3 audio/mpg audio/x-mpg audio/x-mpegaudio),
     :message => "El tipo de audio no esta soportado. Tiene que ser del tipo OGG o MP3."
-  
-  # gmaps4rails https://github.com/apneadiving/Google-Maps-for-Rails
-  acts_as_gmappable :lat => 'latitude', :lon => 'longitude'
 
-  before_save :generate_slug
-  
-  fulltext_search_in :title, :street, :city, :country
-
-  def self.find_by_slug(slug)
-    where(:slug => slug).first
-  end
-
-  def to_param
-    slug
-  end
   
   def get_absolute_url
     "/audios/" + slug
-  end
-
-  def gmaps4rails_address
-    "#{self.street}, #{self.city}, #{self.country}" 
   end
 
   def gmaps4rails_infowindow
@@ -76,11 +33,10 @@ class Audio
      "height" => "16",
      "marker_anchor" => [ 5, 10]
     }
-  end   
-
-  protected
-
-  def generate_slug
-    self.slug = self.title.parameterize
   end
+
+  def preprocessing
+    generate_slug()
+  end
+
 end
