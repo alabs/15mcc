@@ -21,6 +21,12 @@
           <span class="text">Beta</span>
         </a>
       </div>
+      <% if user_signed_in? %>
+        <div id="avatar">
+          <%= gravatar_image_tag(current_user.email, :gravatar => { :size => 40 }) %>
+          <div class="clear"></div>
+        </div>
+      <% end %>
       <div class="container">
         <div class="row">
           <div class="span8" id="topmenu">
@@ -30,7 +36,7 @@
                 <li>/</li>
                 <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
               <% else %>
-                <li><%= link_to 'mi cuenta',  "/profile/#{current_user.username}" %></li>
+                <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
                 <% if current_user.role == 'admin' %>
                   <li>/</li>
                   <li><%= link_to 'administrar', admin_users_path %>

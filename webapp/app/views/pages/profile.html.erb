@@ -1,5 +1,8 @@
 <div class="span10 mt1">
   <h1>Perfil del usuario <%= @user.username %></h1>
+  <div style="float:right;">
+    <%= gravatar_image_tag(@user.email, :gravatar => { :size => 100 }) %>
+  </div>
   <% if current_user == @user %>
     <p><%= link_to 'Editar mi cuenta', edit_user_registration_path %></p>
   <% end %>
