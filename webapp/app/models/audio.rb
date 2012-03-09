@@ -12,10 +12,6 @@ class Audio < Content
     :message => "El tipo de audio no esta soportado. Tiene que ser del tipo OGG o MP3."
 
   
-  def get_absolute_url
-    "/audios/" + slug
-  end
-
   def gmaps4rails_infowindow
     "
     <a href='#{ get_absolute_url }'> 
@@ -37,6 +33,12 @@ class Audio < Content
 
   def preprocessing
     generate_slug()
+  end
+
+  private
+
+  def url_path
+    '/audios/'
   end
 
 end

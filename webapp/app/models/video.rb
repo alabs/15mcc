@@ -12,10 +12,6 @@ class Video < Content
   validates_uniqueness_of :url
 
 
-  def get_absolute_url
-    "/videos/" + slug
-  end
-
   def gmaps4rails_infowindow
     # Idealmente lo hariamos asi, pero no funciona...
     # #{ embed_html(300,172) }
@@ -53,6 +49,10 @@ class Video < Content
     self.thumbnail = vid.thumbnail
     self.embed_url = vid.embed_url
     self.embed_html = vid.embed_html(600)
+  end
+
+  def url_path
+    '/videos/'
   end
 
 end

@@ -4,9 +4,6 @@ class Text < Content
 
   field :body, type: String
 
-  def get_absolute_url
-    "/texts/" + slug
-  end
 
   def gmaps4rails_infowindow
     "
@@ -37,6 +34,12 @@ class Text < Content
 
   def preprocessing
     generate_slug()
+  end
+
+  private
+
+  def url_path
+    '/texts/'
   end
 
 end

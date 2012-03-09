@@ -26,10 +26,6 @@ class Image < Content
     }
   end
 
-  def get_absolute_url
-    "/images/" + slug
-  end
-
   protected
 
   def preprocessing
@@ -39,6 +35,10 @@ class Image < Content
   end
 
   private
+
+  def url_path
+    '/images/'
+  end
 
   def extract_metadata
     return if img.queued_for_write[:original].nil?

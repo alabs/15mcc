@@ -27,7 +27,7 @@ class Content
   field :user_id, type: String
 
   #address
-  field :street, type: String
+  field :address, type: String
   field :city, type: String
   field :country, type: String
   #coordinates
@@ -38,14 +38,14 @@ class Content
   field :title, type: String
   field :happened_at, type: Time
 
-  fulltext_search_in :title, :street, :city, :country
+  fulltext_search_in :title, :address, :city, :country
 
   #geocoding
   geocoded_by :address_from_components
   reverse_geocoded_by :coordinates do |obj,results|
     if geo = results.first
       obj.city    = geo.city
-      obj.street  = geo.address
+      obj.address = geo.address
       obj.country = geo.country
     end
   end
@@ -62,7 +62,7 @@ class Content
   end
 
   def address_from_components
-    [street,city,country].compact.join(', ')
+    [address,city,country].compact.join(', ')
   end
 
   #slug methods
@@ -79,6 +79,10 @@ class Content
 
   def generate_slug
     self.slug = self.title.parameterize
+  end
+
+  def get_absolute_url
+    url_path + slug
   end
 
 end

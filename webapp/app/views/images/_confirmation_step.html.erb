@@ -21,9 +21,9 @@
     <div class="well">
       <div class="form-field">
         <%= f.label 'Dirección' %>
-        <%= f.text_field :street, placeholder: 'Dirección completa', :class => 'span8' %>
-        <% unless @image.errors[:street].blank? %>
-          <span class="error-message"><%= @image.errors[:street].to_sentence %></span>
+        <%= f.text_field :address, placeholder: 'Dirección completa', :class => 'span8' %>
+        <% unless @image.errors[:address].blank? %>
+          <span class="error-message"><%= @image.errors[:address].to_sentence %></span>
         <% end %>
       </div>
 
