@@ -41,5 +41,5 @@ Webapp::Application.configure do
   }
 
   # Para devise
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'localhost:8080' }
 end
