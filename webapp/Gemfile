@@ -90,3 +90,6 @@ gem 'redcarpet'
 
 # para el sitemap
 gem 'sitemap_generator'
+
+# para los avatares
+gem 'gravatar_image_tag'
