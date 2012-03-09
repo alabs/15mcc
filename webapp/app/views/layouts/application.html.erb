@@ -23,7 +23,7 @@
       </div>
       <% if user_signed_in? %>
         <div id="avatar">
-          <%= gravatar_image_tag(current_user.email, :gravatar => { :size => 40 }) %>
+          <%= link_to gravatar_image_tag(current_user.email, :gravatar => { :size => 40 }), "/profile/#{current_user.username}" %>
           <div class="clear"></div>
         </div>
       <% end %>
