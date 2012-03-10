@@ -1,5 +1,5 @@
 <div class="form-stacked main-form">
-<%= form_for(@image, :url =>{ :action => 'create_step'}, :html => { :multipart => true }) do |f| %>
+<%= form_for(@image, :url =>{ :action => 'create_step'}, :html=>{:class => "content-form"}) do |f| %>
   <fieldset>
     <legend>Revisar datos imagen</legend>
 
@@ -18,31 +18,22 @@
       </div>
     </div>
 
-    <div class="well">
-      <div class="form-field">
-        <%= f.label 'Dirección' %>
-        <%= f.text_field :address, placeholder: 'Dirección completa', :class => 'span8' %>
-        <% unless @image.errors[:address].blank? %>
-          <span class="error-message"><%= @image.errors[:address].to_sentence %></span>
-        <% end %>
-      </div>
-
-      <div class="form-field">
-        <%= f.label 'Ciudad' %>
-        <%= f.text_field :city, placeholder: 'Ciudad', :class => 'span8' %>
-        <% unless @image.errors[:city].blank? %>
-          <span class="error-message"><%= @image.errors[:city].to_sentence %></span>
-        <% end %>
-      </div>
-
-      <div class="form-field">
-        <%= f.label 'País' %>
-        <%= f.text_field :country, placeholder: 'País', :class => 'span8' %>
-        <% unless @image.errors[:country].blank? %>
-          <span class="error-message"><%= @image.errors[:country].to_sentence %></span>
-        <% end %>
-      </div>
+    <legend> Localización </legend>
+    <div class="form-field">
+        <%= f.text_field :address_from_components, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
+        <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
+        <%= f.text_field :longitude, :class => 'location_attributes_longitude', :style => "display:none" %>
+        <a href="#" id="map-search" class="btn">
+          <i class='icon-search'></i>
+          Buscar
+        </a>
     </div>
+
+    <% if @map == "[]" %>
+    <%= gmaps("map_options" => {"center_longitude" => -3.700, "center_latitude" => 40.41, "zoom" => 3, "auto_adjust" => false, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+    <% else %>
+    <%= gmaps("map_options" => {"auto_adjust" => true, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+    <% end %>
 
     <div id="form-actions">
       <%= f.submit 'Enviar imagen', :class => 'btn primary' %>

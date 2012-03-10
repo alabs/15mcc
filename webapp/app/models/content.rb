@@ -61,6 +61,19 @@ class Content
     [address,city,country].compact.join(', ')
   end
 
+  def address_from_components=(full_address)
+    unless full_address.nil?
+      #separo los datos geográficos que recibimos separados por comas
+      geo_data = full_address.split(',')
+      #puede ocurrir que los datos de entrada no sean correctos en ese caso los evito
+      if !geo_data.nil? && geo_data.length == 3
+        self.address = geo_data[0]
+        self.city    = geo_data[1]
+        self.country = geo_data[2]
+      end
+    end
+  end
+
   #slug methods
 
   def self.find_by_slug(slug)

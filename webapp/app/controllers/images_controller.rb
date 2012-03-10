@@ -40,6 +40,7 @@ class ImagesController < ApplicationController
   # GET /images/1/new_step
   def new_step
     @image = Image.find_by_slug(params[:id])
+    @map   = @image.to_gmaps4rails
     @image.step session[:order_step]
     authorize! :create, @image
     render 'new'
@@ -47,7 +48,8 @@ class ImagesController < ApplicationController
 
   # POST /images/1/create_step
   def create_step
-    @image              = Image.find_by_slug(params[:id])
+    @image = Image.find_by_slug(params[:id])
+    @map   = @image.to_gmaps4rails
     @image.step session[:order_step]
     authorize! :create, @image
     #

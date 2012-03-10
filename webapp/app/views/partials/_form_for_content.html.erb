@@ -8,15 +8,15 @@
     </div>
     <legend> Localización </legend>
       <div class="form-field">
-        <%= f.text_field :address, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
+        <%= f.text_field :address_from_components, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
         <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
         <%= f.text_field :longitude, :class => 'location_attributes_longitude', :style => "display:none" %>
         <a href="#" id="map-search" class="btn">
           <i class='icon-search'></i>
           Buscar
         </a>
-        <% unless content.errors[:address].blank? %>
-          <span class="error-message"><%= content.errors[:address].to_sentence %></span>
+        <% unless content.errors[:address_from_components].blank? %>
+          <span class="error-message"><%= content.errors[:address_from_components].to_sentence %></span>
         <% end %>
       </div>
       <% if @map == "[]" %>
