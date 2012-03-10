@@ -7,7 +7,6 @@ class Text < Content
 
   field :body, type: String
 
-
   def gmaps4rails_infowindow
     "
     <h5><a href='#{ get_absolute_url }'> ##{ERB::Util.html_escape title} </a></h5>
