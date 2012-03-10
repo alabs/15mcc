@@ -2,15 +2,14 @@ class Video < Content
 
   include Mongoid::Document
 
+  validates_presence_of :url
+  validates_uniqueness_of :url
+
   field :url, type: String
   field :service, type: String
   field :thumbnail, type: String
   field :embed_url, type: String
   field :embed_html, type: String
-  
-  validates_presence_of :url
-  validates_uniqueness_of :url
-
 
   def gmaps4rails_infowindow
     # Idealmente lo hariamos asi, pero no funciona...

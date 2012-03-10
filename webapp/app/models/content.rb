@@ -1,13 +1,11 @@
 class Content
 
-
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Taggable
   include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
   include Geocoder::Model::Mongoid
-
 
   enable_tags_index!
 
@@ -19,8 +17,6 @@ class Content
 
   #validations
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
-  validates_presence_of :title
-  validates_uniqueness_of :title
 
   #fields
   belongs_to :user

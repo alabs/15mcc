@@ -3,6 +3,9 @@ class Audio < Content
   include Mongoid::Document
   include Mongoid::Paperclip
 
+  validates_presence_of :title
+  validates_uniqueness_of :title
+
   has_mongoid_attached_file :archive
   
  # video/ogg no es un bug, es que o sino por lo menos el firefox 10.0.2 no lo deja subir

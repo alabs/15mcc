@@ -2,6 +2,9 @@ class Image < Content
 
   include Wizard
   include Mongoid::Paperclip
+
+  validates_presence_of :title
+  validates_uniqueness_of :title
   
 
   #paperclip
