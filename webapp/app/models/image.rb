@@ -44,16 +44,18 @@ class Image < Content
 
   def extract_metadata
     return if img.queued_for_write[:original].nil?
-    exif_info = EXIFR::JPEG.new(img.queued_for_write[:original].path)
-
-    return unless exif_info.exif?
-    #logger.debug 'escribiendo metadatos exif'
-    self.happened_at = exif_info.date_time
-    #logger.debug "fecha: #{exif_info.date_time}"
-    #datos gps
-    return if exif_info.gps.nil?
-    self.coordinates = [exif_info.gps.longitude,exif_info.gps.latitude]
-    logger.debug "Latitud: #{exif_info.gps.latitude} y Longitud: #{exif_info.gps.longitude}"
+    begin
+      exif_info = EXIFR::JPEG.new(img.queued_for_write[:original].path)
+      #si no tengo datos exif no continuo
+      return unless exif_info.exif?
+      self.happened_at = exif_info.date_time
+      #datos gps
+      return if exif_info.gps.nil?
+      self.coordinates = [exif_info.gps.longitude,exif_info.gps.latitude]
+      logger.debug "Latitud: #{exif_info.gps.latitude} y Longitud: #{exif_info.gps.longitude}"
+    rescue EXIFR::MalformedJPEG => mjpeg
+      logger.error "Error en la captura de datos EXIF de una imagen: #{mjpeg.message}"
+    end
   end
 
 end
