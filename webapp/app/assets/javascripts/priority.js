@@ -40,9 +40,6 @@ function changePriority(el, action){
 
 $(function () {
 
-  $('#flash-message').click( function(){
-      $(this).hide('slow');
-  });
 
   $('.priority').bind('click', function(e){
     e.preventDefault();

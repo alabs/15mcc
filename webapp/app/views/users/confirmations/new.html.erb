@@ -1,10 +1,14 @@
-<h2>Reenviar instrucciones de confirmación</h2>
+<div class="span10 mt1">
 
-<%= bootstrap_form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
+  <%= bootstrap_form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
 
-  <%= f.label :email %>
+    <legend>Reenviar instrucciones de confirmación</legend>
 
-  <div><%= f.submit "Reenviar instrucciones de confirmación" %></div>
-<% end %>
+    <%= f.email_field :email %>
 
-<%= render "links" %>
+    <div class="form-actions"><%= f.submit "Reenviar instrucciones de confirmación", :class => "btn btn-primary"  %></div>
+  <% end %>
+
+  <%= render "links" %>
+
+</div>
