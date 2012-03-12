@@ -44,14 +44,18 @@ class TagsController < ApplicationController
   # GET /tags/search.json
   # GET /tags/search.json?term="bla"
   def search
+
+    # esto es un listado de todos los tags:
+    # ["bla", "feature", "hola"]
+    tags = Content.all_tags.map {|c| c[:name] }
+
     if params["term"]
-      # It's only from Text but it seems like is in all the other taggable models
-      all_tags = Text.tags.grep(/#{params["term"]}/)
-    else
-      all_tags = Text.tags
+      # buscamos el termino
+      tags = tags.grep(/#{params["term"]}/)
     end
     
-    @tags = all_tags.map {|t| {"id" => t, "label" => t, "value" => t} }
+    # devolvemos con una list un hash con cada termino que encontramos
+    @tags = tags.map {|t| {"id" => t, "label" => t, "value" => t} }
     
     respond_to do |format|
       format.json { render :json => @tags }
