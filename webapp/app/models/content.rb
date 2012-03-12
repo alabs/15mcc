@@ -85,14 +85,15 @@ class Content
     slug
   end
 
+  def get_absolute_url
+    url_path + slug
+  end
+
   protected
 
   def generate_slug
     self.slug = self.title.parameterize
   end
 
-  def get_absolute_url
-    url_path + slug
-  end
 
 end
