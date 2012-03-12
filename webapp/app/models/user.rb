@@ -13,7 +13,7 @@ class User
   attr_accessible :username, :email, :role, :as => :admin
   attr_accessor :terms, :login
 
-  validates_length_of :username, minimun: 3, maximum: 10
+  validates_length_of :username, minimun: 3, maximum: 20
   validates_uniqueness_of :username
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
