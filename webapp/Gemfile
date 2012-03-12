@@ -93,3 +93,6 @@ gem 'sitemap_generator'
 
 # para los avatares
 gem 'gravatar_image_tag'
+# para los estilos con bootsrap
+#
+gem 'nokogiri'

@@ -1,23 +1,21 @@
-    <div class="form-field">
-      <%= f.label 'Tags' %>
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8', :required => "true" %>
-    </div>
-    <div class="form-field">
-      <%= f.label 'Fecha' %>
-      <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8', :required => "true" %>
-    </div>
-    <legend> Localización </legend>
+  <div class="form-field">
+    <%= f.text_field :tags, placeholder: 'Etiquetas separadas por comas', class: 'span6', :required => "true" %>
+    <%= f.text_field :happened_at, placeholder: 'Fecha en la que ha ocurrido', :class => 'span6', :required => "true" %>
+  </div>
+
       <div class="form-field">
-        <%= f.text_field :address_from_components, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
+        <%= f.text_field :address, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' do %>
+          <a href="#" id="map-search" class="btn">
+            <i class='icon-search'></i>
+            Buscar
+          </a>
+        <% end %>
+
+      <div class="hide">
         <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
         <%= f.text_field :longitude, :class => 'location_attributes_longitude', :style => "display:none" %>
-        <a href="#" id="map-search" class="btn">
-          <i class='icon-search'></i>
-          Buscar
-        </a>
-        <% unless content.errors[:address_from_components].blank? %>
-          <span class="error-message"><%= content.errors[:address_from_components].to_sentence %></span>
-        <% end %>
+      </div>
+
       </div>
       <% if @map == "[]" %>
         <%= gmaps("map_options" => {"center_longitude" => -3.700, "center_latitude" => 40.41, "zoom" => 3, "auto_adjust" => false, "auto_zoom" => false},"markers" => { "data" => @map }) %>
@@ -36,7 +34,6 @@
       <br />
 
       <div class="form-field">
-        <%= f.label :terms, "Acepto las condiciones de uso" %>
         <%= f.check_box :terms, :required => true %>
       </div>
 

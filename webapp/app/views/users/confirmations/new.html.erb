@@ -1,10 +1,8 @@
 <h2>Reenviar instrucciones de confirmación</h2>
 
-<%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
-  <%= devise_error_messages! %>
+<%= bootstrap_form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
 
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email %></div>
+  <%= f.label :email %>
 
   <div><%= f.submit "Reenviar instrucciones de confirmación" %></div>
 <% end %>

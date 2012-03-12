@@ -1,24 +1,16 @@
 <div class="span10 mt1">
 
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"} ) do |f| %>
+  <%= bootstrap_form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"} ) do |f| %>
     <legend>Iniciar sesión</legend>
   
     <div class="control-group">
       <%= f.label :login, "Usuario o correo", :class => "control-label" %>
       <div class="controls">
         <%= f.text_field :login %>
-      </div>
-    </div>
-  
-    <div class="control-group">
-      <%= f.label :password, "Contraseña", :class => "control-label" %>
-      <div class="controls">
         <%= f.password_field :password %>
-      </div>
-    </div>
   
     <% if devise_mapping.rememberable? -%>
-      <div><%= f.check_box :remember_me %> <%= f.label :remember_me, "Recordarme" %></div>
+      <%= f.check_box :remember_me %> <%= f.label :remember_me, "Recordarme" %>
     <% end -%>
   
     <div class="form-actions"><%= f.submit "Iniciar sesión", :class => "btn btn-primary" %></div>

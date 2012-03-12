@@ -1,12 +1,51 @@
 
 es:
   mongoid:
+    attributes:
+      image:
+        title: "Título"
+        tags: "Etiquetas"
+        address: "¿Dónde ha ocurrido?"
+        happened_at: "¿Cuándo ha ocurrido?"
+        terms: "Acepto las condiciones de uso"
+      audio:
+        title: "Título"
+        tags: "Etiquetas"
+        address: "¿Dónde ha ocurrido?"
+        happened_at: "¿Cuándo ha ocurrido?"
+        terms: "Acepto las condiciones de uso"
+      text:
+        title: "Título"
+        body: "Texto"
+        tags: "Etiquetas"
+        address: "¿Dónde ha ocurrido?"
+        happened_at: "¿Cuándo ha ocurrido?"
+        terms: "Acepto las condiciones de uso"
+      video:
+        url: "Dirección URL"
+        tags: "Etiquetas"
+        address: "¿Dónde ha ocurrido?"
+        happened_at: "¿Cuándo ha ocurrido?"
+        terms: "Acepto las condiciones de uso"
+      user:
+        login: "Usuario o correo electrónico"
+        username: "Nombre de usuario"
+        email: "Correo electrónico"
+        password: "Contraseña"
+        current_password: "Contraseña actual"
+        password_confirmation: "Confirmación de contraseña"
+        terms: "Acepto las condiciones de uso"
     errors:
       models:
+        video:
+          attributes:
+            url:
+              taken: "Ya hay un vídeo con esa dirección URL"
         user:
           attributes:
             password:
               too_short: "La contraseña es muy corta"
+              confirmation: "La contraseña y su confirmación deben coincidir"
             email:
               taken: "Ese correo ya se está utilizando"
             terms:

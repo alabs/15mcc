@@ -1,31 +1,17 @@
 <div class="form-stacked main-form">
-<%= form_for(@video, :html => {:class => "content-form"}) do |f| %>
-  <fieldset>
-    <legend>Introducir nuevo video</legend>
+  <%= bootstrap_form_for(@video, :html => {:class => "content-form" }) do |f| %>
+    <fieldset>
+      <legend>Introducir nuevo video</legend>
+      <%= render :partial => "partials/copyright_notice" %>
 
-<%= render :partial => "partials/copyright_notice" %>
-
-<% if @video.errors.any? %>
-   <% @video.errors.full_messages.each do |msg| %>
-     <div class="alert alert-error"><%= msg %></div>
-   <% end %>
-<% end %>
-
-    <div class="form-field">
-      <%= f.label 'URL' %>
-      <%= f.text_field :url, required: true, placeholder: 'URL del video', :class => 'span8' %>
-      <% unless @video.errors[:url].blank? %>
-        <span class="error-message"><%= @video.errors[:url].to_sentence %></span>
-      <% end %>
-    </div>
-
-    <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @video} %>
-
-    <div id="form-actions">
-      <%= f.submit 'Enviar video', :class => 'btn primary' %>
-      <%= link_to 'Cancelar', texts_path, :class => 'btn danger' %>
-    </div>
-
+      <div class="form-field">
+        <%= f.text_field :url, required: true, placeholder: 'http://', :class => 'span8' %>
+        <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @video} %>
+      </div>
+      <div id="form-actions">
+        <%= f.submit 'Enviar video', :class => 'btn btn-primary' %>
+        <%= link_to 'Cancelar', texts_path, :class => 'btn btn-danger' %>
+      </div>
     </fieldset>
-<% end %>
+  <% end %>
 </div>

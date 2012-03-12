@@ -56,22 +56,31 @@ $(function(){
 
 
   if ( $('#wmd-input').length > 0 ) {
-    // markdown
+    // edicion de markdown para por ejemplo /texts/new
+
+    // Esto es un fix para el bootstrap_form_for, que solo deja ponerlo abajo;
+    // mola mas que este entre el label y el textarea, asi que lo movemos...
+    var $button_bar = $('#wmd-button-bar');
+    $button_bar.parent().prepend('<div id="wmd-button-bar"></div>');
+    $button_bar.remove();
+    
+    // esto ya es del Markdown en si, usamos la libreria PageDown
     var converter = Markdown.getSanitizingConverter();
     var editor = new Markdown.Editor(converter);
     editor.run();
   } 
 
   $(".show_markdown_help").click( function(event){
+    // esto es bastante tonto: muestra o esconde la ayuda de estilos
      event.preventDefault();
      if ( $(this).hasClass("hide_markdown_help") ){
-       $(this).text("ver ayuda de marcado");
+       $(this).text("ver ayuda de estilos");
        $(this).removeClass("hide_markdown_help");
      } else {
        $(this).addClass("hide_markdown_help");
-       $(this).text("esconder ayuda de marcado");
+       $(this).text("esconder ayuda de estilos");
      }
-     $(this).next().slideToggle("slow", "linear");
+     $(this).parent().next().slideToggle("slow", "linear");
    });
 
 
