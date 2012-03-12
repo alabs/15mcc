@@ -1,0 +1,47 @@
+<div class="form-stacked main-form">
+<%= form_for(@image, :url =>{ :action => 'create_step'}, :html=>{:class => "content-form"}) do |f| %>
+  <fieldset>
+    <legend>Revisar datos imagen</legend>
+
+<%= render :partial => "partials/copyright_notice" %>
+
+<% if @image.errors.any? %>
+   <% @image.errors.full_messages.each do |msg| %>
+     <div class="alert alert-error"><%= msg %></div>
+   <% end %>
+<% end %>
+
+    <div class="form-field">
+      <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8' %>
+    </div>
+
+<<<<<<< HEAD
+    <legend> Localización </legend>
+    <div class="form-field">
+        <%= f.text_field :address_from_components, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' %>
+        <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
+        <%= f.text_field :longitude, :class => 'location_attributes_longitude', :style => "display:none" %>
+        <a href="#" id="map-search" class="btn">
+          <i class='icon-search'></i>
+          Buscar
+        </a>
+    </div>
+
+    <% if @map == "[]" %>
+    <%= gmaps("map_options" => {"center_longitude" => -3.700, "center_latitude" => 40.41, "zoom" => 3, "auto_adjust" => false, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+    <% else %>
+    <%= gmaps("map_options" => {"auto_adjust" => true, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
+    <% end %>
+=======
+    <!-- TODO: formulario de busqueda -->
+      <div class="form-field">
+        <%= f.text_field :street, placeholder: 'Dirección, Ciudad, País', :class => 'span8' %>
+      </div>
+>>>>>>> #21
+
+    <div id="form-actions">
+      <%= f.submit 'Enviar imagen', :class => 'btn btn-primary' %>
+    </div>
+  </fieldset>
+<% end %>
+</div>

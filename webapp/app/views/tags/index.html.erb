@@ -5,8 +5,8 @@
     <hr />
     <ul id="tagcloud">
       <% @tagcloud.each do |tag| %>
-        <li class="<%= tag_weight_css(tag[1]) %>">
-          <%= link_to tag[0], :controller => "tags", :action => "show", :tag => tag[0] %>
+        <li class="<%= tag_weight_css(tag[:count]) %>">
+          <%= link_to tag[:name], :controller => "tags", :action => "show", :tag => tag[:name] %>
         </li>
       <% end %>
     </ul>

@@ -3,22 +3,13 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.json
   def index
-    #tags = Text.tags_with_weight + Image.tags_with_weight + Video.tags_with_weight + Audio.tags_with_weight
-    tags = Text.all_tags + Image.all_tags + Video.all_tags + Audio.all_tags
-    #logger.info('DEBUG 15M.CC: ' + tags.inspect)
-    #@tagcloud = {}
-    #tags.each do |t|
-    #  if @tagcloud[t[0]] == nil then @tagcloud[t[0]] = t[1]
-    #  else @tagcloud[t[0]] = @tagcloud[t[0]] + t[1]
-    #  end
-    #end
+    @tagcloud = Content.all_tags
 
     respond_to do |format|
       format.html # tagcloud.html.erb
       format.json { render json: @tagcloud }
     end
   end
-
 
   # GET /tags/show/<tagname>
   # GET /tags/show/<tagname>.json

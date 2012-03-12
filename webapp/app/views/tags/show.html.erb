@@ -4,7 +4,7 @@
     <h1>Etiqueta <%= @tag %></h1>
     <hr />
 
-    <% if @videos.exists? %>
+    <% if !@videos.none? %>
       <h2> Vídeos </h2>
     <ul class="span10">
       <% @videos.each do |video| %>
@@ -19,7 +19,7 @@
     <% end %>
     <div class="clearfix"></div>
 
-    <% if @images.exists? %>
+    <% if !@images.none? %>
       <h2> Imágenes </h2>
     <ul class="span10">
       <% @images.each do |image| %>
@@ -33,7 +33,7 @@
     </ul>
     <% end %>
 
-    <% if @audios.exists? %>
+    <% if !@audios.none? %>
       <h2> Audios </h2>
     <ul class="span10">
       <% @audios.each do |audio| %>
@@ -42,7 +42,7 @@
       <% end %>
     <% end %>
 
-    <% if @texts.exists? %>
+    <% if not @texts.none? %>
       <h2> Textos </h2>
     <ul class="span10">
       <% @texts.each do |text| %>
@@ -50,7 +50,7 @@
       <% end %>
     <% end %>
 
-    <% if not @texts.exists? and not @images.exists? and not @audios.exists? and not @videos.exists? %>
+    <% if @texts.none? and @images.none? and @audios.none? and @videos.none? %>
       No hay contenidos con esta etiqueta.
     <% end %>
 
