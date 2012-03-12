@@ -3,7 +3,7 @@
   <%= bootstrap_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class => "form-horizontal" }) do |f| %>
   <legend>¿Has olvidado tu contraseña?</legend>
     <%= f.email_field :email %>
-    <div class="form-actions"><%= f.submit "Enviarme las instrucciones para cambiar mi contraseña", :class => "btn btn-primary" %></div>
+    <div class="form-actions"><%= f.submit "Enviarme las instrucciones", :class => "btn btn-primary" %></div>
   <% end %>
 
   <%= render "links" %>
