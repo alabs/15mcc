@@ -2,12 +2,13 @@ class Content
 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::Taggable
+  #include Mongoid::Taggable
+  include Mongoid::Document::Taggable
   include Mongoid::FullTextSearch
   include Gmaps4rails::ActsAsGmappable
   include Geocoder::Model::Mongoid
 
-  enable_tags_index!
+  #enable_tags_index!
 
   #callbacks
   before_save :preprocessing, :reverse_geocode, :geocode

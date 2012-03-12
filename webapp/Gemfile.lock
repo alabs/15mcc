@@ -116,9 +116,11 @@ GEM
       tzinfo (~> 0.3.22)
     mongoid-paperclip (0.0.7)
       paperclip (>= 2.3.6)
+    mongoid-simple-tags (0.0.3)
+      mongoid (>= 2.0.0)
+      mongoid (>= 2.0.0)
     mongoid_fulltext (0.5.7)
       unicode_utils (~> 1.0.0)
-    mongoid_taggable (0.1.7)
     multi_json (1.1.0)
     multipart-post (1.1.5)
     net-scp (1.0.4)
@@ -236,8 +238,8 @@ DEPENDENCIES
   mercury-rails
   mongoid
   mongoid-paperclip
+  mongoid-simple-tags
   mongoid_fulltext
-  mongoid_taggable
   nokogiri
   pry-rails
   rails (= 3.2.2)
