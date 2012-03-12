@@ -15,7 +15,7 @@ es:
       unauthenticated: 'Necesitas acceder a tu cuenta o registrarte antes de continuar.'
       unconfirmed: 'Necesitas confirmar tu cuenta antes de continuar.'
       locked: 'Tu cuenta esta bloqueada.'
-      invalid: 'Contraseña o Email incorrecto.'
+      invalid: 'Contraseña, usuario o correo electrónico incorrecto.'
       invalid_token: 'Token de autenticación incorrecto.'
       timeout: 'Tu sesión ha expirado, por favor accede de nuevo para continuar.'
       inactive: 'Tu cuenta no ha sido activada.'
@@ -46,8 +46,8 @@ es:
       failure: 'No has sido autorizado en la cuenta %{kind} porque "%{reason}".'
     mailer:
       confirmation_instructions:
-        subject: 'Instrucciones de confirmación'
+        subject: 'Instrucciones de confirmación de 15M.cc'
       reset_password_instructions:
-        subject: 'Instrucciones para cambiar tu contraseña'
+        subject: 'Instrucciones para cambiar tu contraseña de 15M.cc'
       unlock_instructions:
-        subject: 'Instrucciones para desbloquear tu cuenta'
+        subject: 'Instrucciones para desbloquear tu cuenta de 15M.cc'

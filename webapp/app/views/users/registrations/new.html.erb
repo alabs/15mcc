@@ -2,7 +2,11 @@
 
   <%= bootstrap_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:class => "form-horizontal"}) do |f| %>
     <legend>Registrarse</legend>
-      <%= f.text_field :username, :required => true %>
+
+      <%= f.text_field :username, :required => true do %>
+        <p class="help-block">Máximo 10 caracteres</p>
+      <% end %>
+
       <%= f.email_field :email, :required => true %>
       <%= f.password_field :password, :required => true %>
       <%= f.password_field :password_confirmation, :required => true %>

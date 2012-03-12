@@ -43,6 +43,8 @@ es:
               taken: "Ya hay un vídeo con esa dirección URL"
         user:
           attributes:
+            username:
+              too_long: "Has puesto un nombre de usuario muy largo"
             password:
               too_short: "La contraseña es muy corta"
               confirmation: "La contraseña y su confirmación deben coincidir"
