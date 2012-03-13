@@ -1,0 +1,12 @@
+defaults: &defaults
+  facebook_app_id: ''
+  facebook_app_secret: ''
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

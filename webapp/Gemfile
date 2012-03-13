@@ -97,3 +97,6 @@ gem 'gravatar_image_tag'
 # para los estilos con bootsrap
 #
 gem 'nokogiri'
+
+# auth diferentes proveedores
+gem 'omniauth-facebook'

@@ -5,7 +5,8 @@ Webapp::Application.routes.draw do
 
   Mercury::Engine.routes
 
-  devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' }
+  devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' },
+    :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   resources :videos do 
     member do
@@ -58,7 +59,7 @@ Webapp::Application.routes.draw do
   get 'search' => 'search#search'
   get 'search/ajax' => 'search#ajax'
 
-  match '/profile/:username' => 'pages#profile'
+  get 'profile/:username' => 'pages#profile', :constraints => /^([\w\.%\+\-]+)$/i, :as => 'profile'
   get 'admin/users' => 'admin/users#index'
   get 'admin/users/search' => 'admin/users#search'
   put 'admin/users/:username/update' => 'admin/users#update', :as => 'admin_users_update'
