@@ -18,4 +18,4 @@
 config/database.yml
 public/system
 config/initializers/recaptcha.rb
-config/app_config.yml
+#config/app_config.yml
