@@ -81,6 +81,20 @@ class User
       end
     end
   end
+
+  def self.find_for_open_id(access_token, signed_in_resource=nil)
+    data = access_token.info
+    if user = User.where(:email => data["email"]).first
+      user
+    else
+      #sreg = sreg_user_info
+      #logger.info('DEBUG 15M.CC: ' + sreg.inspect)
+      user = User.new(:email => data["email"], :password => Devise.friendly_token[0,20])
+      user.skip_confirmation!
+      user.save
+      user
+    end
+  end
   
   ROLES = %w[admin editor user anonymous]
   

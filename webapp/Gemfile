@@ -100,3 +100,4 @@ gem 'nokogiri'
 
 # auth diferentes proveedores
 gem 'omniauth-facebook'
+gem 'omniauth-openid'
