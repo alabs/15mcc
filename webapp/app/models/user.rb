@@ -67,7 +67,6 @@ class User
     if user = User.where(:email => data.email).first
       user
     else # crear un usuario con una contraseña aleatoria
-      logger.info('DEBUG 15M.CC: ' + data.inspect)
       user = User.new(:email => data.email, :username => data.username, :password => Devise.friendly_token[0,20])
       user.skip_confirmation!
       user.save
