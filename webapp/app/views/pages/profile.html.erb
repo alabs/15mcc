@@ -26,7 +26,7 @@
         <% @texts.each do |text| %>
           <tr>
             <td><%= link_to text.title, text %></td>
-            <td><%= text.happened_at %></td>
+            <td><%= l text.happened_at, :format => :short %></td>
             <td><%= text.city %></td>
             <td><%= text.country %></td>
             <td>
@@ -59,7 +59,7 @@
         <% @audios.each do |audio| %>
           <tr>
             <td><%= link_to audio.title, audio %></td>
-            <td><%= audio.happened_at %></td>
+            <td><%= l audio.happened_at, :format => :short %></td>
             <td><%= audio.city %></td>
             <td><%= audio.country %></td>
             <td>
@@ -92,7 +92,7 @@
         <% @images.each do |image| %>
           <tr>
             <td><%= link_to image.title, image %></td>
-            <td><%= image.happened_at %></td>
+            <td><%= l image.happened_at, :format => :short %></td>
             <td><%= image.city %></td>
             <td><%= image.country %></td>
             <td>
@@ -125,7 +125,7 @@
         <% @videos.each do |video| %>
           <tr>
             <td><%= link_to video.title, video %></td>
-            <td><%= video.happened_at %></td>
+            <td><%= l video.happened_at, :format => :short %></td>
             <td><%= video.city %></td>
             <td><%= video.country %></td>
             <td>

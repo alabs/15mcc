@@ -24,8 +24,8 @@
       <% else %>
         <p><strong>Creado por:</strong> <%= link_to 'anonymous', "/profile/anonymous" %></p>
       <% end %>
-      <p><strong>Publicado:</strong> <%= content.created_at.to_s %></p>
-      <p><strong>Ha ocurrido:</strong> <%= content.happened_at.to_s %></p>
+      <p><strong>Publicado:</strong> <%= l content.created_at, :format => :short %></p>
+      <p><strong>Ha ocurrido:</strong> <%= l content.happened_at, :format => :short %></p>
     </div>
 
     <div class="modal" id="abuse-modal" style="display:none;">

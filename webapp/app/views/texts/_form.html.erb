@@ -1,5 +1,5 @@
 <div class="form-stacked main-form">
-  <%= bootstrap_form_for(@text, :html => {:class => "content-form"} ) do |f| %>
+  <%= form_for(@text, :html => {:class => "content-form"} ) do |f| %>
   <fieldset>
     <legend>Introducir nuevo texto</legend>
     <%= render :partial => "partials/copyright_notice" %>
