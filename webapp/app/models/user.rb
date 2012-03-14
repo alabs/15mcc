@@ -9,7 +9,7 @@ class User
   has_many :texts
   has_many :videos
 
-  attr_accessible :username, :email, :password, :password_confirmation, :terms
+  attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography
   attr_accessible :username, :email, :role, :as => :admin
   attr_accessor :terms, :login
 
@@ -19,6 +19,7 @@ class User
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
   field :username, :type => String
+  field :biography, :type => String
 
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
