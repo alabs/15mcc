@@ -1,29 +1,28 @@
-
 es:
   mongoid:
     attributes:
       image:
         title: "Título"
-        tags: "Etiquetas"
+        tag_list: "Etiquetas"
         address: "¿Dónde ha ocurrido?"
         happened_at: "¿Cuándo ha ocurrido?"
         terms: "Acepto las condiciones de uso"
       audio:
         title: "Título"
-        tags: "Etiquetas"
+        tag_list: "Etiquetas"
         address: "¿Dónde ha ocurrido?"
         happened_at: "¿Cuándo ha ocurrido?"
         terms: "Acepto las condiciones de uso"
       text:
         title: "Título"
         body: "Texto"
-        tags: "Etiquetas"
+        tag_list: "Etiquetas"
         address: "¿Dónde ha ocurrido?"
         happened_at: "¿Cuándo ha ocurrido?"
         terms: "Acepto las condiciones de uso"
       video:
         url: "Dirección URL"
-        tags: "Etiquetas"
+        tag_list: "Etiquetas"
         address: "¿Dónde ha ocurrido?"
         happened_at: "¿Cuándo ha ocurrido?"
         terms: "Acepto las condiciones de uso"

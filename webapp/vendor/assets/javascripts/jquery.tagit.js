@@ -29,12 +29,12 @@
     $.widget('ui.tagit', {
         options: {
             itemName          : 'item',
-            fieldName         : 'tags',
+            fieldName         : 'tag_list',
             availableTags     : [],
             tagSource         : null,
             removeConfirmation: false,
-            caseSensitive     : true,
-            placeholderText   : null,
+            caseSensitive     : false,
+            placeholderText   : 'Etiquetas separadas por comas',
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.

@@ -1,5 +1,5 @@
 <div class="form-stacked main-form">
-  <%= form_for(@image, :url =>{ :action => 'create_step'}, :html => { :multipart => true, :class => 'content-form' }) do |f| %>
+  <%= bootstrap_form_for(@image, :url =>{ :action => 'create_step'}, :html => { :multipart => true, :class => 'content-form' }) do |f| %>
   <fieldset>
     <legend>Revisar datos imagen</legend>
 
