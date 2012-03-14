@@ -1,5 +1,7 @@
 class User
   include Mongoid::Document
+  include Mongoid::Paperclip
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :rememberable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -9,7 +11,7 @@ class User
   has_many :texts
   has_many :videos
 
-  attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography
+  attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography, :avatar
   attr_accessible :username, :email, :role, :as => :admin
   attr_accessor :terms, :login
 
@@ -17,6 +19,8 @@ class User
   validates_uniqueness_of :username
   validates_format_of :username, :with => /^([\w\.%\+\-]+)$/i
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
+
+  has_mongoid_attached_file :avatar,:styles => { :small => ['40x40', :png], :normal => ['80x80', :png] }, :default_url => "/assets/missing.png"
 
   field :username, :type => String
   field :biography, :type => String

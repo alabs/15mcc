@@ -11,6 +11,13 @@
 
       <%= f.text_area :biography, :rows => 5 %>
 
+      <div class="control-group">
+        <label for="user_avatar" class="control-label">Avatar</label>
+        <div class="controls">
+          <%= f.file_field :avatar %>
+        </div>
+      </div>
+
       <%= f.password_field :password, :required => true %>
 
       <%= f.password_field :password_confirmation, :required => true %>

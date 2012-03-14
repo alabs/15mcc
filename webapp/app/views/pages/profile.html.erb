@@ -6,9 +6,7 @@
   </p>
 
   <div style="float:right;margin-top: -40px;">
-    <%= gravatar_image_tag(@user.email, :gravatar => { :size => 100 }) %>
-    <br />
-    <span class="label"><%= link_to 'Cambiar mi avatar', 'https://es.gravatar.com/' %></span>
+    <%= image_tag @user.avatar.url %>
   </div>
   <% if current_user == @user %>
       <span class="label"><%= link_to 'Editar mi cuenta', edit_user_registration_path %></span>

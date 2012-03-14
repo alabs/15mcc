@@ -1,6 +1,6 @@
 <div class="span10 mt1">
 
-  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :class => "form-horizontal" }) do |f| %>
+  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :multipart => true, :method => :put, :class => "form-horizontal" }) do |f| %>
     <legend>Editar usuario</legend>
 
         <%= f.text_field :username %>
@@ -8,6 +8,13 @@
         <%= f.email_field :email %>
 
         <%= f.text_area :biography, :rows => 5 %>
+
+        <div class="control-group">
+          <label for="user_avatar" class="control-label">Avatar</label>
+          <div class="controls">
+            <%= f.file_field :avatar %>
+          </div>
+        </div>
 
         <%= f.password_field :current_password do %>
           <p class="help-block">(necesitamos tu contraseña para confirmar tus cambios)</p>
