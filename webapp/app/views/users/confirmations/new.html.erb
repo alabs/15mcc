@@ -1,6 +1,6 @@
 <div class="span10 mt1">
 
-  <%= bootstrap_form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
+  <%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
 
     <legend>Reenviar instrucciones de confirmación</legend>
 

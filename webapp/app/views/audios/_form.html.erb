@@ -1,5 +1,5 @@
 <div class="form-stacked main-form">
-  <%= bootstrap_form_for(@audio, :html => { :multipart => true, :class => "content-form" }) do |f| %>
+  <%= form_for(@audio, :html => { :multipart => true, :class => "content-form" }) do |f| %>
   <fieldset>
     <legend>Introducir nuevo audio</legend>
       <%= render :partial => "partials/copyright_notice" %>
