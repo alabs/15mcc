@@ -1,6 +1,7 @@
 <div class="row" style="margin-top:20px;">
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span9">
+    <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
     <h2><%= @image.title %></h2>
     <%= image_tag(@image.img.url) %>
     <%= render :partial => "partials/metadata", :locals => { :content => @image } %>

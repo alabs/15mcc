@@ -1,11 +1,13 @@
 <div class="row" style="margin-top:20px;">
   <%= render :partial => 'partials/sidebar_bank' %>
   <div class="span9">
+
+    <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
+
     <h2><%= @text.title %></h2>
     <p>
       <%= @text.to_html(@text.body).html_safe %> 
     </p>
-
 
     <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
