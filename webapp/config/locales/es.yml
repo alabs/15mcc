@@ -200,31 +200,18 @@ es:
       <<: *errors
   mongoid:
     attributes:
-      image:
+      content:
         title: "Título"
         tag_list: "Etiquetas"
-        address: "¿Dónde ha ocurrido?"
         happened_at: "¿Cuándo ha ocurrido?"
         terms: "Acepto las condiciones de uso"
-      audio:
-        title: "Título"
-        tags: "Etiquetas"
-        address: "¿Dónde ha ocurrido?"
-        happened_at: "¿Cuándo ha ocurrido?"
-        terms: "Acepto las condiciones de uso"
+        address: "Calle"
+        city: "Ciudad"
+        country: "País"
       text:
-        title: "Título"
         body: "Texto"
-        tag_list: "Etiquetas"
-        address: "¿Dónde ha ocurrido?"
-        happened_at: "¿Cuándo ha ocurrido?"
-        terms: "Acepto las condiciones de uso"
       video:
         url: "Dirección URL"
-        tags: "Etiquetas"
-        address: "¿Dónde ha ocurrido?"
-        happened_at: "¿Cuándo ha ocurrido?"
-        terms: "Acepto las condiciones de uso"
       user:
         login: "Usuario o correo electrónico"
         username: "Nombre de usuario"

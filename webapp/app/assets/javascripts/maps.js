@@ -42,28 +42,41 @@ $(function(){
     }
 
     // Busqueda de un nodo
-    var $street = $(".map-street"); 
+    var $address = $("#map-address"); 
+    var $city = $("#map-city"); 
+    var $country = $("#map-country"); 
+
     function searchMap() {
+
+      // si city o country estan vacios, mostramos el error
+      if ( $city.val() == "" ) { $city.parent().parent().addClass('error'); return false; }; 
+      if ( $country.val() == "" ) { $country.parent().parent().addClass('error'); return false; }; 
+
+      // mostramos el progreso, hacemos la peticion y lo pintamos en el mapa
       $("body").css("cursor", "progress");
-      $.getJSON('/maps/search/' + $street.val() , function(data){
+      $city.parent().parent().removeClass('error');
+      $country.parent().parent().removeClass('error');
+      $.getJSON('/maps/search/' + $address.val() + ' ' + $city.val() + ' ' + $country.val(), function(data){
         var latlng = new google.maps.LatLng(data[0].lat, data[0].lng);
         clearOverlays();
         placeMarker(latlng);
         updateFormLocation(latlng);
+        // zoom por defecto, se ve la ciudad
+        var zoom = 7; 
+        // si hay puesta una direccion, hacemos zoom a la calle
+        if ( $address.val() != "" ) { zoom = 15 } ; 
+        Gmaps.map.map.setZoom(zoom);
         Gmaps.map.map.panTo(latlng);
         $("body").css("cursor", "auto");
       });
     }
-    $('#map-search').click(function(e){
-      e.preventDefault();
-      searchMap();
-    });
+
+    $('#map-search').click(function(e){ e.preventDefault(); searchMap(); });
+
     // deshabilitamos la opcion por defecto del enter, que o sino intenta de submitear el form
-    $street.bind('keypress', function(e) {
-      if(e.keyCode==13){
-        e.preventDefault();
-        searchMap();
-      }
-    });
+    $address.bind('keypress', function(e) { if(e.keyCode==13){ e.preventDefault(); searchMap(); } });
+    $city.bind('keypress', function(e) { if(e.keyCode==13){ e.preventDefault(); searchMap(); } });
+    $country.bind('keypress', function(e) { if(e.keyCode==13){ e.preventDefault(); searchMap(); } });
+
   }
 });

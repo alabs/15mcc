@@ -3,13 +3,15 @@
     <%= f.text_field :happened_at, placeholder: 'Fecha en la que ha ocurrido', :class => 'span6', :required => "true" %>
   </div>
 
+  <legend> ¿Dónde ha ocurrido? </legend>
       <div class="form-field">
-        <%= f.text_field :address, placeholder: 'Dirección, Ciudad, País', :class => 'span7 map-street' do %>
+        <%= f.text_field :address, placeholder: 'Ejemplo: Plaza de Puerta del Sol', :id => 'map-address', :class => 'span7' %>
+        <%= f.text_field :city, placeholder: 'Ejemplo: Madrid', :id => 'map-city', :class => 'span7', :required => true %>
+        <%= f.text_field :country, placeholder: 'Ejemplo: España', :id => 'map-country', :class => 'span7', :required => true %>
           <a href="#" id="map-search" class="btn">
             <i class='icon-search'></i>
             Buscar
           </a>
-        <% end %>
 
       <div class="hide">
         <%= f.text_field :latitude, :class => 'location_attributes_latitude', :style => "display:none" %>
