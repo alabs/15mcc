@@ -72,7 +72,7 @@ module BootstrapFormBuilder
     def get_label(field, options)
       # fix para que funcione el html en los labels
       labelOptions = {:class => 'control-label'} #.merge(options[:label] || {})
-      if options[:label] then
+      if options.has_key? :label then
         labelTag = label(field, labelOptions) do 
           options[:label].html_safe
         end
