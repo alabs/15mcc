@@ -12,15 +12,15 @@
 <% end %>
 
     <div class="form-field">
-      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span8' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', :class => 'span8' %>
     </div>
 
     <div class="form-field">
-      <%= f.file_field :img, required: true %>
+      <%= f.file_field :img, required: true, class: 'upload' %>
     </div>
 
     <div class="form-field">
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' %>
+      <%= f.text_field :tag_list, class: 'span8', :required => 'true' %>
     </div>
 
     <% if current_user.blank? %>

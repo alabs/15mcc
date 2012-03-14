@@ -38,6 +38,7 @@
         <%= audio %>
         <li><h5><%= link_to audio.title, audio %></h5>
       <% end %>
+    </ul>
     <% end %>
 
     <% if @texts.exists? %>
@@ -46,6 +47,7 @@
       <% @texts.each do |text| %>
         <li><h5><%= link_to text.title, text %></h5>
       <% end %>
+    </ul>
     <% end %>
 
     <% if not @texts.exists? and not @images.exists? and not @audios.exists? and not @videos.exists? %>
