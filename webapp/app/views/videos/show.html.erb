@@ -4,6 +4,14 @@
     <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
     <h2><%= @video.title %></h2>
     <%= raw @video.embed_html %>
+
+    <% if can? :update, @video %> 
+        <%= link_to 'Editar', edit_video_path(@video), :class => "btn btn-primary" %>
+    <% end %>
+    <% if can? :destroy, @video %> 
+        <%= link_to 'Eliminar', @video, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+    <% end %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @video } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @video } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>

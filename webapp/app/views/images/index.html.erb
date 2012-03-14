@@ -18,6 +18,12 @@
         <%= link_to image_tag(image.img.url(:small)), image %>
         <div class="caption">
           <h5><%= link_to image.title, image %></h5>
+            <% if can? :update, image %> 
+                <%= link_to 'Editar', edit_image_path(image), :class => "btn btn-primary" %>
+            <% end %>
+            <% if can? :destroy, image %> 
+                <%= link_to 'Eliminar', image, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+            <% end %>
         </div>
       </div>
     </li>

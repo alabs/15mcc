@@ -18,6 +18,12 @@
             <%= link_to image_tag(video.thumbnail), video %>
             <div class="caption">
               <h5><%= link_to video.title, video %></h5>
+              <% if can? :update, video %> 
+                  <%= link_to 'Editar', edit_video_path(video), :class => "btn btn-primary" %>
+              <% end %>
+              <% if can? :destroy, video %> 
+                  <%= link_to 'Eliminar', video, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+              <% end %>
             </div>
           </div>
         </li>

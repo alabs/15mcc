@@ -4,6 +4,14 @@
     <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
     <h2><%= @image.title %></h2>
     <%= image_tag(@image.img.url) %>
+
+    <% if can? :update, @image %> 
+        <%= link_to 'Editar', edit_image_path(@image), :class => "btn btn-primary" %>
+    <% end %>
+    <% if can? :destroy, @image %> 
+        <%= link_to 'Eliminar', @image, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+    <% end %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @image } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>

@@ -20,7 +20,6 @@
       <th>Fecha</th>
       <th>Ciudad</th>
       <th>País</th>
-      <th>Acciones</th>
     </tr>
   </thead>
 
@@ -31,11 +30,16 @@
         <td><%= l audio.happened_at, :format => :short %></td>
         <td><%= audio.city %></td>
         <td><%= audio.country %></td>
-        <td>
-          <%= link_to 'Mostrar', audio %>
-          <%= link_to 'Editar', edit_audio_path(audio) %>
-          <%= link_to 'Eliminar', audio, confirm: '¿Estas segura?', method: :delete %>
-        </td>
+        <% if can? :update, audio %> 
+          <td>
+            <%= link_to 'Editar', edit_audio_path(audio), :class => "btn btn-primary" %>
+          </td>
+        <% end %>
+        <% if can? :destroy, audio %> 
+          <td>
+            <%= link_to 'Eliminar', audio, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

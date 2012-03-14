@@ -10,6 +10,13 @@
 
     <div id="flash-fallback"></div>
 
+    <% if can? :update, @audio %> 
+        <%= link_to 'Editar', edit_audio_path(@audio), :class => "btn btn-primary" %>
+    <% end %>
+    <% if can? :destroy, @audio %> 
+        <%= link_to 'Eliminar', @audio, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+    <% end %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @audio } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @audio } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>

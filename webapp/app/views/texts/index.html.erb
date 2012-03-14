@@ -20,7 +20,6 @@
       <th>Fecha</th>
       <th>Ciudad</th>
       <th>País</th>
-      <th>Acciones</th>
     </tr>
   </thead>
 
@@ -31,11 +30,16 @@
         <td><%= l text.happened_at, :format => :short %></td>
         <td><%= text.city %></td>
         <td><%= text.country %></td>
-        <td>
-          <%= link_to 'Mostrar', text %>
-          <%= link_to 'Editar', edit_text_path(text) %>
-          <%= link_to 'Eliminar', text, confirm: '¿Estas segura?', method: :delete %>
-        </td>
+        <% if can? :update, text %> 
+          <td>
+            <%= link_to 'Editar', edit_text_path(text), :class => "btn btn-primary" %>
+          </td>
+        <% end %>
+        <% if can? :destroy, text %> 
+          <td>
+            <%= link_to 'Eliminar', text, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

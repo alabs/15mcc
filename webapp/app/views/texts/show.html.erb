@@ -9,6 +9,13 @@
       <%= @text.to_html(@text.body).html_safe %> 
     </p>
 
+    <% if can? :update, @text %> 
+        <%= link_to 'Editar', edit_text_path(@text), :class => "btn btn-primary" %>
+    <% end %>
+    <% if can? :destroy, @text %> 
+        <%= link_to 'Eliminar', @text, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+    <% end %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
