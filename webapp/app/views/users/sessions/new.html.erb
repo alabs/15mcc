@@ -1,4 +1,4 @@
-<div class="span10 mt1">
+<div class="span6 mt1">
 
   <%= bootstrap_form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"} ) do |f| %>
     <legend>Iniciar sesión</legend>
@@ -15,4 +15,9 @@
   
   <%= render "links" %>
 
+</div>
+
+<div class="span5 mt2">
+  <%= link_to image_tag('facebook.png'), user_omniauth_authorize_path(:facebook), :title => 'Conectar mediante Facebook' %>
+  <%= link_to image_tag('google.png'), user_omniauth_authorize_path(:google), :title => 'Conectar mediante Google' %>
 </div>

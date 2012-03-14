@@ -3,7 +3,7 @@ class User
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :rememberable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :trackable, :validatable, :confirmable
+         :recoverable, :trackable, :validatable, :confirmable, :omniauthable
 
   has_many :images
   has_many :texts
@@ -13,8 +13,9 @@ class User
   attr_accessible :username, :email, :role, :as => :admin
   attr_accessor :terms, :login
 
-  validates_length_of :username, minimun: 3, maximum: 20
+  validates_length_of :username, minimun: 3, maximum: 30
   validates_uniqueness_of :username
+  validates_format_of :username, :with => /^([\w\.%\+\-]+)$/i
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
   field :username, :type => String
@@ -59,6 +60,40 @@ class User
   def self.find_for_database_authentication(conditions)
     login = conditions.delete(:login)
     self.any_of({ :username => login }, { :email => login }).first
+  end
+
+  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
+    data = access_token.extra.raw_info
+    if user = User.where(:email => data.email).first
+      user
+    else # crear un usuario con una contraseña aleatoria
+      user = User.new(:email => data.email, :username => data.username, :password => Devise.friendly_token[0,20])
+      user.skip_confirmation!
+      user.save
+      user
+    end
+  end
+
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
+        user.email = data["email"]
+      end
+    end
+  end
+
+  def self.find_for_open_id(access_token, signed_in_resource=nil)
+    data = access_token.info
+    if user = User.where(:email => data["email"]).first
+      user
+    else
+      #sreg = sreg_user_info
+      #logger.info('DEBUG 15M.CC: ' + sreg.inspect)
+      user = User.new(:email => data["email"], :password => Devise.friendly_token[0,20])
+      user.skip_confirmation!
+      user.save
+      user
+    end
   end
   
   ROLES = %w[admin editor user anonymous]
