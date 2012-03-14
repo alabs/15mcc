@@ -9,7 +9,19 @@
       <span class="label"><%= link_to 'Editar mi cuenta', edit_user_registration_path %></span>
   <% end %>
   <br /><br />
+
+
+  <div style="margin-top:5em;" class="span12">
+    <%= gmaps4rails(@map) %>
+  </div>
+
+
+  <div class="span10">
+    <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json"></div>
+  </div>
+
   
+<div class="span10">
   <h2>Textos enviados</h2>
   <% if @texts.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
@@ -141,4 +153,5 @@
     <p>No ha subido videos todavía.</p>
   <% end %>
   <br /><br />
+</div>
 </div>
