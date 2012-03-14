@@ -5,7 +5,8 @@ $(function(){
 
   if ($('#timeline').length != 0){
     // get the data list, we need start/content attributes for every content
-    $.get('/timeline.json', function(resp){
+    var url = $('#timeline').data('url');
+    $.get(url, function(resp){
       $.each(resp, function(){
         var date = $(this)[0].happened_at;
         if (date != null){

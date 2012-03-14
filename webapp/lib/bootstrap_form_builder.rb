@@ -34,8 +34,7 @@ module BootstrapFormBuilder
     [:form_for, :fields_for].each do |method|
       module_eval do
         define_method "bootstrap_#{method}" do |record, *args, &block|
-          # add the TwitterBootstrap builder to the options
-          options           = args.extract_options!
+          # add the TwitterBootstrap builder to the options options           = args.extract_options!
           options[:builder] = BootstrapFormBuilder::FormBuilder
 
           if method == :form_for
@@ -71,8 +70,15 @@ module BootstrapFormBuilder
     end
 
     def get_label(field, options)
-      labelOptions = {:class => 'control-label'}.merge(options[:label] || {})
-      labelTag = label(field, labelOptions)
+      # fix para que funcione el html en los labels
+      labelOptions = {:class => 'control-label'} #.merge(options[:label] || {})
+      if options.has_key? :label then
+        labelTag = label(field, labelOptions) do 
+          options[:label].html_safe
+        end
+      else
+        labelTag = label(field, labelOptions)
+      end
     end
 
     def jquery_datetime_select(field, options = {})

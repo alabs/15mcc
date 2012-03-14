@@ -38,11 +38,12 @@ $(function(){
   $.timepicker.setDefaults($.timepicker.regional['es']);
 
   $('#text_happened_at, #image_happened_at, #audio_happened_at, #video_happened_at').datetimepicker({
+    // la fecha por defecto, como no, es el 15-M 
     defaultDate: new Date(2011, 03, 15, 0, 0),
     numberOfMonths: 3,
     showButtonPanel: true,
-    dateFormat: 'yy-mm-dd',
-    timeFormat: 'hh:mm:ss',
+    dateFormat: 'dd-mm-yy',
+    timeFormat: 'hh:mm',
     hourGrid: 2,
     minuteGrid: 5 
   });

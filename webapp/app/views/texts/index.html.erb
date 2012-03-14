@@ -28,7 +28,7 @@
     <% @texts.each do |text| %>
       <tr>
         <td><%= link_to text.title, text %></td>
-        <td><%= text.happened_at %></td>
+        <td><%= l text.happened_at, :format => :short %></td>
         <td><%= text.city %></td>
         <td><%= text.country %></td>
         <td>

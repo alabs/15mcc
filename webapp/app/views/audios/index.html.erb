@@ -28,7 +28,7 @@
     <% @audios.each do |audio| %>
       <tr>
         <td><%= link_to audio.title, audio %></td>
-        <td><%= audio.happened_at %></td>
+        <td><%= l audio.happened_at, :format => :short %></td>
         <td><%= audio.city %></td>
         <td><%= audio.country %></td>
         <td>
