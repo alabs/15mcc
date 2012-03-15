@@ -14,7 +14,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def google
-    logger.info('DEBUG 15M.CC: ' + request.env['omniauth.auth'].inspect)
+    #logger.info('DEBUG 15M.CC: ' + request.env['omniauth'].inspect)
+    omniauth = request.env['omniauth.auth']
+    raise omniauth.to_yaml
     @user = User.find_for_open_id(request.env["omniauth.auth"], current_user)
 
     if @user.persisted?
