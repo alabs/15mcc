@@ -23,11 +23,6 @@
             <%= image_tag('ribbon.png') %>
           </div>
           <div class="span6" id="topmenu">
-      <% if user_signed_in? %>
-        <div id="avatar">
-          <%= link_to image_tag(current_user.avatar.url(:small), :size => "40x40"), "/profile/#{current_user.username}" %>
-        </div>
-      <% end %>
             <ul>
               <% unless user_signed_in? %>
                 <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
@@ -43,11 +38,6 @@
                 <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
               <% end %>
             </ul>
-          </div><!-- topmenu -->
-          <div class="span4" id="logo">
-            <%= link_to image_tag('logo.png'), root_path %>
-          </div>
-          <div class="span4">
             <div class="control-group">
               <div class="controls">
                 <div class="input-prepend">
@@ -58,8 +48,17 @@
                 </div>
               </div>
             </div>
+            <div id="social-buttons">
+            </div>
+          </div><!-- topmenu -->
+          <div class="span4" id="logo">
+            <%= link_to image_tag('logo.png'), root_path %>
           </div>
-        </div>
+        </div><!-- row -->
+        <div class="row">
+          <div class="span4">
+          </div>
+        </div><!-- row -->
       </div>
       <div class="container-fluid" id="mainnav">
         <div class="container">
