@@ -9,6 +9,7 @@
     <meta name="google-site-verification" content="lNyaDKKHJNJOlJLtI9u85zRk1JfHqPWwptZIbx8_SIc" />
   </head>
   <body>
+    <div id="wrapper" class="container">
     <% flash.each do |name, msg| %>
       <div id="flash-message" class="alert alert-<%= name %>" data-dismiss="alert">
         <a href="#" class="close">x</a>
@@ -16,20 +17,17 @@
       </div>
     <% end %>
     <div id="header">
-      <div class="ribbon-holder">
-        <a class="ribbon" href="/">
-          <span class="text">Beta</span>
-        </a>
-      </div>
+      <div class="container">
+        <div class="row">
+          <div class="span2" id="ribbon">
+            <%= image_tag('ribbon.png') %>
+          </div>
+          <div class="span6" id="topmenu">
       <% if user_signed_in? %>
         <div id="avatar">
           <%= link_to image_tag(current_user.avatar.url(:small), :size => "40x40"), "/profile/#{current_user.username}" %>
-          <div class="clear"></div>
         </div>
       <% end %>
-      <div class="container">
-        <div class="row">
-          <div class="span8" id="topmenu">
             <ul>
               <% unless user_signed_in? %>
                 <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
@@ -133,5 +131,6 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
       })();
     </script>
+  </div><!-- wrapper -->
   </body>
 </html>
