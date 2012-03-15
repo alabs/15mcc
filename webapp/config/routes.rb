@@ -7,6 +7,7 @@ Webapp::Application.routes.draw do
 
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' },
     :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  get 'banned' => 'pages#banned', :as => 'banned'
 
   resources :videos do 
     member do

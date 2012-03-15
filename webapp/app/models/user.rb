@@ -12,7 +12,7 @@ class User
   has_many :videos
 
   attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography, :avatar
-  attr_accessible :username, :email, :role, :as => :admin
+  attr_accessible :username, :email, :role, :banned, :as => :admin
   attr_accessor :terms, :login
 
   validates_length_of :username, minimun: 3, maximum: 30
@@ -62,6 +62,9 @@ class User
 
   field :role, :type => String, :default => 'user'
 
+  # para banear usuarios
+  field :banned, :type => Boolean, :default => false
+
   def self.find_for_database_authentication(conditions)
     login = conditions.delete(:login)
     self.any_of({ :username => login }, { :email => login }).first
@@ -99,6 +102,10 @@ class User
       user.save
       user
     end
+  end
+
+  def banned?
+    self.banned == true
   end
   
   ROLES = %w[admin editor user anonymous]

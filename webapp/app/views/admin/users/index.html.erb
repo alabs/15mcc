@@ -19,6 +19,7 @@
         <th>Email</th>
         <th>Rol</th>
         <th>Perfil</th>
+        <th>Baneado</th>
         <th>Última conexión</th>
       </tr>
     </thead>
@@ -28,7 +29,8 @@
           <td><%= best_in_place user, :username, :path => admin_users_update_path(user.username) %></td>
           <td><%= best_in_place user, :email, :path => admin_users_update_path(user.username) %></td>
           <td><%= best_in_place user, :role, :type => :select, :collection => build_roles, :path => admin_users_update_path(user.username) %></td>
-          <td><%= link_to 'Perfil', "/profile/#{user.username}" %>
+          <td><%= link_to 'Perfil', "/profile/#{user.username}" %></td>
+          <td><%= best_in_place user, :banned, :path => admin_users_update_path(user.username), :type => :checkbox %></td>
           <td><%= user.last_sign_in_at %></td>
         </tr>
       <% end %>

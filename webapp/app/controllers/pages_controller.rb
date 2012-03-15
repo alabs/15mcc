@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
 
   check_authorization
+  skip_authorization_check :only => :banned
 
   def index
     authorize! :index, Page
@@ -59,4 +60,6 @@ class PagesController < ApplicationController
     render text: ""  
   end  
 
+  def banned
+  end
 end
