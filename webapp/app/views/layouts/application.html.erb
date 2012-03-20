@@ -10,126 +10,119 @@
   </head>
   <body>
     <div id="wrapper" class="container">
-    <% flash.each do |name, msg| %>
-      <div id="flash-message" class="alert alert-<%= name %>" data-dismiss="alert">
-        <a href="#" class="close">x</a>
-        <strong><%= msg %></strong>
-      </div>
-    <% end %>
-    <div id="header">
-      <div class="container">
-        <div class="row">
-          <div class="span2" id="ribbon">
-            <%= image_tag('ribbon.png') %>
-          </div>
-          <div class="span6" id="topmenu">
-            <ul>
-              <% unless user_signed_in? %>
-                <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
-                <li>/</li>
-                <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
-              <% else %>
-                <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
-                <% if current_user.role == 'admin' %>
-                  <li>/</li>
-                  <li><%= link_to 'administrar', admin_users_path %>
-                <% end %>
-                <li>/</li>
-                <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
-              <% end %>
-            </ul>
-            <div class="control-group">
-              <div class="controls">
-                <div class="input-prepend">
-                  <form id="search-form" action="/search" method="get">
-                    <span class="add-on"> <i class="icon-search"></i> </span>
-                    <input type="search" class="span3" placeholder="Buscar" name="q" id="search"/>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div id="social-buttons">
-            </div>
-          </div><!-- topmenu -->
-          <div class="span4" id="logo">
-            <%= link_to image_tag('logo.png'), root_path %>
-          </div>
-        </div><!-- row -->
-        <div class="row">
-          <div class="span4">
-          </div>
-        </div><!-- row -->
-      </div>
-      <div class="container-fluid" id="mainnav" style="margin-left: -10px;margin-right: -10px;">
+      <% flash.each do |name, msg| %>
+        <div id="flash-message" class="alert alert-<%= name %>" data-dismiss="alert">
+          <a href="#" class="close">x</a>
+          <strong><%= msg %></strong>
+        </div>
+      <% end %>
+      <div id="header">
         <div class="container">
           <div class="row">
-            <div class="span16">
+            <div class="span2" id="ribbon">
+              <%= image_tag('ribbon.png') %>
+            </div>
+            <div class="span6" id="topmenu">
               <ul>
-                <li><%= link_to 'Qué es 15M.cc', page_path("que-es-15m-cc") %> |</li>
-                <li><%= link_to 'Cómo colaborar', page_path("como-colaborar") %> |</li>
-                <li><%= link_to 'Quiénes somos', page_path("quienes-somos") %> |</li>
-                <li><%= link_to 'Blog', 'http://www.15m.cc/', :target => "_blank" %> |</li>
-                <li><%= link_to 'Contacto', page_path('contacto') %> |</li>
-                <li><%= link_to 'Donar', page_path("donar"), :class => 'strong' %></li>
+                <% unless user_signed_in? %>
+                  <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
+                  <li>/</li>
+                  <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
+                <% else %>
+                  <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
+                  <% if current_user.role == 'admin' %>
+                    <li>/</li>
+                    <li><%= link_to 'administrar', admin_users_path %>
+                  <% end %>
+                  <li>/</li>
+                  <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
+                <% end %>
               </ul>
+              <div class="control-group">
+                <div class="controls">
+                  <div class="input-prepend">
+                    <form id="search-form" action="/search" method="get">
+                      <span class="add-on"> <i class="icon-search"></i> </span>
+                      <input type="search" class="span3" placeholder="Buscar" name="q" id="search"/>
+                    </form>
+                  </div>
+                </div>
+              </div><!-- control-group -->
+            </div><!-- topmenu -->
+            <div class="span4" id="logo">
+              <%= link_to image_tag('logo.png'), root_path %>
+            </div>
+          </div><!-- row -->
+          <div class="row">
+            <div class="span4">
+            </div>
+          </div><!-- row -->
+        </div><!-- container -->
+        <div class="container-fluid" id="mainnav" style="margin-left: -10px;margin-right: -10px;">
+          <div class="container">
+            <div class="row">
+              <div class="span16">
+                <ul>
+                  <li><%= link_to 'Qué es 15M.cc', page_path("que-es-15m-cc") %> |</li>
+                  <li><%= link_to 'Cómo colaborar', page_path("como-colaborar") %> |</li>
+                  <li><%= link_to 'Quiénes somos', page_path("quienes-somos") %> |</li>
+                  <li><%= link_to 'Blog', 'http://www.15m.cc/', :target => "_blank" %> |</li>
+                  <li><%= link_to 'Contacto', page_path('contacto') %> |</li>
+                  <li><%= link_to 'Donar', page_path("donar"), :class => 'strong' %></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div><!-- mainnav -->
+      </div><!-- header -->
+      <div class="container" id="content" style="padding-left: 10px;">
+        <%= yield %>
+      </div>
+      <div id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="span8" id="footer-logo">
+              <%= link_to image_tag('logo-footer.png'), root_path %>
+              <div id="footer-line">&nbsp;</div>
+            </div>
+            <div class="span3" id="license">
+              <%= link_to image_tag('license.png'), 'http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES'  %>
             </div>
           </div>
         </div>
-      </div><!-- mainnav -->
-    </div><!-- header -->
-    <div class="container" id="content" style="padding-left: 10px;">
-      <%= yield %>
-    </div>
-    <div id="footer">
-      <div class="container">
-        <div class="row">
-          <div class="span8" id="footer-logo">
-            <%= link_to image_tag('logo-footer.png'), root_path %>
-            <div id="footer-line">
-              &nbsp;
-            </div>
-          </div>
-          <div class="span3" id="license">
-            <%= link_to image_tag('license.png'), 'http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES'  %>
-          </div>
+      </div><!-- footer -->
+      <div class="modal hide" id="modal-welcome-beta">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3>Bienvenido a la beta de 15m.cc</h3>
         </div>
-      </div>
-    </div><!-- footer -->
-    <div class="modal hide" id="modal-welcome-beta">
-      <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3>Bienvenido a la beta de 15m.cc</h3>
-      </div>
-      <div class="modal-body">
-        <p>Esta es una maqueta de pruebas para la plataforma web 15m.cc, puedes probar a subir todo tipo de contenidos y darnos feedback, todos los contenidos serán borrados cuando la web pase a producción.</p>
-      </div>
-      <div class="modal-footer">
-        <a href="#" class="btn btn-primary" data-dismiss="modal">Cerrar</a>
-      </div>
-    </div>
-    <%= javascript_include_tag 'application' %>
-    <%= yield :scripts %>
-    <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-29626425-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-    <script type="text/javascript">
-      var uvOptions = {};
-      (function() {
-        var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-        uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/39ISWZyEbjGr8oDtpLveA.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-      })();
-    </script>
-  </div><!-- wrapper -->
+        <div class="modal-body">
+          <p>Esta es una maqueta de pruebas para la plataforma web 15m.cc, puedes probar a subir todo tipo de contenidos y darnos feedback, todos los contenidos serán borrados cuando la web pase a producción.</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-primary" data-dismiss="modal">Cerrar</a>
+        </div>
+      </div><!-- modal-welcome-beta -->
+      <%= javascript_include_tag 'application' %>
+      <%= yield :scripts %>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-29626425-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <script type="text/javascript">
+        var uvOptions = {};
+        (function() {
+          var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+          uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/39ISWZyEbjGr8oDtpLveA.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+        })();
+      </script>
+    </div><!-- wrapper -->
   </body>
 </html>
