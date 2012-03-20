@@ -221,6 +221,8 @@ es:
         current_password: "Contraseña actual"
         password_confirmation: "Confirmación de contraseña"
         terms: "Acepto las condiciones de uso"
+        name: "Nombre"
+        homepage: "URL de tu web" 
     errors:
       models:
         video:
