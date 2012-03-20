@@ -22,7 +22,7 @@
             <div class="span2" id="ribbon">
               <%= image_tag('ribbon.png') %>
             </div>
-            <div class="span6" id="topmenu">
+            <div class="span4" id="topmenu">
               <ul>
                 <% unless user_signed_in? %>
                   <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
@@ -49,12 +49,8 @@
                 </div>
               </div><!-- control-group -->
             </div><!-- topmenu -->
-            <div class="span4" id="logo">
+            <div class="span6" id="logo">
               <%= link_to image_tag('logo.png'), root_path %>
-            </div>
-          </div><!-- row -->
-          <div class="row">
-            <div class="span4">
             </div>
           </div><!-- row -->
         </div><!-- container -->
@@ -75,13 +71,13 @@
           </div>
         </div><!-- mainnav -->
       </div><!-- header -->
-      <div class="container" id="content" style="padding-left: 10px;">
+      <div class="container" id="content">
         <%= yield %>
       </div>
       <div id="footer">
         <div class="container">
           <div class="row">
-            <div class="span8" id="footer-logo">
+            <div class="span9" id="footer-logo">
               <%= link_to image_tag('logo-footer.png'), root_path %>
               <div id="footer-line">&nbsp;</div>
             </div>

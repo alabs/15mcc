@@ -1,4 +1,4 @@
-@import "bootstrap.2.0.2.min"
+@import "bootstrap.2.0.2"
 @import "jquery-ui-1.8.16.custom"
 @import "jquery.tagit"
 @import "gmaps4rails"
@@ -58,9 +58,12 @@ p, h1, h2, h3
       color: #000
 
 #logo
-  margin-bottom: -4px
   text-align: right
   float: right
+
+#search-form
+  input[type="search"]
+    margin-top: 8px
 
 #mainnav
   background-color: #000
@@ -82,11 +85,9 @@ p, h1, h2, h3
   margin-top: 20px
 
 #home-sections
-  ul
-    margin-left: 20px
   ul li
     display: inline
-    margin-right: 50px
+    margin-right: 22px
 
 #home-info
   text-align: right
@@ -118,6 +119,9 @@ p, h1, h2, h3
     input, textarea
       padding: 10px
 
+#slide-share-home
+  margin-left: 40px
+
 // fix for googlemaps + bootstrap
 // https://github.com/twitter/bootstrap/issues/1552
 .map_container img 
@@ -125,11 +129,8 @@ p, h1, h2, h3
 
 #footer
   margin-top: 40px
-  #footer-logo
-    margin-top: -10px
   #footer-line
     background-color: #9c9e9f
-    margin-top: -4px
 
 #modal-node-tags
   .ui-autocomplete-input
