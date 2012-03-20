@@ -19,11 +19,15 @@ class User
   validates_uniqueness_of :username
   validates_format_of :username, :with => /^([\w\.%\+\-]+)$/i
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
+  validates_presence_of :name
 
   has_mongoid_attached_file :avatar,:styles => { :small => ['40x40', :png], :normal => ['80x80', :png] }, :default_url => "/assets/missing.png"
 
   field :username, :type => String
   field :biography, :type => String
+
+  field :name, :type => String
+  field :homepage, :type => String
 
   ## Database authenticatable
   field :email,              :type => String, :null => false, :default => ""
