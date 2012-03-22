@@ -14,8 +14,8 @@ $(function(){
     // };
     // Update form attributes with given coordinates
     function updateFormLocation(latLng) {
-        $('.location_attributes_latitude').val(latLng.lat());
-        $('.location_attributes_longitude').val(latLng.lng());
+        $('.location_attributes_latitude').attr('value', latLng.lat());
+        $('.location_attributes_longitude').attr('value', latLng.lng());
     }
     // Add a marker with an open infowindow
     function placeMarker(latLng) {
