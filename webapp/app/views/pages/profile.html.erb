@@ -58,24 +58,26 @@
   </div>
   <div class="span7" id="profile-main-links">
     <ul>
-      <li><%= link_to 'mapa', '#' %> |</li>
-      <li><strong><%= link_to 'línea temporal', '#' %></strong> |</li>
-      <li><%= link_to 'etiquetas', '#' %></li>
+      <li><%= link_to 'mapa', '#', :id => "show-user-map" %> |</li>
+      <li><%= link_to 'línea temporal', '#', :id => "show-user-timeline", :class => "strong" %> |</li>
+      <li><%= link_to 'etiquetas', '#', :id => "show-user-tags" %></li>
     </ul>
   </div>
 </div>
 
-<div class="row">
-  <div class="span12" id="timeline" data-url="/profile/<%= @user.username %>/timeline.json">  </div>
+<div id="user-timeline" class="row span11">
+  <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json">  </div>
 </div>
 
-<div class="span10 mt1">
-  
+<div id="user-map" class="span10 mt1 hide">
   <div style="margin-top:5em;" class="span12">
     <%= gmaps4rails(@map) %>
   </div>
+</div>
 
-
+<div id="user-tags" class="row hide">
+  <!-- TODO: tags -->
+</div>
 
   
 <div class="span10">
