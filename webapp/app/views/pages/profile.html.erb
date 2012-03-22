@@ -50,6 +50,25 @@
   </div>
 </div>
 
+<hr class="hr-profile" />
+
+<div class="row">
+  <div class="span3 offset1">
+    <strong>Tus materiales subidos</strong>
+  </div>
+  <div class="span7" id="profile-main-links">
+    <ul>
+      <li><%= link_to 'mapa', '#' %> |</li>
+      <li><strong><%= link_to 'línea temporal', '#' %></strong> |</li>
+      <li><%= link_to 'etiquetas', '#' %></li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12" id="timeline" data-url="/profile/<%= @user.username %>/timeline.json">  </div>
+</div>
+
 <div class="span10 mt1">
   
   <div style="margin-top:5em;" class="span12">
@@ -57,9 +76,6 @@
   </div>
 
 
-  <div class="span10">
-    <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json"></div>
-  </div>
 
   
 <div class="span10">
