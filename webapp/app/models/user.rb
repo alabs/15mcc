@@ -11,7 +11,7 @@ class User
   has_many :texts
   has_many :videos
 
-  attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography, :avatar
+  attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography, :avatar, :name, :homepage
   attr_accessible :username, :email, :role, :banned, :as => :admin
   attr_accessor :terms, :login
 
@@ -21,7 +21,7 @@ class User
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
   validates_presence_of :name
 
-  has_mongoid_attached_file :avatar,:styles => { :small => ['40x40', :png], :normal => ['80x80', :png] }, :default_url => "/assets/missing.png"
+  has_mongoid_attached_file :avatar,:styles => { :small => ['40x40', :png], :normal => ['128x128', :png] }, :default_url => "/assets/missing.png"
 
   field :username, :type => String
   field :biography, :type => String
