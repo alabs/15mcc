@@ -20,7 +20,9 @@
 
     <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
-    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
+    <% if @map != "[]" %>
+      <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
+    <% end %>
     <p><%= link_to 'Volver', texts_path %>
   </div>
 </div>

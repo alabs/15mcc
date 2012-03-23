@@ -23,7 +23,7 @@ class TextsController < ApplicationController
     @text = Text.find_by_slug(params[:id])
     authorize! :show, @text
 
-    @map = @text.to_gmaps4rails
+    @map = @text.to_gmaps4rails if @text.country
 
     respond_to do |format|
       format.html # show.html.erb
