@@ -42,6 +42,7 @@ class Ability
         can :index, klass
         can :show, klass
         can :new, klass
+        can :download, klass
         can :create, klass
         cannot :priority, klass
         cannot :update, klass
@@ -64,6 +65,7 @@ class Ability
         can :index, klass
         can :show, klass
         can :new, klass
+        can :download, klass
         can :create, klass
         cannot :priority, klass
         cannot :update, klass

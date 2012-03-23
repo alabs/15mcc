@@ -124,6 +124,13 @@ class ImagesController < ApplicationController
     end
   end
 
+  # GET /texts/1/download
+  def download
+    @image = Image.find_by_slug(params[:id])
+    authorize! :download, @image
+    send_file @image.img.path, :type => @image.img.content_type
+  end
+
   # POST /images/1/priority
   def priority
     @image = Image.find(params[:id])

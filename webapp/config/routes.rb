@@ -18,6 +18,7 @@ Webapp::Application.routes.draw do
 
   resources :images do
     member do
+      get 'download'
       post 'priority'
       post 'abuse'
       get 'new_step'
@@ -27,6 +28,7 @@ Webapp::Application.routes.draw do
 
   resources :texts do 
     member do
+      get 'download'
       post 'priority'
       post 'abuse'
     end
@@ -34,6 +36,7 @@ Webapp::Application.routes.draw do
 
   resources :audios do 
     member do
+      get 'download'
       post 'priority'
       post 'abuse'
     end

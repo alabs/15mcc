@@ -96,6 +96,13 @@ class AudiosController < ApplicationController
     end
   end
 
+  # GET /audios/1/download
+  def download
+    @audio = Audio.find_by_slug(params[:id])
+    authorize! :download, @audio
+    send_file @audio.archive.path
+  end
+
   # POST /audios/1/priority
   def priority
     @audio = Audio.find(params[:id])

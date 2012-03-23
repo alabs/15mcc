@@ -12,6 +12,8 @@
         <%= link_to 'Eliminar', @image, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
+    <%= link_to "Descargar", download_image_path(@text), :class => "btn btn-success" %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @image } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>

@@ -99,6 +99,17 @@ class TextsController < ApplicationController
     end
   end
 
+  # GET /texts/1/download
+  def download
+    @text = Text.find_by_slug(params[:id])
+    authorize! :download, @text
+    filename = "/tmp/#{@text.id}.txt"
+    f = File.new(filename, 'w')
+    f.puts(@text.body)
+    f.close
+    send_file filename, :filename => @text.title + '.txt', :type => 'text/plain'
+  end
+
   # POST /texts/1/priority
   def priority
     @text = Text.find(params[:id])

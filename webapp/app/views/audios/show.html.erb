@@ -17,6 +17,8 @@
         <%= link_to 'Eliminar', @audio, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
+    <%= link_to "Descargar", download_audio_path(@audio), :class => "btn btn-success" %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @audio } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @audio } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
