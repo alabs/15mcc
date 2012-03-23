@@ -17,7 +17,7 @@ class User
 
   validates_length_of :username, minimun: 3, maximum: 30
   validates_uniqueness_of :username
-  validates_format_of :username, :with => /^([\w\.%\+\-]+)$/i
+  validates_format_of :username, :with => /[A-Za-z0-9\._\-]+/
   validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
   validates_presence_of :name
 
