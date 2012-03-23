@@ -23,6 +23,10 @@ class Content
   belongs_to :user
   field :user_id, type: String
 
+  field :author_id, type: String
+  field :author, type: String
+  field :author_link, type: String
+
   #address
   field :address, type: String
   field :city, type: String
