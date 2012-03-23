@@ -63,8 +63,10 @@ Webapp::Application.routes.draw do
   get 'search' => 'search#search'
   get 'search/ajax' => 'search#ajax'
 
-  get 'profile/:username' => 'pages#profile', :constraints => /^([\w\.%\+\-]+)$/i, :as => 'profile'
-  get 'profile/:username/timeline' => 'pages#timeline', :constraints => /^([\w\.%\+\-]+)$/i, :as => 'profile_timeline'
+  constraints(:username => /[A-Za-z0-9\._\-]+/) do
+    get 'profile/:username' => 'pages#profile', :as => 'profile'
+    get 'profile/:username/timeline' => 'pages#timeline', :as => 'profile_timeline'
+  end
 
   get 'admin/users' => 'admin/users#index'
   get 'admin/users/search' => 'admin/users#search'
