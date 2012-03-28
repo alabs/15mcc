@@ -1,15 +1,19 @@
   <% if user_signed_in? %>
     <%= f.check_box :author_myself, :class => "author_myself" do %>
-      Soy el autor
+      <%= I18n.t("help.content.author.myself") %>
     <% end %>
   <% end %>
 
   <div class="form-field author-field">
-    <%= f.text_field :author_name, class: 'span8', :required => "true" %>
+    <%= f.text_field :author_name, class: 'span8', :required => "true"  do %>
+      <p class="help-block"><%= I18n.t("help.content.author.name") %></p>
+    <% end %>
   </div>
 
   <div class="form-field author-field">
-    <%= f.text_field :author_link, class: 'span8', :type => "url" %>
+    <%= f.text_field :author_link, class: 'span8', :type => "url" do %>
+      <p class="help-block"><%= I18n.t("help.content.author.url") %></p>
+    <% end %>
   </div>
 
   <div class="form-field">

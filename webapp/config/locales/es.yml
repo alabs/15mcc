@@ -271,3 +271,7 @@ es:
         address: "Ayuda de la direccion"
         city: "Ayuda de la ciudad"
         country: "Ayuda de la país"
+      author:
+        myself: "Soy el autor"
+        name: "Autor (nombre)"
+        url: "Autor (URL)"
