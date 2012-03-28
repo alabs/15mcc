@@ -1,10 +1,11 @@
-  <div class="form-field">
-    <%= check_box_tag "author_myself" %>
-    <label for="author_myself" id="author_myself_label">Soy el autor</label>
-  </div>
+  <% if user_signed_in? %>
+    <%= f.check_box :author_myself, :class => "author_myself" do %>
+      Soy el autor
+    <% end %>
+  <% end %>
 
   <div class="form-field author-field">
-    <%= f.text_field :author, class: 'span8' %>
+    <%= f.text_field :author_name, class: 'span8', :required => "true" %>
   </div>
 
   <div class="form-field author-field">

@@ -23,8 +23,11 @@ class Content
   belongs_to :user
   field :user_id, type: String
 
-  field :author_id, type: String
-  field :author, type: String
+  # Puede ser que el mismo  usuario creador de la ficha 
+  # sea el autor de la obra
+  field :author_myself, type: String
+  # o sino puede ser un nombre/link
+  field :author_name, type: String
   field :author_link, type: String
 
   #address
