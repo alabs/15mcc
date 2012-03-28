@@ -231,13 +231,13 @@ es:
         video:
           attributes:
             url:
-              taken: "Ya hay un vídeo con esa dirección URL"
+              taken: "Ya hay un vídeo con la misma dirección URL. Alguien lo ha añadido ants que tú"
         user:
           attributes:
             username:
-              too_long: "Has puesto un nombre de usuario muy largo"
+              too_long: "Has puesto un nombre de usuario demasiado largo"
             password:
-              too_short: "La contraseña es muy corta"
+              too_short: "La contraseña es demasiado corta"
               confirmation: "La contraseña y su confirmación deben coincidir"
             email:
               taken: "Ese correo ya se está utilizando"
@@ -254,24 +254,24 @@ es:
     default: "No estás autorizado a acceder a esta página"
   help:
     text:
-      title: "Esta es la ayuda para el título"
-      body: "Esta es la ayuda para el cuerpo"
+      title: "Usa un título corto y descriptivo del texto."
+      body: "Pega aquí el texto a subir. si quieres le puedes dar formato con loso botones de arriba."
     audio:
-      title: "Esta es la ayuda para el título"
-      archive: "Esta es la ayuda para el archivo"
+      title: "Usa un título corto y descriptivo del audio."
+      archive: "Selecciona en tu disco duro el archivo de audio a subir. puedes subir MP3, y WAWs."
     image:
-      title: "Esta es la ayuda para el título"
-      archive: "Esta es la ayuda para el archivo"
+      title: "Usa un título corto y descriptivo de la foto."
+      archive: "Selecciona en tu disco duro el archivo de fotografía a subir. Puedes subir JPG, PNG y TIFFs. Al subirse (y en caso de ser mayores) se convertirán en un máximo de 1600x1600pix y un máximo de 400kb de tamaño"
     video:
-      url: "Esta es la ayuda para la URL"
+      url: "Introduce la URL (dirección web) del vídeo a referenciar, por ejemplo: http://www.youtube.com/watch?v=yWaszPxC_CY&feature=related. NOTA: (Los vídeos no los alojamos nosotros, sino que los tomamos de otras webs como youtube, vimeo, etc...)"
     content:
-      tags: "Esta es la ayuda de los tags"
-      time: "Esta es la ayuda del tiempo"
+      tags: "Define con etiquetas el contenido del material que estás subiendo. Empieza a esribir y verás como se van 'autocompletando' las etiquetas más frecuentes"
+      time: "Indica la fecha y hora que sucedió lo que muestras / describes en el material que estás subiendo. Si no indicas nada, se asignará automáticamente las 12h del mediodía."
       location: 
-        address: "Ayuda de la direccion"
-        city: "Ayuda de la ciudad"
-        country: "Ayuda de la país"
+        address: "Indica la dirección postal (calle) donde ocurrió lo que muestras / describes en el material que estás subiendo. Si no lo sabes, puedes dejar este campo vacío."
+        city: "Indica la ciudad donde ocurrió lo que muestras / describes en el material que estás subiendo."
+        country: "Indica el país donde ocurrió lo que muestras / describes en el material que estás subiendo."
       author:
         myself: "Soy el autor"
-        name: "Autor (nombre)"
-        url: "Autor (URL)"
+        name: "Indica el nombre del autor del material que estás subiendo"
+        url: "Indica una URL (dirección web) del autor: una web, blog, facebook... Este campo no es obligatorio"
