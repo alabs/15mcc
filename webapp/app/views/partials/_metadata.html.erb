@@ -17,6 +17,17 @@
       <p><strong>Latitud:</strong> <%= content.latitude %></p>
       <p><strong>Longitud:</strong> <%= content.longitude %></p>
       <p><strong>Tags:</strong> <%= content.tag_list %></p>
+
+      <% if content.author_myself == "1" %>
+        <p><strong>Autor:</strong><%= link_to content.user.username, profile_path(content.user) %></p>
+      <% else %>
+        <% if content.author_link %> 
+          <p><strong>Autor:</strong> <%= link_to content.author_name, content.author_link %></p>
+        <% else %>
+          <p><strong>Autor:</strong> <%= content.author_name %></p>
+        <% end %>
+      <% end %>
+
     </div>
     <div class="well">
       <% if content.user %>

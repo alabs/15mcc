@@ -201,6 +201,9 @@ es:
   mongoid:
     attributes:
       content:
+        author_myself: ""
+        author_name: "Autor (nombre)"
+        author_link: "Autor (URL)"
         title: "Título"
         tag_list: "Etiquetas"
         happened_at: "¿Cuándo ha ocurrido?"

@@ -1,3 +1,17 @@
+  <% if user_signed_in? %>
+    <%= f.check_box :author_myself, :class => "author_myself" do %>
+      Soy el autor
+    <% end %>
+  <% end %>
+
+  <div class="form-field author-field">
+    <%= f.text_field :author_name, class: 'span8', :required => "true" %>
+  </div>
+
+  <div class="form-field author-field">
+    <%= f.text_field :author_link, class: 'span8', :type => "url" %>
+  </div>
+
   <div class="form-field">
     <%= f.text_field :tag_list, class: 'span8', :required => "true" do %>
       <p class="help-block"><%= I18n.t("help.content.tags") %></p>

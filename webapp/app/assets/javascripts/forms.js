@@ -1,3 +1,18 @@
+
+
+function check_author_checker(){
+  // para el checkbox de "Soy el autor"
+ if ( $('.author_myself').is(':checked') ) {
+   $('.author-field').slideUp('slow');
+   $('.author-field input').removeAttr('required');
+ } else { 
+   $('.author-field').slideDown('slow');
+   $('.author-field input').attr('required', 'required');
+ }
+}
+
+
+
 $(function(){
 
   // date and time picker for Fecha
@@ -347,5 +362,12 @@ $(function(){
   $( "#map-country" ).autocomplete({
     source: country_list
   });
+
+  // para el checkbox de "Soy el autor"
+  check_author_checker();
+
+  $('.author_myself').on('change', function(){
+    check_author_checker();
+  })
 
 });
