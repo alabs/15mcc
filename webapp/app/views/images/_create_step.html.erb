@@ -12,15 +12,20 @@
 <% end %>
 
     <div class="form-field">
-      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', :class => 'span8' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', :class => 'span8' do %>
+        <p class="help-block"><%= I18n.t("help.image.title") %></p>
+      <% end %>
     </div>
 
     <div class="form-field">
       <%= f.file_field :img, required: true, class: 'upload' %>
+        <p class="help-block"><%= I18n.t("help.image.archive") %></p>
     </div>
 
     <div class="form-field">
-      <%= f.text_field :tag_list, class: 'span8', :required => 'true' %>
+      <%= f.text_field :tag_list, class: 'span8', :required => 'true' do %>
+        <p class="help-block"><%= I18n.t("help.content.tags") %></p>
+      <% end %>
     </div>
 
     <% if current_user.blank? %>

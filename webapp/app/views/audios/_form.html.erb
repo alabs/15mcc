@@ -3,10 +3,15 @@
   <fieldset>
     <legend>Introducir nuevo audio</legend>
       <%= render :partial => "partials/copyright_notice" %>
+
       <div class="form-field">
-        <%= f.text_field :title, required: true, placeholder: 'Título del audio', :class => 'span8' %>
+        <%= f.text_field :title, required: true, placeholder: 'Título del audio', :class => 'span8' do %>
+          <p class="help-block"><%= I18n.t("help.audio.title") %></p>
+        <% end %>
         <%= f.file_field :archive, required: true %>
+          <p class="help-block"><%= I18n.t("help.audio.archive") %></p>
       </div>
+
       <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @audio} %>
     <div id="form-actions">
       <%= f.submit 'Enviar audio', :class => 'btn btn-primary' %>

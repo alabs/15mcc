@@ -249,3 +249,22 @@ es:
       truncate: "..."
   unauthorized:
     default: "No estás autorizado a acceder a esta página"
+  help:
+    text:
+      title: "Esta es la ayuda para el título"
+      body: "Esta es la ayuda para el cuerpo"
+    audio:
+      title: "Esta es la ayuda para el título"
+      archive: "Esta es la ayuda para el archivo"
+    image:
+      title: "Esta es la ayuda para el título"
+      archive: "Esta es la ayuda para el archivo"
+    video:
+      url: "Esta es la ayuda para la URL"
+    content:
+      tags: "Esta es la ayuda de los tags"
+      time: "Esta es la ayuda del tiempo"
+      location: 
+        address: "Ayuda de la direccion"
+        city: "Ayuda de la ciudad"
+        country: "Ayuda de la país"

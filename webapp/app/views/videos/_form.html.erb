@@ -5,7 +5,10 @@
       <%= render :partial => "partials/copyright_notice" %>
 
       <div class="form-field">
-        <%= f.text_field :url, required: true, placeholder: 'http://', :class => 'span8' %>
+        <%= f.text_field :url, required: true, placeholder: 'http://', :class => 'span8' do %>
+          <p class="help-block"><%= I18n.t("help.video.url") %></p>
+        <% end %>
+
         <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @video} %>
       </div>
       <div id="form-actions">

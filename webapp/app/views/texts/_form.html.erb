@@ -4,9 +4,12 @@
     <legend>Introducir nuevo texto</legend>
     <%= render :partial => "partials/copyright_notice" %>
     <div class="form-field">
-      <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span8' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span8' do %>
+        <p class="help-block"><%= I18n.t("help.text.title") %></p>
+      <% end %>
         <div class="wmd-panel">
           <%= f.text_area :body, rows: 6, required: true, placeholder: 'Cuerpo del texto', :class => 'span8 wmd-input', :id => 'wmd-input' do %>
+          <p class="help-block"><%= I18n.t("help.text.body") %></p>
           <div id="wmd-button-bar"></div>
         <p>
           <a href="#" class="show_markdown_help">ver ayuda de estilos</a>

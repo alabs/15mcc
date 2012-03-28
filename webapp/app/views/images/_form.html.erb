@@ -3,9 +3,16 @@
   <fieldset>
     <legend>Editar imagen</legend>
       <%= render :partial => "partials/copyright_notice" %>
-      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span8' %>
+      <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span8' do %>
+          <p class="help-block"><%= I18n.t("help.image.title") %></p>
+        <% end %>
+
       <%= f.file_field :img, required: true %>
-      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' %>
+      <p class="help-block"><%= I18n.t("help.image.archive") %></p>
+
+      <%= f.text_field :tags, placeholder: 'Tags separados por comas', class: 'span8' do %>
+          <p class="help-block"><%= I18n.t("help.content.tags") %></p>
+        <% end %>
 
     <% if current_user.blank? %>
       <div class="alert alert-info">
