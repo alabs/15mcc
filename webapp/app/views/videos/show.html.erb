@@ -12,6 +12,8 @@
         <%= link_to 'Eliminar', @video, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
+    <%= link_to "Descargar", page_path("videodownloader"), :class => "btn btn-success" %>
+
     <%= render :partial => "partials/metadata", :locals => { :content => @video } %>
     <%= render :partial => "partials/social_buttons", :locals => { :content => @video } %>
     <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
