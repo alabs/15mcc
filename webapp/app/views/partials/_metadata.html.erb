@@ -22,7 +22,7 @@
         <p><strong>Autor:</strong><%= link_to content.user.username, profile_path(content.user) %></p>
       <% else %>
         <% if content.author_link %> 
-          <p><strong>Autor:</strong> <%= link_to content.author_name, content.author_link %></p>
+          <p><strong>Autor:</strong> <%= link_to content.author_name, content.author_link, :target => "_blank" %></p>
         <% else %>
           <p><strong>Autor:</strong> <%= content.author_name %></p>
         <% end %>
@@ -33,7 +33,7 @@
       <% if content.user %>
         <p><strong>Creado por:</strong> <%= link_to content.user.username, "/profile/#{content.user.username}" %></p>
       <% else %>
-        <p><strong>Creado por:</strong> <%= link_to 'anonymous', "/profile/anonymous" %></p>
+        <p><strong>Creado por:</strong> anonymous</p>
       <% end %>
       <p><strong>Publicado:</strong> <%= l content.created_at, :format => :short %></p>
       <p><strong>Ha ocurrido:</strong> <%= l content.happened_at, :format => :short %></p>
@@ -55,7 +55,7 @@
         </div>
         <div class="modal-footer">
           <input type="submit" class="btn btn-primary" value="Enviar" />
-          <a href="#" class="btn">Cancelar</a>
+          <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
         </div>
       </form>
     </div>

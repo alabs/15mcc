@@ -1,0 +1,61 @@
+body {
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+
+}
+
+body, html {
+
+}
+
+a { text-decoration: none
+
+}
+
+A:LINK {text-decoration : none; color : #1a4774} 
+A:VISITED {text-decoration : none; color : #1a4774} 
+A:HOVER {text-decoration : none; color : #1a4774} 
+A:ACTIVE {text-decoration : none; color : #1a4774
+
+} 
+
+
+.texto1 {
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        text-align: left;
+        color: #000;
+}
+
+.texto2 {
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 9px;
+        text-align: left;
+        color: #000;
+
+}
+
+.titulo1 {
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 22px;
+        text-align: left;
+        font-weight: bold;
+        color: #1a4774;
+}
+
+.titulo2 {
+
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        text-align: left;
+        color: #1a4774;
+}
+
+.footer {
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 8px;
+        text-align: left;
+        color: #666666;
+
+}
+

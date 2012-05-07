@@ -28,6 +28,11 @@ class Image < Content
     }
   end
 
+  def get_absolute_url
+    user = self.user ? self.user.username : "anonymous" 
+    '/' + user + '/images/' + self.slug
+  end
+
   protected
 
   def preprocessing
