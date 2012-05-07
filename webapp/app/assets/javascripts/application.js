@@ -1,5 +1,17 @@
 //= require external
-//= require_tree .
+//= require audios
+//= require forms
+//= require maps
+//= require priority
+//= require search
+//= require time
+//= require user
+//= require welcome
+//= require admin/users
+// require_tree .
+// mindmap 
+// jquery.simplemm.js
+//
 //
 
 

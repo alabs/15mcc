@@ -49,7 +49,7 @@ Webapp::Application.routes.draw do
   end
 
   get 'bank' => 'pages#bank'
-  get 'bank/editor' => 'mapmind#editor'
+  #get 'bank/editor' => 'mapmind#editor'
 
   get 'tags/search' => 'tags#search'
   get 'tags' => 'tags#index'
