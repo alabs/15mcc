@@ -9,39 +9,6 @@ Webapp::Application.routes.draw do
     :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   get 'banned' => 'pages#banned', :as => 'banned'
 
-  resources :videos do 
-    member do
-      post 'priority'
-      post 'abuse'
-    end
-  end
-
-  resources :images do
-    member do
-      get 'download'
-      post 'priority'
-      post 'abuse'
-      get 'new_step'
-      put 'create_step'
-    end
-  end
-
-  resources :texts do 
-    member do
-      get 'download'
-      post 'priority'
-      post 'abuse'
-    end
-  end
-
-  resources :audios do 
-    member do
-      get 'download'
-      post 'priority'
-      post 'abuse'
-    end
-  end
-
  # resources :nodes
 
  # resources :connections do
@@ -62,6 +29,41 @@ Webapp::Application.routes.draw do
 
   get 'search' => 'search#search'
   get 'search/ajax' => 'search#ajax'
+    
+  scope '/profile/:username', :constraints => { :username => /[A-Za-z0-9\._\-]+/ } do
+    resources :videos do 
+      member do
+        post 'priority'
+        post 'abuse'
+      end
+    end
+  
+    resources :images do
+      member do
+        get 'download'
+        post 'priority'
+        post 'abuse'
+        get 'new_step'
+        put 'create_step'
+      end
+    end
+  
+    resources :texts do 
+      member do
+        get 'download'
+        post 'priority'
+        post 'abuse'
+      end
+    end
+  
+    resources :audios do 
+      member do
+        get 'download'
+        post 'priority'
+        post 'abuse'
+      end
+    end
+  end
 
   constraints(:username => /[A-Za-z0-9\._\-]+/) do
     get 'profile/:username' => 'pages#profile', :as => 'profile'

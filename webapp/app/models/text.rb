@@ -34,7 +34,7 @@ class Text < Content
   protected
 
   def preprocessing
-    generate_slug()
+    #generate_slug()
   end
 
   private
