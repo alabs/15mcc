@@ -37,7 +37,6 @@ class Content
   #coordinates
   field :coordinates, type: Array
   #
-  field :slug, type: String
   field :priority, type: Boolean, :default => false
   field :title, type: String
   field :happened_at, type: Time
@@ -82,25 +81,9 @@ class Content
     end
   end
 
-  #slug methods
-
-  def self.find_by_slug(slug)
-    where(:slug => slug).first
-  end
-
-  def to_param
-    slug
-  end
-
   def get_absolute_url
-    url_path + slug
+    user = self.user ? self.user.username : "anonymous" 
+    '/profile/' + user + url_path + self.id.to_s
   end
-
-  protected
-
-  def generate_slug
-    self.slug = self.title.parameterize
-  end
-
 
 end

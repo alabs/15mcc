@@ -20,7 +20,7 @@ class TextsController < ApplicationController
   # GET /texts/1
   # GET /texts/1.json
   def show
-    @text = Text.find_by_slug(params[:id])
+    @text = Text.find(params[:id])
     authorize! :show, @text
 
     @map = @text.to_gmaps4rails if @text.country

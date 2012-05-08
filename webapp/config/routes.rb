@@ -42,11 +42,11 @@ Webapp::Application.routes.draw do
     end
   end
 
-  resources :nodes
+ # resources :nodes
 
-  resources :connections do
-    get 'search', :on => :collection
-  end
+ # resources :connections do
+ #   get 'search', :on => :collection
+ # end
 
   get 'bank' => 'pages#bank'
   #get 'bank/editor' => 'mapmind#editor'
