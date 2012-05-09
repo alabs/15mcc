@@ -58,7 +58,7 @@ class ImagesController < ApplicationController
       unless @image.last_step?
         @image.next_step
         session[:order_step] = @image.current_step
-        redirect_to new_step_image_url(@image.slug)
+        redirect_to new_step_image_url(@image.id)
       #
       else
         session[:order_step] = nil
@@ -80,7 +80,7 @@ class ImagesController < ApplicationController
     if verify_captcha(@image) and @image.save
       @image.next_step
       session[:order_step] = @image.current_step
-      redirect_to new_step_image_url(@image.slug)
+      redirect_to new_step_image_url(@image.id)
     #
     else
       session[:order_step] = nil
