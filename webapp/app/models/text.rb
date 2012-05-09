@@ -31,12 +31,6 @@ class Text < Content
     markdown.render(field)
   end
 
-  protected
-
-  def preprocessing
-    #generate_slug()
-  end
-
   private
 
   def url_path

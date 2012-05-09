@@ -36,7 +36,6 @@ class Video < Content
 
   def preprocessing
     generate_metadata()
-    generate_slug()
   end
 
   private

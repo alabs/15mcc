@@ -9,9 +9,10 @@
     <ul class="span10">
       <% @videos.each do |video| %>
         <li class="thumbnail span2">
-          <%= link_to image_tag(video.thumbnail), video %>
+        <% user = video.user ? video.user.username : "anonymous" %>
+        <%= link_to image_tag(video.thumbnail), video_path(video, :username => user) %>
           <div class="caption">
-            <h5><%= link_to video.title, video %></h5>
+            <h5><%= link_to video.title, video_path(video, :username => video) %></h5>
           </div>
         </li>
       <% end %>
@@ -24,9 +25,10 @@
     <ul class="span10">
       <% @images.each do |image| %>
       <li class="thumbnail span3">
-        <%= link_to image_tag(image.img.url(:small)), image %>
+        <% user = image.user ? image.user.username : "anonymous" %>
+        <%= link_to image_tag(image.img.url(:small)), image_path(image, :username => user) %>
         <div class="caption">
-          <h5><%= link_to image.title, image %></h5>
+          <h5><%= link_to image.title, image_path(image, :username => user) %></h5>
         </div>
       </li>
       <% end %>
@@ -37,8 +39,8 @@
       <h2> Audios </h2>
     <ul class="span10">
       <% @audios.each do |audio| %>
-        <%= audio %>
-        <li><h5><%= link_to audio.title, audio %></h5>
+        <% user = audio.user ? audio.user.username : "anonymous" %>
+        <li><h5><%= link_to audio.title, audio_path(audio, :username => user) %></h5>
       <% end %>
     <% end %>
 
@@ -46,7 +48,8 @@
       <h2> Textos </h2>
     <ul class="span10">
       <% @texts.each do |text| %>
-        <li><h5><%= link_to text.title, text %></h5>
+        <% user = text.user ? text.user.username : "anonymous" %>
+        <li><h5><%= link_to text.title, text_path(text, :username => user) %></h5>
       <% end %>
     <% end %>
 

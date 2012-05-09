@@ -20,7 +20,7 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     authorize! :show, @image
 
     @map = @image.to_gmaps4rails
@@ -39,7 +39,7 @@ class ImagesController < ApplicationController
 
   # GET /images/1/new_step
   def new_step
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     @map   = @image.to_gmaps4rails
     @image.step session[:order_step]
     authorize! :create, @image
@@ -48,7 +48,7 @@ class ImagesController < ApplicationController
 
   # POST /images/1/create_step
   def create_step
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     @map   = @image.to_gmaps4rails
     @image.step session[:order_step]
     authorize! :create, @image
@@ -90,14 +90,14 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     authorize! :update, @image
   end
 
   # PUT /images/1
   # PUT /images/1.json
   def update
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     authorize! :update, @image
 
     respond_to do |format|
@@ -114,7 +114,7 @@ class ImagesController < ApplicationController
   # DELETE /images/1
   # DELETE /images/1.json
   def destroy
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     authorize! :destroy, @image
     @image.destroy
 
@@ -126,7 +126,7 @@ class ImagesController < ApplicationController
 
   # GET /texts/1/download
   def download
-    @image = Image.find_by_slug(params[:id])
+    @image = Image.find(params[:id])
     authorize! :download, @image
     send_file @image.img.path, :type => @image.img.content_type
   end

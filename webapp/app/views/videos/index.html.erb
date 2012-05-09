@@ -15,14 +15,15 @@
       <% @videos.each do |video| %>
         <li class="span2">
           <div class="thumbnail">
-            <%= link_to image_tag(video.thumbnail), video %>
+            <% user = video.user ? video.user.username : "anonymous" %>
+            <%= link_to image_tag(video.thumbnail), video_path(video, :username => user) %>
             <div class="caption">
               <h5><%= link_to video.title, video %></h5>
               <% if can? :update, video %> 
-                  <%= link_to 'Editar', edit_video_path(video), :class => "btn btn-primary" %>
+                <%= link_to 'Editar', edit_video_path(video, :username => user), :class => "btn btn-primary" %>
               <% end %>
               <% if can? :destroy, video %> 
-                  <%= link_to 'Eliminar', video, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+                <%= link_to 'Eliminar', video_path(video, :username => user), :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
               <% end %>
             </div>
           </div>

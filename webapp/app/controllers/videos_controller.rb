@@ -21,7 +21,7 @@ class VideosController < ApplicationController
   # GET /videos/1
   # GET /videos/1.json
   def show
-    @video = Video.find_by_slug(params[:id])
+    @video = Video.find(params[:id])
     @map = @video.to_gmaps4rails
     authorize! :show, @video
     respond_to do |format|
@@ -45,7 +45,7 @@ class VideosController < ApplicationController
 
   # GET /videos/1/edit
   def edit
-    @video = Video.find_by_slug(params[:id])
+    @video = Video.find(params[:id])
     @map = @video.to_gmaps4rails
     authorize! :update, @video
   end
@@ -72,7 +72,7 @@ class VideosController < ApplicationController
   # PUT /videos/1
   # PUT /videos/1.json
   def update
-    @video = Video.find_by_slug(params[:id])
+    @video = Video.find(params[:id])
     authorize! :update, @video
 
     respond_to do |format|
@@ -89,7 +89,7 @@ class VideosController < ApplicationController
   # DELETE /videos/1
   # DELETE /videos/1.json
   def destroy
-    @video = Video.find_by_slug(params[:id])
+    @video = Video.find(params[:id])
     authorize! :destroy, @video
     @video.destroy
 

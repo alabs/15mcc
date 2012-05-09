@@ -30,7 +30,7 @@ Webapp::Application.routes.draw do
   get 'search' => 'search#search'
   get 'search/ajax' => 'search#ajax'
     
-  scope '/profile/:username', :constraints => { :username => /[A-Za-z0-9\._\-]+/ } do
+  scope '/profile/:username', :constraints => { :username => /[A-Za-z0-9\._\-]+/ }, :defaults => { :username => 'all' } do
     resources :videos do 
       member do
         post 'priority'

@@ -100,14 +100,15 @@
       <tbody>
         <% @images.each do |image| %>
           <tr>
-            <td><%= link_to image.title, image %></td>
+            <% user = image.user ? image.user.username : "anonymous" %>
+            <td><%= link_to image.title, image_path(image, :username => user) %></td>
             <td><%= l image.happened_at, :format => :short %></td>
             <td><%= image.city %></td>
             <td><%= image.country %></td>
             <td>
-              <%= link_to 'Mostrar', image %>
-              <%= link_to 'Editar', edit_image_path(image) %>
-              <%= link_to 'Eliminar', image, confirm: '¿Estas segura?', method: :delete %>
+              <%= link_to 'Mostrar', image_path(image, :username => user) %>
+              <%= link_to 'Editar', edit_image_path(image, :username => user) %>
+              <%= link_to 'Eliminar', image_path(image, :username => user), confirm: '¿Estas segura?', method: :delete %>
             </td>
             <td></td>
           </tr>
@@ -142,14 +143,15 @@
       <tbody>
         <% @videos.each do |video| %>
           <tr>
-            <td><%= link_to video.title, video %></td>
+            <% user = video.user ? video.user.username : "anonymous" %>
+            <td><%= link_to video.title, video_path(video, :username => user) %></td>
             <td><%= l video.happened_at, :format => :short %></td>
             <td><%= video.city %></td>
             <td><%= video.country %></td>
             <td>
-              <%= link_to 'Mostrar', video %>
-              <%= link_to 'Editar', edit_video_path(video) %>
-              <%= link_to 'Eliminar', video, confirm: '¿Estas segura?', method: :delete %>
+              <%= link_to 'Mostrar', video_path(video, :username => user) %>
+              <%= link_to 'Editar', edit_video_path(video, :username => user) %>
+              <%= link_to 'Eliminar', video_path(video, :username => user), confirm: '¿Estas segura?', method: :delete %>
             </td>
             <td></td>
           </tr>
@@ -184,14 +186,15 @@
       <tbody>
         <% @texts.each do |text| %>
           <tr>
-            <td><%= link_to text.title, text %></td>
+            <% user = text.user ? text.user.username : "anonymous" %>
+            <td><%= link_to text.title, text_path(text, :username => user) %></td>
             <td><%= l text.happened_at, :format => :short %></td>
             <td><%= text.city %></td>
             <td><%= text.country %></td>
             <td>
-              <%= link_to 'Mostrar', text %>
-              <%= link_to 'Editar', edit_text_path(text) %>
-              <%= link_to 'Eliminar', text, confirm: '¿Estas segura?', method: :delete %>
+              <%= link_to 'Mostrar', text_path(text, :username => user) %>
+              <%= link_to 'Editar', edit_text_path(text, :username => user) %>
+              <%= link_to 'Eliminar', text_path(text, :username => user), confirm: '¿Estas segura?', method: :delete %>
             </td>
           </tr>
         <% end %>
@@ -223,14 +226,15 @@
       <tbody>
         <% @audios.each do |audio| %>
           <tr>
-            <td><%= link_to audio.title, audio %></td>
+            <% user = audio.user ? audio.user.username : "anonymous" %>
+            <td><%= link_to audio.title, audio_path(audio, :username => user) %></td>
             <td><%= l audio.happened_at, :format => :short %></td>
             <td><%= audio.city %></td>
             <td><%= audio.country %></td>
             <td>
-              <%= link_to 'Mostrar', audio %>
-              <%= link_to 'Editar', edit_audio_path(audio) %>
-              <%= link_to 'Eliminar', audio, confirm: '¿Estas segura?', method: :delete %>
+              <%= link_to 'Mostrar', audio_path(audio, :username => user) %>
+              <%= link_to 'Editar', edit_audio_path(audio, :username => user) %>
+              <%= link_to 'Eliminar', audio_path(audio, :username => user), confirm: '¿Estas segura?', method: :delete %>
             </td>
           </tr>
         <% end %>

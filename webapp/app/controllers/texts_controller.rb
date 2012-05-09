@@ -45,7 +45,7 @@ class TextsController < ApplicationController
 
   # GET /texts/1/edit
   def edit
-    @text = Text.find_by_slug(params[:id])
+    @text = Text.find(params[:id])
     @map = @text.to_gmaps4rails
     authorize! :update, @text
   end
@@ -72,7 +72,7 @@ class TextsController < ApplicationController
   # PUT /texts/1
   # PUT /texts/1.json
   def update
-    @text = Text.find_by_slug(params[:id])
+    @text = Text.find(params[:id])
     authorize! :update, @text
 
     respond_to do |format|
@@ -89,7 +89,7 @@ class TextsController < ApplicationController
   # DELETE /texts/1
   # DELETE /texts/1.json
   def destroy
-    @text = Text.find_by_slug(params[:id])
+    @text = Text.find(params[:id])
     authorize! :destroy, @text
     @text.destroy
 
@@ -101,7 +101,7 @@ class TextsController < ApplicationController
 
   # GET /texts/1/download
   def download
-    @text = Text.find_by_slug(params[:id])
+    @text = Text.find(params[:id])
     authorize! :download, @text
     filename = "/tmp/#{@text.id}.txt"
     f = File.new(filename, 'w')

@@ -26,18 +26,19 @@
   <tbody>
     <% @audios.each do |audio| %>
       <tr>
-        <td><%= link_to audio.title, audio %></td>
+        <% user = audio.user ? audio.user.username : "anonymous" %>
+        <td><%= link_to audio.title, audio_path(audio, :username => user) %></td>
         <td><%= l audio.happened_at, :format => :short %></td>
         <td><%= audio.city %></td>
         <td><%= audio.country %></td>
         <% if can? :update, audio %> 
           <td>
-            <%= link_to 'Editar', edit_audio_path(audio), :class => "btn btn-primary" %>
+            <%= link_to 'Editar', edit_audio_path(audio, :username => user), :class => "btn btn-primary" %>
           </td>
         <% end %>
         <% if can? :destroy, audio %> 
           <td>
-            <%= link_to 'Eliminar', audio, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+            <%= link_to 'Eliminar', audio_path(audio, :username => user), :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
           </td>
         <% end %>
       </tr>

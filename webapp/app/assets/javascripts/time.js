@@ -11,30 +11,30 @@ $(function(){
         var date = $(this)[0].happened_at;
         if (date != null){
           var type_slug; var type_icon; 
-
           switch( $(this)[0].klass ){
             case "Text":
-              type_slug = "/texts/"
+              type_slug = "texts"
               type_icon = "align-left"
               break;
             case "Image":
-              type_slug = "/images/"
+              type_slug = "images"
               type_icon = "picture"
               break;
             case "Video":
-              type_slug = "/videos/"
+              type_slug = "videos"
               type_icon = "film"
               break;
             case "Audio":
-              type_slug = "/audios/"
+              type_slug = "audios"
               type_icon = "film"
               break;
             default:
-              type_slug = "/texts/"
+              type_slug = "texts"
               type_icon = "align-left"
           }
 
-          var title = '<a href="' + type_slug + $(this)[0].slug + '"><i class="icon-' + type_icon + '"></i>' + $(this)[0].title + '</a>';
+          var url = "/profile/" + $(this)[0].user + "/" + type_slug + "/" + $(this)[0]._id
+          var title = '<a href="' + url + '"><i class="icon-' + type_icon + '"></i>' + $(this)[0].title + '</a>';
           data.push({ start: new Date(date), content: title });   
         }
       });

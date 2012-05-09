@@ -4,7 +4,6 @@ class Audio < Content
   include Mongoid::Paperclip
 
   validates_presence_of :title
-  validates_uniqueness_of :title
 
   has_mongoid_attached_file :archive
   
@@ -32,10 +31,6 @@ class Audio < Content
      "height" => "16",
      "marker_anchor" => [ 5, 10]
     }
-  end
-
-  def preprocessing
-    generate_slug()
   end
 
   private

@@ -31,7 +31,7 @@
     </div>
     <div class="well">
       <% if content.user %>
-        <p><strong>Creado por:</strong> <%= link_to content.user.username, "/profile/#{content.user.username}" %></p>
+        <p><strong>Creado por:</strong> <%= link_to content.user.username, profile_path(content.user) %></p>
       <% else %>
         <p><strong>Creado por:</strong> anonymous</p>
       <% end %>
