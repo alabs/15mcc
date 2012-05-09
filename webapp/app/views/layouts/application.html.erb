@@ -55,23 +55,40 @@
           </div><!-- row -->
         </div><!-- container -->
         <div class="container-fluid" id="mainnav" style="margin-left: -10px;margin-right: -10px;">
+        </div><!-- mainnav -->
           <div class="container">
             <div class="row">
               <div class="span16">
-                <ul>
-                  <li><%= link_to 'Inicio', root_path %> |</li>
-                  <li><%= link_to 'Qué es 15M.cc', page_path("que-es-15m-cc") %> |</li>
-                  <li><%= link_to 'Cómo colaborar', page_path("como-colaborar") %> |</li>
-                  <li><%= link_to 'Licencia', page_path("licencia") %> |</li>
-                  <li><%= link_to 'Quiénes somos', page_path("quienes-somos") %> |</li>
-                  <li><%= link_to 'Blog', 'http://www.15m.cc/', :target => "_blank" %> |</li>
-                  <li><%= link_to 'Contacto', page_path('contacto') %> |</li>
-                  <li><%= link_to 'Donar', page_path("donar"), :class => 'strong' %></li>
+                <ul class="nav nav-pills">
+                  <li><%= link_to 'QUÉ ES ESTO', root_path %></li>
+                  <li class="dropdown" id="ver">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#ver">
+                      VER MATERIAL
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to 'mapa', maps_path %></li>
+                      <li><%= link_to 'línea de tiempo', timeline_path %></li>
+                      <li><%= link_to 'etiquetas', tags_path %></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown" id="subir">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#subir">
+                      SUBIR MATERIAL
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to 'texto', new_text_path %></li>
+                      <li><%= link_to 'foto', new_image_path %></li>
+                      <li><%= link_to 'audio', new_audio_path %></li>
+                      <li><%= link_to 'vídeo', new_video_path %></li>
+                    </ul>
+                  </li>
+                  <li><%= link_to 'FAQ', page_path("preguntas-mas-frecuentes") %></li>
                 </ul>
               </div>
             </div>
           </div>
-        </div><!-- mainnav -->
       </div><!-- header -->
       <div class="container" id="content">
         <%= yield %>
