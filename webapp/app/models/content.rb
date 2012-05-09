@@ -11,7 +11,7 @@ class Content
   #enable_tags_index!
 
   #callbacks
-  before_save :preprocessing, :reverse_geocode, :geocode
+  before_save :reverse_geocode, :geocode
 
   #accessors
   attr_accessor :terms

@@ -5,6 +5,8 @@ class Video < Content
   validates_presence_of :url
   validates_uniqueness_of :url
 
+  before_save :preprocessing
+
   field :url, type: String
   field :service, type: String
   field :thumbnail, type: String

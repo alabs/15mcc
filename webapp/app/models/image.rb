@@ -6,6 +6,8 @@ class Image < Content
   validates_presence_of :title
   validates_uniqueness_of :title
 
+  before_save :preprocessing
+
   #paperclip
   has_mongoid_attached_file :img,:styles => {:small => ['260x180', :jpg],:marker => ['20x20', :jpg]}
 
