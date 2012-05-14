@@ -1,0 +1,14 @@
+  <div class="row">
+    <% if content.user %>
+      <%= image_tag content.user.avatar.url(:normal) %>
+      <%= content.user.name %> 
+    <% else %>
+      <div class="span2">
+        <%= image_tag "missing.png"%>
+      </div>
+      <div class="span8">
+        <h2><%= content.title %></h2>
+        Anónimo 
+      </div>
+    <% end %>
+  </div>
