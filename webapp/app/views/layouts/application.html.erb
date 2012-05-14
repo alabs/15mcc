@@ -37,7 +37,7 @@
         </div><!-- mainnav -->
           <div class="container">
             <div class="row">
-              <div class="span16" id="mainnavbar">
+              <div class="span6" id="mainnavbar">
                 <ul class="nav nav-pills">
                   <li><%= link_to 'QUÉ ES ESTO', page_path("que-es-esto") %></li>
                   <li class="dropdown" id="ver">
@@ -66,34 +66,34 @@
                   <li><%= link_to 'FAQ', page_path("faq") %></li>
                 </ul>
               </div>
-            </div>
-            <div class="span4" id="topmenu">
-              <ul>
-                <% unless user_signed_in? %>
-                  <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
-                  <li>/</li>
-                  <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
-                <% else %>
-                  <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
-                  <% if current_user.role == 'admin' %>
+              <div class="span6" id="topmenu">
+                <ul>
+                  <% unless user_signed_in? %>
+                    <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
                     <li>/</li>
-                    <li><%= link_to 'administrar', admin_users_path %>
+                    <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
+                  <% else %>
+                    <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
+                    <% if current_user.role == 'admin' %>
+                      <li>/</li>
+                      <li><%= link_to 'administrar', admin_users_path %>
+                    <% end %>
+                    <li>/</li>
+                    <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
                   <% end %>
-                  <li>/</li>
-                  <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
-                <% end %>
-              </ul>
-              <div class="control-group">
-                <div class="controls">
-                  <div class="input-prepend">
-                    <form id="search-form" action="/search" method="get">
-                      <span class="add-on"> <i class="icon-search"></i> </span>
-                      <input type="search" class="span3" placeholder="Buscar" name="q" id="search"/>
-                    </form>
+                </ul>
+                <div class="control-group">
+                  <div class="controls">
+                    <div class="input-prepend">
+                      <form id="search-form" action="/search" method="get">
+                        <span class="add-on"> <i class="icon-search"></i> </span>
+                        <input type="search" class="span3" placeholder="Buscar" name="q" id="search"/>
+                      </form>
+                    </div>
                   </div>
-                </div>
-              </div><!-- control-group -->
-            </div><!-- topmenu -->
+                </div><!-- control-group -->
+              </div><!-- topmenu -->
+            </div>
           </div>
       </div><!-- header -->
       <div class="container" id="content">
