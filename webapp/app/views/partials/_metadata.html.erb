@@ -21,8 +21,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr> <td><b>Fecha</b>: <%= l content.happened_at, :format => :short %> </td></tr>
-        <tr><td><b>Hora</b>: <%= l content.happened_at, :format => :short %> </td></tr>
+        <tr> <td><b>Fecha</b>: <%= l content.happened_at, :format => "%d-%m-%Y" %> </td></tr>
+        <tr><td><b>Hora</b>: <%= l content.happened_at, :format => "%H:%M" %> </td></tr>
       </tbody>
       <thead>
         <tr>

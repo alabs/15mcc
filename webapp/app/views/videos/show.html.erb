@@ -1,5 +1,4 @@
 <div class="row" style="margin:20px;">
-  <%= link_to "< Volver", "#", :id => "goback" %>
 
   <%= render :partial => "partials/content_header", :locals => { :content => @video, :type => "video" } %>
 
@@ -10,11 +9,12 @@
   </div>
 
   <div class="span5 right">
+    <% user = @video.user ? @video.user.username : "anonymous" %>
     <% if can? :update, @video %> 
-        <%= link_to 'Editar', edit_video_path(@video), :class => "btn" %>
+      <%= link_to 'Editar', edit_video_path(@video, :username => user), :class => "btn" %>
     <% end %>
     <% if can? :destroy, @video %> 
-        <%= link_to 'Eliminar', @video, :class => "btn", confirm: '¿Estas segura?', method: :delete %>
+      <%= link_to 'Eliminar', video_path(@video, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
     <%= link_to "Descargar", page_path("videodownloader"), :class => "btn" %>
