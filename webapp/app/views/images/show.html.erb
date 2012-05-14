@@ -1,21 +1,31 @@
-<div class="row" style="margin-top:20px;">
-  <div class="span9">
-    <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
-    <h2><%= @image.title %></h2>
-    <%= image_tag(@image.img.url) %>
+<div class="row" style="margin:20px;">
 
+  <%= render :partial => "partials/content_header", :locals => { :content => @image, :type => "image" } %>
+
+  <div class="center">
+    <%= image_tag(@image.img.url) %>
+  </div>
+
+  <div class="span6">
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
+  </div>
+
+  <div class="span5 right">
+    <% user = @image.user ? @image.user.username : "anonymous" %>
     <% if can? :update, @image %> 
-        <%= link_to 'Editar', edit_image_path(@image), :class => "btn btn-primary" %>
+      <%= link_to 'Editar', edit_image_path(@image, :username => user), :class => "btn" %>
     <% end %>
     <% if can? :destroy, @image %> 
-        <%= link_to 'Eliminar', @image, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+        <%= link_to 'Eliminar', image_path(@image, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
-    <%= link_to "Descargar", download_image_path(@text), :class => "btn btn-success" %>
+    <%= link_to "Descargar", download_image_path(@image, :username => user), :class => "btn" %>
 
-    <%= render :partial => "partials/metadata", :locals => { :content => @image } %>
-    <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
-    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
-    <p><%= link_to 'Volver', images_path %>
+    <%= render :partial => "partials/change_priority", :locals => { :content => @image } %>
+
+    <a class="btn" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
   </div>
+
+  <%= render :partial => "partials/metadata", :locals => { :content => @image, :map => @map } %>
 </div>
+

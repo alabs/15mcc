@@ -1,0 +1,16 @@
+  <%= link_to "< Volver", "#", :id => "goback" %>
+
+  <div class="row">
+    <% if content.user %>
+      <%= link_to(image_tag(content.user.avatar.url(:normal)), profile_path(content.user)) %>
+      <%= link_to content.user.username, profile_path(content.user) %>
+    <% else %>
+      <div class="span2">
+        <%= image_tag "missing.png"%>
+      </div>
+      <div class="span8">
+        <h2><%= content.title %></h2>
+        Anónimo 
+      </div>
+    <% end %>
+  </div>

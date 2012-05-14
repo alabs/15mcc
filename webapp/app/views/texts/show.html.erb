@@ -1,29 +1,30 @@
-<div class="row" style="margin-top:20px;">
-  <div class="span9">
+<div class="row" style="margin:20px;">
 
-    <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
+  <%= render :partial => "partials/content_header", :locals => { :content => @text, :type => "text" } %>
 
-    <h2><%= @text.title %></h2>
     <p>
       <%= @text.to_html(@text.body).html_safe %> 
     </p>
 
+  <div class="span6">
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
+  </div>
+
+  <div class="span5 right">
     <% user = @text.user ? @text.user.username : "anonymous" %>
     <% if can? :update, @text %> 
-      <%= link_to 'Editar', edit_text_path(@text, :username => user), :class => "btn btn-primary" %>
+      <%= link_to 'Editar', edit_text_path(@text, :username => user), :class => "btn" %>
     <% end %>
     <% if can? :destroy, @text %> 
-        <%= link_to 'Eliminar', text_path(@text, :username => user), :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+        <%= link_to 'Eliminar', text_path(@text, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
-    <%= link_to "Descargar", download_text_path(@text, :username => user), :class => "btn btn-success" %>
+    <%= link_to "Descargar", download_text_path(@text, :username => user), :class => "btn" %>
 
-    <%= render :partial => "partials/metadata", :locals => { :content => @text } %>
-    <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
-    <% if @map != "[]" %>
-      <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
-    <% end %>
-    <p><%= link_to 'Volver', texts_path %>
+    <%= render :partial => "partials/change_priority", :locals => { :content => @text } %>
+
+    <a class="btn" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
   </div>
-</div>
 
+  <%= render :partial => "partials/metadata", :locals => { :content => @text, :map => @map } %>
+</div>

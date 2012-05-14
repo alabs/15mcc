@@ -1,21 +1,28 @@
-<div class="row" style="margin-top:20px;">
-  <div class="span9">
-    <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
-    <h2><%= @video.title %></h2>
-    <%= raw @video.embed_html %>
+<div class="row" style="margin:20px;">
 
+  <%= render :partial => "partials/content_header", :locals => { :content => @video, :type => "video" } %>
+
+  <div class="center" style="text-align:center;"><%= raw @video.embed_html %></div>
+
+  <div class="span6">
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @video } %>
+  </div>
+
+  <div class="span5 right">
+    <% user = @video.user ? @video.user.username : "anonymous" %>
     <% if can? :update, @video %> 
-        <%= link_to 'Editar', edit_video_path(@video), :class => "btn btn-primary" %>
+      <%= link_to 'Editar', edit_video_path(@video, :username => user), :class => "btn" %>
     <% end %>
     <% if can? :destroy, @video %> 
-        <%= link_to 'Eliminar', @video, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+      <%= link_to 'Eliminar', video_path(@video, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete %>
     <% end %>
 
-    <%= link_to "Descargar", page_path("videodownloader"), :class => "btn btn-success" %>
+    <%= link_to "Descargar", page_path("videodownloader"), :class => "btn" %>
 
-    <%= render :partial => "partials/metadata", :locals => { :content => @video } %>
-    <%= render :partial => "partials/social_buttons", :locals => { :content => @video } %>
-    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
-    <p><%= link_to 'Volver', videos_path %>
+    <%= render :partial => "partials/change_priority", :locals => { :content => @video } %>
+
+    <a class="btn" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
   </div>
+
+  <%= render :partial => "partials/metadata", :locals => { :content => @video, :map => @map } %>
 </div>

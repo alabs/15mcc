@@ -1,43 +1,75 @@
 
-  <% if can? :priority, content %>
-    <% if content.priority == true %>
-      <p><%= link_to image_tag("priority-ok.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "remove", "data-type" => content.class.to_s %></p>
-    <% else %>
-      <p><%= link_to image_tag("priority-ko.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "add", "data-type" => content.class.to_s %></p>
-    <% end %>
-  <% end %>
-    
-    <a class="btn btn-danger" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
-    <p/>
+<div class="span12" style="margin-top:2em;">
 
-    <div class="well">
-      <p><strong>Dirección:</strong> <%= content.address %></p>
-      <p><strong>Ciudad:</strong> <%= content.city %></p>
-      <p><strong>País:</strong> <%= content.country %></p>
-      <p><strong>Latitud:</strong> <%= content.latitude %></p>
-      <p><strong>Longitud:</strong> <%= content.longitude %></p>
-      <p><strong>Tags:</strong> <%= content.tag_list %></p>
-
-      <% if content.author_myself == "1" %>
-        <p><strong>Autor:</strong><%= link_to content.user.username, profile_path(content.user) %></p>
-      <% else %>
-        <% if content.author_link %> 
-          <p><strong>Autor:</strong> <%= link_to content.author_name, content.author_link, :target => "_blank" %></p>
-        <% else %>
-          <p><strong>Autor:</strong> <%= content.author_name %></p>
+  <div class="span3" id="content-metadata">
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Dónde ha ocurrido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if content.address %>
+        <tr> <td><b>Dirección</b>: <%= content.address %> </td> </tr>
         <% end %>
-      <% end %>
+        <tr> <td><b>Ciudad / País</b>: <%= content.city %> / <%= content.country %> </td></tr>
+        <tr><td><b>Latitud / Longitud</b>: <%= content.latitude %> / <%= content.longitude %> </td></tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th>Cuándo ha ocurrido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> <td><b>Fecha</b>: <%= l content.happened_at, :format => "%d-%m-%Y" %> </td></tr>
+        <tr><td><b>Hora</b>: <%= l content.happened_at, :format => "%H:%M" %> </td></tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th>Etiquetas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> <td> <%= content.tag_list %></td></tr>
+      </tbody>
+    </table>
 
-    </div>
-    <div class="well">
-      <% if content.user %>
-        <p><strong>Creado por:</strong> <%= link_to content.user.username, profile_path(content.user) %></p>
-      <% else %>
-        <p><strong>Creado por:</strong> anonymous</p>
-      <% end %>
-      <p><strong>Publicado:</strong> <%= l content.created_at, :format => :short %></p>
-      <p><strong>Ha ocurrido:</strong> <%= l content.happened_at, :format => :short %></p>
-    </div>
+    <table class="table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Material subido por</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> <td>
+          <% if content.author_myself == "1" %>
+            <%= link_to content.user.username, profile_path(content.user) %>
+          <% else %>
+            <% if content.author_link %> 
+             <%= link_to content.author_name, content.author_link, :target => "_blank" %>
+            <% else %>
+             <%= content.author_name %>
+            <% end %>
+          <% end %>
+        </td></tr>
+      </tbody>
+      <thead>
+        <tr>
+          <th>Fecha y hora de subida</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr> <td><%= l content.created_at, :format => :short %></td> </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="span5" id="content-map">
+    <%= gmaps("map_options" => { "zoom" => 7, "auto_zoom" => false},"markers" => { "data" => map }) %>
+  </div>
+
+</div>
+
 
     <div class="modal" id="abuse-modal" style="display:none;">
       <div class="modal-header">
