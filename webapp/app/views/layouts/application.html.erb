@@ -20,19 +20,24 @@
         <div class="container" id="main-header">
           <div class="row">
             <div class="span2" id="ribbon">
-              <%= image_tag('ribbon.png') %>
+              <%= image_tag('ribbon2.png') %>
             </div>
             <div class="span10" id="logo">
-              <%= link_to image_tag('logo-banco.png', :style => "margin-top:3em;"), root_path, :style => "vertical-align:top" %>
-              <%= link_to image_tag('lightbulb.png', :style => "position:relative;"), root_path %>
+              <div id="logo-banco">
+                <%= link_to image_tag('logo-banco.png'), root_path %>
+              </div>
+              <div id="light">
+                <%= link_to image_tag('lightbulb.png'), root_path %>
+              </div>
             </div>
           </div><!-- row -->
         </div><!-- container -->
-        <div class="container-fluid" id="mainnav" style="margin-left: -10px;margin-right: -10px;">
+        <div class="container-fluid" id="mainnav">
+          &nbsp;
         </div><!-- mainnav -->
           <div class="container">
             <div class="row">
-              <div class="span16">
+              <div class="span16" id="mainnavbar">
                 <ul class="nav nav-pills">
                   <li><%= link_to 'QUÉ ES ESTO', page_path("que-es-esto") %></li>
                   <li class="dropdown" id="ver">
