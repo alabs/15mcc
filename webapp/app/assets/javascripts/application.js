@@ -36,6 +36,10 @@ function displayLoggedinUserLinks() {
     loginLink.hide();
     // send HTML
     // if(userGreetings){ userGreetings.update("<span id='username'>username</span>"); }
+    var aa = readCookie('a');
+    if (aa == 1) {
+      $(".admin-link").show();
+    }
     logoutLink.show();
   }
   return true;
