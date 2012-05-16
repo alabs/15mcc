@@ -67,14 +67,14 @@
                 </ul>
               </div>
               <div class="span6" id="topmenu">
-                <div id="login-link">
+                <div id="login-link" style="display:none;">
                   <ul>
                     <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
                     <li>/</li>
                     <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
                   </ul>
                 </div><!-- login-link -->
-                <div id="logout-link">
+                <div id="logout-link" style="display:none;">
                   <% if user_signed_in? %>
                   <ul>
                     <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
