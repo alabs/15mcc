@@ -4,11 +4,11 @@ module ApplicationHelper
     flash.each do |name, msg|
       cookies[:flash_notice] = {
         :value => msg,
-        :expires => expiration || Time.now - 1.day
+        :expires => expiration || 1.minutes.from_now
       }
       cookies[:flash_notice_class] = {
         :value => name,
-        :expires => expiration || Time.now - 1.day
+        :expires => expiration || 1.minutes.from_now
       }
     end
   end
