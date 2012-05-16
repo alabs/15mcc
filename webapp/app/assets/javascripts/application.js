@@ -25,8 +25,8 @@ function readCookie(name) {
 
 function displayLoggedinUserLinks() {
   var username = readCookie('username');
-  var loginLink = $("login");
-  var logoutLink = $("logout");
+  var loginLink = $("#login-link");
+  var logoutLink = $("#logout-link");
   if (username == null) {
     loginLink.show();
     logoutLink.hide();
@@ -35,7 +35,7 @@ function displayLoggedinUserLinks() {
     loginLink.hide();
     // send HTML
     // if(userGreetings){ userGreetings.update("<span id='username'>username</span>"); }
-    logout.show();
+    logoutLink.show();
   }
   return true;
 }

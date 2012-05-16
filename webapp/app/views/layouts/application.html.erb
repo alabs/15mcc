@@ -67,12 +67,16 @@
                 </ul>
               </div>
               <div class="span6" id="topmenu">
-                <ul>
-                  <% unless user_signed_in? %>
+                <div id="login-link" style="display:none;">
+                  <ul>
                     <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
                     <li>/</li>
                     <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
-                  <% else %>
+                  </ul>
+                </div><!-- login-link -->
+                <div id="logout-link" style="display:none;">
+                  <% if user_signed_in? %>
+                  <ul>
                     <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
                     <% if current_user.role == 'admin' %>
                       <li>/</li>
@@ -80,8 +84,9 @@
                     <% end %>
                     <li>/</li>
                     <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
-                  <% end %>
-                </ul>
+                  </ul>
+                <% end %>
+                </div><!-- logout-link -->
                 <div class="control-group">
                   <div class="controls">
                     <div class="input-prepend">
