@@ -51,3 +51,6 @@ es:
         subject: 'Instrucciones para cambiar tu contraseña de 15M.cc'
       unlock_instructions:
         subject: 'Instrucciones para desbloquear tu cuenta de 15M.cc'
+    omniauth_callbacks:
+      failure: 'No has sido autorizado en la cuenta %{kind} porque "%{reason}".'
+      success: 'Has sido autorizado satisfactoriamente de la cuenta %{kind}.'
