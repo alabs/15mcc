@@ -1,7 +1,9 @@
-<div class="row" style="margin-top:20px;">
-  <div class="span8">
+<div class="row" style="margin:20px;">
+  <div class="span11">
     <h1>Mapa geográfico</h1>
     <hr />
-    <%= gmaps("markers" => { "data" => @map, "options" => { "randomize" => true } } ) %>
+    <div id="general-map">
+      <%= gmaps("markers" => { "data" => @map, "options" => { "randomize" => true } } ) %>
+    </div>
   </div>
 </div>
