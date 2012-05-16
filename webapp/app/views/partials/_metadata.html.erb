@@ -24,19 +24,21 @@
         <tr> <td><b>Fecha</b>: <%= l content.happened_at, :format => "%d-%m-%Y" %> </td></tr>
         <tr><td><b>Hora</b>: <%= l content.happened_at, :format => "%H:%M" %> </td></tr>
       </tbody>
-      <thead>
-        <tr>
-          <th>Etiquetas</th>
-        </tr>
-      </thead>
-      <tbody>
-      <tr><td>
-        <% content.tags.each do |tag| %>
-          <%= link_to tag, tag_show_path(tag) %>
-          <%= "|" unless tag == content.tags.last %>
-        <% end %>
-      </td></tr>
-      </tbody>
+      <% if content.tags %>
+        <thead>
+          <tr>
+            <th>Etiquetas</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr><td>
+          <% content.tags.each do |tag| %>
+            <%= link_to tag, tag_show_path(tag) %>
+            <%= "|" unless tag == content.tags.last %>
+          <% end %>
+        </td></tr>
+        </tbody>
+      <% end %>
     </table>
 
     <table class="table table-bordered table-condensed">
