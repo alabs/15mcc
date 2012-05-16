@@ -30,7 +30,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr> <td> <%= content.tag_list %></td></tr>
+      <tr><td>
+        <% content.tags.each do |tag| %>
+          <%= link_to tag, tag_show_path(tag) %>
+          <%= "|" unless tag == content.tags.last %>
+        <% end %>
+      </td></tr>
       </tbody>
     </table>
 

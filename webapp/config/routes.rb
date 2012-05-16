@@ -20,8 +20,8 @@ Webapp::Application.routes.draw do
 
   get 'tags/search' => 'tags#search'
   get 'tags' => 'tags#index'
-  match '/tags/show/:tag' => "tags#show"
-  match '/tags/small/:tags' => "tags#small"
+  get '/tags/show/:tag' => "tags#show", :as => "tag_show"
+  get '/tags/small/:tags' => "tags#small"
 
   get 'maps' => 'maps#index'
   match '/maps/search/:address' => "maps#search"
