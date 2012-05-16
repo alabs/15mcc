@@ -5,6 +5,7 @@ class PagesController < ApplicationController
 
   def index
     authorize! :index, Page
+    set_http_cache(6.hours, visibility = true)
   end
 
   def bank
