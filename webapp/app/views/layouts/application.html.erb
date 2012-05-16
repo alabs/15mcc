@@ -11,9 +11,10 @@
   <body>
     <div id="wrapper" class="container">
       <% flash.each do |name, msg| %>
-        <div id="flash-message" class="alert alert-<%= name %>" data-dismiss="alert">
+        <% flash_notice_cookie(msg) %>
+        <div id="flash-message" class="alert alert-<%= cookies[:flash_notice_class] %>" data-dismiss="alert">
           <a href="#" class="close">x</a>
-          <strong><%= msg %></strong>
+          <strong><%= cookies[:msg] %></strong>
         </div>
       <% end %>
       <div id="header">
