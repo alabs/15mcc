@@ -1,0 +1,2 @@
+module MySessionsHelper
+end

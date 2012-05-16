@@ -1,0 +1,23 @@
+<div class="span6 mt1">
+
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => "form-horizontal"} ) do |f| %>
+    <legend>Iniciar sesión</legend>
+  
+        <%= f.text_field :login %>
+        <%= f.password_field :password %>
+  
+    <% if devise_mapping.rememberable? -%>
+      <%= f.check_box :remember_me %> <%= f.label :remember_me, "Recordarme" %>
+    <% end -%>
+  
+    <div class="form-actions"><%= f.submit "Iniciar sesión", :class => "btn btn-primary" %></div>
+  <% end %>
+  
+  <%= render "links" %>
+
+</div>
+
+<div class="span5 mt2">
+  <%= link_to image_tag('facebook.png'), user_omniauth_authorize_path(:facebook), :title => 'Conectar mediante Facebook' %>
+  <!-- <%= link_to image_tag('google.png'), '#', :title => 'Conectar mediante Google' %> -->
+</div>

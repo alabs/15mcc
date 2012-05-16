@@ -6,7 +6,7 @@ Webapp::Application.routes.draw do
   Mercury::Engine.routes
 
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout', :sign_up => 'signup' },
-    :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+    :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", :sessions => 'my_sessions' }
   get 'banned' => 'pages#banned', :as => 'banned'
 
  # resources :nodes
