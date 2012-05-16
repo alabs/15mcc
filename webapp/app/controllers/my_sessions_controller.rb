@@ -1,6 +1,13 @@
 class MySessionsController < Devise::SessionsController
 
-  after_filter :set_cookie
+  after_filter :set_cookie, :except => :destroy
+
+  def destroy
+    super
+    session[:fb_token] = nil
+    cookies.delete(:username)
+    cookies.delete(:a)
+  end
 
   protected
 
@@ -16,9 +23,6 @@ class MySessionsController < Devise::SessionsController
           :expires => 2.days.from_now
         }
       end
-    else
-      cookies.delete(:username)
-      cookies.delete(:a)
     end
   end
 end
