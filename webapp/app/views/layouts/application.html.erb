@@ -7,22 +7,26 @@
     <%= stylesheet_link_tag 'application', :media => 'all' %>
     <%= csrf_meta_tags %>
     <meta name="google-site-verification" content="lNyaDKKHJNJOlJLtI9u85zRk1JfHqPWwptZIbx8_SIc" />
+    <%= javascript_include_tag 'application' %>
+    <%= yield :scripts %>
   </head>
   <body>
     <div id="wrapper" class="container">
       <% flash.each do |name, msg| %>
         <% flash_notice_cookie(msg) %>
-        <script type="text/javascript">
-          //var m = "<%= msg %>";
-          //console.log(m);
-          //if (m != null) {
-          //  $("#flash-message").show();
-          //}
-        </script>
-        <div id="flash-message" class="alert alert-<%= cookies[:flash_notice_class] %>" data-dismiss="alert">
+        <div style="display:none;" id="flash-message" class="alert alert-<%= cookies[:flash_notice_class] %>" data-dismiss="alert">
           <a href="#" class="close">x</a>
           <strong><%= cookies[:flash_notice] %></strong>
         </div>
+        <script type="text/javascript">
+          $(function() {
+            var m = "<%= msg %>";
+            console.log(m);
+            if (m != null) {
+              $("#flash-message").show();
+            }
+          });
+        </script>
       <% end %>
       <div id="header">
         <div class="container" id="main-header">
@@ -143,8 +147,6 @@
           <a href="#" class="btn btn-primary" data-dismiss="modal">Cerrar</a>
         </div>
       </div><!-- modal-welcome-beta -->
-      <%= javascript_include_tag 'application' %>
-      <%= yield :scripts %>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-31485437-1']);
