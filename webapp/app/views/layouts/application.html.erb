@@ -20,10 +20,14 @@
         </div>
         <script type="text/javascript">
           $(function() {
-            var m = "<%= msg %>";
+            var m = "<%= cookies[:flash_notice] %>";
             console.log(m);
             if (m != null) {
               $("#flash-message").show();
+              "<% cookies.delete :flash_notice %>";
+              "<% cookies.delete :flash_notice_class %>";
+            } else {
+              $("#flash-message").hide();
             }
           });
         </script>
