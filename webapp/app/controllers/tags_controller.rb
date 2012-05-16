@@ -51,7 +51,7 @@ class TagsController < ApplicationController
 
     if params["term"]
       # buscamos el termino
-      tags = tags.grep(/#{params["term"]}/)
+      tags = tags.grep(/#{params["term"]}/i)
     end
     
     # devolvemos con una list un hash con cada termino que encontramos
