@@ -24,9 +24,16 @@ p, h1, h2, h3
   @extend .alert-info
 
 #wrapper
-  background-color: #fff
   padding: 10px
   margin-top: 15px 
+  background: #e5e5e5 /* Old browsers */
+  background: -moz-linear-gradient(top,  #e5e5e5 0%, #ffffff 5%) /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(5%,#ffffff)) /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #e5e5e5 0%,#ffffff 5%) /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #e5e5e5 0%,#ffffff 5%) /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #e5e5e5 0%,#ffffff 5%) /* IE10+ */
+  background: linear-gradient(top,  #e5e5e5 0%,#ffffff 5%) /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ) /* IE6-9 */
 
 #flash-message
   position: fixed
@@ -72,11 +79,19 @@ p, h1, h2, h3
     float: left
 
 #mainnav
-  background-color: #000
+  margin: -110px -10px 0px -10px
   margin-left: 10px
   margin-right: -10px
   margin-top: 20px
   height: 20px
+  background: #45484d /* Old browsers */
+  background: -moz-linear-gradient(top,  #45484d 0%, #000000 100%) /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)) /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #45484d 0%,#000000 100%) /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #45484d 0%,#000000 100%) /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #45484d 0%,#000000 100%) /* IE10+ */
+  background: linear-gradient(top,  #45484d 0%,#000000 100%) /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ) /* IE6-9 */
 
 #mainnavbar
   position: relative

@@ -73,10 +73,26 @@
                       <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                      <li><%= link_to 'texto', new_text_path %></li>
-                      <li><%= link_to 'foto', new_image_path %></li>
-                      <li><%= link_to 'audio', new_audio_path %></li>
-                      <li><%= link_to 'vídeo', new_video_path %></li>
+                      <li>
+                        <%= link_to new_text_path do %>
+                          <i class="icon-align-left"></i> texto
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to new_image_path do %>
+                          <i class="icon-picture"></i> foto
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to new_audio_path do %>
+                          <i class="icon-volume-up"></i> audio
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to new_video_path do %>
+                          <i class="icon-film"></i> vídeo
+                        <% end %>
+                      </li>
                     </ul>
                   </li>
                   <li><%= link_to 'FAQ', page_path("faq") %></li>

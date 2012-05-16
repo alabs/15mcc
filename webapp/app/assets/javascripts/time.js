@@ -26,7 +26,7 @@ $(function(){
               break;
             case "Audio":
               type_slug = "audios"
-              type_icon = "film"
+              type_icon = "volume-up"
               break;
             default:
               type_slug = "texts"
