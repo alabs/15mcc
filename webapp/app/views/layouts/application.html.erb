@@ -20,10 +20,14 @@
         </div>
         <script type="text/javascript">
           $(function() {
-            var m = "<%= msg %>";
+            var m = "<%= cookies[:flash_notice] %>";
             console.log(m);
             if (m != null) {
               $("#flash-message").show();
+              "<% cookies.delete :flash_notice %>";
+              "<% cookies.delete :flash_notice_class %>";
+            } else {
+              $("#flash-message").hide();
             }
           });
         </script>
@@ -38,17 +42,17 @@
               <div id="logo-banco">
                 <%= link_to image_tag('logo-banco.png'), root_path %>
               </div>
-              <div id="light">
+              <div id="light" style="position: fixed; right: 210px;">
                 <%= link_to image_tag('lightbulb.png'), root_path %>
               </div>
             </div>
           </div><!-- row -->
         </div><!-- container -->
+          <div class="container">
+            <div class="row">
         <div class="container-fluid" id="mainnav">
           &nbsp;
         </div><!-- mainnav -->
-          <div class="container">
-            <div class="row">
               <div class="span6" id="mainnavbar">
                 <ul class="nav nav-pills">
                   <li><%= link_to 'QUÉ ES ESTO', page_path("que-es-esto") %></li>
