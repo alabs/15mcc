@@ -1,4 +1,4 @@
-SitemapGenerator::Sitemap.default_host = "http://15m.cc"
+SitemapGenerator::Sitemap.default_host = "http://bancodeideas.15m.cc"
 
 SitemapGenerator::Sitemap.create do
 
@@ -22,3 +22,4 @@ SitemapGenerator::Sitemap.create do
   end
 
 end
+
