@@ -7,14 +7,12 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if @user.persisted?
       cookies[:username] = {
         :value => @user.username,
-        :expires => 2.days.from_now,
-        :domain => "bancodeideas.15m.cc"
+        :expires => 2.days.from_now
       }
       if @user.role == 'admin'
         cookies[:a] = {
           :value => 1,
-          :expires => 2.days.from_now,
-          :domain => "bancodeideas.15m.cc"
+          :expires => 2.days.from_now
         }
       end
       flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => 'Facebook'
