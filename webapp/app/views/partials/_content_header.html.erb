@@ -2,8 +2,13 @@
 
   <div class="row">
     <% if content.user %>
-      <%= link_to(image_tag(content.user.avatar.url(:normal)), profile_path(content.user)) %>
-      <%= link_to content.user.username, profile_path(content.user) %>
+      <div class="span2">
+        <%= link_to(image_tag(content.user.avatar.url(:normal)), profile_path(content.user.username)) %>
+      </div>
+      <div class="span8">
+        <h2><%= content.title %></h2>
+        <%= link_to content.user.username, profile_path(content.user.username) %>
+      </div>
     <% else %>
       <div class="span2">
         <%= image_tag "missing.png"%>
@@ -13,4 +18,16 @@
         Anónimo 
       </div>
     <% end %>
+    <div class="span1">
+      <% case type %>
+        <% when "text" %>
+          <%= image_tag "icons/glyphicons_029_notes_2.png" %>
+        <% when "image" %>
+          <%= image_tag "icons/glyphicons_159_picture.png" %>
+        <% when "audio" %>
+          <%= image_tag "icons/glyphicons_184_volume_up.png" %>
+        <% when "video" %>
+          <%= image_tag "icons/glyphicons_008_film.png" %>
+      <% end %> 
+    </div>
   </div>

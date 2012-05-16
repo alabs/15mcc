@@ -1,27 +1,41 @@
-<div class="row" style="margin-top:20px;">
-  <div class="span9">
-    <span class="label label-info"><%= link_to "Volver a la página anterior", "#", :id => "goback" %></span>
-    <h2><%= @audio.title %></h2>
+<div class="row" style="margin:20px;">
 
-    <audio controls="controls">
-      <source src="<%= @audio.archive.url %>" />
-    </audio>
+  <%= render :partial => "partials/content_header", :locals => { :content => @audio, :type => "audio" } %>
 
-    <div id="flash-fallback"></div>
+  <div class="center">
+    <audio controls="controls"><source src="<%= @audio.archive.url %>" /></audio><div id="flash-fallback"></div>
+  </div>
 
+  <div class="span4">
+    <%= render :partial => "partials/social_buttons", :locals => { :content => @audio } %>
+  </div>
+
+  <div id="actions">
+    <% user = @audio.user ? @audio.user.username : "anonymous" %>
     <% if can? :update, @audio %> 
-        <%= link_to 'Editar', edit_audio_path(@audio), :class => "btn btn-primary" %>
+      <%= link_to edit_audio_path(@audio, :username => user), :class => "btn" do %>
+        <i class="icon-pencil"></i>
+        Editar
+      <% end %>
     <% end %>
     <% if can? :destroy, @audio %> 
-        <%= link_to 'Eliminar', @audio, :class => "btn btn-danger", confirm: '¿Estas segura?', method: :delete %>
+      <%= link_to audio_path(@audio, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete do %>
+        <i class="icon-remove"></i>
+        Eliminar
+      <% end %>
     <% end %>
 
-    <%= link_to "Descargar", download_audio_path(@audio), :class => "btn btn-success" %>
+    <%= link_to download_audio_path(@audio, :username => user), :class => "btn" do %>
+      <i class="icon-circle-arrow-down"></i>
+      Descargar
+    <% end %>
 
-    <%= render :partial => "partials/metadata", :locals => { :content => @audio } %>
-    <%= render :partial => "partials/social_buttons", :locals => { :content => @audio } %>
-    <%= render :partial => "partials/geo_map", :locals => { :map => @map } %>
-    <p><%= link_to 'Volver', audios_path %>
+    <%= render :partial => "partials/change_priority", :locals => { :content => @audio } %>
+
+    <a class="btn" data-toggle="modal" href="#abuse-modal">
+      <i class="icon-exclamation-sign"></i>
+      Denunciar</a>
   </div>
-</div>
 
+  <%= render :partial => "partials/metadata", :locals => { :content => @audio, :map => @map } %>
+</div>

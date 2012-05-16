@@ -6,24 +6,35 @@
       <%= @text.to_html(@text.body).html_safe %> 
     </p>
 
-  <div class="span6">
+  <div class="span4">
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
   </div>
 
-  <div class="span5 right">
+  <div id="actions" class="span7">
     <% user = @text.user ? @text.user.username : "anonymous" %>
     <% if can? :update, @text %> 
-      <%= link_to 'Editar', edit_text_path(@text, :username => user), :class => "btn" %>
+      <%= link_to edit_text_path(@text, :username => user), :class => "btn" do %>
+        <i class="icon-pencil"></i>
+        Editar
+      <% end %>
     <% end %>
     <% if can? :destroy, @text %> 
-        <%= link_to 'Eliminar', text_path(@text, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete %>
+      <%= link_to text_path(@text, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete do %>
+        <i class="icon-remove"></i>
+        Eliminar
+      <% end %>
     <% end %>
 
-    <%= link_to "Descargar", download_text_path(@text, :username => user), :class => "btn" %>
+    <%= link_to download_text_path(@text, :username => user), :class => "btn" do %>
+      <i class="icon-circle-arrow-down"></i>
+      Descargar
+    <% end %>
 
     <%= render :partial => "partials/change_priority", :locals => { :content => @text } %>
 
-    <a class="btn" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
+    <a class="btn" data-toggle="modal" href="#abuse-modal">
+      <i class="icon-exclamation-sign"></i>
+      Denunciar</a>
   </div>
 
   <%= render :partial => "partials/metadata", :locals => { :content => @text, :map => @map } %>

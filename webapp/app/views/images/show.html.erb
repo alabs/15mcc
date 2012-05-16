@@ -6,26 +6,36 @@
     <%= image_tag(@image.img.url) %>
   </div>
 
-  <div class="span6">
+  <div class="span4">
     <%= render :partial => "partials/social_buttons", :locals => { :content => @image } %>
   </div>
 
-  <div class="span5 right">
+  <div id="actions">
     <% user = @image.user ? @image.user.username : "anonymous" %>
     <% if can? :update, @image %> 
-      <%= link_to 'Editar', edit_image_path(@image, :username => user), :class => "btn" %>
+      <%= link_to edit_image_path(@image, :username => user), :class => "btn" do %>
+        <i class="icon-pencil"></i>
+        Editar
+      <% end %>
     <% end %>
     <% if can? :destroy, @image %> 
-        <%= link_to 'Eliminar', image_path(@image, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete %>
+      <%= link_to image_path(@image, :username => user), :class => "btn", confirm: '¿Estas segura?', method: :delete do %>
+        <i class="icon-remove"></i>
+        Eliminar
+      <% end %>
     <% end %>
 
-    <%= link_to "Descargar", download_image_path(@image, :username => user), :class => "btn" %>
+    <%= link_to download_image_path(@image, :username => user), :class => "btn" do %>
+      <i class="icon-circle-arrow-down"></i>
+      Descargar
+    <% end %>
 
     <%= render :partial => "partials/change_priority", :locals => { :content => @image } %>
 
-    <a class="btn" data-toggle="modal" href="#abuse-modal">Denunciar contenido</a>
+    <a class="btn" data-toggle="modal" href="#abuse-modal">
+      <i class="icon-exclamation-sign"></i>
+      Denunciar</a>
   </div>
 
   <%= render :partial => "partials/metadata", :locals => { :content => @image, :map => @map } %>
 </div>
-
