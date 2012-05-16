@@ -26,3 +26,28 @@ $(function(){
   });
 
 });
+
+// Image Map Rollover with jQuery - svenerberg
+// http://www.svennerberg.com/2008/09/imagemap-rollover/
+// Runs when the DOM has been loaded
+$(document).ready(function() {
+        // Check if map exists
+        if($('#homepage-map')) {
+                // Loop through each AREA in the imagemap
+                $('#homepage-map area').each(function() {
+        
+                        // Assigning an action to the mouseover event
+                        $(this).mouseover(function(e) {
+                                var country_id = $(this).attr('id').replace('area-', 'section-');
+                                $('#'+country_id).show();
+                        });
+                        
+                        // Assigning an action to the mouseout event
+                        $(this).mouseout(function(e) {
+                                var country_id = $(this).attr('id').replace('area-', 'section-');
+                                $('#'+country_id).hide();
+                        });
+                        
+                });
+        }
+});

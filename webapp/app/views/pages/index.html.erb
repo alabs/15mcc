@@ -1,6 +1,109 @@
 <div class="row">
   <div class="span12" style="text-align:center;">
-    <img src="/assets/home-navigation.png" />
+    <div id="map" style="text-alig:center; margin-left:auto; margin-right:auto;">
+      <img src="/assets/transp.gif" id="transparent_map" alt="" usemap="#homepage-map" />
+      <img src="/assets/home-navigation.png" alt="" />
+      <map id="homepage-map" name="homepage-map">
+        <area shape="poly" id="area-maps" coords="77,43,43,74,59,115,106,116,116,74" href="/maps" alt="Mapa geográfico" title="Mapa geográfico"   />
+        <area shape="poly" id="area-timeline" coords="337,45,305,70,313,108,354,123,381,90,367,52" href="/timeline" alt="Línea del tiempo" title="Línea del tiempo"   />
+        <area shape="poly" id="area-tags" coords="210,293,178,311,179,356,221,374,249,331,237,307" href="/tags" alt="Etiquetas" title="Etiquetas"   />
+        <area shape="poly" id="area-textos" coords="499,43,477,51,466,71,468,101,485,118,510,124,537,107,542,85,538,67,526,52" href="<%= url_for new_text_path %>" alt="Textos" title="Textos"   />
+        <area shape="poly" id="area-videos" coords="494,272,470,283,463,309,472,334,490,346,516,349,533,339,541,317,540,295,522,277" href="<%= url_for new_video_path %>" alt="Vídeos" title="Vídeos"   />
+        <area shape="poly" id="area-fotos" coords="729,45,708,50,694,67,692,93,708,110,723,122,748,119,761,106,768,83,764,63,749,48" href="<%= url_for new_image_path %>" alt="Fotos" title="Fotos"   />
+        <area shape="poly" id="area-audios" coords="723,270,700,285,691,295,692,317,705,334,719,349,740,350,763,338,770,316,764,303,753,282,743,273" href="<%= url_for new_audio_path %>" alt="Audios" title="Audios"  />
+      </map>
+  <ul>
+    <li id="section-maps"><a href="/maps">Mapa geográfico</a></li>
+    <li id="section-timeline"><a href="/timeline">Línea del tiempo</a></li>
+    <li id="section-tags"><a href="/tags">Etiquetas</a></li>
+    <li id="section-textos"><a href="/texts">Textos</a></li>
+    <li id="section-audios"><a href="/audios">Audios</a></li>
+    <li id="section-fotos"><a href="/fotos">Fotos</a></li>
+    <li id="section-videos"><a href="/videos">Vídeos</a></li>
+  </ul>
+    </div>
   </div>
 </div>
 
+
+<style>
+#transparent_map {
+        position: absolute;
+        z-index: 30;
+        width: 835px;
+        height: 403px;
+        border: none;
+}
+#map {
+  position: relative;
+  width: 835px;
+  height: 403px;
+}
+#map ul {
+  list-style: none;
+}
+#map li {
+  position: absolute;
+  z-index: 20;
+  text-indent: -1000em;
+  display: none;
+}
+
+#section-maps {
+  background: url(/assets/botones/mapa.png) no-repeat;
+  width: 100px;
+  height: 100px;
+  top: 43px; 
+  left: 40px;
+}
+
+#section-timeline {
+  background: url(/assets/botones/timeline.png) no-repeat;
+    height: 100px;
+    left: 301px;
+    top: 44px;
+    width: 100px;
+}
+
+#section-tags {
+  background: url(/assets/botones/etiquetas.png) no-repeat;
+  width: 100px;
+  height: 100px;
+    left: 170px;
+    top: 295px;
+}
+
+#section-fotos {
+  background: url(/assets/botones/fotos.png) no-repeat;
+  width: 100px;
+  height: 100px;
+    left: 689px;
+    top: 43px;
+}
+
+#section-audios {
+  background: url(/assets/botones/audios.png) no-repeat;
+  width: 100px;
+  height: 100px;
+    left: 689px;
+    top: 270px;
+}
+
+#section-videos {
+  background: url(/assets/botones/videos.png) no-repeat;
+  width: 100px;
+  height: 100px;
+    left: 462px;
+    top: 270px;
+}
+
+#section-textos {
+  background: url(/assets/botones/textos.png) no-repeat;
+  width: 100px;
+  height: 100px;
+    left: 462px;
+    top: 43px;
+}
+
+
+</style>
