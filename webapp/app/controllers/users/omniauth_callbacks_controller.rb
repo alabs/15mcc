@@ -10,6 +10,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         :expires => 2.days.from_now,
         :domain => "bancodeideas.15m.cc"
       }
+      if @user.role == 'admin'
+        cookies[:a] = {
+          :value => 1,
+          :expires => 2.days.from_now,
+          :domain => "bancodeideas.15m.cc"
+        }
+      end
       flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => 'Facebook'
       sign_in_and_redirect @user, :event => :authentication
     else

@@ -11,6 +11,13 @@ class MySessionsController < Devise::SessionsController
         :expires => 2.days.from_now,
         :domain => "bancodeideas.15m.cc"
       }
+      if current_user.role == 'admin'
+        cookies[:a] = {
+          :value => 1,
+          :expires => 2.days.from_now,
+          :domain => "bancodeideas.15m.cc"
+        }
+      end
     end
   end
 end
