@@ -25,6 +25,7 @@ function readCookie(name) {
 
 function displayLoggedinUserLinks() {
   var username = readCookie('username');
+  console.log("15M.CC DEBUG: " + username);
   var loginLink = $("#login-link");
   var logoutLink = $("#logout-link");
   if (username == null) {
