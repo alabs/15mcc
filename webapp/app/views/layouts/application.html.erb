@@ -74,7 +74,7 @@
                     <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
                   </ul>
                 </div><!-- login-link -->
-                <div id="logout-link" style="display:none;">
+                <div id="logout-link">
                   <% if user_signed_in? %>
                   <ul>
                     <li><%= link_to current_user.username,  "/profile/#{current_user.username}" %></li>
