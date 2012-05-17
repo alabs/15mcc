@@ -20,12 +20,12 @@
         </div>
         <script type="text/javascript">
           $(function() {
-            var m = "<%= cookies[:flash_notice] %>";
-            console.log(m);
+            var m = $.cookie('flash_notice');
+            //console.log(m);
             if (m != null) {
               $("#flash-message").show();
-              "<% cookies.delete :flash_notice %>";
-              "<% cookies.delete :flash_notice_class %>";
+              $.cookie("flash_notice", null);
+              $.cookie("flash_notice_class", null);
             } else {
               $("#flash-message").hide();
             }

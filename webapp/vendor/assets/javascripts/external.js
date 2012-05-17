@@ -6,6 +6,8 @@
 //= require jquery.purr
 //= require best_in_place
 
+//= require jquery.cookie
+
 // visualizaciones y demas
 //= require gmaps4rails/googlemaps.js
 //= require timeline
