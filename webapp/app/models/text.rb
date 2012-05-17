@@ -10,9 +10,10 @@ class Text < Content
     "
     <h5><a href='#{ get_absolute_url }'> ##{ERB::Util.html_escape title} </a></h5>
     <p>
-      #{ERB::Util.html_escape body}
+      <a href='#{ get_absolute_url }'>
+        #{body[0, 500]}...
+      </a>
     </p>
-    <b>Etiquetado con</b>: #{ tags }
     "
   end
 

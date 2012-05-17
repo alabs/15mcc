@@ -17,7 +17,6 @@ class Image < Content
       <h5>#{ERB::Util.html_escape title}</h5>
       <img class='infowindow-thumb' src='#{ img.url(:small) }' />
     </a>
-    <b>Etiquetado con</b>: #{ tags }
     "
   end
 

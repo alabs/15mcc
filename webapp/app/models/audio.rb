@@ -20,7 +20,6 @@ class Audio < Content
       <h5>##{ERB::Util.html_escape title}</h5>
       <p><img src='/assets/icon-audios.png'></p>
     </a>
-    <b>Etiquetado con</b>: #{ tags }
     "
   end
 

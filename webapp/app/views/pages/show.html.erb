@@ -1,3 +1,4 @@
+<% @title = @page.title %>
 <% if can? :update, @page %>
   <p><%= link_to "Editar página", "/editor" + request.path, id: "edit_link", data: { save_url: mercury_update_page_path(@page.slug) }, :class => "label" %></p>  
 <% end %>

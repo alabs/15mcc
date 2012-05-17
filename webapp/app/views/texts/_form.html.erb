@@ -1,7 +1,7 @@
 <div class="form-stacked main-form">
   <%= form_for(@text, :html => {:class => "content-form"} ) do |f| %>
   <fieldset>
-    <legend>Introducir nuevo texto</legend>
+    <legend><%= @title %></legend>
     <%= render :partial => "partials/copyright_notice" %>
     <div class="form-field">
       <%= f.text_field :title, required: true, placeholder: 'Título del texto', :class => 'span8' do %>
