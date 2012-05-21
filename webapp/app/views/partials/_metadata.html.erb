@@ -13,7 +13,9 @@
           <tr> <td><b>Dirección</b>: <%= content.address %> </td> </tr>
         <% end %>
         <tr> <td><b>Ciudad / País</b>: <%= content.city %> / <%= content.country %> </td></tr>
-        <tr><td><b>Latitud / Longitud</b>: <%= content.latitude %> / <%= content.longitude %> </td></tr>
+        <tr><td><b>Latitud / Longitud</b>:
+          <%= number_with_precision(content.latitude, :precision => 2) %> /
+          <%= number_with_precision(content.longitude, :precision => 2) %> </td></tr>
       </tbody>
       <thead>
         <tr>
