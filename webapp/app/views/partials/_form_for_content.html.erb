@@ -35,7 +35,10 @@
     <% req = true %>
   <% end %>
 
-  <legend> ¿Dónde ha ocurrido? </legend>
+<div class="form-field">
+  <label> ¿Dónde ha ocurrido? </label>
+</div>
+
       <div class="form-field">
         <%= f.text_field :address, placeholder: 'Ejemplo: Plaza de Puerta del Sol', :id => 'map-address', :class => 'span7' do %>
       <p class="help-block"><%= I18n.t("help.content.location.address") %></p>
