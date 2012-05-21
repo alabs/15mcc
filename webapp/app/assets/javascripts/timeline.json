@@ -1,16 +1,6 @@
-class TimelineController < ApplicationController
-
-  # GET /timeline
-  def index
-    @contents = Text.all | Image.all | Video.all | Audio.all
-    @contents.map do |c|
-      user = c.user ? c.user.username : "anonymous"
-      c.write_attribute(:user, user)
-      c.write_attribute(:klass, c.class.to_s)
-    end 
-
-    @timeline = {}
-    @timeline["timeline"] = '{
+{
+    "timeline":
+    {
         "headline":"The Kitchen Sink",
         "type":"default",
                 "startDate":"2011,9,1",
@@ -19,7 +9,7 @@ class TimelineController < ApplicationController
             {
                 "startDate":"2012,1,26",
                 "headline":"Sh*t Politicians Say",
-                "text":"<p>Sh*t Politicians Say landed just hours before Thursday nights Republican presidential debate and stars actor Joe Leon. In true political fashion, his character rattles off common jargon heard from people running for office.</p><p>Do these ring a bell? Moral fiber, family values, trust me, three-point plan, earmarks, tough question, children are our future, Washington outsider, jobs, my opponent all sound familiar.</p>",
+                "text":"<p>Sh*t Politicians Say landed just hours before Thursday night’s Republican presidential debate and stars actor Joe Leon. In true political fashion, his character rattles off common jargon heard from people running for office.</p><p>Do these ring a bell? Moral fiber, family values, trust me, three-point plan, earmarks, tough question, children are our future, Washington outsider, jobs, my opponent — all sound familiar.</p>",
                 "asset":
                 {
                     "media":"http://youtu.be/u4XpeU9erbg",
@@ -30,7 +20,7 @@ class TimelineController < ApplicationController
             {
                 "startDate":"2012,1,10",
                 "headline":"Sh*t Nobody Says",
-                "text":"<p>Have you ever heard someone say can I burn a copy of your Nickelback CD? or my Bazooka gum still has flavor! Nobody says that.</p>",
+                "text":"<p>Have you ever heard someone say “can I burn a copy of your Nickelback CD?” or “my Bazooka gum still has flavor!” Nobody says that.</p>",
                 "asset":
                 {
                     "media":"http://youtu.be/f-x8t0JOnVw",
@@ -253,13 +243,5 @@ class TimelineController < ApplicationController
                 }
             }
         ]
-    }'
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @timeline }
-    end
-  end
-
-end
-
+    }
+}

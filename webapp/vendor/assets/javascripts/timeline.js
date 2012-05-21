@@ -1,5026 +1,7523 @@
+/*!
+	TimelineJS
+	Designed and built by Zach Wise at VéritéCo
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	http://www.gnu.org/licenses/
+	
+*/
+
+/*********************************************** 
+     Begin VMM.js 
+***********************************************/ 
+
+/* Verite
+ * Verite JS Master
+ * Version: 0.6
+ * Date: April 26, 2012
+ * Copyright 2012 Verite unless part of Verite Timeline, 
+ * if part of Timeline then it inherits Timeline's license.
+ * Designed and built by Zach Wise digitalartwork.net
+ * ----------------------------------------------------- */
+
+
+/* Simple JavaScript Inheritance
+ * By John Resig http://ejohn.org/
+ * MIT Licensed.
+================================================== */
+(function() {
+	var initializing = false,
+	fnTest = /xyz/.test(function() {
+		xyz;
+		}) ? /\b_super\b/: /.*/;
+		// The base Class implementation (does nothing)
+	this.Class = function() {};
+
+    // Create a new Class that inherits from this class
+	Class.extend = function(prop) {
+		var _super = this.prototype;
+
+        // Instantiate a base class (but only create the instance,
+        // don't run the init constructor)
+		initializing = true;
+		var prototype = new this();
+		initializing = false;
+
+        // Copy the properties over onto the new prototype
+		for (var name in prop) {
+            // Check if we're overwriting an existing function
+			prototype[name] = typeof prop[name] == "function" &&
+			typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+			(function(name, fn) {
+				return function() {
+					var tmp = this._super;
+
+					// Add a new ._super() method that is the same method
+					// but on the super-class
+					this._super = _super[name];
+
+					// The method only need to be bound temporarily, so we
+					// remove it when we're done executing
+					var ret = fn.apply(this, arguments);
+					this._super = tmp;
+
+					return ret;
+				};
+			})(name, prop[name]) :
+			prop[name];
+		}
+
+		// The dummy class constructor
+		function Class() {
+			// All construction is actually done in the init method
+			if (!initializing && this.init)
+			this.init.apply(this, arguments);
+		}
+
+		// Populate our constructed prototype object
+		Class.prototype = prototype;
+
+		// Enforce the constructor to be what we expect
+		Class.prototype.constructor = Class;
+
+		// And make this class extendable
+		Class.extend = arguments.callee;
+
+		return Class;
+    };
+})();
+
+/* Access to the Global Object
+ * access the global object without hard-coding the identifier window
+================================================== */
+var global = (function () {
+   return this || (1,eval)('this');
+}());
+
+/* VMM
+================================================== */
+if (typeof VMM == 'undefined') {
+	
+	/* Main Scope Container
+	================================================== */
+	//var VMM = {};
+	var VMM = Class.extend({});
+	
+	/* Debug
+	================================================== */
+	VMM.debug = true;
+	
+	/* Master Config
+	================================================== */
+	
+	VMM.master_config = ({
+		
+		init: function() {
+			return this;
+		},
+		
+		sizes: {
+			api: {
+				width:			0,
+				height:			0
+			}
+		},
+		
+		vp:				"Pellentesque nibh felis, eleifend id, commodo in, interdum vitae, leo",
+		
+		api_keys_master: {
+			flickr:		"RAIvxHY4hE/Elm5cieh4X5ptMyDpj7MYIxziGxi0WGCcy1s+yr7rKQ==",
+			google:		"jwNGnYw4hE9lmAez4ll0QD+jo6SKBJFknkopLS4FrSAuGfIwyj57AusuR0s8dAo=",
+			twitter:	""
+		},
+		
+		flickr: {
+			active:			false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		},
+		
+		youtube: {
+			active:			false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		},
+		
+		vimeo: {
+			active:			false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		},
+		
+		googlemaps: {
+			active:			false,
+			map_active:		false,
+			places_active:	false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		},
+		
+		googledocs: {
+			active:			false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		},
+		
+		wikipedia: {
+			active:			false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		},
+		
+		soundcloud: {
+			active:			false,
+			array:			[],
+			api_loaded:		false,
+			que:			[]
+		}
+		
+	}).init();
+	
+	//VMM.createElement(tag, value, cName, attrs, styles);
+	VMM.createElement = function(tag, value, cName, attrs, styles) {
+		
+		var ce = "";
+		
+		if (tag != null && tag != "") {
+			
+			// TAG
+			ce += "<" + tag;
+			if (cName != null && cName != "") {
+				ce += " class='" + cName + "'";
+			};
+			
+			if (attrs != null && attrs != "") {
+				ce += " " + attrs;
+			};
+			
+			if (styles != null && styles != "") {
+				ce += " style='" + styles + "'";
+			};
+			
+			ce += ">";
+			
+			if (value != null && value != "") {
+				ce += value;
+			}
+			
+			// CLOSE TAG
+			ce = ce + "</" + tag + ">";
+		}
+		
+		return ce;
+		
+    };
+
+	VMM.createMediaElement = function(media, caption, credit) {
+		
+		var ce = "";
+		
+		var _valid = false;
+		
+		ce += "<div class='media'>";
+		
+		if (media != null && media != "") {
+			
+			valid = true;
+			
+			ce += "<img src='" + media + "'>";
+			
+			// CREDIT
+			if (credit != null && credit != "") {
+				ce += VMM.createElement("div", credit, "credit");
+			}
+			
+			// CAPTION
+			if (caption != null && caption != "") {
+				ce += VMM.createElement("div", caption, "caption");
+			}
+
+		}
+		
+		ce += "</div>";
+		
+		return ce;
+		
+    };
+
+	// Hide URL Bar for iOS and Android by Scott Jehl
+	// https://gist.github.com/1183357
+
+	VMM.hideUrlBar = function () {
+		var win = window,
+			doc = win.document;
+
+		// If there's a hash, or addEventListener is undefined, stop here
+		if( !location.hash || !win.addEventListener ){
+
+			//scroll to 1
+			window.scrollTo( 0, 1 );
+			var scrollTop = 1,
+
+			//reset to 0 on bodyready, if needed
+			bodycheck = setInterval(function(){
+				if( doc.body ){
+					clearInterval( bodycheck );
+					scrollTop = "scrollTop" in doc.body ? doc.body.scrollTop : 1;
+					win.scrollTo( 0, scrollTop === 1 ? 0 : 1 );
+				}	
+			}, 15 );
+
+			win.addEventListener( "load", function(){
+				setTimeout(function(){
+					//reset to hide addr bar at onload
+					win.scrollTo( 0, scrollTop === 1 ? 0 : 1 );
+				}, 0);
+			}, false );
+		}
+	};
+	
+
+}
+
+/* Trace (console.log)
+================================================== */
+function trace( msg ) {
+	if (VMM.debug) {
+		if (window.console) {
+			console.log(msg);
+		} else if ( typeof( jsTrace ) != 'undefined' ) {
+			jsTrace.send( msg );
+		} else {
+			//alert(msg);
+		}
+	}
+}
+
+/* Extending Date to include Week
+================================================== */
+Date.prototype.getWeek = function() {
+	var onejan = new Date(this.getFullYear(),0,1);
+	return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+}
+
+/* Extending Date to include Day of Year
+================================================== */
+Date.prototype.getDayOfYear = function() {
+	var onejan = new Date(this.getFullYear(),0,1);
+	return Math.ceil((this - onejan) / 86400000);
+}
+
+/* A MORE SPECIFIC TYPEOF();
+//	http://rolandog.com/archives/2007/01/18/typeof-a-more-specific-typeof/
+================================================== */
+// type.of()
+var is={
+	Null:function(a){return a===null;},
+	Undefined:function(a){return a===undefined;},
+	nt:function(a){return(a===null||a===undefined);},
+	Function:function(a){return(typeof(a)==="function")?a.constructor.toString().match(/Function/)!==null:false;},
+	String:function(a){return(typeof(a)==="string")?true:(typeof(a)==="object")?a.constructor.toString().match(/string/i)!==null:false;},
+	Array:function(a){return(typeof(a)==="object")?a.constructor.toString().match(/array/i)!==null||a.length!==undefined:false;},
+	Boolean:function(a){return(typeof(a)==="boolean")?true:(typeof(a)==="object")?a.constructor.toString().match(/boolean/i)!==null:false;},
+	Date:function(a){return(typeof(a)==="date")?true:(typeof(a)==="object")?a.constructor.toString().match(/date/i)!==null:false;},
+	HTML:function(a){return(typeof(a)==="object")?a.constructor.toString().match(/html/i)!==null:false;},
+	Number:function(a){return(typeof(a)==="number")?true:(typeof(a)==="object")?a.constructor.toString().match(/Number/)!==null:false;},
+	Object:function(a){return(typeof(a)==="object")?a.constructor.toString().match(/object/i)!==null:false;},
+	RegExp:function(a){return(typeof(a)==="function")?a.constructor.toString().match(/regexp/i)!==null:false;}
+};
+var type={
+	of:function(a){
+		for(var i in is){
+			if(is[i](a)){
+				return i.toLowerCase();
+			}
+		}
+	}
+};
+
+
+
+
+
+/*********************************************** 
+     Begin VMM.Library.js 
+***********************************************/ 
+
+/* LIBRARY ABSTRACTION
+================================================== */
+if(typeof VMM != 'undefined') {
+	
+	VMM.attachElement = function(element, content) {
+		if( typeof( jQuery ) != 'undefined' ){
+			jQuery(element).html(content);
+		}
+		
+	};
+	
+	VMM.appendElement = function(element, content) {
+		
+		if( typeof( jQuery ) != 'undefined' ){
+			jQuery(element).append(content);
+		}
+		
+	};
+	
+	VMM.getHTML = function(element) {
+		var e;
+		if( typeof( jQuery ) != 'undefined' ){
+			e = jQuery(element).html();
+			return e;
+		}
+		
+	};
+	
+	VMM.getElement = function(element, p) {
+		var e;
+		if( typeof( jQuery ) != 'undefined' ){
+			if (p) {
+				e = jQuery(element).parent().get(0);
+				
+			} else {
+				e = jQuery(element).get(0);
+			}
+			return e;
+		}
+		
+	};
+	
+	VMM.bindEvent = function(element, the_handler, the_event_type, event_data) {
+		var e;
+		var _event_type = "click";
+		var _event_data = {};
+		
+		if (the_event_type != null && the_event_type != "") {
+			_event_type = the_event_type;
+		}
+		
+		if (_event_data != null && _event_data != "") {
+			_event_data = event_data;
+		}
+		
+		if( typeof( jQuery ) != 'undefined' ){
+			jQuery(element).bind(_event_type, _event_data, the_handler);
+			
+			//return e;
+		}
+		
+	};
+	
+	VMM.unbindEvent = function(element, the_handler, the_event_type) {
+		var e;
+		var _event_type = "click";
+		var _event_data = {};
+		
+		if (the_event_type != null && the_event_type != "") {
+			_event_type = the_event_type;
+		}
+		
+		if( typeof( jQuery ) != 'undefined' ){
+			jQuery(element).unbind(_event_type, the_handler);
+			
+			//return e;
+		}
+		
+	};
+	
+	VMM.fireEvent = function(element, the_event_type, the_data) {
+		var e;
+		var _event_type = "click";
+		var _data = [];
+		
+		if (the_event_type != null && the_event_type != "") {
+			_event_type = the_event_type;
+		}
+		if (the_data != null && the_data != "") {
+			_data = the_data;
+		}
+		
+		if( typeof( jQuery ) != 'undefined' ){
+			jQuery(element).trigger(_event_type, _data);
+			
+			//return e;
+		}
+		
+	};
+
+	VMM.getJSON = function(url, data, callback) {
+		if( typeof( jQuery ) != 'undefined' ){
+			
+			/* CHECK FOR IE AND USE Use Microsoft XDR
+			================================================== */
+			if ( VMM.Browser.browser == "Explorer" && parseInt(VMM.Browser.version, 10) >= 7 && window.XDomainRequest) {
+				trace("it's ie");
+				var ie_url = url;
+
+				if (ie_url.match('^http://')){
+					trace("RUNNING GET JSON")
+				     ie_url = ie_url.replace("http://","//");
+					return jQuery.getJSON(url, data, callback);
+				} else if (ie_url.match('^https://')) {
+					trace("RUNNING XDR");
+					ie_url = ie_url.replace("https://","http://");
+					var xdr = new XDomainRequest();
+					xdr.open("get", ie_url);
+					xdr.onload = function() {
+						var ie_json = VMM.parseJSON(xdr.responseText);
+						trace(xdr.responseText);
+						if (type.of(ie_json) == "null" || type.of(ie_json) == "undefined") {
+							trace("IE JSON ERROR")
+						} else {
+							return data(ie_json)
+						}								
+								
+					}
+					xdr.send();
+				} else {
+					return jQuery.getJSON(url, data, callback);
+				}
+			} else {
+				return jQuery.getJSON(url, data, callback);
+			}
+		}
+	}
+	
+	VMM.parseJSON = function(the_json) {
+		if( typeof( jQuery ) != 'undefined' ){
+			return jQuery.parseJSON(the_json);
+		}
+	}
+	
+	// ADD ELEMENT AND RETURN IT
+	VMM.appendAndGetElement = function(append_to_element, tag, cName, content) {
+		var e;
+		var _tag = "<div>";
+		var _class = "";
+		var _content = "";
+
+		
+		if (tag != null && tag != "") {
+			_tag = tag;
+		}
+		
+		if (cName != null && cName != "") {
+			_class = cName;
+		}
+		
+		if (content != null && content != "") {
+			_content = content;
+		}
+		
+		if( typeof( jQuery ) != 'undefined' ){
+			
+			e = jQuery(tag);
+			
+			e.addClass(_class);
+			e.html(_content);
+			
+			jQuery(append_to_element).append(e);
+			
+		}
+		
+		return e;
+		
+	};
+	
+	VMM.Lib = ({
+		
+		init: function() {
+			return this;
+		},
+		
+		hide: function(element, duration) {
+			if (duration != null && duration != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).hide(duration);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).hide();
+				}
+			}
+			
+		},
+		
+		remove: function(element) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).remove();
+			}
+		},
+		
+		detach: function(element) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).detach();
+			}
+		},
+		
+		append: function(element, value) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).append(value);
+			}
+		},
+		
+		prepend: function(element, value) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).prepend(value);
+			}
+		},
+		
+		show: function(element, duration) {
+			if (duration != null && duration != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).show(duration);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).show();
+				}
+			}
+			
+		},
+		
+		load: function(element, callback_function, event_data) {
+			var _event_data = {elem:element}; // return element by default
+			if (_event_data != null && _event_data != "") {
+				_event_data = event_data;
+			}
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).load(_event_data, callback_function);
+			}
+		},
+		
+		addClass: function(element, cName) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).addClass(cName);
+			}
+		},
+		
+		removeClass: function(element, cName) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).removeClass(cName);
+			}
+		},
+		
+		attr: function(element, aName, value) {
+			if (value != null && value != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).attr(aName, value);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					return jQuery(element).attr(aName);
+				}
+			}
+		},
+		
+		prop: function(element, aName, value) {
+			if (typeof jQuery == 'undefined' || !/[1-9]\.[3-9].[1-9]/.test(jQuery.fn.jquery)) {
+			    VMM.Lib.attribute(element, aName, value);
+			} else {
+				jQuery(element).prop(aName, value);
+			}
+		},
+		
+		attribute: function(element, aName, value) {
+			
+			if (value != null && value != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).attr(aName, value);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					return jQuery(element).attr(aName);
+				}
+			}
+		},
+		
+		visible: function(element, show) {
+			if (show != null) {
+				if( typeof( jQuery ) != 'undefined' ){
+					if (show) {
+						jQuery(element).show(0);
+					} else {
+						jQuery(element).hide(0);
+					}
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					if ( jQuery(element).is(':visible')){
+						return true;
+					} else {
+						return false;
+					}
+				}
+			}
+		},
+		
+		css: function(element, prop, value) {
+
+			if (value != null && value != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).css(prop, value);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					return jQuery(element).css(prop);
+				}
+			}
+		},
+		
+		cssmultiple: function(element, propval) {
+
+			if( typeof( jQuery ) != 'undefined' ){
+				return jQuery(element).css(propval);
+			}
+		},
+		
+		offset: function(element) {
+			var p;
+			if( typeof( jQuery ) != 'undefined' ){
+				p = jQuery(element).offset();
+			}
+			return p;
+		},
+		
+		position: function(element) {
+			var p;
+			if( typeof( jQuery ) != 'undefined' ){
+				p = jQuery(element).position();
+			}
+			return p;
+		},
+		
+		width: function(element, s) {
+			if (s != null && s != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).width(s);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					return jQuery(element).width();
+				}
+			}
+		},
+		
+		height: function(element, s) {
+			if (s != null && s != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).height(s);
+				}
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					return jQuery(element).height();
+				}
+			}
+		},
+		
+		toggleClass: function(element, cName) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).toggleClass(cName);
+			}
+		},
+		
+		each:function(element, return_function) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).each(return_function);
+			}
+			
+		},
+		
+		html: function(element, str) {
+			var e;
+			if( typeof( jQuery ) != 'undefined' ){
+				e = jQuery(element).html();
+				return e;
+			}
+			
+			if (str != null && str != "") {
+				if( typeof( jQuery ) != 'undefined' ){
+					jQuery(element).html(str);
+				}
+			} else {
+				var e;
+				if( typeof( jQuery ) != 'undefined' ){
+					e = jQuery(element).html();
+					return e;
+				}
+			}
+
+		},
+		
+		find: function(element, selec) {
+			if( typeof( jQuery ) != 'undefined' ){
+				return jQuery(element).find(selec);
+			}
+		},
+		
+		stop: function(element) {
+			if( typeof( jQuery ) != 'undefined' ){
+				jQuery(element).stop();
+			}
+		},
+		
+		animate: function(element, duration, ease, att, callback_function) {
+			
+			var _ease = "easein";
+			var _duration = 1000;
+			var _att = {};
+			
+			if (duration != null) {
+				if (duration < 1) {
+					_duration = 1;
+				} else {
+					_duration = Math.round(duration);
+				}
+				
+			}
+			
+			if (ease != null && ease != "") {
+				_ease = ease;
+			}
+			
+			if (att != null) {
+				_att = att
+			} else {
+				_att = {opacity: 0}
+			}
+			
+			
+			if (VMM.Browser.device == "mobile" || VMM.Browser.device == "tablet") {
+				
+				var _tdd = Math.round((_duration/1500)*10)/10
+				var __duration = _tdd + 's';
+				VMM.Lib.css(element, '-webkit-transition', 'all '+ __duration + ' ease');
+				VMM.Lib.css(element, '-moz-transition', 'all '+ __duration + ' ease');
+				VMM.Lib.css(element, '-o-transition', 'all '+ __duration + ' ease');
+				VMM.Lib.css(element, '-ms-transition', 'all '+ __duration + ' ease');
+				VMM.Lib.css(element, 'transition', 'all '+ __duration + ' ease');
+				VMM.Lib.cssmultiple(element, _att);
+				
+				//callback_function();
+				/*
+				if( typeof( jQuery ) != 'undefined' ){
+					if (callback_function != null && callback_function != "") {
+						jQuery(element).animate(_att, {queue:false, duration:_duration, easing:_ease, complete:callback_function} );
+					} else {
+						jQuery(element).animate(_att, {queue:false, duration:_duration, easing:_ease} );
+					}
+				}
+				*/
+				
+			} else {
+				if( typeof( jQuery ) != 'undefined' ){
+					if (callback_function != null && callback_function != "") {
+						jQuery(element).animate(_att, {queue:false, duration:_duration, easing:_ease, complete:callback_function} );
+					} else {
+						jQuery(element).animate(_att, {queue:false, duration:_duration, easing:_ease} );
+					}
+				}
+			}
+			
+		},
+		
+	}).init();
+}
+
+/*	jQuery Easing v1.3
+	http://gsgd.co.uk/sandbox/jquery/easing/
+================================================== */
+if( typeof( jQuery ) != 'undefined' ){
+	
+	jQuery.easing['jswing'] = jQuery.easing['swing'];
+
+	jQuery.extend( jQuery.easing, {
+		def: 'easeOutQuad',
+		swing: function (x, t, b, c, d) {
+			//alert(jQuery.easing.default);
+			return jQuery.easing[jQuery.easing.def](x, t, b, c, d);
+		},
+		easeInExpo: function (x, t, b, c, d) {
+			return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+		},
+		easeOutExpo: function (x, t, b, c, d) {
+			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+		},
+		easeInOutExpo: function (x, t, b, c, d) {
+			if (t==0) return b;
+			if (t==d) return b+c;
+			if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+			return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+		},
+		easeInQuad: function (x, t, b, c, d) {
+			return c*(t/=d)*t + b;
+		},
+		easeOutQuad: function (x, t, b, c, d) {
+			return -c *(t/=d)*(t-2) + b;
+		},
+		easeInOutQuad: function (x, t, b, c, d) {
+			if ((t/=d/2) < 1) return c/2*t*t + b;
+			return -c/2 * ((--t)*(t-2) - 1) + b;
+		},
+	});
+}
+
+
+/*********************************************** 
+     Begin VMM.Browser.js 
+***********************************************/ 
+
+/* DEVICE AND BROWSER DETECTION
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.Browser == 'undefined') {
+	
+	VMM.Browser = {
+		init: function () {
+			this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+			this.version = this.searchVersion(navigator.userAgent)
+				|| this.searchVersion(navigator.appVersion)
+				|| "an unknown version";
+			this.OS = this.searchString(this.dataOS) || "an unknown OS";
+			this.device = this.searchDevice(navigator.userAgent);
+			this.orientation = this.searchOrientation(window.orientation);
+		},
+		searchOrientation: function(orientation) {
+			if ( orientation == 0  || orientation == 180) {  
+				return "portrait";
+			} else if ( orientation == 90 || orientation == -90) {  
+				return "landscape";
+			} else {
+				return "normal";
+			}
+		},
+		searchDevice: function(d) {
+			if (d.match(/Android/i) || d.match(/iPhone|iPod/i)) {
+				return "mobile";
+			} else if (d.match(/iPad/i)) {
+				return "tablet";
+			} else if (d.match(/BlackBerry/i) || d.match(/IEMobile/i)) {
+				return "other mobile";
+			} else {
+				return "desktop";
+			}
+		},
+		searchString: function (data) {
+			for (var i=0;i<data.length;i++)	{
+				var dataString = data[i].string;
+				var dataProp = data[i].prop;
+				this.versionSearchString = data[i].versionSearch || data[i].identity;
+				if (dataString) {
+					if (dataString.indexOf(data[i].subString) != -1)
+						return data[i].identity;
+				}
+				else if (dataProp)
+					return data[i].identity;
+			}
+		},
+		searchVersion: function (dataString) {
+			var index = dataString.indexOf(this.versionSearchString);
+			if (index == -1) return;
+			return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+		},
+		dataBrowser: [
+			{
+				string: navigator.userAgent,
+				subString: "Chrome",
+				identity: "Chrome"
+			},
+			{ 	string: navigator.userAgent,
+				subString: "OmniWeb",
+				versionSearch: "OmniWeb/",
+				identity: "OmniWeb"
+			},
+			{
+				string: navigator.vendor,
+				subString: "Apple",
+				identity: "Safari",
+				versionSearch: "Version"
+			},
+			{
+				prop: window.opera,
+				identity: "Opera",
+				versionSearch: "Version"
+			},
+			{
+				string: navigator.vendor,
+				subString: "iCab",
+				identity: "iCab"
+			},
+			{
+				string: navigator.vendor,
+				subString: "KDE",
+				identity: "Konqueror"
+			},
+			{
+				string: navigator.userAgent,
+				subString: "Firefox",
+				identity: "Firefox"
+			},
+			{
+				string: navigator.vendor,
+				subString: "Camino",
+				identity: "Camino"
+			},
+			{		// for newer Netscapes (6+)
+				string: navigator.userAgent,
+				subString: "Netscape",
+				identity: "Netscape"
+			},
+			{
+				string: navigator.userAgent,
+				subString: "MSIE",
+				identity: "Explorer",
+				versionSearch: "MSIE"
+			},
+			{
+				string: navigator.userAgent,
+				subString: "Gecko",
+				identity: "Mozilla",
+				versionSearch: "rv"
+			},
+			{ 		// for older Netscapes (4-)
+				string: navigator.userAgent,
+				subString: "Mozilla",
+				identity: "Netscape",
+				versionSearch: "Mozilla"
+			}
+		],
+		dataOS : [
+			{
+				string: navigator.platform,
+				subString: "Win",
+				identity: "Windows"
+			},
+			{
+				string: navigator.platform,
+				subString: "Mac",
+				identity: "Mac"
+			},
+			{
+				string: navigator.userAgent,
+				subString: "iPhone",
+				identity: "iPhone/iPod"
+		    },
+			{
+				string: navigator.userAgent,
+				subString: "iPad",
+				identity: "iPad"
+		    },
+			{
+				string: navigator.platform,
+				subString: "Linux",
+				identity: "Linux"
+			}
+		]
+
+	}
+	VMM.Browser.init();
+}
+
+/*********************************************** 
+     Begin VMM.MediaElement.js 
+***********************************************/ 
+
+/* MediaElement
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.MediaElement == 'undefined') {
+	
+	VMM.MediaElement = ({
+		
+		init: function() {
+			return this;
+		},
+		
+		thumbnail: function(data, w, h) {
+			_w = 16;
+			_h = 24;
+			if (w != null && w != "") {_w = w};
+			if (h != null && h != "") {_h = h};
+			
+			if (data.media != null && data.media != "") {
+				_valid				=	true;
+				var mediaElem		=	"";
+				var m				=	VMM.MediaType(data.media); //returns an object with .type and .id
+				// CREATE MEDIA CODE 
+				if (m.type == "image") {
+					//mediaElem		=	"<div class='thumbnail thumb-photo'><img src='" + m.id + "' width='" + _w + "px' height='" + _h + "px'></div>";
+					mediaElem		=	"<div class='thumbnail thumb-photo'></div>";
+					return mediaElem;
+				} else if (m.type	==	"flickr") {
+					mediaElem		=	"<div class='thumbnail thumb-photo' id='flickr_" + m.id + "_thumb'></div>";
+					return mediaElem;
+				} else if (m.type	==	"youtube") {
+					mediaElem		=	"<div class='thumbnail thumb-youtube' id='youtube_" + m.id + "_thumb'></div>";
+					return mediaElem;
+				} else if (m.type	==	"googledoc") {
+					mediaElem		=	"<div class='thumbnail thumb-document'></div>";
+					return mediaElem;
+				} else if (m.type	==	"vimeo") {
+					mediaElem		=	"<div class='thumbnail thumb-vimeo' id='vimeo_" + m.id + "_thumb'></div>";
+					return mediaElem;
+				} else if (m.type  ==  "dailymotion") {
+					mediaElem		=  "<div class='thumbnail thumb-video'></div>";
+					return mediaElem;
+				} else if (m.type	==	"twitter"){
+					mediaElem		=	"<div class='thumbnail thumb-twitter'></div>";
+					return mediaElem;
+				} else if (m.type	==	"twitter-ready") {
+					mediaElem		=	"<div class='thumbnail thumb-twitter'></div>";
+					return mediaElem;
+				} else if (m.type	==	"soundcloud") {
+					mediaElem		=	"<div class='thumbnail thumb-audio'></div>";
+					return mediaElem;
+				} else if (m.type	==	"google-map") {
+					mediaElem		=	"<div class='thumbnail thumb-map'></div>";
+					return mediaElem;
+				} else if (m.type	==	"wikipedia") {
+					mediaElem		=	"<div class='thumbnail thumb-wikipedia'></div>";
+					return mediaElem;
+				} else if (m.type	==	"unknown") {
+					if (m.id.match("blockquote")) {
+						mediaElem		=	"<div class='thumbnail thumb-quote'></div>";
+					} else {
+						mediaElem		=	"<div class='thumbnail thumb-plaintext'></div>";
+					}
+					return mediaElem;
+				} else if (m.type	==	"website") {
+					mediaElem		=	"<div class='thumbnail thumb-website'></div>";
+					//mediaElem		=	"<div class='thumbnail'><img src='http://api.snapito.com/free/sc?url=" + m.id + "' width='" + _w + "px' height='" + _h + "px'></div>";
+					return mediaElem;
+				} else {
+					mediaElem = "<div class='thumbnail thumb-plaintext'></div>";
+					return mediaElem;
+				}
+			} 
+		},
+		
+		create: function(data) {
+			//$mediacontainer				=	element;
+			var _valid					=	false;
+			
+			if (data.media != null && data.media != "") {
+				var mediaElem			=	"";
+				var captionElem			=	"";
+				var creditElem			=	"";
+				var m					=	VMM.MediaType(data.media); //returns an object with .type and .id
+				var isTextMedia			=	false;
+				var _id					=	"";
+				_valid					=	true;
+				
+			// CREDIT
+				if (data.credit != null && data.credit != "") {
+					creditElem			=	"<div class='credit'>" + VMM.Util.linkify_with_twitter(data.credit, "_blank") + "</div>";
+				}
+			// CAPTION
+				if (data.caption != null && data.caption != "") {
+					captionElem			=	"<div class='caption'>" + VMM.Util.linkify_with_twitter(data.caption, "_blank") + "</div>";
+				}
+			// IMAGE
+				if (m.type				==	"image") {
+					mediaElem			=	"<div class='media-image media-shadow'><img src='" + m.id + "' class='media-image'></div>";
+			// FLICKR
+				} else if (m.type		==	"flickr") {
+					_id					=	"flickr_" + m.id;
+					mediaElem			=	"<div class='media-image media-shadow'><a href='" + m.link + "' target='_blank'><img id='" + _id + "_large" + "'></a></div>";
+					VMM.ExternalAPI.flickr.get(m.id, "#" + _id);
+			// GOOGLE DOCS
+				} else if (m.type		==	"googledoc") {
+					_id					=	"googledoc_" + VMM.Util.unique_ID(5);
+					mediaElem			=	"<div class='media-frame media-shadow doc' id='" + _id + "'><span class='messege'><p>Loading Document</p></span></div>";
+					VMM.ExternalAPI.googledocs.get(m.id, _id);
+			// YOUTUBE
+				} else if (m.type		==	"youtube") {
+					mediaElem			=	"<div class='media-shadow'><div class='media-frame video youtube' id='youtube_" + m.id + "'><span class='messege'><p>Loading YouTube video</p></span></div></div>";
+					VMM.ExternalAPI.youtube.get(m.id);
+			// VIMEO
+				} else if (m.type		==	"vimeo") {
+					mediaElem			=	"<div class='media-shadow'><iframe class='media-frame video vimeo' autostart='false' frameborder='0' width='100%' height='100%' src='http://player.vimeo.com/video/" + m.id + "?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff'></iframe></div>";
+					VMM.ExternalAPI.vimeo.get(m.id);
+			// DAILYMOTION
+				} else if (m.type		==	"dailymotion") {
+					mediaElem			=	"<div class='media-shadow'><iframe class='media-frame video dailymotion' autostart='false' frameborder='0' width='100%' height='100%' src='http://www.dailymotion.com/embed/video/" + m.id + "'></iframe></div>";
+			// TWITTER
+				} else if (m.type		==	"twitter"){
+					mediaElem			=	"<div class='twitter' id='" + "twitter_" + m.id + "'><span class='messege'><p>Loading Tweet</p></span></div>";
+					isTextMedia			=	true;
+					VMM.ExternalAPI.twitter.prettyHTML(m.id);
+			// TWITTER
+				} else if (m.type		==	"twitter-ready") {
+					isTextMedia			=	true;
+					mediaElem			=	m.id;
+			// SOUNDCLOUD
+				} else if (m.type		==	"soundcloud") {
+					_id					=	"soundcloud_" + VMM.Util.unique_ID(5);
+					mediaElem			=	"<div class='media-frame media-shadow soundcloud' id='" + _id + "'><span class='messege'><p>Loading Sound</p></span></div>";
+					VMM.ExternalAPI.soundcloud.get(m.id, _id);
+			// GOOGLE MAPS
+				} else if (m.type		==	"google-map") {
+					_id					=	"googlemap_" + VMM.Util.unique_ID(7);
+					mediaElem			=	"<div class='media-frame media-shadow map' id='" + _id + "'><span class='messege'><p>Loading Map</p></span></div>";
+					VMM.ExternalAPI.googlemaps.get(m.id, _id);
+			// WIKIPEDIA
+				} else if (m.type		==	"wikipedia") {
+					_id					=	"wikipedia_" + VMM.Util.unique_ID(7);
+					mediaElem			=	"<div class='wikipedia' id='" + _id + "'><span class='messege'><p>Loading Wikipedia</p></span></div>";
+					isTextMedia			=	true;
+					VMM.ExternalAPI.wikipedia.get(m.id, _id);
+			// UNKNOWN
+				} else if (m.type		==	"unknown") { 
+					trace("NO KNOWN MEDIA TYPE FOUND TRYING TO JUST PLACE THE HTML"); 
+					isTextMedia			=	true;
+					mediaElem			=	"<div class='plain-text'><div class='container'>" + VMM.Util.properQuotes(m.id) + "</div></div>";
+			// WEBSITE
+				} else if (m.type		==	"website") { 
+					mediaElem			=	"<div class='media-shadow'><iframe class='media-frame website' frameborder='0' autostart='false' width='100%' height='100%' scrolling='yes' marginheight='0' marginwidth='0' src='" + m.id + "'></iframe></div>";
+					//mediaElem			=	"<a href='" + m.id + "' target='_blank'>" + "<img src='http://api.snapito.com/free/lc?url=" + m.id + "'></a>";
+			// NO MATCH
+				} else {
+					trace("NO KNOWN MEDIA TYPE FOUND");
+					trace(m.type);
+				}
+				
+			// WRAP THE MEDIA ELEMENT
+				mediaElem				=	"<div class='media-container' >" + mediaElem + creditElem + captionElem + "</div>";
+			// RETURN
+				if (isTextMedia) {
+					return "<div class='text-media'><div class='media-wrapper'>" + mediaElem + "</div></div>";
+				} else {
+					return "<div class='media-wrapper'>" + mediaElem + "</div>";
+				}
+				
+				/*
+				if (_return) {
+					if (isTextMedia) {
+						return "<div class='media text-media'><div class='media-wrapper'>" + mediaElem + "</div></div>";
+					} else {
+						return "<div class='media'><div class='media-wrapper'>" + mediaElem + "</div></div>";
+					}
+				} else {
+					VMM.appendElement($mediacontainer, mediaElem);
+					VMM.appendElement($mediacontainer, creditElem);
+					VMM.appendElement($mediacontainer, captionElem);
+				}
+				*/
+			};
+			
+		},
+		
+	}).init();
+}
+
+/*********************************************** 
+     Begin VMM.MediaType.js 
+***********************************************/ 
+
+/* MediaType
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.MediaType == 'undefined') {
+	
+	//VMM.mediaType.youtube(d); //should return a true or false
+	// VMM.MediaType(url); //returns an object with .type and .id
+	
+	VMM.MediaType = function(d) {
+		var success = false;
+		var media   = {};
+		
+		if (d.match("div class='twitter'")) {
+			media.type = "twitter-ready";
+		    media.id = d;
+		    success = true;
+		} else if (d.match('(www.)?youtube|youtu\.be')) {
+			if (d.match('v=')) {
+				media.id = VMM.Util.getUrlVars(d)["v"];
+			} else { 
+				media.id = d.split(/v\/|v=|youtu\.be\//)[1].split(/[?&]/)[0];
+			}
+		    media.type = "youtube";
+		    success = true;
+		} else if (d.match('(player.)?vimeo\.com')) {
+		    media.type = "vimeo";
+		    media.id = d.split(/video\/|\/\/vimeo\.com\//)[1].split(/[?&]/)[0];;
+		    success = true;
+	    } else if (d.match('(www.)?dailymotion\.com')) {
+			media.id = d.split(/video\/|\/\/dailymotion\.com\//)[1];
+			media.type = "dailymotion";
+			success = true;
+		} else if (d.match('(player.)?soundcloud\.com')) {
+			media.type = "soundcloud";
+			media.id = d;
+			success = true;
+		} else if (d.match('(www.)?twitter\.com')) {
+			if (d.match("status\/")) {
+				media.id = d.split("status\/")[1];
+			} else if (d.match("statuses\/")) {
+				media.id = d.split("statuses\/")[1];
+			} else {
+				media.id = "";
+			}
+			media.type = "twitter";
+			success = true;
+		} else if (d.match("maps.google") && !d.match("staticmap")) {
+			media.type = "google-map";
+		    media.id = d.split(/src=['|"][^'|"]*?['|"]/gi);
+			success = true;
+		} else if (d.match("flickr.com/photos")) {
+			media.type = "flickr";
+			media.id = d.split("photos\/")[1].split("/")[1];
+			media.link = d;
+			success = true;
+		} else if (d.match(/jpg|jpeg|png|gif/i) || d.match("staticmap")) {
+			media.type = "image";
+			media.id = d;
+			success = true;
+		} else if (VMM.FileExtention.googleDocType(d)) {
+			media.type = "googledoc";
+			media.id = d;
+			success = true;
+		} else if (d.match('(www.)?wikipedia\.org')) {
+			media.type = "wikipedia";
+			//media.id = d.split("wiki\/")[1];
+			var wiki_id = d.split("wiki\/")[1].split("#")[0].replace("_", " ");
+			media.id = VMM.Util.toTitleCase(wiki_id).replace(" ", "%20");
+			trace("WIKIPEDIA " + media.id);
+			success = true;
+		} 	else if (d.indexOf('http://') == 0) {
+			media.type = "website";
+			media.id = d;
+			success = true;
+		} else {
+			trace("unknown media");  
+			media.type = "unknown";
+			media.id = d;
+			success = true;
+		}
+		
+		if (success) { 
+			return media;
+		} else {
+			trace("No valid media id detected");
+			trace(d);
+		}
+		return false;
+	}
+}
+
+/*********************************************** 
+     Begin VMM.Media.js 
+***********************************************/ 
+
+/* Media
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.Media == 'undefined') {
+	
+	// something = new VMM.Media(parent, w, h, {thedata});
+	VMM.Media = function(parent, w, h, thedata) {  
+		
+		/* PRIVATE VARS
+		================================================== */
+		var data = {}; // HOLDS DATA
+		
+		var _valid = false;
+		
+		var config = {
+			width: 720,
+			height: 400,
+			content_width: 720,
+			content_height: 400,
+			ease: "easeInOutExpo",
+			duration: 1000,
+			spacing: 15
+		};
+		/* ELEMENTS
+		================================================== */
+		var $media = "";
+		var $container = "";
+		var $mediacontainer  = "";
+		var $mediaelement = "";
+		var layout = parent; // expecting media div
+		
+		if (w != null && w != "") {config.width = w};
+		if (h != null && h != "") {config.height = h};
+		/*
+		if (typeof thedata != "undefined") {
+			data = thedata;
+			this.init(data);
+		}
+		*/
+		/* PUBLIC FUNCTIONS
+		================================================== */
+		this.init = function(d) {
+			if(typeof d != 'undefined') {
+				this.setData(d);
+			} else {
+				trace("WAITING ON DATA");
+			}
+		};
+		
+		var build = function(media, caption, credit) {
+			
+			$media = VMM.appendAndGetElement(layout, "<div>", "media");
+			$container = VMM.appendAndGetElement($media, "<div>", "container");
+			$mediacontainer = VMM.appendAndGetElement($container, "<div>", "media-container");
+			
+
+			if (data.media != null && data.media != "") {
+
+				_valid = true;
+				var m = {};
+				
+				m = VMM.MediaType(data.media); //returns an object with .type and .id
+				
+				if (m.type == "image") {
+					VMM.appendElement($mediacontainer, "<img src='" + m.id + "'>");  
+				} else if (m.type == "youtube") {
+					VMM.appendElement($mediacontainer, "<iframe frameborder='0' src='http://www.youtube.com/embed/" + m.id + "?&rel=0&theme=light&showinfo=0&hd=1&autohide=0&color=white' allowfullscreen>");
+				} else if (m.type == "vimeo") {
+					VMM.appendElement($mediacontainer, "<iframe frameborder='0' src='http://player.vimeo.com/video/" + m.id + "?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff'>");
+				} else {
+					
+				}
+				
+				// CREDIT
+				if (data.credit != null && data.credit != "") {
+					VMM.appendElement($container, VMM.createElement("div", data.credit, "credit"));
+				}
+
+				// CAPTION
+				if (data.caption != null && data.caption != "") {
+					VMM.appendElement($container, VMM.createElement("div", data.caption, "caption"));
+				}
+
+			}
+	    };
+	
+		
+	
+		/* GETTERS AND SETTERS
+		================================================== */
+		
+		this.setData = function(d) {
+			if(typeof d != 'undefined') {
+				data = d;
+				build();
+			} else{
+				trace("NO DATA");
+			}
+		};
+		
+		/* RESIZE
+		================================================== */
+		
+		function reSize() {
+
+		}
+		
+
+
+	}
+	
+	// Less expensive to use prototype
+	
+	VMM.Media.prototype.height = function(h) {
+		if (h != null && h != "") {
+			config.height = h;
+			reSize();
+		} else {
+			return config.height;
+		}
+	};
+	
+	VMM.Media.prototype.width = function(w) {
+		if (w != null && w != "") {
+			config.width = w;
+			reSize();
+		} else {
+			return config.width;
+		}
+	};
+	
+	/* GETTERS AND SETTERS
+	================================================== */
+	
+	VMM.Media.prototype.getData = function() {
+		return data;
+	};
+	
+	VMM.Media.prototype.setConfig = function(d) {
+		if(typeof d != 'undefined') {
+			config = d;
+		} else{
+			trace("NO CONFIG DATA");
+		}
+	};
+	
+	VMM.Media.prototype.getConfig = function() {
+		return config;
+	};
+	
+	VMM.Media.prototype.setSize = function(w, h) {
+		if (w != null) {config.width = w};
+		if (h != null) {config.height = h};
+		if (_active) {
+			reSize();
+		}
+		
+	}
+	
+	VMM.Media.prototype.active = function() {
+		return _active;
+	};
+	
+}
+
+/*********************************************** 
+     Begin VMM.FileExtention.js 
+***********************************************/ 
+
+/* File Extention
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.FileExtention == 'undefined') {
+	//VMM.FileExtention.googleDocType(url);
+	VMM.FileExtention = {
+		googleDocType: function(url) {
+			var fileName = url;
+			var fileExtension = "";
+			//fileExtension = fileName.substr(5);
+			fileExtension = fileName.substr(fileName.length - 5, 5);
+			var validFileExtensions = ["DOC","DOCX","XLS","XLSX","PPT","PPTX","PDF","PAGES","AI","PSD","TIFF","DXF","SVG","EPS","PS","TTF","XPS","ZIP","RAR"];
+			var flag = false;
+			
+			for (var i = 0; i < validFileExtensions.length; i++) {
+
+				
+				if (fileExtension.toLowerCase().match(validFileExtensions[i].toString().toLowerCase()) || fileName.match("docs.google.com") ) {
+					flag = true;
+				}
+				
+			}
+			
+			return flag;
+
+		}
+	}
+}
+
+/*********************************************** 
+     Begin VMM.ExternalAPI.js 
+***********************************************/ 
+
+/* External API
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
+	
+	VMM.ExternalAPI = {
+		
+		pushQues: function() {
+			
+			if (VMM.master_config.googlemaps.active) {
+				VMM.ExternalAPI.googlemaps.pushQue();
+			}
+			if (VMM.master_config.youtube.active) {
+				VMM.ExternalAPI.youtube.pushQue();
+			}
+			if (VMM.master_config.soundcloud.active) {
+				VMM.ExternalAPI.soundcloud.pushQue();
+			}
+			if (VMM.master_config.googledocs.active) {
+				VMM.ExternalAPI.googledocs.pushQue();
+			}
+			if (VMM.master_config.wikipedia.active) {
+				VMM.ExternalAPI.wikipedia.pushQue();
+			}
+			if (VMM.master_config.vimeo.active) {
+				VMM.ExternalAPI.vimeo.pushQue();
+			}
+			
+		},
+		
+		twitter: {
+			tweetArray: [],
+			// VMM.ExternalAPI.twitter.getHTML(id);
+			getHTML: function(id) {
+				//var the_url = document.location.protocol + "//api.twitter.com/1/statuses/oembed.json?id=" + id+ "&callback=?";
+				var the_url = "http://api.twitter.com/1/statuses/oembed.json?id=" + id+ "&callback=?";
+				VMM.getJSON(the_url, VMM.ExternalAPI.twitter.onJSONLoaded);
+			},
+			onJSONLoaded: function(d) {
+				trace("TWITTER JSON LOADED");
+				var id = d.id;
+				VMM.attachElement("#"+id, VMM.Util.linkify_with_twitter(d.html) );
+			},
+			
+			// VMM.ExternalAPI.twitter.parseTwitterDate(date);
+			parseTwitterDate: function(d) {
+				var date = new Date(Date.parse(d));
+				/*
+				var t = d.replace(/(\d{1,2}[:]\d{2}[:]\d{2}) (.*)/, '$2 $1');
+				t = t.replace(/(\+\S+) (.*)/, '$2 $1');
+				var date = new Date(Date.parse(t)).toLocaleDateString();
+				var time = new Date(Date.parse(t)).toLocaleTimeString();
+				*/
+				return date;
+			},
+			
+			prettyParseTwitterDate: function(d) {
+				var date = new Date(Date.parse(d));
+				return VMM.Util.date.prettyDate(date, true);
+			},
+
+			// VMM.ExternalAPI.twitter.getTweets(tweets_array);
+			getTweets: function(tweets) {
+				var tweetArray = [];
+				var number_of_tweets = tweets.length;
+				
+				for(var i = 0; i < tweets.length; i++) {
+					
+					var twitter_id = "";
+					
+					
+					/* FIND THE TWITTER ID
+					================================================== */
+					if (tweets[i].tweet.match("status\/")) {
+						twitter_id = tweets[i].tweet.split("status\/")[1];
+					} else if (tweets[i].tweet.match("statuses\/")) {
+						twitter_id = tweets[i].tweet.split("statuses\/")[1];
+					} else {
+						twitter_id = "";
+					}
+					
+					/* FETCH THE DATA
+					================================================== */
+					var the_url = "http://api.twitter.com/1/statuses/show.json?id=" + twitter_id + "&include_entities=true&callback=?";
+					VMM.getJSON(the_url, function(d) {
+						
+						var tweet = {}
+						/* FORMAT RESPONSE
+						================================================== */
+						var twit = "<div class='twitter'><blockquote><p>";
+						var td = VMM.Util.linkify_with_twitter(d.text, "_blank");
+						twit += td;
+						twit += "</p>";
+						
+						twit += "— " + d.user.name + " (<a href='https://twitter.com/" + d.user.screen_name + "'>@" + d.user.screen_name + "</a>) <a href='https://twitter.com/" + d.user.screen_name + "/status/" + d.id + "'>" + VMM.ExternalAPI.twitter.prettyParseTwitterDate(d.created_at) + " </a></blockquote></div>";
+						
+						tweet.content = twit;
+						tweet.raw = d;
+						
+						tweetArray.push(tweet);
+						
+						
+						/* CHECK IF THATS ALL OF THEM
+						================================================== */
+						if (tweetArray.length == number_of_tweets) {
+							var the_tweets = {tweetdata: tweetArray}
+							VMM.fireEvent(global, "TWEETSLOADED", the_tweets);
+						}
+					})
+					.success(function() { trace("second success"); })
+					.error(function() { trace("error"); })
+					.complete(function() { trace("complete"); });
+					
+				}
+					
+				
+			},
+			
+			// VMM.ExternalAPI.twitter.getTweetSearch(search string);
+			getTweetSearch: function(tweets, number_of_tweets) {
+				var _number_of_tweets = 40;
+				if (number_of_tweets != null && number_of_tweets != "") {
+					_number_of_tweets = number_of_tweets;
+				}
+				
+				var the_url = "http://search.twitter.com/search.json?q=" + tweets + "&rpp=" + _number_of_tweets + "&include_entities=true&result_type=mixed";
+				var tweetArray = [];
+				VMM.getJSON(the_url, function(d) {
+					
+					/* FORMAT RESPONSE
+					================================================== */
+					for(var i = 0; i < d.results.length; i++) {
+						var tweet = {}
+						var twit = "<div class='twitter'><blockquote><p>";
+						var td = VMM.Util.linkify_with_twitter(d.results[i].text, "_blank");
+						twit += td;
+						twit += "</p>";
+						twit += "— " + d.results[i].from_user_name + " (<a href='https://twitter.com/" + d.results[i].from_user + "'>@" + d.results[i].from_user + "</a>) <a href='https://twitter.com/" + d.results[i].from_user + "/status/" + d.id + "'>" + VMM.ExternalAPI.twitter.prettyParseTwitterDate(d.results[i].created_at) + " </a></blockquote></div>";
+						tweet.content = twit;
+						tweet.raw = d.results[i];
+						tweetArray.push(tweet);
+					}
+					var the_tweets = {tweetdata: tweetArray}
+					VMM.fireEvent(global, "TWEETSLOADED", the_tweets);
+				});
+				
+			},
+			
+			prettyHTML: function(id) {
+				var id = id.toString();
+				var error_obj = {
+					twitterid: id
+				};
+				var the_url = "http://api.twitter.com/1/statuses/show.json?id=" + id + "&include_entities=true&callback=?";
+				trace("id " + id);
+				var twitter_timeout = setTimeout(VMM.ExternalAPI.twitter.notFoundError, 4000, id);
+				
+				VMM.getJSON(the_url, VMM.ExternalAPI.twitter.formatJSON)
+					.error(function(jqXHR, textStatus, errorThrown) {
+						trace("TWITTER error");
+						trace("TWITTER ERROR: " + textStatus + " " + jqXHR.responseText);
+						VMM.attachElement("#twitter_"+id, "<p>ERROR LOADING TWEET " + id + "</p>" );
+					})
+					.success(function() {
+						clearTimeout(twitter_timeout);
+					});
+			},
+			
+			notFoundError: function(id) {
+				trace("TWITTER JSON ERROR TIMEOUT " + id);
+				VMM.attachElement("#twitter_" + id, "<span class='messege'><p>Error loading tweet: " + id + "</p></span>"  );
+				
+				// CHECK RATE STATUS
+				VMM.getJSON("http://api.twitter.com/1/account/rate_limit_status.json", function(d) {
+					trace("REMAINING TWITTER API CALLS " + d.remaining_hits);
+					trace("TWITTER RATE LIMIT WILL RESET AT " + d.reset_time);
+					var mes = "";
+					if (d.remaining_hits == 0) {
+						mes		= 	"<p>You've reached the maximum number of tweets you can load in an hour.</p>";
+						mes 	+=	"<p>You can view tweets again starting at: <br/>" + d.reset_time + "</p>";
+					} else {
+						mes 	= 	"<p>Tweet " + id + " was not found.</p>";
+					}
+					VMM.attachElement("#twitter_" + id, "<span class='messege'>" + mes + "</span>" );
+				});
+				
+			},
+			
+			formatJSON: function(d) {
+				trace("TWITTER JSON LOADED F");
+				trace(d);
+				var id = d.id_str;
+				
+				var twit = "<blockquote><p>";
+				var td = VMM.Util.linkify_with_twitter(d.text, "_blank");
+				//td = td.replace(/(@([\w]+))/g,"<a href='http://twitter.com/$2' target='_blank'>$1</a>");
+				//td = td.replace(/(#([\w]+))/g,"<a href='http://twitter.com/#search?q=%23$2' target='_blank'>$1</a>");
+				twit += td;
+				twit += "</p></blockquote>";
+				twit += " <a href='https://twitter.com/" + d.user.screen_name + "/status/" + d.id + "' target='_blank' alt='link to original tweet' title='link to original tweet'>" + "<span class='created-at'></span>" + " </a>";
+				twit += "<div class='vcard author'>";
+				twit += "<a class='screen-name url' href='https://twitter.com/" + d.user.screen_name + "' data-screen-name='" + d.user.screen_name + "' target='_blank'>";
+				twit += "<span class='avatar'><img src=' " + d.user.profile_image_url + "'  alt=''></span>";
+				twit += "<span class='fn'>" + d.user.name + "</span>";
+				twit += "<span class='nickname'>@" + d.user.screen_name + "</span>";
+				twit += "</a>";
+				twit += "</div>";
+				
+				VMM.attachElement("#twitter_"+id.toString(), twit );
+				
+			}
+			
+		},
+		
+		googlemaps: {
+			
+			get: function(url, id) {
+				var timer;
+				var map_vars = VMM.Util.getUrlVars(url);
+				var api_key;
+				
+				if (VMM.master_config.Timeline.api_keys.google != "") {
+					api_key = VMM.master_config.Timeline.api_keys.google;
+				} else {
+					api_key = Aes.Ctr.decrypt(VMM.master_config.api_keys_master.google, VMM.master_config.vp, 256);
+				}
+				
+				var map_url = "http://maps.googleapis.com/maps/api/js?key=" + api_key + "&libraries=places&sensor=false&callback=VMM.ExternalAPI.googlemaps.onMapAPIReady";
+				var map = { url: url, vars: map_vars, id: id };
+				
+				if (VMM.master_config.googlemaps.active) {
+					VMM.master_config.googlemaps.que.push(map);
+				} else {
+					VMM.master_config.googlemaps.que.push(map);
+					
+					if (VMM.master_config.googlemaps.api_loaded) {
+						
+					} else {
+						VMM.LoadLib.js(map_url, function() {
+							trace("Google Maps API Library Loaded");
+						});
+					}
+				}
+			},
+			
+			create: function(m) {
+				var map_attribution = "";
+				var layer;
+				var map;
+				
+				function mapProvider(name) {
+					if (name in VMM.ExternalAPI.googlemaps.map_providers) {
+						map_attribution = VMM.ExternalAPI.googlemaps.map_attribution[VMM.ExternalAPI.googlemaps.map_providers[name].attribution];
+						return VMM.ExternalAPI.googlemaps.map_providers[name];
+					} else {
+						if (VMM.ExternalAPI.googlemaps.defaultType(name)) {
+							trace("GOOGLE MAP DEFAULT TYPE");
+							return google.maps.MapTypeId[name.toUpperCase()];
+						} else {
+							trace("Not a maptype: " + name );
+						}
+					}
+				}
+				
+				google.maps.VeriteMapType = function(name) {
+					if (VMM.ExternalAPI.googlemaps.defaultType(name)) {
+						return google.maps.MapTypeId[name.toUpperCase()];
+					} else {
+						var provider = 			mapProvider(name);
+						return google.maps.ImageMapType.call(this, {
+							"getTileUrl": function(coord, zoom) {
+								var index = 	(zoom + coord.x + coord.y) % VMM.ExternalAPI.googlemaps.map_subdomains.length;
+								return [
+									provider.url
+										.replace("{S}", VMM.ExternalAPI.googlemaps.map_subdomains[index])
+										.replace("{Z}", zoom)
+										.replace("{X}", coord.x)
+										.replace("{Y}", coord.y)
+										.replace("{z}", zoom)
+										.replace("{x}", coord.x)
+										.replace("{y}", coord.y)
+								];
+							},
+							"tileSize": 		new google.maps.Size(256, 256),
+							"name":				name,
+							"minZoom":			provider.minZoom,
+							"maxZoom":			provider.maxZoom
+						});
+					}
+				};
+				
+				google.maps.VeriteMapType.prototype = new google.maps.ImageMapType("_");
+				
+				/* Make the Map
+				================================================== */
+				
+				
+				if (type.of(VMM.master_config.Timeline.maptype) == "string") {
+					if (VMM.ExternalAPI.googlemaps.defaultType(VMM.master_config.Timeline.maptype)) {
+						layer				=	google.maps.MapTypeId[VMM.master_config.Timeline.maptype.toUpperCase()];
+					} else {
+						layer				=	VMM.master_config.Timeline.maptype;
+					}
+				} else {
+					layer					=	"toner";
+				}
+				
+				var location				=	new google.maps.LatLng(41.875696,-87.624207);
+				var latlong;
+				var zoom					=	11;
+				var has_location			=	false;
+				var has_zoom				=	false;
+				var map_bounds;
+				
+				if (type.of(VMM.Util.getUrlVars(m.url)["ll"]) == "string") {
+					has_location			=	true;
+					latlong					=	VMM.Util.getUrlVars(m.url)["ll"].split(",");
+					location				=	new google.maps.LatLng(parseFloat(latlong[0]),parseFloat(latlong[1]));
+					
+				} else if (type.of(VMM.Util.getUrlVars(m.url)["sll"]) == "string") {
+					latlong					=	VMM.Util.getUrlVars(m.url)["sll"].split(",");
+					location				=	new google.maps.LatLng(parseFloat(latlong[0]),parseFloat(latlong[1]));
+				} 
+				
+				if (type.of(VMM.Util.getUrlVars(m.url)["z"]) == "string") {
+					has_zoom				=	true;
+					zoom					=	parseFloat(VMM.Util.getUrlVars(m.url)["z"]);
+				}
+				
+				var map_options = {
+					zoom:						zoom,
+					disableDefaultUI:			true,
+					mapTypeControl:				false,
+					zoomControl:				true,
+					zoomControlOptions: {
+						style:					google.maps.ZoomControlStyle.SMALL,
+						position:				google.maps.ControlPosition.TOP_RIGHT
+					},
+					center: 					location,
+					mapTypeId:					layer,
+					mapTypeControlOptions: {
+				        mapTypeIds:				[layer]
+				    }
+				}
+				
+				var unique_map_id			=	m.id.toString() + "_gmap";
+				
+				VMM.attachElement("#" + m.id, "<div class='google-map' id='" + unique_map_id + "' style='width=100%;height=100%;'></div>");
+				
+				var map						=	new google.maps.Map(document.getElementById(unique_map_id), map_options);
+				
+				if (VMM.ExternalAPI.googlemaps.defaultType(VMM.master_config.Timeline.maptype)) {
+					
+				} else {
+					map.mapTypes.set(layer, new google.maps.VeriteMapType(layer));
+					// ATTRIBUTION
+					var map_attribution_html =	"<div class='map-attribution'><div class='attribution-text'>" + map_attribution + "</div></div>";
+					VMM.appendElement("#"+unique_map_id, map_attribution_html);
+				}
+				
+				loadKML();
+				
+				// KML
+				function loadKML() {
+					var kml_url				=	m.url + "&output=kml";
+					kml_url					=	kml_url.replace("&output=embed", "");
+					var kml_layer			=	new google.maps.KmlLayer(kml_url, {preserveViewport:true});
+					var infowindow			=	new google.maps.InfoWindow();
+					kml_layer.setMap(map);
+
+					google.maps.event.addListenerOnce(kml_layer, "defaultviewport_changed", function() {
+						map.fitBounds(kml_layer.getDefaultViewport() );
+						if (has_location) {
+							map.panTo(location);
+						} 
+						if (has_zoom) {
+							map.setZoom(zoom);
+						}
+					});
+					
+					google.maps.event.addListener(kml_layer, 'click', function(kmlEvent) {
+						var text			=	kmlEvent.featureData.description;
+						showInfoWindow(text);
+						
+						function showInfoWindow(c) {
+							infowindow.setContent(c);
+							infowindow.open(map);
+						}
+					});
+				}
+				
+			},
+			
+			pushQue: function() {
+				for(var i = 0; i < VMM.master_config.googlemaps.que.length; i++) {
+					VMM.ExternalAPI.googlemaps.create(VMM.master_config.googlemaps.que[i]);
+				}
+				VMM.master_config.googlemaps.que = [];
+			},
+			
+			onMapAPIReady: function() {
+				VMM.master_config.googlemaps.map_active = true;
+				VMM.master_config.googlemaps.places_active = true;
+				VMM.ExternalAPI.googlemaps.onAPIReady();
+			},
+			
+			onPlacesAPIReady: function() {
+				VMM.master_config.googlemaps.places_active = true;
+				VMM.ExternalAPI.googlemaps.onAPIReady();
+			},
+			
+			onAPIReady: function() {
+				if (!VMM.master_config.googlemaps.active) {
+					if (VMM.master_config.googlemaps.map_active && VMM.master_config.googlemaps.places_active) {
+						VMM.master_config.googlemaps.active = true;
+						VMM.ExternalAPI.googlemaps.pushQue();
+					}
+				}
+			},
+			
+			defaultType: function(name) {
+				if (name.toLowerCase() == "satellite" || name.toLowerCase() == "hybrid" || name.toLowerCase() == "terrain" || name.toLowerCase() == "roadmap") {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			
+			map_subdomains: ["", "a.", "b.", "c.", "d."],
+			
+			map_attribution: {
+				"stamen": 			"Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://creativecommons.org/licenses/by-sa/3.0'>CC BY SA</a>.",
+				"apple": 			"Map data &copy; 2012  Apple, Imagery &copy; 2012 Apple"
+			},
+						
+			map_providers: {
+				"toner": {
+					"url": 			"http://{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png",
+					"minZoom": 		0,
+					"maxZoom": 		20,
+					"attribution": 	"stamen"
+					
+				},
+				"toner-lines": {
+					"url": 			"http://{S}tile.stamen.com/toner-lines/{Z}/{X}/{Y}.png",
+					"minZoom": 		0,
+					"maxZoom": 		20,
+					"attribution": 	"stamen"
+				},
+				"toner-labels": {
+					"url": 			"http://{S}tile.stamen.com/toner-labels/{Z}/{X}/{Y}.png",
+					"minZoom": 		0,
+					"maxZoom": 		20,
+					"attribution": 	"stamen"
+				},
+				"sterrain": {
+					"url": 			"http://{S}tile.stamen.com/terrain/{Z}/{X}/{Y}.jpg",
+					"minZoom": 		4,
+					"maxZoom": 		20,
+					"attribution": 	"stamen"
+				},
+				"apple": {
+					"url": 			"http://gsp2.apple.com/tile?api=1&style=slideshow&layers=default&lang=en_US&z={z}&x={x}&y={y}&v=9",
+					"minZoom": 		4,
+					"maxZoom": 		14,
+					"attribution": 	"apple"
+				},
+				"watercolor": {
+					"url": 			"http://{S}tile.stamen.com/watercolor/{Z}/{X}/{Y}.jpg",
+					"minZoom": 		3,
+					"maxZoom": 		16,
+					"attribution": 	"stamen"
+				}
+			},
+			
+			
+			
+		},
+		
+		googledocs: {
+			
+			get: function(url, id) {
+				var doc = {url: url, id: id};
+				VMM.master_config.googledocs.que.push(doc);
+				VMM.master_config.googledocs.active = true;
+			},
+			
+			create: function(doc) {
+				var mediaElem = ""; 
+				if (doc.url.match(/docs.google.com/i)) {
+					mediaElem	=	"<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + doc.url + "&amp;embedded=true'></iframe>";
+				} else {
+					mediaElem	=	"<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + "http://docs.google.com/viewer?url=" + doc.url + "&amp;embedded=true'></iframe>";
+				}
+				VMM.attachElement("#"+doc.id, mediaElem);
+			},
+			
+			pushQue: function() {
+				for(var i = 0; i < VMM.master_config.googledocs.que.length; i++) {
+					VMM.ExternalAPI.googledocs.create(VMM.master_config.googledocs.que[i]);
+				}
+				VMM.master_config.googledocs.que = [];
+			}
+		
+		},
+		
+		flickr: {
+			
+			get: function(mid, id) {
+				var api_key;
+				if (VMM.master_config.Timeline.api_keys.flickr != "") {
+					api_key = VMM.master_config.Timeline.api_keys.flickr;
+				} else {
+					api_key = Aes.Ctr.decrypt(VMM.master_config.api_keys_master.flickr, VMM.master_config.vp, 256)
+				}
+				var the_url = "http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=" + api_key + "&photo_id=" + mid + "&format=json&jsoncallback=?";
+				VMM.getJSON(the_url, VMM.ExternalAPI.flickr.create);
+			},
+			
+			create: function(d) {
+				var flickr_id = d.sizes.size[0].url.split("photos\/")[1].split("/")[1];
+				var id = "flickr_" + flickr_id;
+				var flickr_large_id = id + "_large";
+				var flickr_thumb_id = id + "_thumb";
+				var flickr_img_size, flickr_img_thumb, flickr_size_found = false;
+				var flickr_best_size = "Large";
+				
+				flickr_best_size = VMM.ExternalAPI.flickr.sizes(VMM.master_config.sizes.api.height);
+				
+				for(var i = 0; i < d.sizes.size.length; i++) {
+					if (d.sizes.size[i].label == flickr_best_size) {
+						flickr_size_found = true;
+						flickr_img_size = d.sizes.size[i].source;
+					}
+				}
+				if (!flickr_size_found) {
+					flickr_img_size = d.sizes.size[d.sizes.size.length - 1].source;
+				}
+				
+				flickr_img_thumb = d.sizes.size[0].source;
+				VMM.Lib.attr("#"+flickr_large_id, "src", flickr_img_size);
+				VMM.attachElement("#"+flickr_thumb_id, "<img src='" + flickr_img_thumb + "'>");
+			},
+			
+			sizes: function(s) {
+				var _size = "";
+				if (s <= 75) {
+					_size = "Thumbnail";
+				} else if (s <= 180) {
+					_size = "Small";
+				} else if (s <= 240) {
+					_size = "Small 320";
+				} else if (s <= 375) {
+					_size = "Medium";
+				} else if (s <= 480) {
+					_size = "Medium 640";
+				} else if (s <= 600) {
+					_size = "Medium 800";
+				} else {
+					_size = "Large";
+				}
+				
+				return _size;
+			}
+			
+		},
+		
+		soundcloud: {
+			
+			get: function(url, id) {
+				var sound = {url: url, id: id};
+				VMM.master_config.soundcloud.que.push(sound);
+				VMM.master_config.soundcloud.active = true;
+			},
+			
+			create: function(sound) {
+				var the_url = "http://soundcloud.com/oembed?url=" + sound.url + "&format=js&callback=?";
+				VMM.getJSON(the_url, function(d) {
+					VMM.attachElement("#"+sound.id, d.html);
+				});
+			},
+			
+			pushQue: function() {
+				for(var i = 0; i < VMM.master_config.soundcloud.que.length; i++) {
+					VMM.ExternalAPI.soundcloud.create(VMM.master_config.soundcloud.que[i]);
+				}
+				VMM.master_config.soundcloud.que = [];
+			},
+			
+		},
+		
+		wikipedia: {
+			
+			get: function(url, id) {
+				trace("WIKIPEDIA GET");
+				var api_obj = {url: url, id: id};
+				VMM.master_config.wikipedia.que.push(api_obj);
+				VMM.master_config.wikipedia.active = true;
+			},
+			
+			create: function(api_obj) {
+				
+				var the_url = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles=" + api_obj.url + "&format=json&exintro=1&callback=?";
+				VMM.getJSON(the_url, function(d) {
+					trace(d);
+					if ( VMM.Browser.browser == "Explorer" && parseInt(VMM.Browser.version, 10) >= 7 && window.XDomainRequest) {
+						VMM.attachElement("#"+api_obj.id, "<p>Wikipedia entry unable to load using Internet Explorer.</p>" );
+					} else {
+						var wiki_extract = VMM.Util.getObjectAttributeByIndex(d.query.pages, 0).extract;
+						var wiki_title = VMM.Util.getObjectAttributeByIndex(d.query.pages, 0).title;
+						var _wiki = "";
+						var wiki_text = "";
+						var wiki_text_array = wiki_extract.split("<p>");
+						var wiki_number_of_paragraphs = 1;
+					
+						for(var i = 0; i < wiki_text_array.length; i++) {
+							if (i+1 <= wiki_number_of_paragraphs && i+1 < wiki_text_array.length) {
+								wiki_text	+= "<p>" + wiki_text_array[i+1];
+							}
+						}
+					
+						_wiki		=	"<h4><a href='http://en.wikipedia.org/wiki/" + wiki_title + "' target='_blank'>" + wiki_title + "</a></h4>";
+						_wiki		+=	"<div class='wiki-source'>From Wikipedia, the free encyclopedia</span>";
+						_wiki		+=	VMM.Util.linkify_wikipedia(wiki_text);
+					
+						if (wiki_extract.match("REDIRECT")) {
+						
+						} else {
+							VMM.attachElement("#"+api_obj.id, _wiki );
+						}
+					}
+					
+				});
+				
+			},
+			
+			pushQue: function() {
+				trace("WIKIPEDIA PUSH QUE");
+				for(var i = 0; i < VMM.master_config.wikipedia.que.length; i++) {
+					VMM.ExternalAPI.wikipedia.create(VMM.master_config.wikipedia.que[i]);
+				}
+				VMM.master_config.wikipedia.que = [];
+			},
+			
+		},
+		
+		youtube: {
+			
+			get: function(id) {
+				var url = "http://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc&callback=?";
+				
+				if (VMM.master_config.youtube.active) {
+					VMM.master_config.youtube.que.push(id);
+				} else {
+					VMM.master_config.youtube.que.push(id);
+					if (!VMM.master_config.youtube.api_loaded) {
+						VMM.LoadLib.js('http://www.youtube.com/player_api', function() {
+							trace("YouTube API Library Loaded");
+						});
+					}
+				}
+				
+				// THUMBNAIL
+				VMM.getJSON(url, VMM.ExternalAPI.youtube.createThumb);
+			},
+			
+			create: function(id) {
+				
+				var p = {
+					active: 				false,
+					player: 				{},
+					name:					'youtube_'+id,
+					playing:				false
+				};
+				
+				p.player['youtube_'+id] = new YT.Player('youtube_'+id, {
+					height: 				'390',
+					width: 					'640',
+					playerVars: {
+						enablejsapi:		1,
+						color: 				'white',
+						showinfo:			0,
+						theme:				'light',
+						rel:				0
+					},
+					videoId: id,
+					events: {
+						'onReady': 			VMM.ExternalAPI.youtube.onPlayerReady,
+						'onStateChange': 	VMM.ExternalAPI.youtube.onStateChange
+					}
+				});
+				
+				VMM.master_config.youtube.array.push(p);
+			},
+			
+			createThumb: function(d) {
+		        trace(d.data.id);
+				trace(d.data.thumbnail.sqDefault);
+				var thumb_id = "youtube_" + d.data.id + "_thumb";
+				VMM.attachElement("#" + thumb_id, "<img src='" + d.data.thumbnail.sqDefault + "'>");
+			},
+			
+			pushQue: function() {
+				for(var i = 0; i < VMM.master_config.youtube.que.length; i++) {
+					VMM.ExternalAPI.youtube.create(VMM.master_config.youtube.que[i]);
+				}
+				VMM.master_config.youtube.que = [];
+			},
+			
+			onAPIReady: function() {
+				VMM.master_config.youtube.active = true;
+				VMM.ExternalAPI.youtube.pushQue();
+			},
+			
+			stopPlayers: function() {
+				for(var i = 0; i < VMM.master_config.youtube.array.length; i++) {
+					if (VMM.master_config.youtube.array[i].playing) {
+						var the_name = VMM.master_config.youtube.array[i].name;
+						VMM.master_config.youtube.array[i].player[the_name].stopVideo();
+					}
+				}
+			},
+			
+			onStateChange: function(e) {
+				for(var i = 0; i < VMM.master_config.youtube.array.length; i++) {
+					var the_name = VMM.master_config.youtube.array[i].name;
+					if (VMM.master_config.youtube.array[i].player[the_name] == e.target) {
+						if (e.data == YT.PlayerState.PLAYING) {
+							VMM.master_config.youtube.array[i].playing = true;
+						}
+					}
+				}
+			},
+			
+			onPlayerReady: function(e) {
+				
+			}
+			
+			
+		},
+		
+		vimeo: {
+			
+			get: function(id) {
+				VMM.master_config.vimeo.que.push(id);
+				VMM.master_config.vimeo.active = true;
+			},
+			
+			create: function(d) {
+				trace("VIMEO CREATE");
+				// THUMBNAIL
+				var url = "http://vimeo.com/api/v2/video/" + d + ".json";
+				VMM.getJSON(url, VMM.ExternalAPI.vimeo.createThumb);
+			},
+			
+			createThumb: function(d) {
+				trace("VIMEO CREATE THUMB");
+				var thumb_id = "vimeo_" + d[0].id + "_thumb";
+				VMM.attachElement("#" + thumb_id, "<img src='" + d[0].thumbnail_small + "'>");
+			},
+			
+			pushQue: function() {
+				for(var i = 0; i < VMM.master_config.vimeo.que.length; i++) {
+					VMM.ExternalAPI.vimeo.create(VMM.master_config.vimeo.que[i]);
+				}
+				VMM.master_config.vimeo.que = [];
+			}
+			
+		}
+	
+	}
+	
+}
+
+/*  YOUTUBE API READY
+	Can't find a way to customize this callback and keep it in the VMM namespace
+	Youtube wants it to be this function. 
+================================================== */
+function onYouTubePlayerAPIReady() {
+	trace("GLOBAL YOUTUBE API CALLED")
+	VMM.ExternalAPI.youtube.onAPIReady();
+}
+
+/*********************************************** 
+     Begin VMM.TouchSlider.js 
+***********************************************/ 
+
+/* TOUCH SLIDER
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.TouchSlider == 'undefined') {
+	
+	// VMM.TouchSlider.createSlidePanel(touch_object, move_object, w, padding, vertical, h) ;
+	VMM.TouchSlider = {
+		createPanel: function(touch_object, move_object, w, padding, vertical, h) {
+			VMM.TouchSlider.vertical = false;
+			VMM.TouchSlider.vertical = vertical;
+			
+			var x = padding;
+			VMM.TouchSlider.width = w;
+			VMM.TouchSlider.height = h;
+			VMM.TouchSlider.makeTouchable(touch_object, move_object);
+			/*
+			if (sticky != null && sticky != "") {
+				VMM.TouchSlider.sticky = sticky;
+			} else {
+				VMM.TouchSlider.sticky = false;
+			}
+			*/
+			// VMM.TouchSlider.sticky = sticky;
+			
+		},
+		
+		removePanel: function(touch_object) {
+			VMM.unbindEvent(touch_object, VMM.TouchSlider.onTouchStart, "touchstart");
+			VMM.unbindEvent(touch_object, VMM.TouchSlider.onTouchMove, "touchmove");
+			VMM.unbindEvent(touch_object, VMM.TouchSlider.onTouchEnd, "touchend");
+		},
+		
+		makeTouchable: function(touch_object, move_object) {
+			VMM.bindEvent(touch_object, VMM.TouchSlider.onTouchStart, "touchstart", {element: move_object});
+			VMM.bindEvent(touch_object, VMM.TouchSlider.onTouchMove, "touchmove", {element: move_object});
+			VMM.bindEvent(touch_object, VMM.TouchSlider.onTouchEnd, "touchend", {element: move_object});
+	    },
+		onTouchStart: function(e) {
+			VMM.TouchSlider.touchStart(e.data.element, e);
+			e.stopPropagation();
+			return true;
+		},
+		onTouchEnd: function(e) {
+			e.stopPropagation();
+			
+			if (VMM.TouchSlider.sliding) {
+				VMM.TouchSlider.sliding = false;
+				VMM.TouchSlider.touchEnd(e.data.element, e);
+				return false;
+			} else {
+				return true;
+			}
+			
+		},
+		onTouchMove: function(e) {
+			VMM.TouchSlider.touchMove(e.data.element, e);
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		},
+		getLeft: function(elem) {
+			return parseInt(VMM.Lib.css(elem, 'left').substring(0, VMM.Lib.css(elem, 'left').length - 2), 10);
+		},
+		getTop: function(elem) {
+			return parseInt(VMM.Lib.css(elem, 'top').substring(0, VMM.Lib.css(elem, 'top').length - 2), 10);
+		},
+	    touchStart: function(elem, e) {
+			
+			VMM.Lib.css(elem, '-webkit-transition-duration', '0');
+			
+			VMM.TouchSlider.startX = e.originalEvent.touches[0].screenX;
+			VMM.TouchSlider.startY = e.originalEvent.touches[0].screenY;
+			
+			VMM.TouchSlider.startLeft = VMM.TouchSlider.getLeft(elem);
+			VMM.TouchSlider.startTop = VMM.TouchSlider.getTop(elem);
+			
+			VMM.TouchSlider.touchStartTime = new Date().getTime();
+
+	    },
+		touchEnd: function(elem, e) {
+			if (VMM.TouchSlider.getLeft(elem) > 0) {
+				
+				//This means they dragged to the right past the first item
+				
+				if (VMM.TouchSlider.vertical) {
+					VMM.Lib.animate(elem, 1000, "", {"top": 0});
+				} else {
+					VMM.Lib.animate(elem, 1000, "", {"left": 0});
+				}
+				
+				VMM.TouchSlider.startX = null;
+				VMM.TouchSlider.startY = null;
+				
+				VMM.fireEvent(elem, "TOUCHUPDATE", [0]);
+				
+			} else {
+				//This means they were just dragging within the bounds of the grid and we just need to handle the momentum and snap to the grid.
+				VMM.TouchSlider.slideMomentum(elem, e);
+	         }
+	    },
+		slideMomentum: function(elem, e) {
+			var slideAdjust = (new Date().getTime() - VMM.TouchSlider.touchStartTime) * 10;
+			var timeAdjust = slideAdjust;
+			
+			var left = VMM.TouchSlider.getLeft(elem);
+			var top = VMM.TouchSlider.getTop(elem);
+			
+			var changeX = 6000 * (Math.abs(VMM.TouchSlider.startLeft) - Math.abs(left));
+			var changeY = 6000 * (Math.abs(VMM.TouchSlider.startTop) - Math.abs(top));
+			
+			slideAdjust = Math.round(changeX / slideAdjust);
+			slideAdjustY = Math.round(changeY / slideAdjust);
+
+			var newLeft = slideAdjust + left;
+			var newTop = slideAdjustY + top;
+			
+			var y = newTop % VMM.TouchSlider.height;
+			var t = newLeft % VMM.TouchSlider.width;
+			
+			
+			var _r_object = {
+				top: Math.min(0, newTop),
+				left: Math.min(0, newLeft),
+				time: timeAdjust
+			}
+			VMM.fireEvent(elem, "TOUCHUPDATE", [_r_object]);
+			/*
+			if (VMM.TouchSlider.sticky) {
+				trace("sticky");
+				if ((Math.abs(t)) > ((VMM.TouchSlider.width / 2))) {
+					//Show the next cell
+					newLeft -= (VMM.TouchSlider.width - Math.abs(t));
+				} else {
+		             //Stay on the current cell
+					newLeft -= t;
+				}
+				
+				VMM.fireEvent(elem, "TOUCHUPDATE", [Math.min(0, newLeft)]);
+				
+			} else {
+				trace("not sticky");
+				//VMM.TouchSlider.doSlide(elem, Math.min(0, newLeft), '0.5s');
+				VMM.Lib.animate(elem, 500, "", {"left": Math.min(0, newLeft)});
+			}
+			*/
+			
+			VMM.TouchSlider.startX = null;
+			VMM.TouchSlider.startY = null;
+			
+	    },
+		doSlide: function(elem, x, duration) {
+			VMM.Lib.css(elem, '-webkit-transition-property', 'left');
+			VMM.Lib.css(elem, '-webkit-transition-duration', duration);
+			VMM.Lib.css(elem, 'left', x);
+		},
+		touchMove: function(elem, e) {
+			
+			if (!VMM.TouchSlider.sliding) {
+				//elem.parent().addClass('sliding');
+			}
+
+			VMM.TouchSlider.sliding = true;
+			
+			if (VMM.TouchSlider.vertical) {
+				
+				if (VMM.TouchSlider.startY > e.originalEvent.touches[0].screenY) {
+					VMM.Lib.css(elem, 'top', -(VMM.TouchSlider.startY - e.originalEvent.touches[0].screenY - VMM.TouchSlider.startTop));
+					VMM.TouchSlider.slidingTop = true;
+				} else {
+					var top = (e.originalEvent.touches[0].screenY - VMM.TouchSlider.startY + VMM.TouchSlider.startTop);
+					VMM.Lib.css(elem, 'top', -(VMM.TouchSlider.startY - e.originalEvent.touches[0].screenY - VMM.TouchSlider.startTop));
+					VMM.TouchSlider.slidingTop = false;
+				}
+				
+			} else {
+				
+				if (VMM.TouchSlider.startX > e.originalEvent.touches[0].screenX) {
+					VMM.Lib.css(elem, 'left', -(VMM.TouchSlider.startX - e.originalEvent.touches[0].screenX - VMM.TouchSlider.startLeft));
+					VMM.TouchSlider.slidingLeft = true;
+				} else {
+					var left = (e.originalEvent.touches[0].screenX - VMM.TouchSlider.startX + VMM.TouchSlider.startLeft);
+					VMM.Lib.css(elem, 'left', -(VMM.TouchSlider.startX - e.originalEvent.touches[0].screenX - VMM.TouchSlider.startLeft));
+					VMM.TouchSlider.slidingLeft = false;
+				}
+				
+			}
+			
+			
+		}
+	}
+}
+
+/*********************************************** 
+     Begin VMM.DragSlider.js 
+***********************************************/ 
+
+/* DRAG SLIDER
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.DragSlider == 'undefined') {
+	// VMM.DragSlider.createSlidePanel(drag_object, move_object, w, padding, sticky);
+	// VMM.DragSlider.cancelSlide();
+	VMM.DragSlider = {
+		createPanel: function(drag_object, move_object, w, padding, sticky) {
+			
+
+			
+			var x = padding;
+			VMM.DragSlider.width = w;
+			VMM.DragSlider.makeDraggable(drag_object, move_object);
+			VMM.DragSlider.drag_elem = drag_object;
+			/*
+			if (sticky != null && sticky != "") {
+				VMM.TouchSlider.sticky = sticky;
+			} else {
+				VMM.TouchSlider.sticky = false;
+			}
+			*/
+			VMM.DragSlider.sticky = sticky;
+		},
+		makeDraggable: function(drag_object, move_object) {
+			VMM.bindEvent(drag_object, VMM.DragSlider.onDragStart, "mousedown", {element: move_object, delement: drag_object});
+			//VMM.bindEvent(drag_object, VMM.DragSlider.onDragMove, "mousemove", {element: move_object});
+			VMM.bindEvent(drag_object, VMM.DragSlider.onDragEnd, "mouseup", {element: move_object, delement: drag_object});
+			VMM.bindEvent(drag_object, VMM.DragSlider.onDragLeave, "mouseleave", {element: move_object, delement: drag_object});
+	    },
+		cancelSlide: function(e) {
+			VMM.unbindEvent(VMM.DragSlider.drag_elem, VMM.DragSlider.onDragMove, "mousemove");
+			//VMM.DragSlider.drag_elem.preventDefault();
+			//VMM.DragSlider.drag_elem.stopPropagation();
+			return true;
+		},
+		onDragLeave: function(e) {
+
+			VMM.unbindEvent(e.data.delement, VMM.DragSlider.onDragMove, "mousemove");
+			e.preventDefault();
+			e.stopPropagation();
+			return true;
+		},
+		onDragStart: function(e) {
+			VMM.DragSlider.dragStart(e.data.element, e.data.delement, e);
+			
+			e.preventDefault();
+			e.stopPropagation();
+			return true;
+		},
+		onDragEnd: function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			if (VMM.DragSlider.sliding) {
+				VMM.DragSlider.sliding = false;
+				VMM.DragSlider.dragEnd(e.data.element, e.data.delement, e);
+				return false;
+			} else {
+				return true;
+			}
+			
+		},
+		onDragMove: function(e) {
+			VMM.DragSlider.dragMove(e.data.element, e);
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		},
+		dragStart: function(elem, delem, e) {
+			
+			VMM.DragSlider.startX = e.pageX;
+			
+			VMM.DragSlider.startLeft = VMM.DragSlider.getLeft(elem);
+			VMM.DragSlider.dragStartTime = new Date().getTime();
+			VMM.DragSlider.dragWidth = VMM.Lib.width(delem);
+			
+			// CANCEL CURRENT ANIMATION IF ANIMATING
+			var _newx = Math.round(VMM.DragSlider.startX - e.pageX - VMM.DragSlider.startLeft);
+			
+			VMM.Lib.stop(elem);
+			VMM.bindEvent(delem, VMM.DragSlider.onDragMove, "mousemove", {element: elem});
+
+	    },
+		dragEnd: function(elem, delem, e) {
+			VMM.unbindEvent(delem, VMM.DragSlider.onDragMove, "mousemove");
+			//VMM.DragSlider.dragMomentum(elem, e);
+			if (VMM.DragSlider.getLeft(elem) > 0) {
+				//(VMM.DragSlider.dragWidth/2)
+				//This means they dragged to the right past the first item
+				//VMM.Lib.animate(elem, 1000, "linear", {"left": 0});
+				
+				//VMM.fireEvent(elem, "DRAGUPDATE", [0]);
+			} else {
+				//This means they were just dragging within the bounds of the grid and we just need to handle the momentum and snap to the grid.
+				VMM.DragSlider.dragMomentum(elem, e);
+	         }
+		},
+		dragMove: function(elem, e) {
+			if (!VMM.DragSlider.sliding) {
+				//elem.parent().addClass('sliding');
+			}
+			
+			VMM.DragSlider.sliding = true;
+			if (VMM.DragSlider.startX > e.pageX) {
+				//Sliding to the left
+				VMM.Lib.css(elem, 'left', -(VMM.DragSlider.startX - e.pageX - VMM.DragSlider.startLeft));
+				VMM.DragSlider.slidingLeft = true;
+			} else {
+				//Sliding to the right
+				var left = (e.pageX - VMM.DragSlider.startX + VMM.DragSlider.startLeft);
+				VMM.Lib.css(elem, 'left', -(VMM.DragSlider.startX - e.pageX - VMM.DragSlider.startLeft));
+				VMM.DragSlider.slidingLeft = false;
+			}
+		},
+		dragMomentum: function(elem, e) {
+			var slideAdjust = (new Date().getTime() - VMM.DragSlider.dragStartTime) * 10;
+			var timeAdjust = slideAdjust;
+			var left = VMM.DragSlider.getLeft(elem);
+
+			var changeX = 6000 * (Math.abs(VMM.DragSlider.startLeft) - Math.abs(left));
+			//var changeX = 6000 * (VMM.DragSlider.startLeft - left);
+			slideAdjust = Math.round(changeX / slideAdjust);
+			
+			var newLeft = left + slideAdjust;
+			
+			var t = newLeft % VMM.DragSlider.width;
+			//left: Math.min(0, newLeft),
+			var _r_object = {
+				left: Math.min(newLeft),
+				time: timeAdjust
+			}
+			
+			VMM.fireEvent(elem, "DRAGUPDATE", [_r_object]);
+			var _ease = "easeOutExpo";
+			if (_r_object.time > 0) {
+				VMM.Lib.animate(elem, _r_object.time, _ease, {"left": _r_object.left});
+			};
+			
+			
+			//VMM.DragSlider.startX = null;
+		},
+		getLeft: function(elem) {
+			return parseInt(VMM.Lib.css(elem, 'left').substring(0, VMM.Lib.css(elem, 'left').length - 2), 10);
+		}
+	
+	}
+}
+
+/*********************************************** 
+     Begin VMM.Slider.js 
+***********************************************/ 
+
+/* Slider
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
+	
+	VMM.Slider = function(parent, parent_config) {
+		
+		var events = {}, config;
+		var $slider, $slider_mask, $slider_container, $slides_items;
+		var data = [], slides = [], slide_positions = [];
+		
+		var slides_content		=	"";
+		var current_slide		=	0;
+		var current_width		=	960;
+		var touch				=	{move: false, x: 10, y:0, off: 0, dampen: 48};
+		var content				=	"";
+		var _active				=	false;
+		var layout				=	parent;
+		var navigation			=	{nextBtn:"", prevBtn:"", nextDate:"", prevDate:"", nextTitle:"", prevTitle:""};
+		var timer;
+		
+		// CONFIG
+		if(typeof VMM.Timeline != 'undefined') {
+			config	= 	VMM.Timeline.Config;
+		} else {
+			config = {
+				preload: 4,
+				current_slide: 0,
+				interval: 10, 
+				something: 0, 
+				width: 720, 
+				height: 400, 
+				ease: "easeInOutExpo", 
+				duration: 1000, 
+				timeline: false, 
+				spacing: 15,
+				slider: {
+					width: 720, 
+					height: 400, 
+					content: {
+						width: 720, 
+						height: 400, 
+						padding: 130
+					}, 
+					nav: {
+						width: 100, 
+						height: 200
+					} 
+				} 
+			};
+		}
+		
+		/* PUBLIC VARS
+		================================================== */
+		this.ver = "0.6";
+		
+		config.slider.width		=	config.width;
+		config.slider.height	=	config.height;
+		
+		/* PUBLIC FUNCTIONS
+		================================================== */
+		this.init = function(d) {
+			slides = [];
+			slide_positions = [];
+			
+			if(typeof d != 'undefined') {
+				this.setData(d);
+			} else {
+				trace("WAITING ON DATA");
+			}
+		};
+		
+		this.width = function(w) {
+			if (w != null && w != "") {
+				config.slider.width = w;
+				reSize();
+			} else {
+				return config.slider.width;
+			}
+		}
+		
+		this.height = function(h) {
+			if (h != null && h != "") {
+				config.slider.height = h;
+				reSize();
+			} else {
+				return config.slider.height;
+			}
+		}
+		
+		/* GETTERS AND SETTERS
+		================================================== */
+		this.setData = function(d) {
+			if(typeof d != 'undefined') {
+				data = d;
+				build();
+			} else{
+				trace("NO DATA");
+			}
+		};
+		
+		this.getData = function() {
+			return data;
+		};
+		
+		this.setConfig = function(d) {
+			if(typeof d != 'undefined') {
+				config = d;
+			} else{
+				trace("NO CONFIG DATA");
+			}
+		}
+		
+		this.getConfig = function() {
+			return config;
+		};
+		
+		this.setSize = function(w, h) {
+			if (w != null) {config.slider.width = w};
+			if (h != null) {config.slider.height = h};
+			if (_active) {
+				reSize();
+			}
+			
+		}
+		
+		this.active = function() {
+			return _active;
+		};
+		
+		this.getCurrentNumber = function() {
+			return current_slide;
+		};
+		
+		this.setSlide = function(n) {
+			goToSlide(n);
+		};
+		
+		/* ON EVENT
+		================================================== */
+		function onConfigSet() {
+			trace("onConfigSet");
+		};
+		
+		function reSize(go_to_slide, from_start) {
+			
+			var _go_to_slide = true;
+			var _from_start = false;
+			
+			if (go_to_slide != null) {_go_to_slide = go_to_slide};
+			if (from_start != null) {_from_start = from_start};
+			
+			current_width = config.slider.width;
+			
+			config.slider.nav.height = VMM.Lib.height(navigation.prevBtnContainer);
+			
+			config.slider.content.width = current_width - (config.slider.content.padding *2);
+			
+			VMM.Lib.width($slides_items, (slides.length * config.slider.content.width));
+			
+			if (_from_start) {
+				var _pos = slides[current_slide].leftpos();
+				VMM.Lib.css($slider_container, "left", _pos);
+			}
+			
+			// RESIZE SLIDES
+			sizeSlides();
+			
+			// POSITION SLIDES
+			positionSlides();
+			
+			// POSITION NAV
+			VMM.Lib.css(navigation.nextBtn, "left", (current_width - config.slider.nav.width));
+			VMM.Lib.height(navigation.prevBtn, config.slider.height);
+			VMM.Lib.height(navigation.nextBtn, config.slider.height);
+			VMM.Lib.css(navigation.nextBtnContainer, "top", ( (config.slider.height/2) - (config.slider.nav.height/2) ) );
+			VMM.Lib.css(navigation.prevBtnContainer, "top", ( (config.slider.height/2) - (config.slider.nav.height/2) ) );
+			
+			// Animate Changes
+			VMM.Lib.height($slider_mask, config.slider.height);
+			VMM.Lib.width($slider_mask, current_width);
+			
+			if (_go_to_slide) {
+				goToSlide(current_slide, "linear", 1);
+			};
+			
+			if (current_slide == 0) {
+				VMM.Lib.visible(navigation.prevBtn, false);
+			}
+			
+		}
+		
+		/* NAVIGATION
+		================================================== */
+		function onNextClick(e) {
+			if (current_slide == slides.length - 1) {
+				VMM.Lib.animate($slider_container, config.duration, config.ease, {"left": -(slides[current_slide].leftpos()) } );
+			} else {
+				goToSlide(current_slide+1);
+				upDate();
+			}
+		}
+		
+		function onPrevClick(e) {
+			if (current_slide == 0) {
+				goToSlide(current_slide);
+			} else {
+				goToSlide(current_slide-1);
+				upDate();
+			}
+		}
+
+		function onKeypressNav(e) {
+			switch(e.keyCode) {
+				case 39:
+					// RIGHT ARROW
+					onNextClick(e);
+					break;
+				case 37:
+					// LEFT ARROW
+					onPrevClick(e);
+					break;
+			}
+		}
+		
+		function onTouchUpdate(e, b) {
+			if (slide_positions.length == 0) {
+				for(var i = 0; i < slides.length; i++) {
+					slide_positions.push( slides[i].leftpos() );
+				}
+			}
+			if (typeof b.left == "number") {
+				var _pos = b.left;
+				var _slide_pos = -(slides[current_slide].leftpos());
+				if (_pos < _slide_pos - (config.slider_width/3)) {
+					onNextClick();
+				} else if (_pos > _slide_pos + (config.slider_width/3)) {
+					onPrevClick();
+				} else {
+					VMM.Lib.animate($slider_container, config.duration, config.ease, {"left": _slide_pos });
+				}
+			} else {
+				VMM.Lib.animate($slider_container, config.duration, config.ease, {"left": _slide_pos });
+			}
+			
+			if (typeof b.top == "number") {
+				VMM.Lib.animate($slider_container, config.duration, config.ease, {"top": -b.top});
+			} else {
+				
+			}
+		};
+		
+		/* UPDATE
+		================================================== */
+		function upDate() {
+			config.current_slide = current_slide;
+			VMM.fireEvent(layout, "UPDATE");
+		};
+		
+		/* GET DATA
+		================================================== */
+		var getData = function(d) {
+			data = d;
+		};
+		
+		/* BUILD SLIDES
+		================================================== */
+		var buildSlides = function(d) {
+			VMM.attachElement($slides_items, "");
+			slides = [];
+			
+			for(var i = 0; i < d.length; i++) {
+				var _slide = new VMM.Slider.Slide(d[i], $slides_items);
+				//_slide.show();
+				slides.push(_slide);
+			}
+		}
+		
+		var preloadSlides = function(skip) {
+			if (skip) {
+				preloadTimeOutSlides();
+			} else {
+				timer = setTimeout(preloadTimeOutSlides, config.duration);
+			}
+		}
+		
+		var preloadTimeOutSlides = function() {
+			for(var j = 0; j < config.preload; j++) {
+				if ( !((current_slide + j) > slides.length - 1)) {
+					slides[current_slide + j].show();
+				}
+				if ( !( (current_slide - j) < 0 ) ) {
+					slides[current_slide - j].show();
+				}
+			}
+			
+			sizeSlides();
+		}
+		
+		/* SIZE SLIDES
+		================================================== */
+		var sizeSlides = function() {
+			var layout_text_media = 		".slider-item .layout-text-media .media .media-container ";
+			var layout_media = 				".slider-item .layout-media .media .media-container ";
+			var layout_both	= 				".slider-item .media .media-container";
+			var mediasize = {
+				text_media: {
+					width: 		(config.slider.content.width/100) * 60,
+					height: 	config.slider.height - 60,
+					video: {
+						width: 	0,
+						height: 0
+					},
+					text: {
+						width:	((config.slider.content.width/100) * 40) - 30,
+						height:	config.slider.height
+					}
+				},
+				media: {
+					width: 		config.slider.content.width,
+					height: 	config.slider.height - 110,
+					video: {
+						width: 	0,
+						height: 0
+					}
+				}
+			}
+			
+			VMM.master_config.sizes.api.width = mediasize.media.width;
+			VMM.master_config.sizes.api.height = mediasize.media.height;
+			
+			mediasize.text_media.video = 	VMM.Util.ratio.fit(mediasize.text_media.width, mediasize.text_media.height, 16, 9);
+			mediasize.media.video = 		VMM.Util.ratio.fit(mediasize.media.width, mediasize.media.height, 16, 9);
+			
+			VMM.Lib.css(".slider-item", "width", config.slider.content.width );
+			VMM.Lib.height(".slider-item", config.slider.height);
+			
+			// HANDLE SMALLER SIZES
+			var is_skinny = false;
+			
+			if (current_width <= 600) {
+				is_skinny = true;
+			} else if (VMM.Browser.device == "mobile" && VMM.Browser.orientation == "portrait") {
+				is_skinny = true;
+			} else if (VMM.Browser.device == "tablet" && VMM.Browser.orientation == "portrait") {
+				//is_skinny = true;
+			}
+			
+			if (is_skinny) {
+				
+				mediasize.text_media.width = 	config.slider.content.width;
+				mediasize.text_media.height = 	((config.slider.height/100) * 50 ) - 50;
+				mediasize.media.height = 		((config.slider.height/100) * 70 ) - 40;
+				
+				mediasize.text_media.video = 	VMM.Util.ratio.fit(mediasize.text_media.width, mediasize.text_media.height, 16, 9);
+				mediasize.media.video = 		VMM.Util.ratio.fit(mediasize.media.width, mediasize.media.height, 16, 9);
+				
+				VMM.Lib.css(".slider-item .layout-text-media .text", "width", "100%" );
+				VMM.Lib.css(".slider-item .layout-text-media .text", "display", "block" );
+				VMM.Lib.css(".slider-item .layout-text-media .text .container", "display", "block" );
+				VMM.Lib.css(".slider-item .layout-text-media .text .container", "width", config.slider.content.width );
+				
+				VMM.Lib.css(".slider-item .layout-text-media .media", "float", "none" );
+				VMM.Lib.addClass(".slider-item .content-container", "pad-top");
+				
+				VMM.Lib.css(".slider-item .media blockquote p", "line-height", "18px" );
+				VMM.Lib.css(".slider-item .media blockquote p", "font-size", "16px" );
+				
+				VMM.Lib.css(".slider-item", "overflow-y", "auto" );
+				
+				
+			} else {
+				
+				VMM.Lib.css(".slider-item .layout-text-media .text", "width", "40%" );
+				VMM.Lib.css(".slider-item .layout-text-media .text", "display", "table-cell" );
+				VMM.Lib.css(".slider-item .layout-text-media .text .container", "display", "table-cell" );
+				VMM.Lib.css(".slider-item .layout-text-media .text .container", "width", "auto" );
+				VMM.Lib.css(".slider-item .layout-text-media .text .container .start", "width", mediasize.text_media.text.width );
+				//VMM.Lib.addClass(".slider-item .content-container", "pad-left");
+				VMM.Lib.removeClass(".slider-item .content-container", "pad-top");
+				
+				VMM.Lib.css(".slider-item .layout-text-media .media", "float", "left" );
+				VMM.Lib.css(".slider-item .layout-text-media", "display", "table" );
+				
+				VMM.Lib.css(".slider-item .media blockquote p", "line-height", "36px" );
+				VMM.Lib.css(".slider-item .media blockquote p", "font-size", "28px" );
+				
+				VMM.Lib.css(".slider-item", "display", "table" );
+				VMM.Lib.css(".slider-item", "overflow-y", "auto" );
+			}
+			
+			// MEDIA FRAME
+			VMM.Lib.css(	layout_text_media + ".media-frame", 		"max-width", 	mediasize.text_media.width);
+			VMM.Lib.height(	layout_text_media + ".media-frame", 						mediasize.text_media.height);
+			VMM.Lib.width(	layout_text_media + ".media-frame", 						mediasize.text_media.width);
+			
+			// IMAGES
+			VMM.Lib.css(	layout_text_media + "img", 					"max-height", 	mediasize.text_media.height );
+			VMM.Lib.css(	layout_media + 		"img", 					"max-height", 	mediasize.media.height );
+			
+			// FIX FOR NON-WEBKIT BROWSERS
+			VMM.Lib.css(	layout_text_media + "img", 					"max-width", 	mediasize.text_media.width );
+			VMM.Lib.css(	layout_text_media + ".twitter .avatar img", "max-width", 	32 );
+			VMM.Lib.css(	layout_text_media + ".twitter .avatar img", "max-height", 	32 );
+			VMM.Lib.css(	layout_media + 		".twitter .avatar img", "max-width", 	32 );
+			VMM.Lib.css(	layout_media + 		".twitter .avatar img", "max-height", 	32 );
+			
+			// IFRAME FULL SIZE VIDEO
+			VMM.Lib.width(	layout_text_media + ".media-frame", 						mediasize.text_media.video.width);
+			VMM.Lib.height(	layout_text_media + ".media-frame", 						mediasize.text_media.video.height);
+			VMM.Lib.width(	layout_media + 		".media-frame", 						mediasize.media.video.width);
+			VMM.Lib.height(	layout_media + 		".media-frame", 						mediasize.media.video.height);
+			VMM.Lib.css(	layout_media + 		".media-frame", 		"max-height", 	mediasize.media.video.height);
+			VMM.Lib.css(	layout_media + 		".media-frame", 		"max-width", 	mediasize.media.video.width);
+			
+			// SOUNDCLOUD
+			VMM.Lib.height(	layout_media + 		".soundcloud", 							168);
+			VMM.Lib.height(	layout_text_media + ".soundcloud", 							168);
+			VMM.Lib.width(	layout_media + 		".soundcloud", 							mediasize.media.width);
+			VMM.Lib.width(	layout_text_media + ".soundcloud", 							mediasize.text_media.width);
+			VMM.Lib.css(	layout_both + 		".soundcloud", 			"max-height", 	168 );
+			
+			// MAPS
+			VMM.Lib.height(	layout_text_media + ".map", 								mediasize.text_media.height);
+			VMM.Lib.css(	layout_media + 		".map", 				"max-height", 	mediasize.media.height);
+			VMM.Lib.width(	layout_media + 		".map", 								mediasize.media.width);
+
+			// DOCS
+			VMM.Lib.height(	layout_text_media + ".doc", 								mediasize.text_media.height);
+			VMM.Lib.height(	layout_media + 		".doc", 								mediasize.media.height);
+			
+			// MAINTAINS VERTICAL CENTER IF IT CAN
+			for(var i = 0; i < slides.length; i++) {
+				
+				slides[i].layout(is_skinny);
+				
+				if (slides[i].content_height() > config.slider.height + 20) {
+					slides[i].css("display", "block");
+				} else {
+					slides[i].css("display", "table");
+				}
+			}
+			
+		}
+		
+		/* POSITION SLIDES
+		================================================== */
+		var positionSlides = function() {
+			var pos = 0;
+			for(var i = 0; i < slides.length; i++) {
+				pos = i * (config.slider.width+config.spacing);
+				slides[i].leftpos(pos);
+			}
+		}
+		
+		/* OPACITY SLIDES
+		================================================== */
+		var opacitySlides = function(n) {
+			var _ease = "linear";
+			for(var i = 0; i < slides.length; i++) {
+				if (i == current_slide) {
+					slides[i].animate(config.duration, _ease, {"opacity": 1});
+				} else if (i == current_slide - 1 || i == current_slide + 1) {
+					slides[i].animate(config.duration, _ease, {"opacity": 0.1});
+				} else {
+					slides[i].opacity(n);
+				}
+			}
+		}
+		
+		/* GO TO SLIDE
+			goToSlide(n, ease, duration);
+		================================================== */
+		var goToSlide = function(n, ease, duration, fast, firstrun) {
+			
+			/* STOP ANY VIDEO PLAYERS ACTIVE
+			================================================== */
+			VMM.ExternalAPI.youtube.stopPlayers();
+			
+			// Set current slide
+			current_slide = n;
+			
+			var _ease = config.ease;
+			var _duration = config.duration;
+			var is_last = false;
+			var is_first = false;
+			var _pos = slides[current_slide].leftpos();
+			var _title = "";
+			
+			if (current_slide == 0) {is_first = true};
+			if (current_slide +1 >= slides.length) {is_last = true};
+			if (ease != null && ease != "") {_ease = ease};
+			if (duration != null && duration != "") {_duration = duration};
+			
+			/* set proper nav titles and dates etc.
+			================================================== */
+			if (is_first) {
+				VMM.Lib.visible(navigation.prevBtn, false);
+			} else {
+				VMM.Lib.visible(navigation.prevBtn, true);
+				_title = VMM.Util.unlinkify(data[current_slide - 1].title)
+				if (config.type == "timeline") {
+					if(typeof data[current_slide - 1].date === "undefined") {
+						VMM.attachElement(navigation.prevDate, _title);
+						VMM.attachElement(navigation.prevTitle, "");
+					} else {
+						VMM.attachElement(navigation.prevDate, data[current_slide - 1].startdate_str);
+						VMM.attachElement(navigation.prevTitle, _title);
+					}
+				} else {
+					VMM.attachElement(navigation.prevTitle, _title);
+				}
+				
+			}
+			if (is_last) {
+				VMM.Lib.visible(navigation.nextBtn, false);
+			} else {
+				VMM.Lib.visible(navigation.nextBtn, true);
+				_title = VMM.Util.unlinkify(data[current_slide + 1].title);
+				if (config.type == "timeline") {
+					if(typeof data[current_slide + 1].date === "undefined") {
+						VMM.attachElement(navigation.nextDate, _title);
+						VMM.attachElement(navigation.nextTitle, "");
+					} else {
+						VMM.attachElement(navigation.nextDate, data[current_slide + 1].startdate_str);
+						VMM.attachElement(navigation.nextTitle, _title);
+					}
+				} else {
+					VMM.attachElement(navigation.nextTitle,  _title);
+				}
+				
+			}
+			
+			/* ANIMATE SLIDE
+			================================================== */
+			if (fast) {
+				VMM.Lib.css($slider_container, "left", -(_pos - config.slider.content.padding));	
+			} else{
+				VMM.Lib.stop($slider_container);
+				VMM.Lib.animate($slider_container, _duration, _ease, {"left": -(_pos - config.slider.content.padding)});
+			}
+			
+			if (firstrun) {
+				VMM.fireEvent(layout, "LOADED");
+			}
+			
+			/* SET Vertical Scoll
+			================================================== */
+			if (slides[current_slide].height() > config.slider_height) {
+				VMM.Lib.css(".slider", "overflow-y", "scroll" );
+			} else {
+				VMM.Lib.css(layout, "overflow-y", "hidden" );
+				VMM.Lib.animate(layout, _duration, _ease, {scrollTop: VMM.Lib.prop(layout, "scrollHeight") - VMM.Lib.height(layout) });
+			}
+			
+			preloadSlides();
+		}
+
+		/* BUILD NAVIGATION
+		================================================== */
+		var buildNavigation = function() {
+			
+			var temp_icon = "<div class='icon'>&nbsp;</div>";
+			
+			navigation.nextBtn = VMM.appendAndGetElement($slider, "<div>", "nav-next");
+			navigation.prevBtn = VMM.appendAndGetElement($slider, "<div>", "nav-previous");
+			navigation.nextBtnContainer = VMM.appendAndGetElement(navigation.nextBtn, "<div>", "nav-container", temp_icon);
+			navigation.prevBtnContainer = VMM.appendAndGetElement(navigation.prevBtn, "<div>", "nav-container", temp_icon);
+			if (config.type == "timeline") {
+				navigation.nextDate = VMM.appendAndGetElement(navigation.nextBtnContainer, "<div>", "date", "");
+				navigation.prevDate = VMM.appendAndGetElement(navigation.prevBtnContainer, "<div>", "date", "");
+			}
+			navigation.nextTitle = VMM.appendAndGetElement(navigation.nextBtnContainer, "<div>", "title", "Title Goes Here");
+			navigation.prevTitle = VMM.appendAndGetElement(navigation.prevBtnContainer, "<div>", "title", "Title Goes Here");
+			
+			VMM.bindEvent(".nav-next", onNextClick);
+			VMM.bindEvent(".nav-previous", onPrevClick);
+			VMM.bindEvent(window, onKeypressNav, 'keydown');
+		}
+		
+		/* BUILD
+		================================================== */
+		var build = function() {
+			
+			// Clear out existing content
+			VMM.attachElement(layout, "");
+			
+			// Get DOM Objects to local objects
+			$slider = VMM.getElement("div.slider");
+			$slider_mask = VMM.appendAndGetElement($slider, "<div>", "slider-container-mask");
+			$slider_container = VMM.appendAndGetElement($slider_mask, "<div>", "slider-container");
+			$slides_items = VMM.appendAndGetElement($slider_container, "<div>", "slider-item-container");
+			
+			// BUILD NAVIGATION
+			buildNavigation();
+
+			// ATTACH SLIDES
+			buildSlides(data);
+			
+			/* MAKE SLIDER TOUCHABLE
+			================================================== */
+			
+			var __duration = 3000;
+			
+			if (VMM.Browser.device == "tablet" || VMM.Browser.device == "mobile") {
+				config.duration = 500;
+				__duration = 1000;
+				//VMM.TouchSlider.createPanel($slider_container, $slider_container, VMM.Lib.width(slides[0]), config.spacing, true);
+				//VMM.TouchSlider.createPanel($slider_container, $slider_container, slides[0].width(), config.spacing, true);
+				//VMM.bindEvent($slider_container, onTouchUpdate, "TOUCHUPDATE");
+			} else if (VMM.Browser.device == "mobile") {
+				
+			} else {
+				//VMM.DragSlider.createPanel($slider_container, $slider_container, VMM.Lib.width(slides[0]), config.spacing, true);
+			}
+			
+			reSize(false, true);
+			VMM.Lib.visible(navigation.prevBtn, false);
+			goToSlide(config.current_slide, "easeOutExpo", __duration, true, true);
+			
+			_active = true;
+		};
+		
+	};
+	
+}
+
+
+
+
+
+
+/*********************************************** 
+     Begin VMM.Slider.Slide.js 
+***********************************************/ 
+
+/* Slider Slide 
+================================================== */
+if (typeof VMM.Slider != 'undefined') {
+	// VMM.Slider.Slide(element, data)
+	VMM.Slider.Slide = function(d, _parent) {
+		
+		var data		=	d;
+		var slide		=	{};
+		var media		=	"";
+		var loaded		=	false;
+		var preloaded	=	false;
+		var is_skinny	=	false;
+		var element		=	VMM.appendAndGetElement(_parent, "<div>", "slider-item");
+		var c = {slide:"", text: "", media: "", media_element: "", layout: "content-container layout", has: { headline: false, text: false, media: false }};
+		var $media, $text, $slide, $wrap;
+		/* PUBLIC
+		================================================== */
+		this.show = function(skinny) {
+			if (!loaded) {
+				if (preloaded) {
+					reLayout(skinny);
+				} else {
+					render(skinny);
+				}
+			}
+		};
+		
+		this.hide = function() {
+			if (loaded) {
+				removeSlide();
+			}
+		};
+		
+		this.layout = function(skinny) {
+			if (loaded && preloaded) {
+				reLayout(skinny);
+			}
+		};
+		
+		this.elem = function() {	
+			return element;
+		};
+		
+		this.position = function() {
+			return VMM.Lib.position(element);
+		};
+		
+		this.leftpos = function(p) {
+			if(typeof p != 'undefined') {
+				VMM.Lib.css(element, "left", p);
+			} else {
+				return VMM.Lib.position(element).left
+			}
+		};
+		
+		this.animate = function(d, e, p) {
+			VMM.Lib.animate(element, d, e, p);
+		};
+		
+		this.css = function(p, v) {
+			VMM.Lib.css(element, p, v );
+		}
+		
+		this.opacity = function(p) {
+			VMM.Lib.css(element, "opacity", p);	
+		}
+		
+		this.width = function() {
+			return VMM.Lib.width(element);
+		};
+		
+		this.height = function() {
+			return VMM.Lib.height(element);
+		};
+		
+		this.content_height = function () {
+			var ch = VMM.Lib.find( element, ".content")[0];
+			
+			if (ch != 'undefined' && ch != null) {
+				return VMM.Lib.height(ch);
+			} else {
+				return 0;
+			}
+		}
+		
+		/* PRIVATE
+		================================================== */
+		var render = function(skinny) {
+			buildSlide(skinny);
+			loaded = true;
+			preloaded = true;
+			var timer = setTimeout(VMM.ExternalAPI.pushQues, 500);
+		};
+		
+		var removeSlide = function() {
+			//VMM.attachElement(element, "");
+			loaded = false;
+		}
+		
+		var reLayout = function(skinny) {
+			
+			if (c.has.text)	{
+				if (skinny) {
+					if (!is_skinny) {
+						VMM.Lib.removeClass($slide, "pad-left");
+						VMM.Lib.detach($text);
+						VMM.Lib.prepend($slide, $text);
+						is_skinny = true;
+					}
+				} else {
+					if (is_skinny) {
+						VMM.Lib.addClass($slide, "pad-left");
+						VMM.Lib.detach($text);
+						VMM.Lib.append($slide, $text);
+						is_skinny = false
+					}
+				}
+			} 
+		}
+		
+		var buildSlide = function(skinny) {
+			$wrap	=	VMM.appendAndGetElement(element, "<div>", "content");
+			$slide	=	VMM.appendAndGetElement($wrap, "<div>");
+			
+			/* DATE
+			================================================== */
+			if (data.startdate != null && data.startdate != "") {
+				if (type.of(data.startdate) == "date") {
+					if (data.type != "start") {
+						var st = data.startdate_str;
+						var en = data.enddate_str;
+						if (st != en) {
+							c.text += VMM.createElement("h2", st + " &mdash; " + en + "", "date");
+						} else {
+							c.text += VMM.createElement("h2", st, "date");
+						}
+					}
+				}
+			}
+			
+			/* HEADLINE
+			================================================== */
+			if (data.headline != null && data.headline != "") {
+				c.has.headline		=	true;
+				if (data.type == "start") {
+					c.text		+=	VMM.createElement("h2", VMM.Util.linkify_with_twitter(data.headline, "_blank"), "start");
+				} else { 
+					c.text		+=	VMM.createElement("h3", VMM.Util.linkify_with_twitter(data.headline, "_blank"));
+				}
+			}
+			
+			/* TEXT
+			================================================== */
+			if (data.text != null && data.text != "") {
+				c.has.text		=	true;
+				c.text			+=	VMM.createElement("p", VMM.Util.linkify_with_twitter(data.text, "_blank"));
+			}
+			
+			if (c.has.text || c.has.headline) {
+				c.text			=	VMM.createElement("div", c.text, "container");
+				$text			=	VMM.appendAndGetElement($slide, "<div>", "text", c.text);
+			}
+			
+			/* MEDIA
+			================================================== */
+			if (data.asset != null && data.asset != "") {
+				if (data.asset.media != null && data.asset.media != "") {
+					c.has.media	=	true;
+					$media		=	VMM.appendAndGetElement($slide, "<div>", "media", VMM.MediaElement.create(data.asset));
+				}
+			}
+			
+			/* COMBINE
+			================================================== */
+			if (c.has.text)	{ c.layout		+=	"-text"		};
+			if (c.has.media){ c.layout		+=	"-media"	};
+
+			if (c.has.text)	{
+				if (skinny) {
+					VMM.Lib.addClass($slide, c.layout);
+					is_skinny = true;
+				} else {
+					VMM.Lib.addClass($slide, c.layout);
+					VMM.Lib.addClass($slide, "pad-left");
+					VMM.Lib.detach($text);
+					VMM.Lib.append($slide, $text);
+				}
+				
+			} else {
+				VMM.Lib.addClass($slide, c.layout);
+			}
+			
+			
+		};
+		
+	}
+	
+};
+
+
+/*********************************************** 
+     Begin VMM.Util.js 
+***********************************************/ 
+
+/* Utilities and Useful Functions
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.Util == 'undefined') {
+	
+	VMM.Util = ({
+		
+		init: function() {
+			return this;
+		},
+		
+		/* CORRECT PROTOCOL (DOES NOT WORK)
+		================================================== */
+		correctProtocol: function(url) {
+			var loc = (window.parent.location.protocol).toString();
+			var prefix = "";
+			var _url = url.split("://", 2);
+			
+			if (loc.match("http")) {
+				prefix = loc;
+			} else {
+				prefix = "https";
+			}
+			
+			return prefix + "://" + _url[1];
+			
+		},
+		
+		/* GET OBJECT ATTRIBUTE BY INDEX
+		================================================== */
+		getObjectAttributeByIndex: function(obj, index) {
+			if(typeof obj != 'undefined') {
+				var i = 0;
+				for (var attr in obj){
+					if (index === i){
+						return obj[attr];
+					}
+					i++;
+				}
+				return "";
+			} else {
+				return "";
+			}
+			
+		},
+		/* RANDOM BETWEEN
+		================================================== */
+		//VMM.Util.randomBetween(1, 3)
+		randomBetween: function(min, max) {
+			return Math.floor(Math.random() * (max - min + 1) + min);
+		},
+		
+		/* AVERAGE
+			http://jsfromhell.com/array/average
+			var x = VMM.Util.average([2, 3, 4]);
+			VMM.Util.average([2, 3, 4]).mean
+		================================================== */
+		average: function(a) {
+		    var r = {mean: 0, variance: 0, deviation: 0}, t = a.length;
+		    for(var m, s = 0, l = t; l--; s += a[l]);
+		    for(m = r.mean = s / t, l = t, s = 0; l--; s += Math.pow(a[l] - m, 2));
+		    return r.deviation = Math.sqrt(r.variance = s / t), r;
+		},
+		
+		/* CUSTOM SORT
+		================================================== */
+		
+		customSort: function(a, b) {
+			var a1= a, b1= b;
+			if(a1== b1) return 0;
+			return a1> b1? 1: -1;
+		},
+		
+		/* Given an int or decimal, turn that into string in $xxx,xxx.xx format.
+		================================================== */
+		number2money: function(n, symbol, padding) {
+			var symbol = (symbol !== null) ? symbol : true; // add $
+			var padding = (padding !== null) ? padding : false; //pad with .00
+			var number = VMM.Math2.floatPrecision(n,2); // rounded correctly to two digits, if decimals passed
+			var formatted = this.niceNumber(number);
+			// no decimal and padding is enabled
+			if (!formatted.split(/\./g)[1] && padding) formatted = formatted + ".00";
+			// add money sign
+			if (symbol) formatted = "$"+formatted;
+			return formatted;
+		},
+		
+		
+		/* Returns a word count number
+		================================================== */
+		wordCount: function(s) {
+			var fullStr = s + " ";
+			var initial_whitespace_rExp = /^[^A-Za-z0-9\'\-]+/gi;
+			var left_trimmedStr = fullStr.replace(initial_whitespace_rExp, "");
+			var non_alphanumerics_rExp = /[^A-Za-z0-9\'\-]+/gi;
+			var cleanedStr = left_trimmedStr.replace(non_alphanumerics_rExp, " ");
+			var splitString = cleanedStr.split(" ");
+			var word_count = splitString.length -1;
+			if (fullStr.length <2) {
+				word_count = 0;
+			}
+			return word_count;
+		},
+		
+		ratio: {
+			fit: function(w, h, ratio_w, ratio_h) {
+				//VMM.Util.ratio.fit(w, h, ratio_w, ratio_h).width;
+				var _fit = {width:0,height:0};
+				// TRY WIDTH FIRST
+				_fit.width = w;
+				//_fit.height = Math.round((h / ratio_h) * ratio_w);
+				_fit.height = Math.round((w / ratio_w) * ratio_h);
+				if (_fit.height > h) {
+					_fit.height = h;
+					//_fit.width = Math.round((w / ratio_w) * ratio_h);
+					_fit.width = Math.round((h / ratio_h) * ratio_w);
+					
+					if (_fit.width > w) {
+						trace("FIT: DIDN'T FIT!!! ")
+					}
+				}
+				
+				return _fit;
+				
+			},
+			r16_9: function(w,h) {
+				//VMM.Util.ratio.r16_9(w, h) // Returns corresponding number
+				if (w !== null && w !== "") {
+					return Math.round((h / 16) * 9);
+				} else if (h !== null && h !== "") {
+					return Math.round((w / 9) * 16);
+				}
+			},
+			r4_3: function(w,h) {
+				if (w !== null && w !== "") {
+					return Math.round((h / 4) * 3);
+				} else if (h !== null && h !== "") {
+					return Math.round((w / 3) * 4);
+				}
+			}
+		},
+		
+		date: {
+			
+			dateformats: {
+				year: "yyyy",
+				month_short: "mmm",
+				month: "mmmm yyyy",
+				full_short: "mmm d",
+				full: "mmmm d',' yyyy",
+				time_no_seconds_short: "h:MM TT",
+				time_no_seconds_small_date: "h:MM TT'<br/><small>'mmmm d',' yyyy'</small>'",
+				full_long: "mmm d',' yyyy 'at' hh:MM TT",
+				full_long_small_date: "hh:MM TT'<br/><small>mmm d',' yyyy'</small>'",
+			},
+			
+			month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			month_abbr: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
+			day: ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+			day_abbr: ["Sun.","Mon.", "Tues.", "Wed.", "Thurs.", "Fri.", "Sat."],
+			hour: [1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12],
+			hour_suffix: ["am"],
+			
+			//B.C.
+			bc_format: {
+				year: "yyyy",
+				month_short: "mmm",
+				month: "mmmm yyyy",
+				full_short: "mmm d",
+				full: "mmmm d',' yyyy",
+				time_no_seconds_short: "h:MM TT",
+				time_no_seconds_small_date: "dddd', 'h:MM TT'<br/><small>'mmmm d',' yyyy'</small>'",
+				full_long: "dddd',' mmm d',' yyyy 'at' hh:MM TT",
+				full_long_small_date: "hh:MM TT'<br/><small>'dddd',' mmm d',' yyyy'</small>'",
+			},
+			
+			setLanguage: function(lang) {
+				trace("SET DATE LANGUAGE");
+				VMM.Util.date.dateformats	=	lang.dateformats;	
+				VMM.Util.date.month			=	lang.date.month;
+				VMM.Util.date.month_abbr	=	lang.date.month_abbr;
+				VMM.Util.date.day			=	lang.date.day;
+				VMM.Util.date.day_abbr		=	lang.date.day_abbr;
+				dateFormat.i18n.dayNames	=	lang.date.day_abbr.concat(lang.date.day);
+				dateFormat.i18n.monthNames	=	lang.date.month_abbr.concat(lang.date.month);
+			},
+			
+			parse: function(d) {
+				if (type.of(d) == "date") {
+					return d;
+				} else {
+					var _date = new Date(0, 0, 1, 0, 0, 0, 0);
+					var _d_array; // DATE ARRAY
+					var _t_array; // TIME ARRAY
+					if ( d.match(/,/gi) ) {
+						_d_array = d.split(",");
+						for(var i = 0; i < _d_array.length; i++) {
+							_d_array[i] = parseInt(_d_array[i]);
+						}
+						if (	_d_array[0]			) {	_date.setFullYear(		_d_array[0]);			}
+						if (	_d_array[1]	> 1		) {	_date.setMonth(			_d_array[1] - 1);		}
+						if (	_d_array[2]	> 1		) {	_date.setDate(			_d_array[2]);			}
+						if (	_d_array[3]	> 1		) {	_date.setHours(			_d_array[3]);			}
+						if (	_d_array[4]	> 1		) {	_date.setMinutes(		_d_array[4]);			}
+						if (	_d_array[5]	> 1		) {	_date.setSeconds(		_d_array[5]);			}
+						if (	_d_array[6]	> 1		) {	_date.setMilliseconds(	_d_array[6]);			}
+					} else if (d.match("/")) {
+						var _time_parse;
+						var _times;
+						if (d.match(" ")) {
+							_time_parse = d.split(" ");
+							if (d.match(":")) {
+								_t_array = _time_parse[1].split(":");
+								if (	_t_array[0]	>= 1	) {		_date.setHours(			_t_array[0]);	}
+								if (	_t_array[1]	>= 1	) {		_date.setMinutes(		_t_array[1]);	}
+								if (	_t_array[2]	>= 1	) {		_date.setSeconds(		_t_array[2]);	}
+								if (	_t_array[3]	>= 1	) {		_date.setMilliseconds(	_t_array[3]);	}
+							}
+							_d_array = _time_parse[0].split("/");
+						} else {
+							_d_array = d.split("/");
+						}
+						if (	_d_array[2]			) {	_date.setFullYear(		_d_array[2]);			}
+						if (	_d_array[0]	> 1		) {	_date.setMonth(			_d_array[0] - 1);		}
+						if (	_d_array[1]	> 1		) {	_date.setDate(			_d_array[1]);			}
+					} else if (d.length < 5) {
+						_date.setFullYear(parseInt(d));
+						_date.setMonth(0);
+						_date.setDate(1);
+						_date.setHours(0);
+						_date.setMinutes(0);
+						_date.setSeconds(0);
+						_date.setMilliseconds(0);
+					} else {
+						_date = new Date(
+							parseInt(d.slice(0,4)), 
+							parseInt(d.slice(4,6)) - 1, 
+							parseInt(d.slice(6,8)), 
+							parseInt(d.slice(8,10)), 
+							parseInt(d.slice(10,12))
+						);
+					}
+					return _date;
+				}
+			},
+			
+			prettyDate: function(d, is_abbr, d2) {
+				var _date;
+				var _date2;
+				var format;
+				var bc_check;
+				var is_pair = false;
+				
+				if (d2 != null) {
+					is_pair = true;
+				}
+				
+				if (type.of(d) == "date") {
+					if (d.getMonth() === 0 && d.getDate() == 1 && d.getHours() === 0 && d.getMinutes() === 0 ) {
+						// YEAR ONLY
+						format = VMM.Util.date.dateformats.year;
+					} else if (d.getDate() <= 1 && d.getHours() === 0 && d.getMinutes() === 0) {
+						// YEAR MONTH
+						if (is_abbr) {
+							format = VMM.Util.date.dateformats.month_short;
+						} else {
+							format = VMM.Util.date.dateformats.month;
+						}
+					} else if (d.getHours() === 0 && d.getMinutes() === 0) {
+						// YEAR MONTH DAY
+						if (is_abbr) {
+							format = VMM.Util.date.dateformats.full_short;
+						} else {
+							format = VMM.Util.date.dateformats.full;
+						}
+					} else  if (d.getMinutes() === 0) {
+						// YEAR MONTH DAY HOUR
+						if (is_abbr) {
+							format = VMM.Util.date.dateformats.time_no_seconds_short;
+						} else {
+							format = VMM.Util.date.dateformats.time_no_seconds_small_date;
+						}
+					} else {
+						// YEAR MONTH DAY HOUR MINUTE
+						if (is_abbr){
+							format = VMM.Util.date.dateformats.time_no_seconds_short; 
+						} else {
+							format = VMM.Util.date.dateformats.full_long; 
+						}
+					}
+					
+					_date = dateFormat(d, format);
+					bc_check = _date.split(" ");
+					
+					// BC TIME SUPPORT
+					for(var i = 0; i < bc_check.length; i++) {
+						if ( parseInt(bc_check[i]) < 0 ) {
+							trace("YEAR IS BC");
+							var bc_original = 	bc_check[i];
+							var bc_number = 	Math.abs( parseInt(bc_check[i]) );
+							var bc_string = 	bc_number.toString() + " B.C.";
+							_date = _date.replace(bc_original, bc_string);
+						}
+					}
+					
+					
+					if (is_pair) {
+						_date2 = dateFormat(d2, format);
+						bc_check = _date2.split(" ");
+						// BC TIME SUPPORT
+						for(var i = 0; i < bc_check.length; i++) {
+							if ( parseInt(bc_check[i]) < 0 ) {
+								trace("YEAR IS BC");
+								var bc_original = 	bc_check[i];
+								var bc_number = 	Math.abs( parseInt(bc_check[i]) );
+								var bc_string = 	bc_number.toString() + " B.C.";
+								_date2 = _date2.replace(bc_original, bc_string);
+							}
+						}
+						
+					}
+				} else {
+					trace("NOT A VALID DATE?");
+					trace(d);
+				}
+				
+				if (is_pair) {
+					return _date + " &mdash; " + _date2;
+				} else {
+					return _date;
+				}
+			}
+			
+		},
+		
+		// VMM.Util.doubledigit(number).
+		doubledigit: function(n) {
+			return (n < 10 ? '0' : '') + n;
+		},
+		
+		
+		/* Returns a truncated segement of a long string of between min and max words. If possible, ends on a period (otherwise goes to max).
+		================================================== */
+		truncateWords: function(s, min, max) {
+			
+			if (!min) min = 30;
+			if (!max) max = min;
+			
+			var initial_whitespace_rExp = /^[^A-Za-z0-9\'\-]+/gi;
+			var left_trimmedStr = s.replace(initial_whitespace_rExp, "");
+			var words = left_trimmedStr.split(" ");
+			
+			var result = [];
+			
+			min = Math.min(words.length, min);
+			max = Math.min(words.length, max);
+			
+			for (var i = 0; i<min; i++) {
+				result.push(words[i]);
+			}		
+			
+			for (var j = min; i<max; i++) {
+				var word = words[i];
+				
+				result.push(word);
+				
+				if (word.charAt(word.length-1) == '.') {
+					break;
+				}
+			}		
+			
+			return (result.join(' '));
+		},
+		
+		/* Turns plain text links into real links
+		================================================== */
+		// VMM.Util.linkify();
+		linkify: function(text,targets,is_touch) {
+			
+			// http://, https://, ftp://
+			var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+
+			// www. sans http:// or https://
+			var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+
+			// Email addresses
+			var emailAddressPattern = /(([a-zA-Z0-9_\-\.]+)@[a-zA-Z_]+?(?:\.[a-zA-Z]{2,6}))+/gim;
+			
+
+			return text
+				.replace(urlPattern, "<a target='_blank' href='$&' onclick='void(0)'>$&</a>")
+				.replace(pseudoUrlPattern, "$1<a target='_blank' onclick='void(0)' href='http://$2'>$2</a>")
+				.replace(emailAddressPattern, "<a target='_blank' onclick='void(0)' href='mailto:$1'>$1</a>");
+		},
+		
+		linkify_with_twitter: function(text,targets,is_touch) {
+			
+			// http://, https://, ftp://
+			var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+			var url_pattern = /(\()((?:ht|f)tps?:\/\/[a-z0-9\-._~!$&'()*+,;=:\/?#[\]@%]+)(\))|(\[)((?:ht|f)tps?:\/\/[a-z0-9\-._~!$&'()*+,;=:\/?#[\]@%]+)(\])|(\{)((?:ht|f)tps?:\/\/[a-z0-9\-._~!$&'()*+,;=:\/?#[\]@%]+)(\})|(<|&(?:lt|#60|#x3c);)((?:ht|f)tps?:\/\/[a-z0-9\-._~!$&'()*+,;=:\/?#[\]@%]+)(>|&(?:gt|#62|#x3e);)|((?:^|[^=\s'"\]])\s*['"]?|[^=\s]\s+)(\b(?:ht|f)tps?:\/\/[a-z0-9\-._~!$'()*+,;=:\/?#[\]@%]+(?:(?!&(?:gt|#0*62|#x0*3e);|&(?:amp|apos|quot|#0*3[49]|#x0*2[27]);[.!&',:?;]?(?:[^a-z0-9\-._~!$&'()*+,;=:\/?#[\]@%]|$))&[a-z0-9\-._~!$'()*+,;=:\/?#[\]@%]*)*[a-z0-9\-_~$()*+=\/#[\]@%])/img;
+			var url_replace = '$1$4$7$10$13<a href="$2$5$8$11$14" class="hyphenate">$2$5$8$11$14</a>$3$6$9$12';
+			
+			// www. sans http:// or https://
+			var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+			function replaceURLWithHTMLLinks(text) {
+			    var exp = /(\b(https?|ftp|file):\/\/([-A-Z0-9+&@#%?=~_|!:,.;]*)([-A-Z0-9+&@#%?\/=~_|!:,.;]*)[-A-Z0-9+&@#\/%=~_|])/ig;
+			    return text.replace(exp, "<a href='$1' target='_blank'>$3</a>");
+			}
+			// Email addresses
+			var emailAddressPattern = /(([a-zA-Z0-9_\-\.]+)@[a-zA-Z_]+?(?:\.[a-zA-Z]{2,6}))+/gim;
+			
+			var twitterHandlePattern = /(@([\w]+))/g;
+			
+			var twitterSearchPattern = /(#([\w]+))/g;
+
+			return text
+				//.replace(urlPattern, "<a target='_blank' href='$&' onclick='void(0)'>$&</a>")
+				.replace(url_pattern, url_replace)
+				.replace(pseudoUrlPattern, "$1<a target='_blank' class='hyphenate' onclick='void(0)' href='http://$2'>$2</a>")
+				.replace(emailAddressPattern, "<a target='_blank' onclick='void(0)' href='mailto:$1'>$1</a>")
+				.replace(twitterHandlePattern, "<a href='http://twitter.com/$2' target='_blank' onclick='void(0)'>$1</a>")
+				.replace(twitterSearchPattern, "<a href='http://twitter.com/#search?q=%23$2' target='_blank' 'void(0)'>$1</a>");
+		},
+		
+		linkify_wikipedia: function(text) {
+			
+			var urlPattern = /<i[^>]*>(.*?)<\/i>/gim;
+			return text
+				.replace(urlPattern, "<a target='_blank' href='http://en.wikipedia.org/wiki/$&' onclick='void(0)'>$&</a>")
+				.replace(/<i\b[^>]*>/gim, "")
+				.replace(/<\/i>/gim, "")
+				.replace(/<b\b[^>]*>/gim, "")
+				.replace(/<\/b>/gim, "");
+		},
+		/* Turns plain text links into real links
+		================================================== */
+		// VMM.Util.unlinkify();
+		unlinkify: function(text) {
+			if(!text) return text;
+			text = text.replace(/<a\b[^>]*>/i,"");
+			text = text.replace(/<\/a>/i, "");
+			return text;
+		},
+		
+		/* TK
+		================================================== */
+		nl2br: function(text) {
+			return text.replace(/(\r\n|[\r\n]|\\n|\\r)/g,"<br/>");
+		},
+		
+		/* Generate a Unique ID
+		================================================== */
+		// VMM.Util.unique_ID(size);
+		unique_ID: function(size) {
+			
+			var getRandomNumber = function(range) {
+				return Math.floor(Math.random() * range);
+			};
+
+			var getRandomChar = function() {
+				var chars = "abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ";
+				return chars.substr( getRandomNumber(62), 1 );
+			};
+
+			var randomID = function(size) {
+				var str = "";
+				for(var i = 0; i < size; i++) {
+					str += getRandomChar();
+				}
+				return str;
+			};
+			
+			return randomID(size);
+		},
+		/* Tells you if a number is even or not
+		================================================== */
+		// VMM.Util.isEven(n)
+		isEven: function(n){
+			return (n%2 === 0) ? true : false;
+		},
+		/* Get URL Variables
+		================================================== */
+		//	var somestring = VMM.Util.getUrlVars(str_url)["varname"];
+		getUrlVars: function(string) {
+			
+			var str = string.toString();
+			
+			if (str.match('&#038;')) { 
+				str = str.replace("&#038;", "&");
+			} else if (str.match('&#38;')) {
+				str = str.replace("&#38;", "&");
+			} else if (str.match('&amp;')) {
+				str = str.replace("&amp;", "&");
+			}
+			
+			var vars = [], hash;
+			var hashes = str.slice(str.indexOf('?') + 1).split('&');
+			for(var i = 0; i < hashes.length; i++) {
+				hash = hashes[i].split('=');
+				vars.push(hash[0]);
+				vars[hash[0]] = hash[1];
+			}
+			
+			
+			return vars;
+		},
+
+		/* Cleans up strings to become real HTML
+		================================================== */
+		toHTML: function(text) {
+			
+			text = this.nl2br(text);
+			text = this.linkify(text);
+			
+			return text.replace(/\s\s/g,"&nbsp;&nbsp;");
+		},
+		
+		/* Returns text strings as CamelCase
+		================================================== */
+		toCamelCase: function(s,forceLowerCase) {
+			
+			if(forceLowerCase !== false) forceLowerCase = true;
+			
+			var sps = ((forceLowerCase) ? s.toLowerCase() : s).split(" ");
+			
+			for(var i=0; i<sps.length; i++) {
+				
+				sps[i] = sps[i].substr(0,1).toUpperCase() + sps[i].substr(1);
+			}
+			
+			return sps.join(" ");
+		},
+		
+		/* Replaces dumb quote marks with smart ones
+		================================================== */
+		properQuotes: function(str) {
+			return str.replace(/\"([^\"]*)\"/gi,"&#8220;$1&#8221;");
+		},
+		/* Given an int or decimal, return a string with pretty commas in the correct spot.
+		================================================== */
+		niceNumber: function(n){
+		
+			var amount = String( Math.abs(Number(n) ) );
+		    
+			var leftOfDecimal = amount.split(/\./g)[0];
+			var rightOfDecimal = amount.split(/\./g)[1];
+		    
+			var formatted_text = '';
+		    
+			var num_a = leftOfDecimal.toArray();
+			num_a.reverse();
+		    
+			for (var i=1; i <= num_a.length; i++) {
+				if ( (i%3 == 0) && (i < num_a.length ) ) {
+					formatted_text = "," + num_a[i-1] + formatted_text;
+				} else {
+					formatted_text = num_a[i-1] + formatted_text;
+				}
+		    }
+			if (rightOfDecimal != null && rightOfDecimal != '' && rightOfDecimal != undefined) {
+				return formatted_text + "." + rightOfDecimal;
+			} else {
+				return formatted_text;
+			}
+		},
+		
+		/* Transform text to Title Case
+		================================================== */
+		toTitleCase: function(t){
+			
+			var __TitleCase = {
+				__smallWords: ['a', 'an', 'and', 'as', 'at', 'but','by', 'en', 'for', 'if', 'in', 'of', 'on', 'or','the', 'to', 'v[.]?', 'via', 'vs[.]?'],
+
+				init: function() {
+					this.__smallRE = this.__smallWords.join('|');
+					this.__lowerCaseWordsRE = new RegExp('\\b(' + this.__smallRE + ')\\b', 'gi');
+					this.__firstWordRE = new RegExp('^([^a-zA-Z0-9 \\r\\n\\t]*)(' + this.__smallRE + ')\\b', 'gi');
+					this.__lastWordRE = new RegExp('\\b(' + this.__smallRE + ')([^a-zA-Z0-9 \\r\\n\\t]*)$', 'gi');
+				},
+
+				toTitleCase: function(string) {
+					var line = '';
+
+					var split = string.split(/([:.;?!][ ]|(?:[ ]|^)["“])/);
+
+					for (var i = 0; i < split.length; ++i) {
+						var s = split[i];
+
+						s = s.replace(/\b([a-zA-Z][a-z.'’]*)\b/g,this.__titleCaseDottedWordReplacer);
+
+		 				// lowercase the list of small words
+						s = s.replace(this.__lowerCaseWordsRE, this.__lowerReplacer);
+
+						// if the first word in the title is a small word then capitalize it
+						s = s.replace(this.__firstWordRE, this.__firstToUpperCase);
+
+						// if the last word in the title is a small word, then capitalize it
+						s = s.replace(this.__lastWordRE, this.__firstToUpperCase);
+
+						line += s;
+					}
+
+					// special cases
+					line = line.replace(/ V(s?)\. /g, ' v$1. ');
+					line = line.replace(/(['’])S\b/g, '$1s');
+					line = line.replace(/\b(AT&T|Q&A)\b/ig, this.__upperReplacer);
+
+					return line;
+				},
+
+				__titleCaseDottedWordReplacer: function (w) {
+					return (w.match(/[a-zA-Z][.][a-zA-Z]/)) ? w : __TitleCase.__firstToUpperCase(w);
+				},
+
+				__lowerReplacer: function (w) { return w.toLowerCase() },
+
+				__upperReplacer: function (w) { return w.toUpperCase() },
+
+				__firstToUpperCase: function (w) {
+					var split = w.split(/(^[^a-zA-Z0-9]*[a-zA-Z0-9])(.*)$/);
+					if (split[1]){
+						split[1] = split[1].toUpperCase();
+						return split.join('');
+						
+					} else {
+						return "";
+					}
+					
+				},
+			};
+
+			__TitleCase.init();
+			
+			t = t.replace(/_/g," ");
+			t = __TitleCase.toTitleCase(t);
+			
+			return t;
+		},
+		
+	}).init();
+	
+	//'string'.linkify();
+	if(!String.linkify) {
+		String.prototype.linkify = function() {
+
+			// http://, https://, ftp://
+			var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
+
+			// www. sans http:// or https://
+			var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+
+			// Email addresses
+			var emailAddressPattern = /(([a-zA-Z0-9_\-\.]+)@[a-zA-Z_]+?(?:\.[a-zA-Z]{2,6}))+/gim;
+			
+			var twitterHandlePattern = /(@([\w]+))/g;
+			
+			var twitterSearchPattern = /(#([\w]+))/g;
+
+			return this
+				.replace(urlPattern, '<a target="_blank" href="$&">$&</a>')
+				.replace(pseudoUrlPattern, '$1<a target="_blank" href="http://$2">$2</a>')
+				.replace(emailAddressPattern, '<a target="_blank" href="mailto:$1">$1</a>')
+				.replace(twitterHandlePattern, "<a href='http://twitter.com/$2' target='_blank'>$1</a>")
+				.replace(twitterSearchPattern, "<a href='http://twitter.com/#search?q=%23$2' target='_blank'>$1</a>");
+	    };
+	};
+	//str.substr(3,4)
+	/*
+	 * Date Format 1.2.3
+	 * (c) 2007-2009 Steven Levithan <stevenlevithan.com>
+	 * MIT license
+	 *
+	 * Includes enhancements by Scott Trenda <scott.trenda.net>
+	 * and Kris Kowal <cixar.com/~kris.kowal/>
+	 *
+	 * Accepts a date, a mask, or a date and a mask.
+	 * Returns a formatted version of the given date.
+	 * The date defaults to the current date/time.
+	 * The mask defaults to dateFormat.masks.default.
+	 */
+
+	var dateFormat = function () {
+		var	token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
+			timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
+			timezoneClip = /[^-+\dA-Z]/g,
+			pad = function (val, len) {
+				val = String(val);
+				len = len || 2;
+				while (val.length < len) val = "0" + val;
+				return val;
+			};
+
+		// Regexes and supporting functions are cached through closure
+		return function (date, mask, utc) {
+			var dF = dateFormat;
+
+			// You can't provide utc if you skip other args (use the "UTC:" mask prefix)
+			if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
+				mask = date;
+				date = undefined;
+			}
+
+			// Passing date through Date applies Date.parse, if necessary
+			date = date ? new Date(date) : new Date;
+			if (isNaN(date)) throw SyntaxError("invalid date");
+
+			mask = String(dF.masks[mask] || mask || dF.masks["default"]);
+
+			// Allow setting the utc argument via the mask
+			if (mask.slice(0, 4) == "UTC:") {
+				mask = mask.slice(4);
+				utc = true;
+			}
+
+			var	_ = utc ? "getUTC" : "get",
+				d = date[_ + "Date"](),
+				D = date[_ + "Day"](),
+				m = date[_ + "Month"](),
+				y = date[_ + "FullYear"](),
+				H = date[_ + "Hours"](),
+				M = date[_ + "Minutes"](),
+				s = date[_ + "Seconds"](),
+				L = date[_ + "Milliseconds"](),
+				o = utc ? 0 : date.getTimezoneOffset(),
+				flags = {
+					d:    d,
+					dd:   pad(d),
+					ddd:  dF.i18n.dayNames[D],
+					dddd: dF.i18n.dayNames[D + 7],
+					m:    m + 1,
+					mm:   pad(m + 1),
+					mmm:  dF.i18n.monthNames[m],
+					mmmm: dF.i18n.monthNames[m + 12],
+					yy:   String(y).slice(2),
+					yyyy: y,
+					h:    H % 12 || 12,
+					hh:   pad(H % 12 || 12),
+					H:    H,
+					HH:   pad(H),
+					M:    M,
+					MM:   pad(M),
+					s:    s,
+					ss:   pad(s),
+					l:    pad(L, 3),
+					L:    pad(L > 99 ? Math.round(L / 10) : L),
+					t:    H < 12 ? "a"  : "p",
+					tt:   H < 12 ? "am" : "pm",
+					T:    H < 12 ? "A"  : "P",
+					TT:   H < 12 ? "AM" : "PM",
+					Z:    utc ? "UTC" : (String(date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
+					o:    (o > 0 ? "-" : "+") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
+					S:    ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
+				};
+
+			return mask.replace(token, function ($0) {
+				return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
+			});
+		};
+	}();
+
+	// Some common format strings
+	dateFormat.masks = {
+		"default":      "ddd mmm dd yyyy HH:MM:ss",
+		shortDate:      "m/d/yy",
+		mediumDate:     "mmm d, yyyy",
+		longDate:       "mmmm d, yyyy",
+		fullDate:       "dddd, mmmm d, yyyy",
+		shortTime:      "h:MM TT",
+		mediumTime:     "h:MM:ss TT",
+		longTime:       "h:MM:ss TT Z",
+		isoDate:        "yyyy-mm-dd",
+		isoTime:        "HH:MM:ss",
+		isoDateTime:    "yyyy-mm-dd'T'HH:MM:ss",
+		isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+	};
+
+	// Internationalization strings
+	dateFormat.i18n = {
+		dayNames: [
+			"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
+			"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+		],
+		monthNames: [
+			"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+			"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+		]
+	};
+
+	// For convenience...
+	Date.prototype.format = function (mask, utc) {
+		return dateFormat(this, mask, utc);
+	};
+	
+}
+
+/*********************************************** 
+     Begin VMM.LoadLib.js 
+***********************************************/ 
+
+/*
+	LoadLib
+	Based on LazyLoad by Ryan Grove
+	https://github.com/rgrove/lazyload/ 
+	Copyright (c) 2011 Ryan Grove <ryan@wonko.com>
+	All rights reserved.
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy of
+	this software and associated documentation files (the 'Software'), to deal in
+	the Software without restriction, including without limitation the rights to
+	use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+	the Software, and to permit persons to whom the Software is furnished to do so,
+	subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+================================================== */
+window.loadedJS = [];
+
+
+if(typeof VMM != 'undefined' && typeof VMM.LoadLib == 'undefined') {
+	//VMM.LoadLib.js('http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', onJQueryLoaded);
+	//VMM.LoadLib.css('http://someurl.css', onCSSLoaded);
+	
+	
+	
+	VMM.LoadLib = (function (doc) {
+		var env,
+		head,
+		pending = {},
+		pollCount = 0,
+		queue = {css: [], js: []},
+		styleSheets = doc.styleSheets;
+	
+		var loaded_Array = [];
+	
+		function isLoaded(url) {
+			var has_been_loaded = false;
+			for(var i=0; i<loaded_Array.length; i++) {
+				if (loaded_Array[i] == url) {
+					has_been_loaded = true;
+				}
+			}
+			if (!has_been_loaded) {
+				loaded_Array.push(url);
+			}
+			return has_been_loaded;
+		}
+
+		function createNode(name, attrs) {
+			var node = doc.createElement(name), attr;
+
+			for (attr in attrs) {
+				if (attrs.hasOwnProperty(attr)) {
+					node.setAttribute(attr, attrs[attr]);
+				}
+			}
+
+			return node;
+		}
+
+	  function finish(type) {
+	    var p = pending[type],
+	        callback,
+	        urls;
+
+	    if (p) {
+	      callback = p.callback;
+	      urls     = p.urls;
+	      urls.shift();
+	      pollCount = 0;
+	      if (!urls.length) {
+	        callback && callback.call(p.context, p.obj);
+	        pending[type] = null;
+	        queue[type].length && load(type);
+	      }
+	    }
+	  }
+
+	  function getEnv() {
+	    var ua = navigator.userAgent;
+
+	    env = {
+
+	      async: doc.createElement('script').async === true
+	    };
+
+	    (env.webkit = /AppleWebKit\//.test(ua))
+	      || (env.ie = /MSIE/.test(ua))
+	      || (env.opera = /Opera/.test(ua))
+	      || (env.gecko = /Gecko\//.test(ua))
+	      || (env.unknown = true);
+	  }
+
+	  function load(type, urls, callback, obj, context) {
+	    var _finish = function () { finish(type); },
+	        isCSS   = type === 'css',
+	        nodes   = [],
+	        i, len, node, p, pendingUrls, url;
+
+	    env || getEnv();
+
+	    if (urls) {
+
+	      urls = typeof urls === 'string' ? [urls] : urls.concat();
+
+	      if (isCSS || env.async || env.gecko || env.opera) {
+
+	        queue[type].push({
+	          urls    : urls,
+	          callback: callback,
+	          obj     : obj,
+	          context : context
+	        });
+	      } else {
+	        for (i = 0, len = urls.length; i < len; ++i) {
+	          queue[type].push({
+	            urls    : [urls[i]],
+	            callback: i === len - 1 ? callback : null,
+	            obj     : obj,
+	            context : context
+	          });
+	        }
+	      }
+	    }
+
+	    if (pending[type] || !(p = pending[type] = queue[type].shift())) {
+	      return;
+	    }
+
+	    head || (head = doc.head || doc.getElementsByTagName('head')[0]);
+	    pendingUrls = p.urls;
+
+	    for (i = 0, len = pendingUrls.length; i < len; ++i) {
+	      url = pendingUrls[i];
+
+	      if (isCSS) {
+	          node = env.gecko ? createNode('style') : createNode('link', {
+	            href: url,
+	            rel : 'stylesheet'
+	          });
+	      } else {
+	        node = createNode('script', {src: url});
+	        node.async = false;
+	      }
+
+	      node.className = 'lazyload';
+	      node.setAttribute('charset', 'utf-8');
+
+	      if (env.ie && !isCSS) {
+	        node.onreadystatechange = function () {
+	          if (/loaded|complete/.test(node.readyState)) {
+	            node.onreadystatechange = null;
+	            _finish();
+	          }
+	        };
+	      } else if (isCSS && (env.gecko || env.webkit)) {
+	        if (env.webkit) {
+	          p.urls[i] = node.href; 
+	          pollWebKit();
+	        } else {
+	          node.innerHTML = '@import "' + url + '";';
+	          pollGecko(node);
+	        }
+	      } else {
+	        node.onload = node.onerror = _finish;
+	      }
+
+	      nodes.push(node);
+	    }
+
+	    for (i = 0, len = nodes.length; i < len; ++i) {
+	      head.appendChild(nodes[i]);
+	    }
+	  }
+
+	  function pollGecko(node) {
+	    var hasRules;
+
+	    try {
+
+	      hasRules = !!node.sheet.cssRules;
+	    } catch (ex) {
+	      pollCount += 1;
+
+	      if (pollCount < 200) {
+	        setTimeout(function () { pollGecko(node); }, 50);
+	      } else {
+
+	        hasRules && finish('css');
+	      }
+
+	      return;
+	    }
+
+	    finish('css');
+	  }
+
+	  function pollWebKit() {
+	    var css = pending.css, i;
+
+	    if (css) {
+	      i = styleSheets.length;
+
+	      while (--i >= 0) {
+	        if (styleSheets[i].href === css.urls[0]) {
+	          finish('css');
+	          break;
+	        }
+	      }
+
+	      pollCount += 1;
+
+	      if (css) {
+	        if (pollCount < 200) {
+	          setTimeout(pollWebKit, 50);
+	        } else {
+
+	          finish('css');
+	        }
+	      }
+	    }
+	  }
+
+	  return {
+
+		css: function (urls, callback, obj, context) {
+			if (isLoaded(urls)) {
+				return callback;
+			} else {
+				load('css', urls, callback, obj, context);
+			}
+		},
+
+		js: function (urls, callback, obj, context) {
+			if (isLoaded(urls)) {
+				return callback;
+			} else {
+				load('js', urls, callback, obj, context);
+			}
+		}
+
+	  };
+	})(this.document);
+}
+
+
+
+/*********************************************** 
+     Begin VMM.Language.js 
+***********************************************/ 
+
+/* LANGUAGE 
+================================================== */
+if(typeof VMM != 'undefined' && typeof VMM.Language == 'undefined') {
+	VMM.Language = {
+		date: {
+			month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			month_abbr: ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."],
+			day: ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+			day_abbr: ["Sun.","Mon.", "Tues.", "Wed.", "Thurs.", "Fri.", "Sat."],
+		}, 
+		dateformats: {
+			year: "yyyy",
+			month_short: "mmm",
+			month: "mmmm yyyy",
+			full_short: "mmm d",
+			full: "mmmm d',' yyyy",
+			time_no_seconds_short: "h:MM TT",
+			time_no_seconds_small_date: "h:MM TT'<br/><small>'mmmm d',' yyyy'</small>'",
+			full_long: "mmm d',' yyyy 'at' hh:MM TT",
+			full_long_small_date: "hh:MM TT'<br/><small>mmm d',' yyyy'</small>'",
+		},
+		messages: {
+			loading_timeline: "Loading Timeline... ",
+			return_to_title: "Return to Title",
+			expand_timeline: "Expand Timeline",
+			contract_timeline: "Contract Timeline"
+		}
+	}
+};
+
+/*********************************************** 
+     Begin AES.js 
+***********************************************/ 
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*  AES implementation in JavaScript (c) Chris Veness 2005-2011                                   */
+/*   - see http://csrc.nist.gov/publications/PubsFIPS.html#197                                    */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+var Aes = {};  // Aes namespace
+
 /**
- * @file timeline.js
+ * AES Cipher function: encrypt 'input' state with Rijndael algorithm
+ *   applies Nr rounds (10/12/14) using key schedule w for 'add round key' stage
  *
- * @brief
- * The Timeline is an interactive visualization chart to visualize events in
- * time, having a start and end date.
- * You can freely move and zoom in the timeline by dragging
- * and scrolling in the Timeline. Items are optionally dragable. The time
- * scale on the axis is adjusted automatically, and supports scales ranging
- * from milliseconds to years.
+ * @param {Number[]} input 16-byte (128-bit) input state array
+ * @param {Number[][]} w   Key schedule as 2D byte-array (Nr+1 x Nb bytes)
+ * @returns {Number[]}     Encrypted output state array
+ */
+Aes.cipher = function(input, w) {    // main Cipher function [§5.1]
+  var Nb = 4;               // block size (in words): no of columns in state (fixed at 4 for AES)
+  var Nr = w.length/Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
+
+  var state = [[],[],[],[]];  // initialise 4xNb byte-array 'state' with input [§3.4]
+  for (var i=0; i<4*Nb; i++) state[i%4][Math.floor(i/4)] = input[i];
+
+  state = Aes.addRoundKey(state, w, 0, Nb);
+
+  for (var round=1; round<Nr; round++) {
+    state = Aes.subBytes(state, Nb);
+    state = Aes.shiftRows(state, Nb);
+    state = Aes.mixColumns(state, Nb);
+    state = Aes.addRoundKey(state, w, round, Nb);
+  }
+
+  state = Aes.subBytes(state, Nb);
+  state = Aes.shiftRows(state, Nb);
+  state = Aes.addRoundKey(state, w, Nr, Nb);
+
+  var output = new Array(4*Nb);  // convert state to 1-d array before returning [§3.4]
+  for (var i=0; i<4*Nb; i++) output[i] = state[i%4][Math.floor(i/4)];
+  return output;
+}
+
+/**
+ * Perform Key Expansion to generate a Key Schedule
  *
- * Timeline is part of the CHAP Links library.
+ * @param {Number[]} key Key as 16/24/32-byte array
+ * @returns {Number[][]} Expanded key schedule as 2D byte-array (Nr+1 x Nb bytes)
+ */
+Aes.keyExpansion = function(key) {  // generate Key Schedule (byte-array Nr+1 x Nb) from Key [§5.2]
+  var Nb = 4;            // block size (in words): no of columns in state (fixed at 4 for AES)
+  var Nk = key.length/4  // key length (in words): 4/6/8 for 128/192/256-bit keys
+  var Nr = Nk + 6;       // no of rounds: 10/12/14 for 128/192/256-bit keys
+
+  var w = new Array(Nb*(Nr+1));
+  var temp = new Array(4);
+
+  for (var i=0; i<Nk; i++) {
+    var r = [key[4*i], key[4*i+1], key[4*i+2], key[4*i+3]];
+    w[i] = r;
+  }
+
+  for (var i=Nk; i<(Nb*(Nr+1)); i++) {
+    w[i] = new Array(4);
+    for (var t=0; t<4; t++) temp[t] = w[i-1][t];
+    if (i % Nk == 0) {
+      temp = Aes.subWord(Aes.rotWord(temp));
+      for (var t=0; t<4; t++) temp[t] ^= Aes.rCon[i/Nk][t];
+    } else if (Nk > 6 && i%Nk == 4) {
+      temp = Aes.subWord(temp);
+    }
+    for (var t=0; t<4; t++) w[i][t] = w[i-Nk][t] ^ temp[t];
+  }
+
+  return w;
+}
+
+/*
+ * ---- remaining routines are private, not called externally ----
+ */
+ 
+Aes.subBytes = function(s, Nb) {    // apply SBox to state S [§5.1.1]
+  for (var r=0; r<4; r++) {
+    for (var c=0; c<Nb; c++) s[r][c] = Aes.sBox[s[r][c]];
+  }
+  return s;
+}
+
+Aes.shiftRows = function(s, Nb) {    // shift row r of state S left by r bytes [§5.1.2]
+  var t = new Array(4);
+  for (var r=1; r<4; r++) {
+    for (var c=0; c<4; c++) t[c] = s[r][(c+r)%Nb];  // shift into temp copy
+    for (var c=0; c<4; c++) s[r][c] = t[c];         // and copy back
+  }          // note that this will work for Nb=4,5,6, but not 7,8 (always 4 for AES):
+  return s;  // see asmaes.sourceforge.net/rijndael/rijndaelImplementation.pdf
+}
+
+Aes.mixColumns = function(s, Nb) {   // combine bytes of each col of state S [§5.1.3]
+  for (var c=0; c<4; c++) {
+    var a = new Array(4);  // 'a' is a copy of the current column from 's'
+    var b = new Array(4);  // 'b' is a•{02} in GF(2^8)
+    for (var i=0; i<4; i++) {
+      a[i] = s[i][c];
+      b[i] = s[i][c]&0x80 ? s[i][c]<<1 ^ 0x011b : s[i][c]<<1;
+
+    }
+    // a[n] ^ b[n] is a•{03} in GF(2^8)
+    s[0][c] = b[0] ^ a[1] ^ b[1] ^ a[2] ^ a[3]; // 2*a0 + 3*a1 + a2 + a3
+    s[1][c] = a[0] ^ b[1] ^ a[2] ^ b[2] ^ a[3]; // a0 * 2*a1 + 3*a2 + a3
+    s[2][c] = a[0] ^ a[1] ^ b[2] ^ a[3] ^ b[3]; // a0 + a1 + 2*a2 + 3*a3
+    s[3][c] = a[0] ^ b[0] ^ a[1] ^ a[2] ^ b[3]; // 3*a0 + a1 + a2 + 2*a3
+  }
+  return s;
+}
+
+Aes.addRoundKey = function(state, w, rnd, Nb) {  // xor Round Key into state S [§5.1.4]
+  for (var r=0; r<4; r++) {
+    for (var c=0; c<Nb; c++) state[r][c] ^= w[rnd*4+c][r];
+  }
+  return state;
+}
+
+Aes.subWord = function(w) {    // apply SBox to 4-byte word w
+  for (var i=0; i<4; i++) w[i] = Aes.sBox[w[i]];
+  return w;
+}
+
+Aes.rotWord = function(w) {    // rotate 4-byte word w left by one byte
+  var tmp = w[0];
+  for (var i=0; i<3; i++) w[i] = w[i+1];
+  w[3] = tmp;
+  return w;
+}
+
+// sBox is pre-computed multiplicative inverse in GF(2^8) used in subBytes and keyExpansion [§5.1.1]
+Aes.sBox =  [0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
+             0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
+             0xb7,0xfd,0x93,0x26,0x36,0x3f,0xf7,0xcc,0x34,0xa5,0xe5,0xf1,0x71,0xd8,0x31,0x15,
+             0x04,0xc7,0x23,0xc3,0x18,0x96,0x05,0x9a,0x07,0x12,0x80,0xe2,0xeb,0x27,0xb2,0x75,
+             0x09,0x83,0x2c,0x1a,0x1b,0x6e,0x5a,0xa0,0x52,0x3b,0xd6,0xb3,0x29,0xe3,0x2f,0x84,
+             0x53,0xd1,0x00,0xed,0x20,0xfc,0xb1,0x5b,0x6a,0xcb,0xbe,0x39,0x4a,0x4c,0x58,0xcf,
+             0xd0,0xef,0xaa,0xfb,0x43,0x4d,0x33,0x85,0x45,0xf9,0x02,0x7f,0x50,0x3c,0x9f,0xa8,
+             0x51,0xa3,0x40,0x8f,0x92,0x9d,0x38,0xf5,0xbc,0xb6,0xda,0x21,0x10,0xff,0xf3,0xd2,
+             0xcd,0x0c,0x13,0xec,0x5f,0x97,0x44,0x17,0xc4,0xa7,0x7e,0x3d,0x64,0x5d,0x19,0x73,
+             0x60,0x81,0x4f,0xdc,0x22,0x2a,0x90,0x88,0x46,0xee,0xb8,0x14,0xde,0x5e,0x0b,0xdb,
+             0xe0,0x32,0x3a,0x0a,0x49,0x06,0x24,0x5c,0xc2,0xd3,0xac,0x62,0x91,0x95,0xe4,0x79,
+             0xe7,0xc8,0x37,0x6d,0x8d,0xd5,0x4e,0xa9,0x6c,0x56,0xf4,0xea,0x65,0x7a,0xae,0x08,
+             0xba,0x78,0x25,0x2e,0x1c,0xa6,0xb4,0xc6,0xe8,0xdd,0x74,0x1f,0x4b,0xbd,0x8b,0x8a,
+             0x70,0x3e,0xb5,0x66,0x48,0x03,0xf6,0x0e,0x61,0x35,0x57,0xb9,0x86,0xc1,0x1d,0x9e,
+             0xe1,0xf8,0x98,0x11,0x69,0xd9,0x8e,0x94,0x9b,0x1e,0x87,0xe9,0xce,0x55,0x28,0xdf,
+             0x8c,0xa1,0x89,0x0d,0xbf,0xe6,0x42,0x68,0x41,0x99,0x2d,0x0f,0xb0,0x54,0xbb,0x16];
+
+// rCon is Round Constant used for the Key Expansion [1st col is 2^(r-1) in GF(2^8)] [§5.2]
+Aes.rCon = [ [0x00, 0x00, 0x00, 0x00],
+             [0x01, 0x00, 0x00, 0x00],
+             [0x02, 0x00, 0x00, 0x00],
+             [0x04, 0x00, 0x00, 0x00],
+             [0x08, 0x00, 0x00, 0x00],
+             [0x10, 0x00, 0x00, 0x00],
+             [0x20, 0x00, 0x00, 0x00],
+             [0x40, 0x00, 0x00, 0x00],
+             [0x80, 0x00, 0x00, 0x00],
+             [0x1b, 0x00, 0x00, 0x00],
+             [0x36, 0x00, 0x00, 0x00] ]; 
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*  AES Counter-mode implementation in JavaScript (c) Chris Veness 2005-2011                      */
+/*   - see http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf                       */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+Aes.Ctr = {};  // Aes.Ctr namespace: a subclass or extension of Aes
+
+/** 
+ * Encrypt a text using AES encryption in Counter mode of operation
  *
- * Timeline is tested on Firefox 3.6, Safari 5.0, Chrome 6.0, Opera 10.6, and
- * Internet Explorer 6+.
+ * Unicode multi-byte character safe
  *
- * @license
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy
- * of the License at
+ * @param {String} plaintext Source text to be encrypted
+ * @param {String} password  The password to use to generate a key
+ * @param {Number} nBits     Number of bits to be used in the key (128, 192, or 256)
+ * @returns {string}         Encrypted text
+ */
+Aes.Ctr.encrypt = function(plaintext, password, nBits) {
+  var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
+  if (!(nBits==128 || nBits==192 || nBits==256)) return '';  // standard allows 128/192/256 bit keys
+  plaintext = Utf8.encode(plaintext);
+  password = Utf8.encode(password);
+  //var t = new Date();  // timer
+	
+  // use AES itself to encrypt password to get cipher key (using plain password as source for key 
+  // expansion) - gives us well encrypted key (though hashed key might be preferred for prod'n use)
+  var nBytes = nBits/8;  // no bytes in key (16/24/32)
+  var pwBytes = new Array(nBytes);
+  for (var i=0; i<nBytes; i++) {  // use 1st 16/24/32 chars of password for key
+    pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
+  }
+  var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));  // gives us 16-byte key
+  key = key.concat(key.slice(0, nBytes-16));  // expand key to 16/24/32 bytes long
+
+  // initialise 1st 8 bytes of counter block with nonce (NIST SP800-38A §B.2): [0-1] = millisec, 
+  // [2-3] = random, [4-7] = seconds, together giving full sub-millisec uniqueness up to Feb 2106
+  var counterBlock = new Array(blockSize);
+  
+  var nonce = (new Date()).getTime();  // timestamp: milliseconds since 1-Jan-1970
+  var nonceMs = nonce%1000;
+  var nonceSec = Math.floor(nonce/1000);
+  var nonceRnd = Math.floor(Math.random()*0xffff);
+  
+  for (var i=0; i<2; i++) counterBlock[i]   = (nonceMs  >>> i*8) & 0xff;
+  for (var i=0; i<2; i++) counterBlock[i+2] = (nonceRnd >>> i*8) & 0xff;
+  for (var i=0; i<4; i++) counterBlock[i+4] = (nonceSec >>> i*8) & 0xff;
+  
+  // and convert it to a string to go on the front of the ciphertext
+  var ctrTxt = '';
+  for (var i=0; i<8; i++) ctrTxt += String.fromCharCode(counterBlock[i]);
+
+  // generate key schedule - an expansion of the key into distinct Key Rounds for each round
+  var keySchedule = Aes.keyExpansion(key);
+  
+  var blockCount = Math.ceil(plaintext.length/blockSize);
+  var ciphertxt = new Array(blockCount);  // ciphertext as array of strings
+  
+  for (var b=0; b<blockCount; b++) {
+    // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
+    // done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
+    for (var c=0; c<4; c++) counterBlock[15-c] = (b >>> c*8) & 0xff;
+    for (var c=0; c<4; c++) counterBlock[15-c-4] = (b/0x100000000 >>> c*8)
+
+    var cipherCntr = Aes.cipher(counterBlock, keySchedule);  // -- encrypt counter block --
+    
+    // block size is reduced on final block
+    var blockLength = b<blockCount-1 ? blockSize : (plaintext.length-1)%blockSize+1;
+    var cipherChar = new Array(blockLength);
+    
+    for (var i=0; i<blockLength; i++) {  // -- xor plaintext with ciphered counter char-by-char --
+      cipherChar[i] = cipherCntr[i] ^ plaintext.charCodeAt(b*blockSize+i);
+      cipherChar[i] = String.fromCharCode(cipherChar[i]);
+    }
+    ciphertxt[b] = cipherChar.join(''); 
+  }
+
+  // Array.join is more efficient than repeated string concatenation in IE
+  var ciphertext = ctrTxt + ciphertxt.join('');
+  ciphertext = Base64.encode(ciphertext);  // encode in base64
+  
+  //alert((new Date()) - t);
+  return ciphertext;
+}
+
+/** 
+ * Decrypt a text encrypted by AES in counter mode of operation
+ *
+ * @param {String} ciphertext Source text to be encrypted
+ * @param {String} password   The password to use to generate a key
+ * @param {Number} nBits      Number of bits to be used in the key (128, 192, or 256)
+ * @returns {String}          Decrypted text
+ */
+Aes.Ctr.decrypt = function(ciphertext, password, nBits) {
+  var blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
+  if (!(nBits==128 || nBits==192 || nBits==256)) return '';  // standard allows 128/192/256 bit keys
+  ciphertext = Base64.decode(ciphertext);
+  password = Utf8.encode(password);
+  //var t = new Date();  // timer
+  
+  // use AES to encrypt password (mirroring encrypt routine)
+  var nBytes = nBits/8;  // no bytes in key
+  var pwBytes = new Array(nBytes);
+  for (var i=0; i<nBytes; i++) {
+    pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
+  }
+  var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));
+  key = key.concat(key.slice(0, nBytes-16));  // expand key to 16/24/32 bytes long
+
+  // recover nonce from 1st 8 bytes of ciphertext
+  var counterBlock = new Array(8);
+  ctrTxt = ciphertext.slice(0, 8);
+  for (var i=0; i<8; i++) counterBlock[i] = ctrTxt.charCodeAt(i);
+  
+  // generate key schedule
+  var keySchedule = Aes.keyExpansion(key);
+
+  // separate ciphertext into blocks (skipping past initial 8 bytes)
+  var nBlocks = Math.ceil((ciphertext.length-8) / blockSize);
+  var ct = new Array(nBlocks);
+  for (var b=0; b<nBlocks; b++) ct[b] = ciphertext.slice(8+b*blockSize, 8+b*blockSize+blockSize);
+  ciphertext = ct;  // ciphertext is now array of block-length strings
+
+  // plaintext will get generated block-by-block into array of block-length strings
+  var plaintxt = new Array(ciphertext.length);
+
+  for (var b=0; b<nBlocks; b++) {
+    // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
+    for (var c=0; c<4; c++) counterBlock[15-c] = ((b) >>> c*8) & 0xff;
+    for (var c=0; c<4; c++) counterBlock[15-c-4] = (((b+1)/0x100000000-1) >>> c*8) & 0xff;
+
+    var cipherCntr = Aes.cipher(counterBlock, keySchedule);  // encrypt counter block
+
+    var plaintxtByte = new Array(ciphertext[b].length);
+    for (var i=0; i<ciphertext[b].length; i++) {
+      // -- xor plaintxt with ciphered counter byte-by-byte --
+      plaintxtByte[i] = cipherCntr[i] ^ ciphertext[b].charCodeAt(i);
+      plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
+    }
+    plaintxt[b] = plaintxtByte.join('');
+  }
+
+  // join array of blocks into single plaintext string
+  var plaintext = plaintxt.join('');
+  plaintext = Utf8.decode(plaintext);  // decode from UTF8 back to Unicode multi-byte chars
+  
+  //alert((new Date()) - t);
+  return plaintext;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*  Base64 class: Base 64 encoding / decoding (c) Chris Veness 2002-2011                          */
+/*    note: depends on Utf8 class                                                                 */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+var Base64 = {};  // Base64 namespace
+
+Base64.code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+/**
+ * Encode string into Base64, as defined by RFC 4648 [http://tools.ietf.org/html/rfc4648]
+ * (instance method extending String object). As per RFC 4648, no newlines are added.
+ *
+ * @param {String} str The string to be encoded as base-64
+ * @param {Boolean} [utf8encode=false] Flag to indicate whether str is Unicode string to be encoded 
+ *   to UTF8 before conversion to base64; otherwise string is assumed to be 8-bit characters
+ * @returns {String} Base64-encoded string
+ */ 
+Base64.encode = function(str, utf8encode) {  // http://tools.ietf.org/html/rfc4648
+  utf8encode =  (typeof utf8encode == 'undefined') ? false : utf8encode;
+  var o1, o2, o3, bits, h1, h2, h3, h4, e=[], pad = '', c, plain, coded;
+  var b64 = Base64.code;
+   
+  plain = utf8encode ? str.encodeUTF8() : str;
+  
+  c = plain.length % 3;  // pad string to length of multiple of 3
+  if (c > 0) { while (c++ < 3) { pad += '='; plain += '\0'; } }
+  // note: doing padding here saves us doing special-case packing for trailing 1 or 2 chars
+   
+  for (c=0; c<plain.length; c+=3) {  // pack three octets into four hexets
+    o1 = plain.charCodeAt(c);
+    o2 = plain.charCodeAt(c+1);
+    o3 = plain.charCodeAt(c+2);
+      
+    bits = o1<<16 | o2<<8 | o3;
+      
+    h1 = bits>>18 & 0x3f;
+    h2 = bits>>12 & 0x3f;
+    h3 = bits>>6 & 0x3f;
+    h4 = bits & 0x3f;
+
+    // use hextets to index into code string
+    e[c/3] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+  }
+  coded = e.join('');  // join() is far faster than repeated string concatenation in IE
+  
+  // replace 'A's from padded nulls with '='s
+  coded = coded.slice(0, coded.length-pad.length) + pad;
+   
+  return coded;
+}
+
+/**
+ * Decode string from Base64, as defined by RFC 4648 [http://tools.ietf.org/html/rfc4648]
+ * (instance method extending String object). As per RFC 4648, newlines are not catered for.
+ *
+ * @param {String} str The string to be decoded from base-64
+ * @param {Boolean} [utf8decode=false] Flag to indicate whether str is Unicode string to be decoded 
+ *   from UTF8 after conversion from base64
+ * @returns {String} decoded string
+ */ 
+Base64.decode = function(str, utf8decode) {
+  utf8decode =  (typeof utf8decode == 'undefined') ? false : utf8decode;
+  var o1, o2, o3, h1, h2, h3, h4, bits, d=[], plain, coded;
+  var b64 = Base64.code;
+
+  coded = utf8decode ? str.decodeUTF8() : str;
+  
+  
+  for (var c=0; c<coded.length; c+=4) {  // unpack four hexets into three octets
+    h1 = b64.indexOf(coded.charAt(c));
+    h2 = b64.indexOf(coded.charAt(c+1));
+    h3 = b64.indexOf(coded.charAt(c+2));
+    h4 = b64.indexOf(coded.charAt(c+3));
+      
+    bits = h1<<18 | h2<<12 | h3<<6 | h4;
+      
+    o1 = bits>>>16 & 0xff;
+    o2 = bits>>>8 & 0xff;
+    o3 = bits & 0xff;
+    
+    d[c/4] = String.fromCharCode(o1, o2, o3);
+    // check for padding
+    if (h4 == 0x40) d[c/4] = String.fromCharCode(o1, o2);
+    if (h3 == 0x40) d[c/4] = String.fromCharCode(o1);
+  }
+  plain = d.join('');  // join() is far faster than repeated string concatenation in IE
+   
+  return utf8decode ? plain.decodeUTF8() : plain; 
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*  Utf8 class: encode / decode between multi-byte Unicode characters and UTF-8 multiple          */
+/*              single-byte character encoding (c) Chris Veness 2002-2011                         */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+var Utf8 = {};  // Utf8 namespace
+
+/**
+ * Encode multi-byte Unicode string into utf-8 multiple single-byte characters 
+ * (BMP / basic multilingual plane only)
+ *
+ * Chars in range U+0080 - U+07FF are encoded in 2 chars, U+0800 - U+FFFF in 3 chars
+ *
+ * @param {String} strUni Unicode string to be encoded as UTF-8
+ * @returns {String} encoded string
+ */
+Utf8.encode = function(strUni) {
+  // use regular expressions & String.replace callback function for better efficiency 
+  // than procedural approaches
+  var strUtf = strUni.replace(
+      /[\u0080-\u07ff]/g,  // U+0080 - U+07FF => 2 bytes 110yyyyy, 10zzzzzz
+      function(c) { 
+        var cc = c.charCodeAt(0);
+        return String.fromCharCode(0xc0 | cc>>6, 0x80 | cc&0x3f); }
+    );
+  strUtf = strUtf.replace(
+      /[\u0800-\uffff]/g,  // U+0800 - U+FFFF => 3 bytes 1110xxxx, 10yyyyyy, 10zzzzzz
+      function(c) { 
+        var cc = c.charCodeAt(0); 
+        return String.fromCharCode(0xe0 | cc>>12, 0x80 | cc>>6&0x3F, 0x80 | cc&0x3f); }
+    );
+  return strUtf;
+}
+
+/**
+ * Decode utf-8 encoded string back into multi-byte Unicode characters
+ *
+ * @param {String} strUtf UTF-8 string to be decoded back to Unicode
+ * @returns {String} decoded string
+ */
+Utf8.decode = function(strUtf) {
+  // note: decode 3-byte chars first as decoded 2-byte strings could appear to be 3-byte char!
+  var strUni = strUtf.replace(
+      /[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g,  // 3-byte chars
+      function(c) {  // (note parentheses for precence)
+        var cc = ((c.charCodeAt(0)&0x0f)<<12) | ((c.charCodeAt(1)&0x3f)<<6) | ( c.charCodeAt(2)&0x3f); 
+        return String.fromCharCode(cc); }
+    );
+  strUni = strUni.replace(
+      /[\u00c0-\u00df][\u0080-\u00bf]/g,                 // 2-byte chars
+      function(c) {  // (note parentheses for precence)
+        var cc = (c.charCodeAt(0)&0x1f)<<6 | c.charCodeAt(1)&0x3f;
+        return String.fromCharCode(cc); }
+    );
+  return strUni;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+/*********************************************** 
+     Begin bootstrap-tooltip.js 
+***********************************************/ 
+
+/* ===========================================================
+ * bootstrap-tooltip.js v2.0.1
+ * http://twitter.github.com/bootstrap/javascript.html#tooltips
+ * Inspired by the original jQuery.tipsy by Jason Frame
+ * ===========================================================
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================== */
+
+!function( $ ) {
+
+  "use strict"
+
+ /* TOOLTIP PUBLIC CLASS DEFINITION
+  * =============================== */
+
+  var Tooltip = function ( element, options ) {
+    this.init('tooltip', element, options)
+  }
+
+  Tooltip.prototype = {
+
+    constructor: Tooltip
+
+  , init: function ( type, element, options ) {
+      var eventIn
+        , eventOut
+
+      this.type = type
+      this.$element = $(element)
+      this.options = this.getOptions(options)
+      this.enabled = true
+
+      if (this.options.trigger != 'manual') {
+        eventIn  = this.options.trigger == 'hover' ? 'mouseenter' : 'focus'
+        eventOut = this.options.trigger == 'hover' ? 'mouseleave' : 'blur'
+        this.$element.on(eventIn, this.options.selector, $.proxy(this.enter, this))
+        this.$element.on(eventOut, this.options.selector, $.proxy(this.leave, this))
+      }
+
+      this.options.selector ?
+        (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+        this.fixTitle()
+    }
+
+  , getOptions: function ( options ) {
+      options = $.extend({}, $.fn[this.type].defaults, options, this.$element.data())
+
+      if (options.delay && typeof options.delay == 'number') {
+        options.delay = {
+          show: options.delay
+        , hide: options.delay
+        }
+      }
+
+      return options
+    }
+
+  , enter: function ( e ) {
+      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
+
+      if (!self.options.delay || !self.options.delay.show) {
+        self.show()
+      } else {
+        self.hoverState = 'in'
+        setTimeout(function() {
+          if (self.hoverState == 'in') {
+            self.show()
+          }
+        }, self.options.delay.show)
+      }
+    }
+
+  , leave: function ( e ) {
+      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
+
+      if (!self.options.delay || !self.options.delay.hide) {
+        self.hide()
+      } else {
+        self.hoverState = 'out'
+        setTimeout(function() {
+          if (self.hoverState == 'out') {
+            self.hide()
+          }
+        }, self.options.delay.hide)
+      }
+    }
+
+  , show: function () {
+      var $tip
+        , inside
+        , pos
+        , actualWidth
+        , actualHeight
+        , placement
+        , tp
+
+      if (this.hasContent() && this.enabled) {
+        $tip = this.tip()
+        this.setContent()
+
+        if (this.options.animation) {
+          $tip.addClass('fade')
+        }
+
+        placement = typeof this.options.placement == 'function' ?
+          this.options.placement.call(this, $tip[0], this.$element[0]) :
+          this.options.placement
+
+        inside = /in/.test(placement)
+
+        $tip
+          .remove()
+          .css({ top: 0, left: 0, display: 'block' })
+          .appendTo(inside ? this.$element : document.body)
+
+        pos = this.getPosition(inside)
+
+        actualWidth = $tip[0].offsetWidth
+        actualHeight = $tip[0].offsetHeight
+
+        switch (inside ? placement.split(' ')[1] : placement) {
+          case 'bottom':
+            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
+            break
+          case 'top':
+            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
+            break
+          case 'left':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
+            break
+          case 'right':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
+            break
+        }
+
+        $tip
+          .css(tp)
+          .addClass(placement)
+          .addClass('in')
+      }
+    }
+
+  , setContent: function () {
+      var $tip = this.tip()
+      $tip.find('.tooltip-inner').html(this.getTitle())
+      $tip.removeClass('fade in top bottom left right')
+    }
+
+  , hide: function () {
+      var that = this
+        , $tip = this.tip()
+
+      $tip.removeClass('in')
+
+      function removeWithAnimation() {
+        var timeout = setTimeout(function () {
+          $tip.off($.support.transition.end).remove()
+        }, 500)
+
+        $tip.one($.support.transition.end, function () {
+          clearTimeout(timeout)
+          $tip.remove()
+        })
+      }
+
+      $.support.transition && this.$tip.hasClass('fade') ?
+        removeWithAnimation() :
+        $tip.remove()
+    }
+
+  , fixTitle: function () {
+      var $e = this.$element
+      if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+        $e.attr('data-original-title', $e.attr('title') || '').removeAttr('title')
+      }
+    }
+
+  , hasContent: function () {
+      return this.getTitle()
+    }
+
+  , getPosition: function (inside) {
+      return $.extend({}, (inside ? {top: 0, left: 0} : this.$element.offset()), {
+        width: this.$element[0].offsetWidth
+      , height: this.$element[0].offsetHeight
+      })
+    }
+
+  , getTitle: function () {
+      var title
+        , $e = this.$element
+        , o = this.options
+
+      title = $e.attr('data-original-title')
+        || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+      title = title.toString().replace(/(^\s*|\s*$)/, "")
+
+      return title
+    }
+
+  , tip: function () {
+      return this.$tip = this.$tip || $(this.options.template)
+    }
+
+  , validate: function () {
+      if (!this.$element[0].parentNode) {
+        this.hide()
+        this.$element = null
+        this.options = null
+      }
+    }
+
+  , enable: function () {
+      this.enabled = true
+    }
+
+  , disable: function () {
+      this.enabled = false
+    }
+
+  , toggleEnabled: function () {
+      this.enabled = !this.enabled
+    }
+
+  , toggle: function () {
+      this[this.tip().hasClass('in') ? 'hide' : 'show']()
+    }
+
+  }
+
+
+ /* TOOLTIP PLUGIN DEFINITION
+  * ========================= */
+
+  $.fn.tooltip = function ( option ) {
+    return this.each(function () {
+      var $this = $(this)
+        , data = $this.data('tooltip')
+        , options = typeof option == 'object' && option
+      if (!data) $this.data('tooltip', (data = new Tooltip(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  $.fn.tooltip.Constructor = Tooltip
+
+  $.fn.tooltip.defaults = {
+    animation: true
+  , delay: 0
+  , selector: false
+  , placement: 'top'
+  , trigger: 'hover'
+  , title: ''
+  , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+  }
+
+}( window.jQuery );
+
+/*********************************************** 
+     Begin bootstrap-tooltip.js 
+***********************************************/ 
+
+/* ===========================================================
+ * bootstrap-tooltip.js v2.0.1
+ * http://twitter.github.com/bootstrap/javascript.html#tooltips
+ * Inspired by the original jQuery.tipsy by Jason Frame
+ * ===========================================================
+ * Copyright 2012 Twitter, Inc.
  *
- * Copyright (c) 2011-2012 Almende B.V.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * @author 	Jos de Jong, <jos@almende.org>
- * @date    2012-05-01
- */
-
-
-/*
- * TODO
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Add zooming with pinching on Android
- *
- * Bug: when an item contains a javascript onclick or a link, this does not work
- *      when the item is not selected (when the item is being selected,
- *      it is redrawn, which cancels any onclick or link action)
- * Bug: when an item contains an image without size, or a css max-width, it is not sized correctly
- * Bug: neglect items when they have no valid start/end, instead of throwing an error
- * Bug: Pinching on ipad does not work very well, sometimes the page will zoom when pinching vertically
- * Bug: cannot set max width for an item, like div.timeline-event-content {white-space: normal; max-width: 100px;}
- * Bug on IE in Quirks mode. When you have groups, and delete an item, the groups become invisible
- *
- */
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================== */
 
-/**
- * Declare a unique namespace for CHAP's Common Hybrid Visualisation Library,
- * "links"
- */
-if (typeof links === 'undefined') {
-  links = {};
-  // important: do not use var, as "var links = {};" will overwrite
-  //            the existing links variable value with undefined in IE8, IE7.
-}
+!function( $ ) {
 
+  "use strict"
 
-/**
- * Ensure the variable google exists
- */
-if (typeof google === 'undefined') {
-  google = undefined;
-  // important: do not use var, as "var google = undefined;" will overwrite
-  //            the existing google variable value with undefined in IE8, IE7.
-}
+ /* TOOLTIP PUBLIC CLASS DEFINITION
+  * =============================== */
 
-
-/**
- * @class Timeline
- * The timeline is a visualization chart to visualize events in time.
- *
- * The timeline is developed in javascript as a Google Visualization Chart.
- *
- * @param {dom_element} container   The DOM element in which the Timeline will
- *                                  be created. Normally a div element.
- */
-links.Timeline = function(container) {
-  // create variables and set default values
-  this.dom = {};
-  this.conversion = {};
-  this.eventParams = {}; // stores parameters for mouse events
-  this.groups = [];
-  this.groupIndexes = {};
-  this.items = [];
-  this.selection = undefined; // stores index and item which is currently selected
-
-  this.listeners = {}; // event listener callbacks
-
-  // Initialize sizes.
-  // Needed for IE (which gives an error when you try to set an undefined
-  // value in a style)
-  this.size = {
-    'actualHeight': 0,
-    'axis': {
-      'characterMajorHeight': 0,
-      'characterMajorWidth': 0,
-      'characterMinorHeight': 0,
-      'characterMinorWidth': 0,
-      'height': 0,
-      'labelMajorTop': 0,
-      'labelMinorTop': 0,
-      'line': 0,
-      'lineMajorWidth': 0,
-      'lineMinorHeight': 0,
-      'lineMinorTop': 0,
-      'lineMinorWidth': 0,
-      'top': 0
-    },
-    'contentHeight': 0,
-    'contentLeft': 0,
-    'contentWidth': 0,
-    'dataChanged': false,
-    'frameHeight': 0,
-    'frameWidth': 0,
-    'groupsLeft': 0,
-    'groupsWidth': 0,
-    'items': {
-      'top': 0
-    }
-  };
-
-  this.dom.container = container;
-
-  this.options = {
-    'width': "100%",
-    'height': "auto",
-    'minHeight': 0,       // minimal height in pixels
-    'autoHeight': true,
-
-    'eventMargin': 10,    // minimal margin between events
-    'eventMarginAxis': 20, // minimal margin beteen events and the axis
-    'dragAreaWidth': 10, // pixels
-
-    'min': undefined,
-    'max': undefined,
-    'intervalMin': 10,  // milliseconds
-    'intervalMax': 1000 * 60 * 60 * 24 * 365 * 10000, // milliseconds
-
-    'moveable': true,
-    'zoomable': true,
-    'selectable': true,
-    'editable': false,
-    'snapEvents': true,
-    'groupChangeable': true,
-
-    'showCurrentTime': true, // show a red bar displaying the current time
-    'showCustomTime': false, // show a blue, draggable bar displaying a custom time
-    'showMajorLabels': true,
-    'showNavigation': false,
-    'showButtonAdd': true,
-    'groupsOnRight': false,
-    'axisOnTop': false,
-    'stackEvents': true,
-    'animate': true,
-    'animateZoom': true,
-    'style': 'box'
-  };
-
-  this.clientTimeOffset = 0;    // difference between client time and the time
-                                // set via Timeline.setCurrentTime()
-  var dom = this.dom;
-
-  // remove all elements from the container element.
-  while (dom.container.hasChildNodes()) {
-    dom.container.removeChild(dom.container.firstChild);
+  var Tooltip = function ( element, options ) {
+    this.init('tooltip', element, options)
   }
 
-  // create a step for drawing the axis
-  this.step = new links.Timeline.StepDate();
+  Tooltip.prototype = {
 
-  // initialize data
-  this.data = [];
-  this.firstDraw = true;
+    constructor: Tooltip
 
-  // date interval must be initialized
-  this.setVisibleChartRange(undefined, undefined, false);
+  , init: function ( type, element, options ) {
+      var eventIn
+        , eventOut
 
-  // create all DOM elements
-  this.redrawFrame();
+      this.type = type
+      this.$element = $(element)
+      this.options = this.getOptions(options)
+      this.enabled = true
 
-  // Internet Explorer does not support Array.indexof,
-  // so we define it here in that case
-  // http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-	if(!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(obj){
-      for(var i = 0; i < this.length; i++){
-        if(this[i] == obj){
-          return i;
+      if (this.options.trigger != 'manual') {
+        eventIn  = this.options.trigger == 'hover' ? 'mouseenter' : 'focus'
+        eventOut = this.options.trigger == 'hover' ? 'mouseleave' : 'blur'
+        this.$element.on(eventIn, this.options.selector, $.proxy(this.enter, this))
+        this.$element.on(eventOut, this.options.selector, $.proxy(this.leave, this))
+      }
+
+      this.options.selector ?
+        (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+        this.fixTitle()
+    }
+
+  , getOptions: function ( options ) {
+      options = $.extend({}, $.fn[this.type].defaults, options, this.$element.data())
+
+      if (options.delay && typeof options.delay == 'number') {
+        options.delay = {
+          show: options.delay
+        , hide: options.delay
         }
       }
-      return -1;
-    }
-	}
 
-  // fire the ready event
-  this.trigger('ready');
-}
-
-
-/**
- * Main drawing logic. This is the function that needs to be called
- * in the html page, to draw the timeline.
- *
- * A data table with the events must be provided, and an options table.
- *
- * @param {DataTable}      data    The data containing the events for the timeline.
- *                                 Object DataTable is defined in
- *                                 google.visualization.DataTable
- * @param {name/value map} options A name/value map containing settings for the
- *                                 timeline. Optional.
- */
-links.Timeline.prototype.draw = function(data, options) {
-  this.setOptions(options);
-
-  // read the data
-  this.setData(data);
-
-  // set timer range. this will also redraw the timeline
-  if (options && options.start && options.end) {
-    this.setVisibleChartRange(options.start, options.end);
-  }
-  else if (this.firstDraw) {
-    this.setVisibleChartRangeAuto();
-  }
-
-  this.firstDraw = false;
-}
-
-
-/**
- * Set options for the timeline.
- * Timeline must be redrawn afterwards
- * @param {name/value map} options A name/value map containing settings for the
- *                                 timeline. Optional.
- */
-links.Timeline.prototype.setOptions = function(options) {
-  if (options) {
-    // retrieve parameter values
-    for (var i in options) {
-      if (options.hasOwnProperty(i)) {
-        this.options[i] = options[i];
-      }
-    }
-  }
-
-  // validate options
-  this.options.autoHeight = (this.options.height === "auto");
-}
-
-/**
- * Set data for the timeline
- * @param {DataTable or JSON array} data
- */
-links.Timeline.prototype.setData = function(data) {
-  // unselect any previously selected item
-  this.unselectItem();
-
-  if (!data) {
-    data = [];
-  }
-
-  this.items = [];
-  this.data = data;
-  var items = this.items;
-  var options = this.options;
-
-  // create groups from the data
-  this.setGroups(data);
-
-  if (google && google.visualization &&
-      data instanceof google.visualization.DataTable) {
-    // read DataTable
-    var hasGroups = (data.getNumberOfColumns() > 3);
-    for (var row = 0, rows = data.getNumberOfRows(); row < rows; row++) {
-      items.push(this.createItem({
-        'start': data.getValue(row, 0),
-        'end': data.getValue(row, 1),
-        'content': data.getValue(row, 2),
-        'group': (hasGroups ? data.getValue(row, 3) : undefined)
-      }));
-    }
-  }
-  else if (links.Timeline.isArray(data)) {
-    // read JSON array
-    for (var row = 0, rows = data.length; row < rows; row++) {
-      var itemData = data[row]
-      var item = this.createItem(itemData);
-      items.push(item);
-    }
-  }
-  else {
-    throw "Unknown data type. DataTable or Array expected.";
-  }
-
-  // set a flag to force the recalcSize method to recalculate the
-  // heights and widths of the events
-  this.size.dataChanged = true;
-  this.redrawFrame();      // create the items for the new data
-  this.recalcSize();       // position the items
-  this.stackEvents(false);
-  this.redrawFrame();      // redraw the items on the final positions
-  this.size.dataChanged = false;
-}
-
-/**
- * Set the groups available in the given dataset
- * @param {DataTable or JSON array} data
- */
-links.Timeline.prototype.setGroups = function (data) {
-  this.deleteGroups();
-  var groups = this.groups;
-  var groupIndexes = this.groupIndexes;
-
-  if (google && google.visualization &&
-      data instanceof google.visualization.DataTable) {
-    // get groups from DataTable
-    var hasGroups = (data.getNumberOfColumns() > 3);
-    if (hasGroups) {
-      var groupNames = data.getDistinctValues(3);
-      for (var i = 0, iMax = groupNames.length; i < iMax; i++) {
-        this.addGroup(groupNames[i]);
-      }
-    }
-  }
-  else if (links.Timeline.isArray(data)){
-    // get groups from JSON Array
-    for (var i = 0, iMax = data.length; i < iMax; i++) {
-      var row = data[i],
-        group = row.group;
-      if (group) {
-        this.addGroup(group);
-      }
-    }
-  }
-  else {
-    throw 'Unknown data type. DataTable or Array expected.';
-  }
-}
-
-
-/**
- * Return the original data table.
- * @param {Google DataTable or Array} data
- */
-links.Timeline.prototype.getData = function  () {
-  return this.data;
-}
-
-
-/**
- * Update the original data with changed start, end or group.
- *
- * @param {Number} index
- * @param {Object} values   An object containing some of the following parameters:
- *                          {Date} start,
- *                          {Date} end,
- *                          {String} content,
- *                          {String} group
- */
-links.Timeline.prototype.updateData = function  (index, values) {
-  var data = this.data;
-
-  if (google && google.visualization &&
-      data instanceof google.visualization.DataTable) {
-    // update the original google DataTable
-    var missingRows = (index + 1) - data.getNumberOfRows();
-    if (missingRows > 0) {
-      data.addRows(missingRows);
+      return options
     }
 
-    if (values.start) {
-      data.setValue(index, 0, values.start);
-    }
-    if (values.end) {
-      data.setValue(index, 1, values.end);
-    }
-    if (values.content) {
-      data.setValue(index, 2, values.content);
-    }
-    if (values.group && data.getNumberOfColumns() > 3) {
-      // TODO: append a column when needed?
-      data.setValue(index, 3, values.group);
-    }
-  }
-  else if (links.Timeline.isArray(data)) {
-    // update the original JSON table
-    var row = data[index];
-    if (row == undefined) {
-      row = {};
-      data[index] = row;
-    }
-
-    if (values.start) {
-      row.start = values.start;
-    }
-    if (values.end) {
-      row.end = values.end;
-    }
-    if (values.content) {
-      row.content = values.content;
-    }
-    if (values.group) {
-      row.group = values.group;
-    }
-  }
-  else {
-    throw "Cannot update data, unknown type of data";
-  }
-}
-
-/**
- * Find the item index from a given HTML element
- * If no item index is found, undefined is returned
- * @param {HTML DOM element} element
- * @return {Number} index
- */
-links.Timeline.prototype.getItemIndex = function(element) {
-  var e = element,
-    dom = this.dom,
-    items = this.items,
-    index = undefined;
-
-  // try to find the frame where the items are located in
-  while (e.parentNode && e.parentNode !== dom.items.frame) {
-    e = e.parentNode;
-  }
-
-  if (e.parentNode === dom.items.frame) {
-    // yes! we have found the parent element of all items
-    // retrieve its id from the array with items
-    for (var i = 0, iMax = items.length; i < iMax; i++) {
-      if (items[i].dom === e) {
-        index = i;
-        break;
-      }
-    }
-  }
-
-  return index;
-}
-
-/**
- * Set a new size for the timeline
- * @param {string} width   Width in pixels or percentage (for example "800px"
- *                         or "50%")
- * @param {string} height  Height in pixels or percentage  (for example "400px"
- *                         or "30%")
- */
-links.Timeline.prototype.setSize = function(width, height) {
-  if (width) {
-    this.options.width = width;
-    this.dom.frame.style.width = width;
-  }
-  if (height) {
-    this.options.height = height;
-    this.options.autoHeight = (this.options.height === "auto");
-    if (height !==  "auto" ) {
-      this.dom.frame.style.height = height;
-    }
-  }
-
-  this.recalcSize();
-  this.stackEvents(false);
-  this.redrawFrame();
-}
-
-
-/**
- * Set a new value for the visible range int the timeline.
- * Set start to null to include everything from the earliest date to end.
- * Set end to null to include everything from start to the last date.
- * Example usage:
- *    myTimeline.setVisibleChartRange(new Date("2010-08-22"),
- *                                    new Date("2010-09-13"));
- * @param {Date}   start     The start date for the timeline. optional
- * @param {Date}   end       The end date for the timeline. optional
- * @param {boolean} redraw   Optional. If true (default) the Timeline is
- *                           directly redrawn
- */
-links.Timeline.prototype.setVisibleChartRange = function(start, end, redraw) {
-  if (start == undefined) {
-    // default of 3 days ago
-    start = new Date();
-    start.setDate(start.getDate() - 3);
-  }
-
-  if (end == undefined) {
-    // default of 4 days ahead
-    end = new Date();
-    end.setDate(start.getDate() + 4);
-  }
-
-  // prevent start Date <= end Date
-  if (end.valueOf() <= start.valueOf()) {
-    end = new Date(start);
-    end.setDate(end.getDate() + 7);
-  }
-
-  // limit to the allowed range (dont let this do by applyRange,
-  // because that method will try to maintain the interval (end-start)
-  var min = this.options.min ? this.options.min.valueOf() : undefined;
-  if (min && start.valueOf() < min) {
-    start = new Date(min);
-  }
-  var max = this.options.max ? this.options.max.valueOf() : undefined;
-  if (max && end.valueOf() > max) {
-    end = new Date(max);
-  }
-
-  this.applyRange(start, end);
-
-  if (redraw == undefined || redraw == true) {
-    this.recalcSize();
-    this.stackEvents(false);
-    this.redrawFrame();
-  }
-  else {
-    this.recalcConversion();
-  }
-}
-
-
-/**
- * Change the visible chart range such that all items become visible
- */
-links.Timeline.prototype.setVisibleChartRangeAuto = function() {
-  var items = this.items;
-    startMin = undefined, // long value of a data
-    endMax = undefined;   // long value of a data
-
-  // find earliest start date from the data
-  for (var i = 0, iMax = items.length; i < iMax; i++) {
-    var item = items[i],
-      start = item.start ? item.start.valueOf() : undefined,
-      end = item.end ? item.end.valueOf() : start;
-
-    if (startMin !== undefined && start !== undefined) {
-      startMin = Math.min(startMin, start);
-    }
-    else {
-      startMin = start;
-    }
-    if (endMax !== undefined && end !== undefined) {
-      endMax = Math.max(endMax, end);
-    }
-    else {
-      endMax = end;
-    }
-  }
-
-  if (startMin !== undefined && endMax !== undefined) {
-    // zoom out 5% such that you have a little white space on the left and right
-    var center = (endMax + startMin) / 2,
-      diff = (endMax - startMin);
-    startMin = startMin - diff * 0.05;
-    endMax = endMax + diff * 0.05;
-
-    // adjust the start and end date
-    this.setVisibleChartRange(new Date(startMin), new Date(endMax));
-  }
-  else {
-    this.setVisibleChartRange(undefined, undefined);
-  }
-}
-
-/**
- * Adjust the visible range such that the current time is located in the center
- * of the timeline
- */
-links.Timeline.prototype.setVisibleChartRangeNow = function() {
-  var now = new Date();
-
-  var diff = (this.end.getTime() - this.start.getTime());
-
-  var startNew = new Date(now.getTime() - diff/2);
-  var endNew = new Date(startNew.getTime() + diff);
-  this.setVisibleChartRange(startNew, endNew);
-}
-
-
-/**
- * Retrieve the current visible range in the timeline.
- * @return {Object} An object with start and end properties
- */
-links.Timeline.prototype.getVisibleChartRange = function() {
-  var range = {
-    'start': new Date(this.start),
-    'end': new Date(this.end)
-  };
-  return range;
-}
-
-
-/**
- * Redraw the timeline. This needs to be executed after the start and/or
- * end time are changed, or when data is added or removed dynamically.
- */
-links.Timeline.prototype.redrawFrame = function() {
-  var dom = this.dom,
-    options = this.options,
-    size = this.size;
-
-  if (!dom.frame) {
-    // the surrounding main frame
-    dom.frame = document.createElement("DIV");
-    dom.frame.className = "timeline-frame";
-    dom.frame.style.position = "relative";
-    dom.frame.style.overflow = "hidden";
-    dom.container.appendChild(dom.frame);
-  }
-
-  if (options.autoHeight) {
-    dom.frame.style.height = size.frameHeight + "px";
-  }
-  else {
-    dom.frame.style.height = options.height || "100%";
-  }
-  dom.frame.style.width = options.width  || "100%";
-
-  this.redrawContent();
-  this.redrawGroups();
-  this.redrawCurrentTime();
-  this.redrawCustomTime();
-  this.redrawNavigation();
-}
-
-
-/**
- * Redraw the content of the timeline: the axis and the items
- */
-links.Timeline.prototype.redrawContent = function() {
-  var dom = this.dom,
-    size = this.size;
-
-  if (!dom.content) {
-    // create content box where the axis and canvas will
-    dom.content = document.createElement("DIV");
-    //this.frame.className = "timeline-frame";
-    dom.content.style.position = "relative";
-    dom.content.style.overflow = "hidden";
-    dom.frame.appendChild(dom.content);
-
-    var timelines = document.createElement("DIV");
-    timelines.style.position = "absolute";
-    timelines.style.left = "0px";
-    timelines.style.top = "0px";
-    timelines.style.height = "100%";
-    timelines.style.width = "0px";
-    dom.content.appendChild(timelines);
-    dom.contentTimelines = timelines;
-
-    var params = this.eventParams,
-      me = this;
-    if (!params.onMouseDown) {
-      params.onMouseDown = function (event) {me.onMouseDown(event);};
-      links.Timeline.addEventListener(dom.content, "mousedown", params.onMouseDown);
-    }
-    if (!params.onTouchStart) {
-      params.onTouchStart = function (event) {me.onTouchStart(event);};
-      links.Timeline.addEventListener(dom.content, "touchstart", params.onTouchStart);
-    }
-    if (!params.onMouseWheel) {
-      params.onMouseWheel = function (event) {me.onMouseWheel(event);};
-      links.Timeline.addEventListener(dom.content, "mousewheel", params.onMouseWheel);
-    }
-    if (!params.onDblClick) {
-      params.onDblClick = function (event) {me.onDblClick(event);};
-      links.Timeline.addEventListener(dom.content, "dblclick", params.onDblClick);
-    }
-  }
-  dom.content.style.left = size.contentLeft + "px";
-  dom.content.style.top = "0px";
-  dom.content.style.width = size.contentWidth + "px";
-  dom.content.style.height = size.frameHeight + "px";
-
-  this.redrawAxis();
-  this.redrawItems();
-  this.redrawDeleteButton();
-  this.redrawDragAreas();
-}
-
-/**
- * Redraw the timeline axis with minor and major labels
- */
-links.Timeline.prototype.redrawAxis = function() {
-  var dom = this.dom,
-    options = this.options,
-    size = this.size,
-    step = this.step;
-
-  var axis = dom.axis;
-  if (!axis) {
-    axis = {};
-    dom.axis = axis;
-  }
-  if (size.axis.properties === undefined) {
-    size.axis.properties = {};
-  }
-  if (axis.minorTexts === undefined) {
-    axis.minorTexts = [];
-  }
-  if (axis.minorLines === undefined) {
-    axis.minorLines = [];
-  }
-  if (axis.majorTexts === undefined) {
-    axis.majorTexts = [];
-  }
-  if (axis.majorLines === undefined) {
-    axis.majorLines = [];
-  }
-
-  if (!axis.frame) {
-    axis.frame = document.createElement("DIV");
-    axis.frame.style.position = "absolute";
-    axis.frame.style.left = "0px";
-    axis.frame.style.top = "0px";
-    dom.content.appendChild(axis.frame);
-  }
-
-  // take axis offline
-  dom.content.removeChild(axis.frame);
-
-  axis.frame.style.width = (size.contentWidth) + "px";
-  axis.frame.style.height = (size.axis.height) + "px";
-
-  // the drawn axis is more wide than the actual visual part, such that
-  // the axis can be dragged without having to redraw it each time again.
-  var start = this.screenToTime(0);
-  var end = this.screenToTime(size.contentWidth);
-  var width = size.contentWidth;
-
-  // calculate minimum step (in milliseconds) based on character size
-  this.minimumStep = this.screenToTime(size.axis.characterMinorWidth * 6).valueOf() -
-                     this.screenToTime(0).valueOf();
-
-  step.setRange(start, end, this.minimumStep);
-
-  this.redrawAxisCharacters();
-
-  this.redrawAxisStartOverwriting();
-
-  step.start();
-  var xFirstMajorLabel = undefined;
-  while (!step.end()) {
-    var cur = step.getCurrent(),
-        x = this.timeToScreen(cur),
-        isMajor = step.isMajor();
-
-    this.redrawAxisMinorText(x, step.getLabelMinor());
-
-    if (isMajor && options.showMajorLabels) {
-      if (x > 0) {
-        if (xFirstMajorLabel === undefined) {
-          xFirstMajorLabel = x;
-        }
-        this.redrawAxisMajorText(x, step.getLabelMajor());
-      }
-      this.redrawAxisMajorLine(x);
-    }
-    else {
-      this.redrawAxisMinorLine(x);
-    }
-
-    step.next();
-  }
-
-  // create a major label on the left when needed
-  if (options.showMajorLabels) {
-    var leftTime = this.screenToTime(0),
-      leftText = this.step.getLabelMajor(leftTime),
-      width = leftText.length * size.axis.characterMajorWidth + 10;// estimation
-
-    if (xFirstMajorLabel === undefined || width < xFirstMajorLabel) {
-      this.redrawAxisMajorText(0, leftText, leftTime);
-    }
-  }
-
-  this.redrawAxisHorizontal();
-
-  // cleanup left over labels
-  this.redrawAxisEndOverwriting();
-
-  // put axis online
-  dom.content.insertBefore(axis.frame, dom.content.firstChild);
-
-}
-
-/**
- * Create characters used to determine the size of text on the axis
- */
-links.Timeline.prototype.redrawAxisCharacters = function () {
-  // calculate the width and height of a single character
-  // this is used to calculate the step size, and also the positioning of the
-  // axis
-  var dom = this.dom,
-    axis = dom.axis;
-
-  if (!axis.characterMinor) {
-    var text = document.createTextNode("0");
-    var characterMinor = document.createElement("DIV");
-    characterMinor.className = "timeline-axis-text timeline-axis-text-minor";
-    characterMinor.appendChild(text);
-    characterMinor.style.position = "absolute";
-    characterMinor.style.visibility = "hidden";
-    characterMinor.style.paddingLeft = "0px";
-    characterMinor.style.paddingRight = "0px";
-    axis.frame.appendChild(characterMinor);
-
-    axis.characterMinor = characterMinor;
-  }
-
-  if (!axis.characterMajor) {
-    var text = document.createTextNode("0");
-    var characterMajor = document.createElement("DIV");
-    characterMajor.className = "timeline-axis-text timeline-axis-text-major";
-    characterMajor.appendChild(text);
-    characterMajor.style.position = "absolute";
-    characterMajor.style.visibility = "hidden";
-    characterMajor.style.paddingLeft = "0px";
-    characterMajor.style.paddingRight = "0px";
-    axis.frame.appendChild(characterMajor);
-
-    axis.characterMajor = characterMajor;
-  }
-}
-
-/**
- * Initialize redraw of the axis. All existing labels and lines will be
- * overwritten and reused.
- */
-links.Timeline.prototype.redrawAxisStartOverwriting = function () {
-  var properties = this.size.axis.properties;
-
-  properties.minorTextNum = 0;
-  properties.minorLineNum = 0;
-  properties.majorTextNum = 0;
-  properties.majorLineNum = 0;
-}
-
-/**
- * End of overwriting HTML DOM elements of the axis.
- * remaining elements will be removed
- */
-links.Timeline.prototype.redrawAxisEndOverwriting = function () {
-  var dom = this.dom,
-    props = this.size.axis.properties,
-    frame = this.dom.axis.frame;
-
-  // remove leftovers
-  var minorTexts = dom.axis.minorTexts,
-      num = props.minorTextNum;
-  while (minorTexts.length > num) {
-    var minorText = minorTexts[num];
-    frame.removeChild(minorText);
-    minorTexts.splice(num, 1);
-  }
-
-  var minorLines = dom.axis.minorLines,
-      num = props.minorLineNum;
-  while (minorLines.length > num) {
-    var minorLine = minorLines[num];
-    frame.removeChild(minorLine);
-    minorLines.splice(num, 1);
-  }
-
-  var majorTexts = dom.axis.majorTexts,
-      num = props.majorTextNum;
-  while (majorTexts.length > num) {
-    var majorText = majorTexts[num];
-    frame.removeChild(majorText);
-    majorTexts.splice(num, 1);
-  }
-
-  var majorLines = dom.axis.majorLines,
-      num = props.majorLineNum;
-  while (majorLines.length > num) {
-    var majorLine = majorLines[num];
-    frame.removeChild(majorLine);
-    majorLines.splice(num, 1);
-  }
-}
-
-/**
- * Redraw the horizontal line and background of the axis
- */
-links.Timeline.prototype.redrawAxisHorizontal = function() {
-  var axis = this.dom.axis,
-    size = this.size;
-
-  if (!axis.backgroundLine) {
-    // create the axis line background (for a background color or so)
-    var backgroundLine = document.createElement("DIV");
-    backgroundLine.className = "timeline-axis";
-    backgroundLine.style.position = "absolute";
-    backgroundLine.style.left = "0px";
-    backgroundLine.style.width = "100%";
-    backgroundLine.style.border = "none";
-    axis.frame.insertBefore(backgroundLine, axis.frame.firstChild);
-
-    axis.backgroundLine = backgroundLine;
-  }
-  axis.backgroundLine.style.top = size.axis.top + "px";
-  axis.backgroundLine.style.height = size.axis.height + "px";
-
-  if (axis.line) {
-    // put this line at the end of all childs
-    var line = axis.frame.removeChild(axis.line);
-    axis.frame.appendChild(line);
-  }
-  else {
-    // make the axis line
-    var line = document.createElement("DIV");
-    line.className = "timeline-axis";
-    line.style.position = "absolute";
-    line.style.left = "0px";
-    line.style.width = "100%";
-    line.style.height = "0px";
-    axis.frame.appendChild(line);
-
-    axis.line = line;
-  }
-  axis.line.style.top = size.axis.line + "px";
-
-}
-
-/**
- * Create a minor label for the axis at position x
- * @param {Number} x
- * @param {String} text
- */
-links.Timeline.prototype.redrawAxisMinorText = function (x, text) {
-  var size = this.size,
-      dom = this.dom,
-      props = size.axis.properties,
-      frame = dom.axis.frame,
-      minorTexts = dom.axis.minorTexts,
-      index = props.minorTextNum,
-      label;
-
-  if (index < minorTexts.length) {
-    label = minorTexts[index]
-  }
-  else {
-    // create new label
-    var content = document.createTextNode(""),
-      label = document.createElement("DIV");
-    label.appendChild(content);
-    label.className = "timeline-axis-text timeline-axis-text-minor";
-    label.style.position = "absolute";
-
-    frame.appendChild(label);
-
-    minorTexts.push(label);
-  }
-
-  label.childNodes[0].nodeValue = text;
-  label.style.left = x + "px";
-  label.style.top  = size.axis.labelMinorTop + "px";
-  //label.title = title;  // TODO: this is a heavy operation
-
-  props.minorTextNum++;
-}
-
-/**
- * Create a minor line for the axis at position x
- * @param {Number} x
- */
-links.Timeline.prototype.redrawAxisMinorLine = function (x) {
-  var axis = this.size.axis,
-      dom = this.dom,
-      props = axis.properties,
-      frame = dom.axis.frame,
-      minorLines = dom.axis.minorLines,
-      index = props.minorLineNum,
-      line;
-
-  if (index < minorLines.length) {
-    line = minorLines[index];
-  }
-  else {
-    // create vertical line
-    line = document.createElement("DIV");
-    line.className = "timeline-axis-grid timeline-axis-grid-minor";
-    line.style.position = "absolute";
-    line.style.width = "0px";
-
-    frame.appendChild(line);
-    minorLines.push(line);
-  }
-
-  line.style.top = axis.lineMinorTop + "px";
-  line.style.height = axis.lineMinorHeight + "px";
-  line.style.left = (x - axis.lineMinorWidth/2) + "px";
-
-  props.minorLineNum++;
-}
-
-/**
- * Create a Major label for the axis at position x
- * @param {Number} x
- * @param {String} text
- */
-links.Timeline.prototype.redrawAxisMajorText = function (x, text) {
-  var size = this.size,
-      props = size.axis.properties,
-      frame = this.dom.axis.frame,
-      majorTexts = this.dom.axis.majorTexts,
-      index = props.majorTextNum,
-      label;
-
-  if (index < majorTexts.length) {
-    label = majorTexts[index];
-  }
-  else {
-    // create label
-    var content = document.createTextNode(text);
-    label = document.createElement("DIV");
-    label.className = "timeline-axis-text timeline-axis-text-major";
-    label.appendChild(content);
-    label.style.position = "absolute";
-    label.style.top = "0px";
-
-    frame.appendChild(label);
-    majorTexts.push(label);
-  }
-
-  label.childNodes[0].nodeValue = text;
-  label.style.top = size.axis.labelMajorTop + "px";
-  label.style.left = x + "px";
-  //label.title = title; // TODO: this is a heavy operation
-
-  props.majorTextNum ++;
-}
-
-/**
- * Create a Major line for the axis at position x
- * @param {Number} x
- */
-links.Timeline.prototype.redrawAxisMajorLine = function (x) {
-  var size = this.size,
-      props = size.axis.properties,
-      axis = this.size.axis,
-      frame = this.dom.axis.frame,
-      majorLines = this.dom.axis.majorLines,
-      index = props.majorLineNum,
-      line;
-
-  if (index < majorLines.length) {
-    var line = majorLines[index];
-  }
-  else {
-    // create vertical line
-    line = document.createElement("DIV");
-    line.className = "timeline-axis-grid timeline-axis-grid-major";
-    line.style.position = "absolute";
-    line.style.top = "0px";
-    line.style.width = "0px";
-
-    frame.appendChild(line);
-    majorLines.push(line);
-  }
-
-  line.style.left = (x - axis.lineMajorWidth/2) + "px";
-  line.style.height = size.frameHeight + "px";
-
-  props.majorLineNum ++;
-}
-
-/**
- * Redraw all items
- */
-links.Timeline.prototype.redrawItems = function() {
-  var dom = this.dom,
-    options = this.options,
-    boxAlign = (options.box && options.box.align) ? options.box.align : undefined;
-    size = this.size,
-    contentWidth = size.contentWidth,
-    items = this.items;
-
-  if (!dom.items) {
-    dom.items = {};
-  }
-
-  // draw the frame containing the items
-  var frame = dom.items.frame;
-  if (!frame) {
-    frame = document.createElement("DIV");
-    frame.style.position = "relative";
-    dom.content.appendChild(frame);
-    dom.items.frame = frame;
-  }
-
-  frame.style.left = "0px";
-  //frame.style.width = "0px";
-  frame.style.top = size.items.top + "px";
-  frame.style.height = (size.frameHeight - size.axis.height) + "px";
-
-  // initialize arrarys for storing the items
-  var ranges = dom.items.ranges;
-  if (!ranges) {
-    ranges = [];
-    dom.items.ranges = ranges;
-  }
-  var boxes = dom.items.boxes;
-  if (!boxes) {
-    boxes = [];
-    dom.items.boxes = boxes;
-  }
-  var dots = dom.items.dots;
-  if (!dots) {
-    dots = [];
-    dom.items.dots = dots;
-  }
-
-  // Take frame offline
-  dom.content.removeChild(frame);
-
-  if (size.dataChanged) {
-    // create the items
-    var rangesCreated = ranges.length,
-      boxesCreated = boxes.length,
-      dotsCreated = dots.length,
-      rangesUsed = 0,
-      boxesUsed = 0,
-      dotsUsed = 0,
-      itemsLength = items.length;
-
-    for (var i = 0, iMax = items.length; i < iMax; i++) {
-      var item = items[i];
-      switch (item.type) {
-        case 'range':
-          if (rangesUsed < rangesCreated) {
-            // reuse existing range
-            var domItem = ranges[rangesUsed];
-            domItem.firstChild.innerHTML = item.content;
-            domItem.style.display = '';
-            item.dom = domItem;
-            rangesUsed++;
+  , enter: function ( e ) {
+      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
+
+      if (!self.options.delay || !self.options.delay.show) {
+        self.show()
+      } else {
+        self.hoverState = 'in'
+        setTimeout(function() {
+          if (self.hoverState == 'in') {
+            self.show()
           }
-          else {
-            // create a new range
-            var domItem = this.createEventRange(item.content);
-            ranges[rangesUsed] = domItem;
-            frame.appendChild(domItem);
-            item.dom = domItem;
-            rangesUsed++;
-            rangesCreated++;
-          }
-          break;
-
-        case 'box':
-          if (boxesUsed < boxesCreated) {
-            // reuse existing box
-            var domItem = boxes[boxesUsed];
-            domItem.firstChild.innerHTML = item.content;
-            domItem.style.display = '';
-            item.dom = domItem;
-            boxesUsed++;
-          }
-          else {
-            // create a new box
-            var domItem = this.createEventBox(item.content);
-            boxes[boxesUsed] = domItem;
-            frame.appendChild(domItem);
-            frame.insertBefore(domItem.line, frame.firstChild);
-            // Note: line must be added in front of the items,
-            //       such that it stays below all items
-            frame.appendChild(domItem.dot);
-            item.dom = domItem;
-            boxesUsed++;
-            boxesCreated++;
-          }
-          break;
-
-        case 'dot':
-          if (dotsUsed < dotsCreated) {
-            // reuse existing box
-            var domItem = dots[dotsUsed];
-            domItem.firstChild.innerHTML = item.content;
-            domItem.style.display = '';
-            item.dom = domItem;
-            dotsUsed++;
-          }
-          else {
-            // create a new box
-            var domItem = this.createEventDot(item.content);
-            dots[dotsUsed] = domItem;
-            frame.appendChild(domItem);
-            item.dom = domItem;
-            dotsUsed++;
-            dotsCreated++;
-          }
-          break;
-
-        default:
-          // do nothing
-          break;
+        }, self.options.delay.show)
       }
     }
 
-    // remove redundant items when needed
-    for (var i = rangesUsed; i < rangesCreated; i++) {
-      frame.removeChild(ranges[i]);
-    }
-    ranges.splice(rangesUsed, rangesCreated - rangesUsed);
-    for (var i = boxesUsed; i < boxesCreated; i++) {
-      var box = boxes[i];
-      frame.removeChild(box.line);
-      frame.removeChild(box.dot);
-      frame.removeChild(box);
-    }
-    boxes.splice(boxesUsed, boxesCreated - boxesUsed);
-    for (var i = dotsUsed; i < dotsCreated; i++) {
-      frame.removeChild(dots[i]);
-    }
-    dots.splice(dotsUsed, dotsCreated - dotsUsed);
-  }
+  , leave: function ( e ) {
+      var self = $(e.currentTarget)[this.type](this._options).data(this.type)
 
-  // reposition all items
-  for (var i = 0, iMax = items.length; i < iMax; i++) {
-    var item = items[i],
-      domItem = item.dom;
+      if (!self.options.delay || !self.options.delay.hide) {
+        self.hide()
+      } else {
+        self.hoverState = 'out'
+        setTimeout(function() {
+          if (self.hoverState == 'out') {
+            self.hide()
+          }
+        }, self.options.delay.hide)
+      }
+    }
 
-    switch (item.type) {
-      case 'range':
-        var left = this.timeToScreen(item.start),
-          right = this.timeToScreen(item.end);
+  , show: function () {
+      var $tip
+        , inside
+        , pos
+        , actualWidth
+        , actualHeight
+        , placement
+        , tp
 
-        // limit the width of the item, as browsers cannot draw very wide divs
-        if (left < -contentWidth) {
-          left = -contentWidth;
-        }
-        if (right > 2 * contentWidth) {
-          right = 2 * contentWidth;
+      if (this.hasContent() && this.enabled) {
+        $tip = this.tip()
+        this.setContent()
+
+        if (this.options.animation) {
+          $tip.addClass('fade')
         }
 
-        var visible = right > -contentWidth && left < 2 * contentWidth;
-        if (visible || size.dataChanged) {
-          // when data is changed, all items must be kept visible, as their heights must be measured
-          if (item.hidden) {
-            item.hidden = false;
-            domItem.style.display = '';
-          }
-          domItem.style.top = item.top + "px";
-          domItem.style.left = left + "px";
-          //domItem.style.width = Math.max(right - left - 2 * item.borderWidth, 1) + "px"; // TODO: borderWidth
-          domItem.style.width = Math.max(right - left, 1) + "px";
-        }
-        else {
-          // hide when outside of the current window
-          if (!item.hidden) {
-            domItem.style.display = 'none';
-            item.hidden = true;
-          }
-        }
-
-        break;
-
-      case 'box':
-        var left = this.timeToScreen(item.start);
-
-        var axisOnTop = options.axisOnTop,
-          axisHeight = size.axis.height,
-          axisTop = size.axis.top;
-        var visible = ((left + item.width/2 > -contentWidth) &&
-          (left - item.width/2 < 2 * contentWidth));
-        if (visible || size.dataChanged) {
-          // when data is changed, all items must be kept visible, as their heights must be measured
-          if (item.hidden) {
-            item.hidden = false;
-            domItem.style.display = '';
-            domItem.line.style.display = '';
-            domItem.dot.style.display = '';
-          }
-          domItem.style.top = item.top + "px";
-          if (boxAlign == 'right') {
-            domItem.style.left = (left - item.width) + "px";
-          }
-          else if (boxAlign == 'left') {
-            domItem.style.left = (left) + "px";
-          }
-          else { // default or 'center'
-            domItem.style.left = (left - item.width/2) + "px";
-          }
-
-          var line = domItem.line;
-          line.style.left = (left - item.lineWidth/2) + "px";
-          if (axisOnTop) {
-            line.style.top = "0px";
-            line.style.height = Math.max(item.top, 0) + "px";
-          }
-          else {
-            line.style.top = (item.top + item.height) + "px";
-            line.style.height = Math.max(axisTop - item.top - item.height, 0) + "px";
-          }
-
-          var dot = domItem.dot;
-          dot.style.left = (left - item.dotWidth/2) + "px";
-          dot.style.top = (axisTop - item.dotHeight/2) + "px";
-        }
-        else {
-          // hide when outside of the current window
-          if (!item.hidden) {
-            domItem.style.display = 'none';
-            domItem.line.style.display = 'none';
-            domItem.dot.style.display = 'none';
-            item.hidden = true;
-          }
-        }
-        break;
-
-      case 'dot':
-        var left = this.timeToScreen(item.start);
-
-        var axisOnTop = options.axisOnTop,
-          axisHeight = size.axis.height,
-          axisTop = size.axis.top;
-        var visible = (left + item.width > -contentWidth) && (left < 2 * contentWidth);
-        if (visible || size.dataChanged) {
-          // when data is changed, all items must be kept visible, as their heights must be measured
-          if (item.hidden) {
-            item.hidden = false;
-            domItem.style.display = '';
-          }
-          domItem.style.top = item.top + "px";
-          domItem.style.left = (left - item.dotWidth / 2) + "px";
-
-          domItem.content.style.marginLeft = (1.5 * item.dotWidth) + "px";
-          //domItem.content.style.marginRight = (0.5 * item.dotWidth) + "px"; // TODO
-          domItem.dot.style.top = ((item.height - item.dotHeight) / 2) + "px";
-        }
-        else {
-          // hide when outside of the current window
-          if (!item.hidden) {
-            domItem.style.display = 'none';
-            item.hidden = true;
-          }
-        }
-        break;
-
-      default:
-        // do nothing
-        break;
-    }
-  }
-
-  // move selected item to the end, to ensure that it is always on top
-  if (this.selection) {
-    var item = this.selection.item;
-    frame.removeChild(item);
-    frame.appendChild(item);
-  }
-
-  // put frame online again
-  dom.content.appendChild(frame);
-
-  /* TODO
-  // retrieve all image sources from the items, and set a callback once
-  // all images are retrieved
-  var urls = [];
-  var timeline = this;
-  links.Timeline.filterImageUrls(frame, urls);
-  if (urls.length) {
-    for (var i = 0; i < urls.length; i++) {
-      var url = urls[i];
-      var callback = function (url) {
-        timeline.redraw();
-      };
-      var sendCallbackWhenAlreadyLoaded = false;
-      links.imageloader.load(url, callback, sendCallbackWhenAlreadyLoaded);
-    }
-  }
-  */
-}
-
-
-/**
- * Create an event in the timeline, with (optional) formatting: inside a box
- * with rounded corners, and a vertical line+dot to the axis.
- * @param {string} content    The content for the event. This can be plain text
- *                            or HTML code.
- */
-links.Timeline.prototype.createEventBox = function(content) {
-  // background box
-  var divBox = document.createElement("DIV");
-  divBox.style.position = "absolute";
-  divBox.style.left  = "0px";
-  divBox.style.top = "0px";
-  divBox.className  = "timeline-event timeline-event-box";
-
-  // contents box (inside the background box). used for making margins
-  var divContent = document.createElement("DIV");
-  divContent.className = "timeline-event-content";
-  divContent.innerHTML = content;
-  divBox.appendChild(divContent);
-
-  // line to axis
-  var divLine = document.createElement("DIV");
-  divLine.style.position = "absolute";
-  divLine.style.width = "0px";
-  divLine.className = "timeline-event timeline-event-line";
-  // important: the vertical line is added at the front of the list of elements,
-  // so it will be drawn behind all boxes and ranges
-  divBox.line = divLine;
-
-  // dot on axis
-  var divDot = document.createElement("DIV");
-  divDot.style.position = "absolute";
-  divDot.style.width  = "0px";
-  divDot.style.height = "0px";
-  divDot.className  = "timeline-event timeline-event-dot";
-  divBox.dot = divDot;
-
-  return divBox;
-}
-
-
-/**
- * Create an event in the timeline: a dot, followed by the content.
- * @param {string} content    The content for the event. This can be plain text
- *                            or HTML code.
- */
-links.Timeline.prototype.createEventDot = function(content) {
-  // background box
-  var divBox = document.createElement("DIV");
-  divBox.style.position = "absolute";
-
-  // contents box, right from the dot
-  var divContent = document.createElement("DIV");
-  divContent.className = "timeline-event-content";
-  divContent.innerHTML = content;
-  divBox.appendChild(divContent);
-
-  // dot at start
-  var divDot = document.createElement("DIV");
-  divDot.style.position = "absolute";
-  divDot.className = "timeline-event timeline-event-dot";
-  divDot.style.width = "0px";
-  divDot.style.height = "0px";
-  divBox.appendChild(divDot);
-
-  divBox.content = divContent;
-  divBox.dot = divDot;
-
-  return divBox;
-}
-
-
-/**
- * Create an event range as a beam in the timeline.
- * @param {string}  content    The content for the event. This can be plain text
- *                             or HTML code.
- */
-links.Timeline.prototype.createEventRange = function(content) {
-  // background box
-  var divBox = document.createElement("DIV");
-  divBox.style.position = "absolute";
-  divBox.className = "timeline-event timeline-event-range";
-
-  // contents box
-  var divContent = document.createElement("DIV");
-  divContent.className = "timeline-event-content";
-  divContent.innerHTML = content;
-  divBox.appendChild(divContent);
-
-  return divBox;
-}
-
-/**
- * Redraw the group labels
- */
-links.Timeline.prototype.redrawGroups = function() {
-  var dom = this.dom,
-    options = this.options,
-    size = this.size,
-    groups = this.groups;
-
-  if (dom.groups === undefined) {
-    dom.groups = {};
-  }
-
-  var labels = dom.groups.labels;
-  if (!labels) {
-    labels = [];
-    dom.groups.labels = labels;
-  }
-  var labelLines = dom.groups.labelLines;
-  if (!labelLines) {
-    labelLines = [];
-    dom.groups.labelLines = labelLines;
-  }
-  var itemLines = dom.groups.itemLines;
-  if (!itemLines) {
-    itemLines = [];
-    dom.groups.itemLines = itemLines;
-  }
-
-  // create the frame for holding the groups
-  var frame = dom.groups.frame;
-  if (!frame) {
-    var frame =  document.createElement("DIV");
-    frame.className = "timeline-groups-axis";
-    frame.style.position = "absolute";
-    frame.style.overflow = "hidden";
-    frame.style.top = "0px";
-    frame.style.height = "100%";
-
-    dom.frame.appendChild(frame);
-    dom.groups.frame = frame;
-  }
-
-  frame.style.left = size.groupsLeft + "px";
-  frame.style.width = (options.groupsWidth !== undefined) ?
-    options.groupsWidth :
-    size.groupsWidth + "px";
-
-  // hide groups axis when there are no groups
-  if (groups.length == 0) {
-    frame.style.display = 'none';
-  }
-  else {
-    frame.style.display = '';
-  }
-
-  if (size.dataChanged) {
-    // create the items
-    var current = labels.length,
-      needed = groups.length;
-
-    // overwrite existing items
-    for (var i = 0, iMax = Math.min(current, needed); i < iMax; i++) {
-      var group = groups[i];
-      var label = labels[i];
-      label.innerHTML = group.content;
-      label.style.display = '';
-    }
-
-    // append new items when needed
-    for (var i = current; i < needed; i++) {
-      var group = groups[i];
-
-      // create text label
-      var label = document.createElement("DIV");
-      label.className = "timeline-groups-text";
-      label.style.position = "absolute";
-      if (options.groupsWidth === undefined) {
-        label.style.whiteSpace = "nowrap";
-      }
-      label.innerHTML = group.content;
-      frame.appendChild(label);
-      labels[i] = label;
-
-      // create the grid line between the group labels
-      var labelLine = document.createElement("DIV");
-      labelLine.className = "timeline-axis-grid timeline-axis-grid-minor";
-      labelLine.style.position = "absolute";
-      labelLine.style.left = "0px";
-      labelLine.style.width = "100%";
-      labelLine.style.height = "0px";
-      labelLine.style.borderTopStyle = "solid";
-      frame.appendChild(labelLine);
-      labelLines[i] = labelLine;
-
-      // create the grid line between the items
-      var itemLine = document.createElement("DIV");
-      itemLine.className = "timeline-axis-grid timeline-axis-grid-minor";
-      itemLine.style.position = "absolute";
-      itemLine.style.left = "0px";
-      itemLine.style.width = "100%";
-      itemLine.style.height = "0px";
-      itemLine.style.borderTopStyle = "solid";
-      dom.content.insertBefore(itemLine, dom.content.firstChild);
-      itemLines[i] = itemLine;
-    }
-
-    // remove redundant items from the DOM when needed
-    for (var i = needed; i < current; i++) {
-      var label = labels[i],
-        labelLine = labelLines[i],
-        itemLine = itemLines[i];
-
-      frame.removeChild(label);
-      frame.removeChild(labelLine);
-      dom.content.removeChild(itemLine);
-    }
-    labels.splice(needed, current - needed);
-    labelLines.splice(needed, current - needed);
-    itemLines.splice(needed, current - needed);
-
-    frame.style.borderStyle = options.groupsOnRight ?
-      "none none none solid" :
-      "none solid none none";
-  }
-
-  // position the groups
-  for (var i = 0, iMax = groups.length; i < iMax; i++) {
-    var group = groups[i],
-      label = labels[i],
-      labelLine = labelLines[i],
-      itemLine = itemLines[i];
-
-    label.style.top = group.labelTop + "px";
-    labelLine.style.top = group.lineTop + "px";
-    itemLine.style.top = group.lineTop + "px";
-    itemLine.style.width = size.contentWidth + "px";
-  }
-
-  if (!dom.groups.background) {
-    // create the axis grid line background
-    var background = document.createElement("DIV");
-    background.className = "timeline-axis";
-    background.style.position = "absolute";
-    background.style.left = "0px";
-    background.style.width = "100%";
-    background.style.border = "none";
-
-    frame.appendChild(background);
-    dom.groups.background = background;
-  }
-  dom.groups.background.style.top = size.axis.top + 'px';
-  dom.groups.background.style.height = size.axis.height + 'px';
-
-  if (!dom.groups.line) {
-    // create the axis grid line
-    var line = document.createElement("DIV");
-    line.className = "timeline-axis";
-    line.style.position = "absolute";
-    line.style.left = "0px";
-    line.style.width = "100%";
-    line.style.height = "0px";
-
-    frame.appendChild(line);
-    dom.groups.line = line;
-  }
-  dom.groups.line.style.top = size.axis.line + 'px';
-}
-
-
-/**
- * Redraw the current time bar
- */
-links.Timeline.prototype.redrawCurrentTime = function() {
-  var options = this.options,
-    dom = this.dom,
-    size = this.size;
-
-  if (!options.showCurrentTime) {
-    if (dom.currentTime) {
-      dom.contentTimelines.removeChild(dom.currentTime);
-      delete dom.currentTime;
-    }
-
-    return;
-  }
-
-  if (!dom.currentTime) {
-    // create the current time bar
-    var currentTime = document.createElement("DIV");
-    currentTime.className = "timeline-currenttime";
-    currentTime.style.position = "absolute";
-    currentTime.style.top = "0px";
-    currentTime.style.height = "100%";
-
-    dom.contentTimelines.appendChild(currentTime);
-    dom.currentTime = currentTime;
-  }
-
-  var now = new Date();
-  var nowOffset = new Date(now.getTime() + this.clientTimeOffset);
-  var x = this.timeToScreen(nowOffset);
-
-  var visible = (x > -size.contentWidth && x < 2 * size.contentWidth);
-  dom.currentTime.style.display = visible ? '' : 'none';
-  dom.currentTime.style.left = x + "px";
-  dom.currentTime.title = "Current time: " + nowOffset;
-
-  // start a timer to adjust for the new time
-  if (this.currentTimeTimer != undefined) {
-    clearTimeout(this.currentTimeTimer);
-    delete this.currentTimeTimer;
-  }
-  var timeline = this;
-  var onTimeout = function() {
-    timeline.redrawCurrentTime();
-  }
-  // the time equal to the width of one pixel, divided by 2 for more smoothness
-  var interval = 1 / this.conversion.factor / 2;
-  if (interval < 30) interval = 30;
-  this.currentTimeTimer = setTimeout(onTimeout, interval);
-}
-
-/**
- * Redraw the custom time bar
- */
-links.Timeline.prototype.redrawCustomTime = function() {
-  var options = this.options,
-    dom = this.dom,
-    size = this.size;
-
-  if (!options.showCustomTime) {
-    if (dom.customTime) {
-      dom.contentTimelines.removeChild(dom.customTime);
-      delete dom.customTime;
-    }
-
-    return;
-  }
-
-  if (!dom.customTime) {
-    var customTime = document.createElement("DIV");
-    customTime.className = "timeline-customtime";
-    customTime.style.position = "absolute";
-    customTime.style.top = "0px";
-    customTime.style.height = "100%";
-
-    var drag = document.createElement("DIV");
-    drag.style.position = "relative";
-    drag.style.top = "0px";
-    drag.style.left = "-10px";
-    drag.style.height = "100%";
-    drag.style.width = "20px";
-    customTime.appendChild(drag);
-
-    dom.contentTimelines.appendChild(customTime);
-    dom.customTime = customTime;
-
-    // initialize parameter
-    this.customTime = new Date();
-  }
-
-  var x = this.timeToScreen(this.customTime),
-    visible = (x > -size.contentWidth && x < 2 * size.contentWidth);
-  dom.customTime.style.display = visible ? '' : 'none';
-  dom.customTime.style.left = x + "px";
-  dom.customTime.title = "Time: " + this.customTime;
-}
-
-
-/**
- * Redraw the delete button, on the top right of the currently selected item
- * if there is no item selected, the button is hidden.
- */
-links.Timeline.prototype.redrawDeleteButton = function () {
-  var timeline = this,
-    options = this.options,
-    dom = this.dom,
-    size = this.size,
-    frame = dom.items.frame;
-
-  if (!options.editable) {
-    return;
-  }
-
-  var deleteButton = dom.items.deleteButton;
-  if (!deleteButton) {
-    // create a delete button
-    deleteButton = document.createElement("DIV");
-    deleteButton.className = "timeline-navigation-delete";
-    deleteButton.style.position = "absolute";
-
-    frame.appendChild(deleteButton);
-    dom.items.deleteButton = deleteButton;
-  }
-
-  if (this.selection) {
-    var index = this.selection.index,
-      item = this.items[index],
-      domItem = this.selection.item,
-      right,
-      top = item.top;
-
-    switch (item.type) {
-      case 'range':
-        right = this.timeToScreen(item.end);
-        break;
-
-      case 'box':
-        //right = this.timeToScreen(item.start) + item.width / 2 + item.borderWidth; // TODO: borderWidth
-        right = this.timeToScreen(item.start) + item.width / 2;
-        break;
-
-      case 'dot':
-        right = this.timeToScreen(item.start) + item.width;
-        break;
-    }
-
-    // limit the position
-    if (right < -size.contentWidth) {
-      right = -size.contentWidth;
-    }
-    if (right > 2 * size.contentWidth) {
-      right = 2 * size.contentWidth;
-    }
-
-    deleteButton.style.left = right + 'px';
-    deleteButton.style.top = top + 'px';
-    deleteButton.style.display = '';
-    frame.removeChild(deleteButton);
-    frame.appendChild(deleteButton);
-  }
-  else {
-    deleteButton.style.display = 'none';
-  }
-}
-
-
-/**
- * Redraw the drag areas. When an item (ranges only) is selected,
- * it gets a drag area on the left and right side, to change its width
- */
-links.Timeline.prototype.redrawDragAreas = function () {
-  var timeline = this,
-    options = this.options,
-    dom = this.dom,
-    size = this.size,
-    frame = this.dom.items.frame;
-
-  if (!options.editable) {
-    return;
-  }
-
-  // create left drag area
-  var dragLeft = dom.items.dragLeft;
-  if (!dragLeft) {
-    dragLeft = document.createElement("DIV");
-    dragLeft.style.width = options.dragAreaWidth + "px";
-    dragLeft.style.position = "absolute";
-    dragLeft.style.cursor = "w-resize";
-
-    frame.appendChild(dragLeft);
-    dom.items.dragLeft = dragLeft;
-  }
-
-  // create right drag area
-  var dragRight = dom.items.dragRight;
-  if (!dragRight) {
-    dragRight = document.createElement("DIV");
-    dragRight.style.width = options.dragAreaWidth + "px";
-    dragRight.style.position = "absolute";
-    dragRight.style.cursor = "e-resize";
-
-    frame.appendChild(dragRight);
-    dom.items.dragRight = dragRight;
-  }
-
-  // reposition left and right drag area
-  if (this.selection) {
-    var index = this.selection.index,
-      item = this.items[index];
-
-    if (item.type == 'range') {
-      var domItem = item.dom,
-      left = this.timeToScreen(item.start),
-      right = this.timeToScreen(item.end),
-      top = item.top,
-      height = item.height;
-
-      dragLeft.style.left = left + 'px';
-      dragLeft.style.top = top + 'px';
-      dragLeft.style.height = height + 'px';
-      dragLeft.style.display = '';
-      frame.removeChild(dragLeft);
-      frame.appendChild(dragLeft);
-
-      dragRight.style.left = (right - options.dragAreaWidth) + 'px';
-      dragRight.style.top = top + 'px';
-      dragRight.style.height = height + 'px';
-      dragRight.style.display = '';
-      frame.removeChild(dragRight);
-      frame.appendChild(dragRight);
-    }
-  }
-  else {
-    dragLeft.style.display = 'none';
-    dragRight.style.display = 'none';
-  }
-}
-
-
-
-/**
- * Create the navigation buttons for zooming and moving
- */
-links.Timeline.prototype.redrawNavigation = function () {
-  var timeline = this,
-    options = this.options,
-    dom = this.dom,
-    frame = dom.frame,
-    navBar = dom.navBar;
-
-  if (!navBar) {
-    if (options.editable || options.showNavigation) {
-      // create a navigation bar containing the navigation buttons
-      navBar = document.createElement("DIV");
-      navBar.style.position = "absolute";
-      navBar.className = "timeline-navigation";
-      if (options.groupsOnRight) {
-        navBar.style.left = '10px';
-      }
-      else {
-        navBar.style.right = '10px';
-      }
-      if (options.axisOnTop) {
-        navBar.style.bottom = '10px';
-      }
-      else {
-        navBar.style.top = '10px';
-      }
-      dom.navBar = navBar;
-      frame.appendChild(navBar);
-    }
-
-    if (options.editable && options.showButtonAdd) {
-      // create a new in button
-      navBar.addButton = document.createElement("DIV");
-      navBar.addButton.className = "timeline-navigation-new";
-
-      navBar.addButton.title = "Create new event";
-      var onAdd = function(event) {
-        links.Timeline.preventDefault(event);
-        links.Timeline.stopPropagation(event);
-
-        // create a new event at the center of the frame
-        var w = timeline.size.contentWidth;
-        var x = w / 2;
-        var xstart = timeline.screenToTime(x - w / 10); // subtract 10% of timeline width
-        var xend = timeline.screenToTime(x + w / 10); // add 10% of timeline width
-        if (options.snapEvents) {
-          timeline.step.snap(xstart);
-          timeline.step.snap(xend);
+        placement = typeof this.options.placement == 'function' ?
+          this.options.placement.call(this, $tip[0], this.$element[0]) :
+          this.options.placement
+
+        inside = /in/.test(placement)
+
+        $tip
+          .remove()
+          .css({ top: 0, left: 0, display: 'block' })
+          .appendTo(inside ? this.$element : document.body)
+
+        pos = this.getPosition(inside)
+
+        actualWidth = $tip[0].offsetWidth
+        actualHeight = $tip[0].offsetHeight
+
+        switch (inside ? placement.split(' ')[1] : placement) {
+          case 'bottom':
+            tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2}
+            break
+          case 'top':
+            tp = {top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2}
+            break
+          case 'left':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth}
+            break
+          case 'right':
+            tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width}
+            break
         }
 
-        var content = "New";
-        var group = timeline.groups.length ? timeline.groups[0].content : undefined;
-
-        timeline.addItem({
-          'start': xstart,
-          'end': xend,
-          'content': content,
-          'group': group
-        });
-        var index = (timeline.items.length - 1);
-        timeline.selectItem(index);
-
-        timeline.applyAdd = true;
-
-        // fire an add event.
-        // Note that the change can be canceled from within an event listener if
-        // this listener calls the method cancelAdd().
-        timeline.trigger('add');
-
-        if (!timeline.applyAdd) {
-          // undo an add
-          timeline.deleteItem(index);
-        }
-        timeline.redrawDeleteButton();
-        timeline.redrawDragAreas();
-      };
-      links.Timeline.addEventListener(navBar.addButton, "mousedown", onAdd);
-      navBar.appendChild(navBar.addButton);
-    }
-
-    if (options.editable && options.showButtonAdd && options.showNavigation) {
-      // create a separator line
-      navBar.addButton.style.borderRightWidth = "1px";
-      navBar.addButton.style.borderRightStyle = "solid";
-    }
-
-    if (options.showNavigation) {
-      // create a zoom in button
-      navBar.zoomInButton = document.createElement("DIV");
-      navBar.zoomInButton.className = "timeline-navigation-zoom-in";
-      navBar.zoomInButton.title = "Zoom in";
-      var onZoomIn = function(event) {
-        links.Timeline.preventDefault(event);
-        links.Timeline.stopPropagation(event);
-        timeline.zoom(0.4);
-        timeline.trigger("rangechange");
-        timeline.trigger("rangechanged");
-      };
-      links.Timeline.addEventListener(navBar.zoomInButton, "mousedown", onZoomIn);
-      navBar.appendChild(navBar.zoomInButton);
-
-      // create a zoom out button
-      navBar.zoomOutButton = document.createElement("DIV");
-      navBar.zoomOutButton.className = "timeline-navigation-zoom-out";
-      navBar.zoomOutButton.title = "Zoom out";
-      var onZoomOut = function(event) {
-        links.Timeline.preventDefault(event);
-        links.Timeline.stopPropagation(event);
-        timeline.zoom(-0.4);
-        timeline.trigger("rangechange");
-        timeline.trigger("rangechanged");
-      };
-      links.Timeline.addEventListener(navBar.zoomOutButton, "mousedown", onZoomOut);
-      navBar.appendChild(navBar.zoomOutButton);
-
-      // create a move left button
-      navBar.moveLeftButton = document.createElement("DIV");
-      navBar.moveLeftButton.className = "timeline-navigation-move-left";
-      navBar.moveLeftButton.title = "Move left";
-      var onMoveLeft = function(event) {
-        links.Timeline.preventDefault(event);
-        links.Timeline.stopPropagation(event);
-        timeline.move(-0.2);
-        timeline.trigger("rangechange");
-        timeline.trigger("rangechanged");
-      };
-      links.Timeline.addEventListener(navBar.moveLeftButton, "mousedown", onMoveLeft);
-      navBar.appendChild(navBar.moveLeftButton);
-
-      // create a move right button
-      navBar.moveRightButton = document.createElement("DIV");
-      navBar.moveRightButton.className = "timeline-navigation-move-right";
-      navBar.moveRightButton.title = "Move right";
-      var onMoveRight = function(event) {
-        links.Timeline.preventDefault(event);
-        links.Timeline.stopPropagation(event);
-        timeline.move(0.2);
-        timeline.trigger("rangechange");
-        timeline.trigger("rangechanged");
-      };
-      links.Timeline.addEventListener(navBar.moveRightButton, "mousedown", onMoveRight);
-      navBar.appendChild(navBar.moveRightButton);
-    }
-  }
-}
-
-
-/**
- * Set current time. This function can be used to set the time in the client
- * timeline equal with the time on a server.
- * @param {Date} time
- */
-links.Timeline.prototype.setCurrentTime = function(time) {
-  var now = new Date();
-  this.clientTimeOffset = time.getTime() - now.getTime();
-
-  this.redrawCurrentTime();
-}
-
-/**
- * Get current time. The time can have an offset from the real time, when
- * the current time has been changed via the method setCurrentTime.
- * @return {Date} time
- */
-links.Timeline.prototype.getCurrentTime = function() {
-  var now = new Date();
-  return new Date(now.getTime() + this.clientTimeOffset);
-}
-
-
-/**
- * Set custom time.
- * The custom time bar can be used to display events in past or future.
- * @param {Date} time
- */
-links.Timeline.prototype.setCustomTime = function(time) {
-  this.customTime = new Date(time);
-  this.redrawCustomTime();
-}
-
-/**
- * Retrieve the current custom time.
- * @return {Date} customTime
- */
-links.Timeline.prototype.getCustomTime = function() {
-  return new Date(this.customTime);
-}
-
-/**
- * Set a custom scale. Autoscaling will be disabled.
- * For example setScale(SCALE.MINUTES, 5) will result
- * in minor steps of 5 minutes, and major steps of an hour.
- *
- * @param {Step.SCALE} newScale  A scale. Choose from SCALE.MILLISECOND,
- *                               SCALE.SECOND, SCALE.MINUTE, SCALE.HOUR,
- *                               SCALE.DAY, SCALE.MONTH, SCALE.YEAR.
- * @param {int}        newStep   A step size, by default 1. Choose for
- *                               example 1, 2, 5, or 10.
- */
-links.Timeline.prototype.setScale = function(scale, step) {
-  this.step.setScale(scale, step);
-  this.redrawFrame();
-}
-
-/**
- * Enable or disable autoscaling
- * @param {boolean} enable  If true or not defined, autoscaling is enabled.
- *                          If false, autoscaling is disabled.
- */
-links.Timeline.prototype.setAutoScale = function(enable) {
-  this.step.setAutoScale(enable);
-  this.redrawFrame();
-}
-
-/**
- * Redraw the timeline
- * Reloads the (linked) data table and redraws the timeline when resized.
- * See also the method checkResize
- */
-links.Timeline.prototype.redraw = function() {
-  this.setData(this.data);
-}
-
-
-/**
- * Check if the timeline is resized, and if so, redraw the timeline.
- * Useful when the webpage is resized.
- */
-links.Timeline.prototype.checkResize = function() {
-  var resized = this.recalcSize();
-  if (resized) {
-    this.redrawFrame();
-  }
-}
-
-/**
- * Recursively retrieve all image urls from the images located inside a given
- * HTML element
- * @param {HTMLElement} elem
- * @param {Array with String} urls   Urls will be added here (no duplicates)
- */
-links.Timeline.filterImageUrls = function(elem, urls) {
-  var child = elem.firstChild;
-  while (child) {
-    if (child.tagName == 'IMG') {
-      var url = child.src;
-      if (urls.indexOf(url) == -1) {
-        urls.push(url);
+        $tip
+          .css(tp)
+          .addClass(placement)
+          .addClass('in')
       }
     }
 
-    links.Timeline.filterImageUrls(child, urls);
+  , setContent: function () {
+      var $tip = this.tip()
+      $tip.find('.tooltip-inner').html(this.getTitle())
+      $tip.removeClass('fade in top bottom left right')
+    }
 
-    child = child.nextSibling;
-  }
-}
+  , hide: function () {
+      var that = this
+        , $tip = this.tip()
 
-/**
- * Recalculate the sizes of all frames, groups, items, axis
- * After recalcSize() is executed, the Timeline should be redrawn normally
- *
- * @return {boolean} resized   Returns true when the timeline has been resized
- */
-links.Timeline.prototype.recalcSize = function() {
-  var resized = false;
+      $tip.removeClass('in')
 
-  var timeline = this;
-    size = this.size,
-    options = this.options,
-    axisOnTop = options.axisOnTop,
-    dom = this.dom,
-    axis = dom.axis,
-    groups = this.groups,
-    labels = dom.groups.labels,
-    items = this.items
+      function removeWithAnimation() {
+        var timeout = setTimeout(function () {
+          $tip.off($.support.transition.end).remove()
+        }, 500)
 
-    groupsWidth = size.groupsWidth,
-    characterMinorWidth  = axis.characterMinor ? axis.characterMinor.clientWidth : 0,
-    characterMinorHeight = axis.characterMinor ? axis.characterMinor.clientHeight : 0,
-    characterMajorWidth  = axis.characterMajor ? axis.characterMajor.clientWidth : 0,
-    characterMajorHeight = axis.characterMajor ? axis.characterMajor.clientHeight : 0,
-    axisHeight = characterMinorHeight + (options.showMajorLabels ? characterMajorHeight : 0),
-    actualHeight = size.actualHeight || axisHeight;
+        $tip.one($.support.transition.end, function () {
+          clearTimeout(timeout)
+          $tip.remove()
+        })
+      }
 
-  // TODO: move checking for loaded items when creating the dom
-  if (size.dataChanged) {
-    // retrieve all image sources from the items, and set a callback once
-    // all images are retrieved
-    var urls = [];
-    for (var i = 0, iMax = items.length; i < iMax; i++) {
-      var item = items[i],
-        domItem = item.dom;
+      $.support.transition && this.$tip.hasClass('fade') ?
+        removeWithAnimation() :
+        $tip.remove()
+    }
 
-      if (domItem) {
-        links.Timeline.filterImageUrls(domItem, urls);
+  , fixTitle: function () {
+      var $e = this.$element
+      if ($e.attr('title') || typeof($e.attr('data-original-title')) != 'string') {
+        $e.attr('data-original-title', $e.attr('title') || '').removeAttr('title')
       }
     }
-    if (urls.length) {
-      for (var i = 0; i < urls.length; i++) {
-        var url = urls[i];
-        var callback = function (url) {
-          timeline.redraw();
-        };
-        var sendCallbackWhenAlreadyLoaded = false;
-        links.imageloader.load(url, callback, sendCallbackWhenAlreadyLoaded);
+
+  , hasContent: function () {
+      return this.getTitle()
+    }
+
+  , getPosition: function (inside) {
+      return $.extend({}, (inside ? {top: 0, left: 0} : this.$element.offset()), {
+        width: this.$element[0].offsetWidth
+      , height: this.$element[0].offsetHeight
+      })
+    }
+
+  , getTitle: function () {
+      var title
+        , $e = this.$element
+        , o = this.options
+
+      title = $e.attr('data-original-title')
+        || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+      title = title.toString().replace(/(^\s*|\s*$)/, "")
+
+      return title
+    }
+
+  , tip: function () {
+      return this.$tip = this.$tip || $(this.options.template)
+    }
+
+  , validate: function () {
+      if (!this.$element[0].parentNode) {
+        this.hide()
+        this.$element = null
+        this.options = null
       }
     }
+
+  , enable: function () {
+      this.enabled = true
+    }
+
+  , disable: function () {
+      this.enabled = false
+    }
+
+  , toggleEnabled: function () {
+      this.enabled = !this.enabled
+    }
+
+  , toggle: function () {
+      this[this.tip().hasClass('in') ? 'hide' : 'show']()
+    }
+
   }
 
-  // check sizes of the items and groups (width and height) when the data is changed
-  if (size.dataChanged) { // TODO: always calculate the size of an item?
-  //if (true) {
-    groupsWidth = 0;
 
-    // loop through all groups to get the maximum width and the heights
-    for (var i = 0, iMax = labels.length; i < iMax; i++) {
-      var group = groups[i];
-      group.width = labels[i].clientWidth;
-      group.height = labels[i].clientHeight;
-      group.labelHeight = group.height;
+ /* TOOLTIP PLUGIN DEFINITION
+  * ========================= */
 
-      groupsWidth = Math.max(groupsWidth, group.width);
-    }
-
-    // loop through the width and height of all items
-    for (var i = 0, iMax = items.length; i < iMax; i++) {
-      var item = items[i],
-        domItem = item.dom,
-        group = item.group;
-
-      var width = domItem ? domItem.clientWidth : 0;
-      var height = domItem ? domItem.clientHeight : 0;
-      resized = resized || (item.width != width);
-      resized = resized || (item.height != height);
-      item.width = width;
-      item.height = height;
-      //item.borderWidth = (domItem.offsetWidth - domItem.clientWidth - 2) / 2; // TODO: borderWidth
-
-      switch (item.type) {
-        case 'range':
-          break;
-
-        case 'box':
-          item.dotHeight = domItem.dot.offsetHeight;
-          item.dotWidth = domItem.dot.offsetWidth;
-          item.lineWidth = domItem.line.offsetWidth;
-          break;
-
-        case 'dot':
-          item.dotHeight = domItem.dot.offsetHeight;
-          item.dotWidth = domItem.dot.offsetWidth;
-          item.contentHeight = domItem.content.offsetHeight;
-          break;
-      }
-
-      if (group) {
-        group.height = group.height ? Math.max(group.height, item.height) : item.height;
-      }
-    }
-
-    // calculate the actual height of the timeline (needed for auto sizing
-    // the timeline)
-    actualHeight = axisHeight + 2 * options.eventMarginAxis;
-    for (var i = 0, iMax = groups.length; i < iMax; i++) {
-      actualHeight += groups[i].height + options.eventMargin;
-    }
+  $.fn.tooltip = function ( option ) {
+    return this.each(function () {
+      var $this = $(this)
+        , data = $this.data('tooltip')
+        , options = typeof option == 'object' && option
+      if (!data) $this.data('tooltip', (data = new Tooltip(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
   }
 
-  // calculate actual height of the timeline when there are no groups
-  // but stacked items
-  if (groups.length == 0 && options.autoHeight) {
-    var min = 0,
-      max = 0;
+  $.fn.tooltip.Constructor = Tooltip
 
-    if (this.animation && this.animation.finalItems) {
-      // adjust the offset of all finalItems when the actualHeight has been changed
-      var finalItems = this.animation.finalItems,
-        finalItem = finalItems[0];
-      if (finalItem && finalItem.top) {
-        min = finalItem.top,
-        max = finalItem.top + finalItem.height;
-      }
-      for (var i = 1, iMax = finalItems.length; i < iMax; i++) {
-        finalItem = finalItems[i];
-        min = Math.min(min, finalItem.top);
-        max = Math.max(max, finalItem.top + finalItem.height);
-      }
-    }
-    else {
-      var item = items[0];
-      if (item && item.top) {
-        min = item.top,
-        max = item.top + item.height;
-      }
-      for (var i = 1, iMax = items.length; i < iMax; i++) {
-        var item = items[i];
-        if (item.top) {
-          min = Math.min(min, item.top);
-          max = Math.max(max, (item.top + item.height));
-        }
-      }
-    }
-
-    actualHeight = (max - min) + 2 * options.eventMarginAxis + axisHeight;
-
-    if (size.actualHeight != actualHeight && options.autoHeight && !options.axisOnTop) {
-      // adjust the offset of all items when the actualHeight has been changed
-      var diff = actualHeight - size.actualHeight;
-      if (this.animation && this.animation.finalItems) {
-        var finalItems = this.animation.finalItems;
-        for (var i = 0, iMax = finalItems.length; i < iMax; i++) {
-          finalItems[i].top += diff;
-          finalItems[i].item.top += diff;
-        }
-      }
-      else {
-        for (var i = 0, iMax = items.length; i < iMax; i++) {
-          items[i].top += diff;
-        }
-      }
-    }
+  $.fn.tooltip.defaults = {
+    animation: true
+  , delay: 0
+  , selector: false
+  , placement: 'top'
+  , trigger: 'hover'
+  , title: ''
+  , template: '<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
   }
 
-  // now the heights of the elements are known, we can calculate the the
-  // width and height of frame and axis and content
-  // Note: IE7 has issues with giving frame.clientWidth, therefore I use offsetWidth instead
-  var frameWidth  = dom.frame ? dom.frame.offsetWidth : 0,
-    frameHeight = Math.max(options.autoHeight ?
-      actualHeight : (dom.frame ? dom.frame.clientHeight : 0),
-      options.minHeight),
-    axisTop  = axisOnTop ? 0 : frameHeight - axisHeight,
-    axisLine = axisOnTop ? axisHeight : axisTop,
-    itemsTop = axisOnTop ? axisHeight : 0,
-    contentHeight = Math.max(frameHeight - axisHeight, 0);
+}( window.jQuery );
 
-  if (options.groupsWidth !== undefined) {
-    groupsWidth = dom.groups.frame ? dom.groups.frame.clientWidth : 0;
-  }
-  var groupsLeft = options.groupsOnRight ? frameWidth - groupsWidth : 0;
+/*********************************************** 
+     Begin VMM.Timeline.js 
+***********************************************/ 
 
-  if (size.dataChanged) {
-    // calculate top positions of the group labels and lines
-    var eventMargin = options.eventMargin,
-      top = axisOnTop ?
-        options.eventMarginAxis + eventMargin/2 :
-        contentHeight - options.eventMarginAxis + eventMargin/2;
+/*!
+	Timeline
+	Designed and built by Zach Wise at VéritéCo
 
-    for (var i = 0, iMax = groups.length; i < iMax; i++) {
-      var group = groups[i];
-      if (axisOnTop) {
-        group.top = top;
-        group.labelTop = top + axisHeight + (group.height - group.labelHeight) / 2;
-        group.lineTop = top + axisHeight + group.height + eventMargin/2;
-        top += group.height + eventMargin;
-      }
-      else {
-        top -= group.height + eventMargin;
-        group.top = top;
-        group.labelTop = top + (group.height - group.labelHeight) / 2;
-        group.lineTop = top - eventMargin/2;
-      }
-    }
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-    // calculate top position of the items
-    for (var i = 0, iMax = items.length; i < iMax; i++) {
-      var item = items[i],
-        group = item.group;
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-      if (group) {
-        item.top = group.top;
-      }
-    }
+    http://www.gnu.org/licenses/
 
-    resized = true;
-  }
+*/  
 
-  resized = resized || (size.groupsWidth !== groupsWidth);
-  resized = resized || (size.groupsLeft !== groupsLeft);
-  resized = resized || (size.actualHeight !== actualHeight);
-  size.groupsWidth = groupsWidth;
-  size.groupsLeft = groupsLeft;
-  size.actualHeight = actualHeight;
+/* 	CodeKit Import
+	http://incident57.com/codekit/
+================================================== */
+// @codekit-prepend "VMM.Timeline.License.js";
+// @codekit-prepend "VMM.js";
+// @codekit-prepend "VMM.Library.js";
+// @codekit-prepend "VMM.Browser.js";
+// @codekit-prepend "VMM.MediaElement.js";
+// @codekit-prepend "VMM.MediaType.js";
+// @codekit-prepend "VMM.Media.js";
+// @codekit-prepend "VMM.FileExtention.js";
+// @codekit-prepend "VMM.ExternalAPI.js";
+// @codekit-prepend "VMM.TouchSlider.js";
+// @codekit-prepend "VMM.DragSlider.js";
+// @codekit-prepend "VMM.Slider.js";
+// @codekit-prepend "VMM.Slider.Slide.js";
+// @codekit-prepend "VMM.Util.js";
+// @codekit-prepend "VMM.LoadLib.js";
+// @codekit-prepend "VMM.Language.js";
 
-  resized = resized || (size.frameWidth !== frameWidth);
-  resized = resized || (size.frameHeight !== frameHeight);
-  size.frameWidth = frameWidth;
-  size.frameHeight = frameHeight;
+// @codekit-append "VMM.Timeline.TimeNav.js";
+// @codekit-append "VMM.Timeline.DataObj.js";
 
-  resized = resized || (size.groupsWidth !== groupsWidth);
-  size.groupsWidth = groupsWidth;
-  size.contentLeft = options.groupsOnRight ? 0 : groupsWidth;
-  size.contentWidth = Math.max(frameWidth - groupsWidth, 0);
-  size.contentHeight = contentHeight;
-
-  resized = resized || (size.axis.top !== axisTop);
-  resized = resized || (size.axis.line !== axisLine);
-  resized = resized || (size.axis.height !== axisHeight);
-  resized = resized || (size.items.top !== itemsTop);
-  size.axis.top = axisTop;
-  size.axis.line = axisLine;
-  size.axis.height = axisHeight;
-  size.axis.labelMajorTop = options.axisOnTop ? 0 : axisLine + characterMinorHeight;
-  size.axis.labelMinorTop = options.axisOnTop ?
-    (options.showMajorLabels ? characterMajorHeight : 0) :
-    axisLine;
-  size.axis.lineMinorTop = options.axisOnTop ? size.axis.labelMinorTop : 0;
-  size.axis.lineMinorHeight = options.showMajorLabels ?
-    frameHeight - characterMajorHeight:
-    frameHeight;
-  size.axis.lineMinorWidth = dom.axis.minorLines.length ?
-    dom.axis.minorLines[0].offsetWidth : 1;
-  size.axis.lineMajorWidth = dom.axis.majorLines.length ?
-    dom.axis.majorLines[0].offsetWidth : 1;
-
-  size.items.top = itemsTop;
-
-  resized = resized || (size.axis.characterMinorWidth  !== characterMinorWidth);
-  resized = resized || (size.axis.characterMinorHeight !== characterMinorHeight);
-  resized = resized || (size.axis.characterMajorWidth  !== characterMajorWidth);
-  resized = resized || (size.axis.characterMajorHeight !== characterMajorHeight);
-  size.axis.characterMinorWidth  = characterMinorWidth;
-  size.axis.characterMinorHeight = characterMinorHeight;
-  size.axis.characterMajorWidth  = characterMajorWidth;
-  size.axis.characterMajorHeight = characterMajorHeight;
-
-  // conversion factors can be changed when width of the Timeline is changed,
-  // and when start or end are changed
-  this.recalcConversion();
-
-  return resized;
-}
+// @codekit-prepend "lib/AES.js";
+// @codekit-prepend "lib/bootstrap-tooltip.js";
 
 
 
-/**
- * Calculate the factor and offset to convert a position on screen to the
- * corresponding date and vice versa.
- * After the method calcConversionFactor is executed once, the methods screenToTime and
- * timeToScreen can be used.
- */
-links.Timeline.prototype.recalcConversion = function() {
-  this.conversion.offset = parseFloat(this.start.valueOf());
-  this.conversion.factor = parseFloat(this.size.contentWidth) /
-    parseFloat(this.end.valueOf() - this.start.valueOf());
-}
 
+/* Timeline
+================================================== */
 
-/**
- * Convert a position on screen (pixels) to a datetime
- * Before this method can be used, the method calcConversionFactor must be
- * executed once.
- * @param {int}     x    Position on the screen in pixels
- * @return {Date}   time The datetime the corresponds with given position x
- */
-links.Timeline.prototype.screenToTime = function(x) {
-  var conversion = this.conversion,
-    time = new Date(parseFloat(x) / conversion.factor + conversion.offset);
-  return time;
-}
+if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
+	
+	VMM.Timeline = function(w, h, conf, _timeline_id) {
+		
+		var $timeline, $feedback, $messege, slider, timenav, version, timeline_id;
+		var events = {}, data = {}, _dates = [], config = {};
+		var has_width = false, has_height = false, ie7 = false, is_moving = false;
+		
+		if (type.of(_timeline_id) == "string") {
+			timeline_id = 			_timeline_id;
+		} else {
+			timeline_id = 			"#timeline";
+		}
+		
+		version = 					"1.30";
+		
+		trace("TIMELINE VERSION " + version);
+		
+		/* CONFIG
+		================================================== */
+		config = {
+			embed:					false,
+			id: 					timeline_id,
+			type: 					"timeline",
+			maptype: 				"toner",
+			preload:				4,
+			current_slide:			0,
+			hash_bookmark:			false,
+			start_at_end: 			false,
+			start_page: 			false,
+			api_keys: {
+				google:				"",
+				flickr:				"",
+				twitter:			""
+			},
+			interval: 				10,
+			something: 				0,
+			width: 					960,
+			height: 				540,
+			spacing: 				15,
+			loaded: {
+				slider: 			false, 
+				timenav: 			false, 
+				percentloaded: 		0
+			},
+			nav: {
+				start_page: 		false,
+				interval_width: 	200,
+				density: 			4,
+				minor_width: 		0,
+				multiplier: {
+					current: 		6,
+					min: 			.1,
+					max: 			50
+				},
+				rows: 				[1, 1, 1],
+				width: 				960,
+				height: 			200,
+				marker: {
+					width: 			150,
+					height: 		48
+				}
+			},
+			feature: {
+				width: 				960,
+				height: 			540
+			},
+			slider: {
+				width: 				720,
+				height: 			400,
+				content: {
+					width: 			720,
+					height: 		400,
+					padding: 		130,
+				},
+				nav: {
+					width: 			100,
+					height: 		200
+				}
+			},
+			ease: 					"easeInOutExpo",
+			duration: 				1000,
+			language: 				VMM.Language
+		};
+		
+		if ( w != null && w != "") {
+			config.width = w;
+			has_width = true;
+		} 
 
-/**
- * Convert a datetime (Date object) into a position on the screen
- * Before this method can be used, the method calcConversionFactor must be
- * executed once.
- * @param {Date}   time A date
- * @return {int}   x    The position on the screen in pixels which corresponds
- *                      with the given date.
- */
-links.Timeline.prototype.timeToScreen = function(time) {
-  var conversion = this.conversion;
-  var x = (time.valueOf() - conversion.offset) * conversion.factor;
-  return x;
-}
+		if ( h != null && h != "") {
+			config.height = h;
+			has_height = true;
+		}
+		
+		if(window.location.hash) {
+			 var hash					=	window.location.hash.substring(1);
+			 if (!isNaN(hash)) {
+			 	 config.current_slide		=	parseInt(hash);
+			 }
+		}
+		
+		window.onhashchange = function () {
+			if (config.hash_bookmark) {
+				if (is_moving) {
+					var hash					=	window.location.hash.substring(1);
+					goToEvent(parseInt(hash));
+				} else {
+					is_moving = false;
+				}
+			}
+		}
+		
+		/* CREATE CONFIG
+		================================================== */
+		var createConfig = function(conf) {
+			
+			// APPLY SUPPLIED CONFIG TO TIMELINE CONFIG
+			if (typeof timeline_config == 'object') {
+				trace("HAS TIMELINE CONFIG");
+			    var x;
+				for (x in timeline_config) {
+					if (Object.prototype.hasOwnProperty.call(timeline_config, x)) {
+						config[x] = timeline_config[x];
+					}
+				}
+			} else if (typeof conf == 'object') {
+				var x;
+				for (x in conf) {
+					if (Object.prototype.hasOwnProperty.call(conf, x)) {
+						config[x] = conf[x];
+					}
+				}
+			}
+			
+			config.nav.width			=	config.width;
+			config.nav.height			=	200;
+			config.feature.width		=	config.width;
+			config.feature.height		=	config.height - config.nav.height;
+			VMM.Timeline.Config			=	config;
+			VMM.master_config.Timeline	=	VMM.Timeline.Config;
+		}
+		
+		/* CREATE TIMELINE STRUCTURE
+		================================================== */
+		var createStructure = function(w, h) {
+			$timeline = 			VMM.getElement(timeline_id);
+			
+			VMM.Lib.addClass(timeline_id, "vmm-timeline");
+			
+			$feedback = 			VMM.appendAndGetElement($timeline, "<div>", "feedback", "");
+			$messege = 				VMM.appendAndGetElement($feedback, "<div>", "messege", "Timeline");
+			slider = 				new VMM.Slider(timeline_id + " div.slider", config);
+			timenav = 				new VMM.Timeline.TimeNav(timeline_id + " div.navigation");
+			
+			if (!has_width) {
+				config.width = VMM.Lib.width($timeline);
+			} else {
+				VMM.Lib.width($timeline, config.width);
+			}
 
+			if (!has_height) {
+				config.height = VMM.Lib.height($timeline);
+			} else {
+				VMM.Lib.height($timeline, config.height);
+			}
+			
+		}
+		
+		/* ON EVENT
+		================================================== */
 
+		function onDataReady(e, d) {
+			trace("onDataReady");
+			trace(d);
+			data = d.timeline;
+			
+			if (type.of(data.era) == "array") {
+				
+			} else {
+				data.era = [];
+			}
+			
+			buildDates();
+			
+		};
+		
+		function onDatesProcessed() {
+			build();
+		}
+		
+		function reSize() {
+			updateSize();
+			slider.setSize(config.feature.width, config.feature.height);
+			timenav.setSize(config.width, config.height);
+		};
+		
+		function onSliderLoaded(e) {
+			config.loaded.slider = true;
+			onComponentLoaded();
+		};
+		
+		function onComponentLoaded(e) {
+			config.loaded.percentloaded = config.loaded.percentloaded + 25;
+			
+			if (config.loaded.slider && config.loaded.timenav) {
+				hideMessege();
+			}
+		}
+		
+		function onTimeNavLoaded(e) {
+			config.loaded.timenav = true;
+			onComponentLoaded();
+		}
+		
+		function onSlideUpdate(e) {
+			is_moving = true;
+			config.current_slide = slider.getCurrentNumber();
+			setHash(config.current_slide);
+			timenav.setMarker(config.current_slide, config.ease,config.duration);
+		};
+		
+		function onMarkerUpdate(e) {
+			is_moving = true;
+			config.current_slide = timenav.getCurrentNumber();
+			setHash(config.current_slide);
+			slider.setSlide(config.current_slide);
+		};
+		
+		var goToEvent = function(n) {
+			if (n <= _dates.length - 1 && n >= 0) {
+				config.current_slide = n;
+				slider.setSlide(config.current_slide);
+				timenav.setMarker(config.current_slide, config.ease,config.duration);
+			} 
+		}
+		
+		function setHash(n) {
+			if (config.hash_bookmark) {
+				window.location.hash = "#" + n.toString();
+			}
+		}
+		
+		/* PUBLIC FUNCTIONS
+		================================================== */
+		this.init = function(_data, _timeline_id, conf) {
+			
+			if (type.of(_timeline_id) == "string") {
+				if (_timeline_id.match("#")) {
+					timeline_id = _timeline_id;
+				} else {
+					timeline_id = "#" + _timeline_id;
+				}
+			}
+			
+			createConfig(conf);
+			createStructure(w,h);
+			
+			trace('TIMELINE INIT');
+			VMM.Util.date.setLanguage(VMM.Timeline.Config.language);
+			
+			$feedback = VMM.appendAndGetElement($timeline, "<div>", "feedback", "");
+			$messege = VMM.appendAndGetElement($feedback, "<div>", "messege", VMM.Timeline.Config.language.messages.loading_timeline);
+			
+			VMM.bindEvent(global, onDataReady, "DATAREADY");
+			VMM.bindEvent(global, showMessege, "MESSEGE");
+			
+			/* GET DATA
+			================================================== */
+			
+			if (VMM.Browser.browser == "MSIE" && parseInt(VMM.Browser.version, 10) == 7) {
+				ie7 = true;
+				VMM.fireEvent(global, "MESSEGE", "Internet Explorer 7 is not supported by #Timeline.");
+			} else {
+				if (type.of(_data) == "string" || type.of(_data) == "object") {
+					VMM.Timeline.DataObj.getData(_data);
+				} else {
+					VMM.Timeline.DataObj.getData(VMM.getElement(timeline_id));
+				}
+			}
+			
+		};
+		
+		this.iframeLoaded = function() {
+			trace("iframeLoaded");
+		};
+		
+		this.reload = function(_d) {
+			trace("loadNewDates" + _d);
+			$messege = VMM.appendAndGetElement($feedback, "<div>", "messege", VMM.Timeline.Config.language.messages.loading_timeline);
+			data = {};
+			VMM.Timeline.DataObj.getData(_d);
+		}
+		
+		/* DATA 
+		================================================== */
+		var getData = function(url) {
+			VMM.getJSON(url, function(d) {
+				data = VMM.Timeline.DataObj.getData(d);
+				VMM.fireEvent(global, "DATAREADY");
+			});
+		};
+		
+		/* MESSEGES 
+		================================================== */
+		
+		var showMessege = function(e, msg) {
+			trace("showMessege " + msg);
+			VMM.attachElement($messege, msg);
+		};
+		
+		var hideMessege = function() {
+			VMM.Lib.animate($feedback, config.duration, config.ease*4, {"opacity": 0}, detachMessege);
+		};
+		
+		var detachMessege = function() {
+			VMM.Lib.detach($feedback);
+		}
+		
+		/* BUILD DISPLAY
+		================================================== */
+		var build = function() {
+			
+			// START AT END?
+			if (config.start_at_end) {
+				config.current_slide = _dates.length - 1;
+			}
+			// CREATE DOM STRUCTURE
+			VMM.attachElement($timeline, "");
+			VMM.appendElement($timeline, "<div class='container main'><div class='feature'><div class='slider'></div></div><div class='navigation'></div></div>");
+			
+			reSize();
+			
+			VMM.bindEvent("div.slider", onSliderLoaded, "LOADED");
+			VMM.bindEvent("div.navigation", onTimeNavLoaded, "LOADED");
+			VMM.bindEvent("div.slider", onSlideUpdate, "UPDATE");
+			VMM.bindEvent("div.navigation", onMarkerUpdate, "UPDATE");
+			
+			slider.init(_dates);
+			timenav.init(_dates, data.era);
+			
+			// RESIZE EVENT LISTENERS
+			VMM.bindEvent(global, reSize, "resize");
+			//VMM.bindEvent(global, function(e) {e.preventDefault()}, "touchmove");
+			
+		};
+		
+		var updateSize = function() {
+			trace("UPDATE SIZE");
+			config.width = VMM.Lib.width($timeline);
+			config.height = VMM.Lib.height($timeline);
+			
+			config.nav.width = config.width;
+			config.feature.width = config.width;
+			
+			if (VMM.Browser.device == "mobile") {
+				//config.feature.height = config.height;
+			} else {
+				//config.feature.height = config.height - config.nav.height - 3;
+			}
+			config.feature.height = config.height - config.nav.height - 3;
+		};
+		
+		// BUILD DATE OBJECTS
+		var buildDates = function() {
+			
+			updateSize();
+			_dates = [];
+			VMM.fireEvent(global, "MESSEGE", "Building Dates");
+			
+			for(var i = 0; i < data.date.length; i++) {
+				
+				if (data.date[i].startDate != null && data.date[i].startDate != "") {
+					
+					var _date = {};
+					
+					// START DATE
+					if (data.date[i].type == "tweets") {
+						_date.startdate = VMM.ExternalAPI.twitter.parseTwitterDate(data.date[i].startDate);
+					} else {
+						_date.startdate = VMM.Util.date.parse(data.date[i].startDate);
+					}
+					
+					_date.uniqueid = (data.date[i].startDate).toString() + "-" + i.toString();
+					
+					// END DATE
+					if (data.date[i].endDate != null && data.date[i].endDate != "") {
+						if (data.date[i].type == "tweets") {
+							_date.enddate = VMM.ExternalAPI.twitter.parseTwitterDate(data.date[i].endDate);
+						} else {
+							_date.enddate = VMM.Util.date.parse(data.date[i].endDate);
+						}
+					} else {
+						_date.enddate = _date.startdate;
+					}
+					
+					_date.title				=	data.date[i].headline;
+					_date.headline			=	data.date[i].headline;
+					_date.type				=	data.date[i].type;
+					_date.date				=	VMM.Util.date.prettyDate(_date.startdate);
+					_date.startdate_str		=	VMM.Util.date.prettyDate(_date.startdate);
+					_date.enddate_str		=	VMM.Util.date.prettyDate(_date.enddate);
+					_date.asset				=	data.date[i].asset;
+					_date.fulldate			=	_date.startdate.getTime();
+					_date.text				=	data.date[i].text;
+					_date.content			=	"";
+					
+					
+					_dates.push(_date);
+					
+				}
+				
+			};
+			
+			/* CUSTOM SORT
+			================================================== */
+			_dates.sort(function(a, b){
+				return a.fulldate - b.fulldate
+			});
+			
+			/* CREATE START PAGE IF AVAILABLE
+			================================================== */
+			if (data.headline != null && data.headline != "" && data.text != null && data.text != "") {
+				trace("HAS STARTPAGE");
+				var _date		=	{};
+				var td_num		=	0;
+				var td			=	_dates[0].startdate;
+				_date.startdate =	new Date(_dates[0].startdate);
+				
+				if (td.getMonth() === 0 && td.getDate() == 1 && td.getHours() === 0 && td.getMinutes() === 0 ) {
+					// trace("YEAR ONLY");
+					_date.startdate.setFullYear(td.getFullYear() - 1);
+				} else if (td.getDate() <= 1 && td.getHours() === 0 && td.getMinutes() === 0) {
+					// trace("YEAR MONTH");
+					_date.startdate.setMonth(td.getMonth() - 1);
+				} else if (td.getHours() === 0 && td.getMinutes() === 0) {
+					// trace("YEAR MONTH DAY");
+					_date.startdate.setDate(td.getDate() - 1);
+				} else  if (td.getMinutes() === 0) {
+					// trace("YEAR MONTH DAY HOUR");
+					_date.startdate.setHours(td.getHours() - 1);
+				} else {
+					// trace("YEAR MONTH DAY HOUR MINUTE");
+					_date.startdate.setMinutes(td.getMinutes() - 1);
+				}
+				
+				_date.uniqueid	=	VMM.Util.unique_ID(5);
+				_date.enddate	=	_date.startdate;
+				_date.title		=	data.headline;
+				_date.headline	=	data.headline;
+				_date.text		=	data.text;
+				_date.type		=	"start";
+				_date.date		=	VMM.Util.date.prettyDate(data.startDate);
+				_date.asset		=	data.asset;
+				_date.fulldate	=	_date.startdate.getTime();
+				
+				if (config.embed) {
+					//document.title = _date.headline;
+				}
+				
+				_dates.push(_date);
+			}
+			
+			/* CUSTOM SORT
+			================================================== */
+			_dates.sort(function(a, b){
+				return a.fulldate - b.fulldate
+			});
+			
+			onDatesProcessed();
+		}
+		
+	};
 
-/**
- * Event handler for touchstart event on mobile devices
- */
-links.Timeline.prototype.onTouchStart = function(event) {
-  var params = this.eventParams,
-    dom = this.dom,
-    me = this;
-
-  if (params.touchDown) {
-    // if already moving, return
-    return;
-  }
-
-  params.touchDown = true;
-  params.zoomed = false;
-
-  this.onMouseDown(event);
-
-  if (!params.onTouchMove) {
-    params.onTouchMove = function (event) {me.onTouchMove(event);};
-    links.Timeline.addEventListener(document, "touchmove", params.onTouchMove);
-  }
-  if (!params.onTouchEnd) {
-    params.onTouchEnd  = function (event) {me.onTouchEnd(event);};
-    links.Timeline.addEventListener(document, "touchend",  params.onTouchEnd);
-  }
+	VMM.Timeline.Config = {};
+	
 };
 
-/**
- * Event handler for touchmove event on mobile devices
- */
-links.Timeline.prototype.onTouchMove = function(event) {
-  var params = this.eventParams;
+/*********************************************** 
+     Begin VMM.Timeline.TimeNav.js 
+***********************************************/ 
 
-  if (event.scale && event.scale !== 1) {
-    params.zoomed = true;
-  }
+/* 	TIMELINE NAVIGATION
+================================================== */
 
-  if (!params.zoomed) {
-    // move
-    this.onMouseMove(event);
-  }
-  else {
-    if (this.options.zoomable) {
-      // pinch
-      // TODO: pinch only supported on iPhone/iPad. Create something manually for Android?
-      params.zoomed = true;
+if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefined') {
+	
+	VMM.Timeline.TimeNav = function(parent, content_width, content_height) {
+		trace("VMM.Timeline.TimeNav");
+		
+		var events = {}, timespan = {}, layout = parent;
+		var data = [], era_markers = [], markers = [], interval_array = [], interval_major_array = [], eras, content;
+		
+		var current_marker		= 	0;
+		var _active				=	false;
+		var timelookup			= 	{day: 24, month: 12, year: 10, hour: 60, minute: 60, second: 1000, decade: 10, century: 100, millenium: 1000, age: 1000000, epoch: 10000000, era: 100000000, eon: 500000000, week: 4.34812141, days_in_month: 30.4368499, days_in_week: 7, weeks_in_month:4.34812141, weeks_in_year:52.177457, days_in_year: 365.242199, hours_in_day: 24 };
+		var dateFractionBrowser	= 	{day: 86400000, week: 7, month: 30.4166666667, year: 12, hour: 24, minute: 1440, second: 86400, decade: 10, century: 100, millenium: 1000, age: 1000000, epoch: 10000000, era: 100000000, eon: 500000000 };
+		
+		var interval			= 	{type: "year", number: 10, first: 1970, last: 2011, multiplier: 100, classname:"_idd", interval_type:"interval"};
+		var interval_major		= 	{type: "year", number: 10, first: 1970, last: 2011, multiplier: 100, classname:"major", interval_type:"interval major"};
+		var interval_macro		= 	{type: "year", number: 10, first: 1970, last: 2011, multiplier: 100, classname:"_dd_minor", interval_type:"interval minor"};
+		var interval_calc		= 	{day: {},month: {},year: {},hour: {},minute: {}, second: {},decade: {},century: {},millenium: {},week: {}, age: {}, epoch: {}, era: {}, eon: {} };
+		
+		/* ELEMENTS
+		================================================== */
+		var $timenav, $content, $time, $timeintervalminor, $timeinterval, $timeintervalmajor, $timebackground, 
+		$timeintervalbackground, $timenavline, $timenavindicator, $timeintervalminor_minor, $toolbar, $zoomin, $zoomout;
+		
+		/* ADD to Config
+		================================================== */
+		var config				= 	VMM.Timeline.Config;
+		config.nav.rows			= 	[config.nav.marker.height, config.nav.marker.height*2, 1];
+		
+		if (content_width != null && content_width != "") {
+			config.nav.width	= 	content_width;
+		} 
+		if (content_height != null && content_height != "") {
+			config.nav.height	= 	content_height;
+		}
+		
+		/*
+		config.nav.density = 		2;
+		config.nav.multiplier = {
+			current: 				6,
+			min: 					.1,
+			max: 					50
+		};
+		*/
+		
+		/* INIT
+		================================================== */
+		this.init = function(d,e) {
+			trace('VMM.Timeline.TimeNav init');
+			// need to evaluate d
+			// some function to determine type of data and prepare it
+			if(typeof d != 'undefined') {
+				this.setData(d, e);
+			} else {
+				trace("WAITING ON DATA");
+			}
+		};
+		
+		/* GETTERS AND SETTERS
+		================================================== */
+		this.setData = function(d,e) {
+			if(typeof d != 'undefined') {
+				data = {};
+				data = d;
+				eras = e;
+				build();
+			} else{
+				trace("NO DATA");
+			}
+		};
+		
+		this.setSize = function(w, h) {
+			if (w != null) {config.width = w};
+			if (h != null) {config.height = h};
+			if (_active) {
+				reSize();
+			}
 
-      var scale = event.scale,
-        oldWidth = (params.end.valueOf() - params.start.valueOf()),
-        newWidth = oldWidth / scale,
-        diff = newWidth - oldWidth,
-        start = new Date(parseInt(params.start.valueOf() - diff/2)),
-        end = new Date(parseInt(params.end.valueOf() + diff/2));
+			
+		}
+		
+		this.setMarker = function(n, ease, duration, fast) {
+			goToMarker(n, ease, duration);
+		}
+		
+		this.getCurrentNumber = function() {
+			return current_marker;
+		}
+		
+		/* ON EVENT
+		================================================== */
+		
+		function onConfigSet() {
+			trace("onConfigSet");
+		};
+		
+		function reSize(firstrun) {
+			VMM.Lib.css($timenavline, "left", Math.round(config.width/2)+2);
+			VMM.Lib.css($timenavindicator, "left", Math.round(config.width/2)-8);
+			goToMarker(config.current_slide, config.ease, config.duration, true, firstrun);
+		};
+		
+		function upDate() {
+			VMM.fireEvent(layout, "UPDATE");
+		}
+		
+		function onZoomIn() {
+			VMM.DragSlider.cancelSlide();
+			if (config.nav.multiplier.current > config.nav.multiplier.min) {
+				if (config.nav.multiplier.current <= 1) {
+					config.nav.multiplier.current = config.nav.multiplier.current - .25;
+				} else {
+					if (config.nav.multiplier.current > 5) {
+						if (config.nav.multiplier.current > 16) {
+							config.nav.multiplier.current = Math.round(config.nav.multiplier.current - 10);
+						} else {
+							config.nav.multiplier.current = Math.round(config.nav.multiplier.current - 4);
+						}
+					} else {
+						config.nav.multiplier.current = Math.round(config.nav.multiplier.current - 1);
+					}
+					
+				}
+				if (config.nav.multiplier.current <= 0) {
+					config.nav.multiplier.current = config.nav.multiplier.min;
+				}
+				refreshTimeline();
+			}
+		}
+		
+		function onZoomOut() {
+			VMM.DragSlider.cancelSlide();
+			if (config.nav.multiplier.current < config.nav.multiplier.max) {
+				if (config.nav.multiplier.current > 4) {
+					if (config.nav.multiplier.current > 16) {
+						config.nav.multiplier.current = Math.round(config.nav.multiplier.current + 10);
+					} else {
+						config.nav.multiplier.current = Math.round(config.nav.multiplier.current + 4);
+					}
+				} else {
+					config.nav.multiplier.current = Math.round(config.nav.multiplier.current + 1);
+				}
+				
+				if (config.nav.multiplier.current >= config.nav.multiplier.max) {
+					config.nav.multiplier.current = config.nav.multiplier.max;
+				}
+				refreshTimeline();
+			}
+		}
+		
+		function onBackHome(e) {
+			VMM.DragSlider.cancelSlide();
+			goToMarker(0);
+			upDate();
+		}
+		
+		var refreshTimeline = function() {
+			trace("config.nav.multiplier " + config.nav.multiplier.current);
+			positionMarkers(true);
+			positionInterval(interval_array, true, true);
+			positionInterval(interval_major_array, true);
+		};
+		
+		/* MARKER EVENTS
+		================================================== */
+		function onMarkerClick(e) {
+			VMM.DragSlider.cancelSlide();
+			goToMarker(e.data.number);
+			upDate();
+		};
+		
+		function onMarkerHover(e) {
+			VMM.Lib.toggleClass(e.data.elem, "zFront");
+		};
+		
+		var goToMarker = function(n, ease, duration, fast, firstrun) {
+			
+			current_marker = 	n;
+			var _ease = 		config.ease;
+			var _duration = 	config.duration;
+			var is_last = 		false;
+			var is_first = 		false;
+			var _pos = 			VMM.Lib.position(markers[current_marker].marker);
+			
+			if (current_marker == 0) {
+				is_first = true;
+			}
+			if (current_marker +1 == markers.length) {
+				is_last = true
+			}
+			if (ease != null && ease != "") {_ease = ease};
+			if (duration != null && duration != "") {_duration = duration};
+			
+			// set marker style
+			for(var i = 0; i < markers.length; i++) {
+				VMM.Lib.removeClass(markers[i].marker, "active");
+			}
+			
+			if (config.start_page && markers[0].type == "start") {
+				VMM.Lib.visible(markers[0].marker, false);
+				VMM.Lib.addClass(markers[0].marker, "start");
+			}
+			
+			VMM.Lib.addClass(markers[current_marker].marker, "active");
+			
+			// ANIMATE MARKER
+			VMM.Lib.stop($timenav);
+			VMM.Lib.animate($timenav, _duration, _ease, {"left": (config.width/2) - (_pos.left)});
+			
+		}
+		
+		/* TOUCH EVENTS
+		================================================== */
+		function onTouchUpdate(e, b) {
+			VMM.Lib.animate($timenav, b.time/2, config.ease, {"left": b.left});
+		};
+		
+		/* CALCULATIONS
+		================================================== */
+		var averageMarkerPositionDistance = function() {
+			var last_pos = 		0;
+			var pos = 			0;
+			var pos_dif = 		0;
+			var mp_diff = 		[];
+			
+			for(var i = 0; i < markers.length; i++) {
+				if (data[i].type == "start") {
+					
+				} else {
+					var _pos = positionOnTimeline(interval, data[i].startdate, data[i].enddate);
+					last_pos = pos;
+					pos = _pos.begin;
+					pos_dif = pos - last_pos;
+					mp_diff.push(pos_dif);
+				}
+			}
+			return VMM.Util.average(mp_diff).mean;
+		}
+		
+		var averageDateDistance = function() {
+			var last_dd = 			0;
+			var dd = 				0;
+			var date_dif = 			0;
+			var date_diffs = 		[];
+			var is_first_date = 	true;
+			
+			for(var i = 0; i < data.length; i++) {
+				if (data[i].type == "start") {
+					trace("DATA DATE IS START")
+				} else {
+					var _dd = 		data[i].startdate;
+					last_dd = 		dd;
+					dd = 			_dd;
+					date_dif = 		dd - last_dd;
+					
+					date_diffs.push(date_dif);
+				}
+			}
+			return VMM.Util.average(date_diffs);
+		}
+		
+		var calculateMultiplier = function() {
+			var temp_multiplier = config.nav.multiplier.current;
+			for(var i = 0; i < temp_multiplier; i++) {
+				if (averageMarkerPositionDistance() < 75) {
+					if (config.nav.multiplier.current > 1) {
+						config.nav.multiplier.current = config.nav.multiplier.current - 1;
+					}
+				}
+			}
+		}
+		
+		var calculateInterval = function() {
+			// NEED TO REWRITE ALL OF THIS
+			var _first								= 	getDateFractions(data[0].startdate);
+			var _last								=	getDateFractions(data[data.length - 1].enddate);
+			
+			// EON
+			interval_calc.eon.type					=	"eon";
+			interval_calc.eon.first					=	_first.eons;
+			interval_calc.eon.base					=	Math.floor(_first.eons);
+			interval_calc.eon.last					=	_last.eons;
+			interval_calc.eon.number				=	timespan.eons;
+			interval_calc.eon.multiplier		 	=	timelookup.eons;
+			interval_calc.eon.minor					=	timelookup.eons;
+			
+			// ERA
+			interval_calc.era.type					=	"era";
+			interval_calc.era.first					=	_first.eras;
+			interval_calc.era.base					=	Math.floor(_first.eras);
+			interval_calc.era.last					=	_last.eras;
+			interval_calc.era.number				=	timespan.eras;
+			interval_calc.era.multiplier		 	=	timelookup.eras;
+			interval_calc.era.minor					=	timelookup.eras;
+			
+			// EPOCH
+			interval_calc.epoch.type				=	"epoch";
+			interval_calc.epoch.first				=	_first.epochs;
+			interval_calc.epoch.base				=	Math.floor(_first.epochs);
+			interval_calc.epoch.last				=	_last.epochs;
+			interval_calc.epoch.number				=	timespan.epochs;
+			interval_calc.epoch.multiplier		 	=	timelookup.epochs;
+			interval_calc.epoch.minor				=	timelookup.epochs;
+			
+			// AGE
+			interval_calc.age.type					=	"age";
+			interval_calc.age.first					=	_first.ages;
+			interval_calc.age.base					=	Math.floor(_first.ages);
+			interval_calc.age.last					=	_last.ages;
+			interval_calc.age.number				=	timespan.ages;
+			interval_calc.age.multiplier		 	=	timelookup.ages;
+			interval_calc.age.minor					=	timelookup.ages;
+			
+			// MILLENIUM
+			interval_calc.millenium.type 			=	"millenium";
+			interval_calc.millenium.first			=	_first.milleniums;
+			interval_calc.millenium.base			=	Math.floor(_first.milleniums);
+			interval_calc.millenium.last			=	_last.milleniums;
+			interval_calc.millenium.number			=	timespan.milleniums;
+			interval_calc.millenium.multiplier	 	=	timelookup.millenium;
+			interval_calc.millenium.minor			=	timelookup.millenium;
+			
+			// CENTURY
+			interval_calc.century.type 				= "century";
+			interval_calc.century.first 			= _first.centuries;
+			interval_calc.century.base 				= Math.floor(_first.centuries);
+			interval_calc.century.last 				= _last.centuries;
+			interval_calc.century.number 			= timespan.centuries;
+			interval_calc.century.multiplier	 	= timelookup.century;
+			interval_calc.century.minor 			= timelookup.century;
+			
+			// DECADE
+			interval_calc.decade.type 				= "decade";
+			interval_calc.decade.first 				= _first.decades;
+			interval_calc.decade.base 				= Math.floor(_first.decades);
+			interval_calc.decade.last 				= _last.decades;
+			interval_calc.decade.number 			= timespan.decades;
+			interval_calc.decade.multiplier 		= timelookup.decade;
+			interval_calc.decade.minor 				= timelookup.decade;
+			
+			// YEAR
+			interval_calc.year.type					= "year";
+			interval_calc.year.first 				= _first.years;
+			interval_calc.year.base 				= Math.floor(_first.years);
+			interval_calc.year.last					= _last.years;
+			interval_calc.year.number 				= timespan.years;
+			interval_calc.year.multiplier 			= 1;
+			interval_calc.year.minor 				= timelookup.month;
+			
+			// MONTH
+			interval_calc.month.type 				= "month";
+			interval_calc.month.first 				= _first.months;
+			interval_calc.month.base 				= Math.floor(_first.months);
+			interval_calc.month.last 				= _last.months;
+			interval_calc.month.number 				= timespan.months;
+			interval_calc.month.multiplier 			= 1;
+			interval_calc.month.minor 				= Math.round(timelookup.week);
+			
+			// WEEK
+			// NOT DONE
+			interval_calc.week.type 				= "week";
+			interval_calc.week.first 				= _first.weeks;
+			interval_calc.week.base 				= Math.floor(_first.weeks);
+			interval_calc.week.last 				= _last.weeks;
+			interval_calc.week.number 				= timespan.weeks;
+			interval_calc.week.multiplier 			= 1;
+			interval_calc.week.minor 				= 7;
+			
+			// DAY
+			interval_calc.day.type 					= "day";
+			interval_calc.day.first 				= _first.days;
+			interval_calc.day.base	 				= Math.floor(_first.days);
+			interval_calc.day.last 					= _last.days;
+			interval_calc.day.number 				= timespan.days;
+			interval_calc.day.multiplier 			= 1;
+			interval_calc.day.minor 				= 24;
+			
+			// HOUR
+			interval_calc.hour.type 				= "hour";
+			interval_calc.hour.first 				= _first.hours;
+			interval_calc.hour.base 				= Math.floor(_first.hours);
+			interval_calc.hour.last 				= _last.hours;
+			interval_calc.hour.number 				= timespan.hours;
+			interval_calc.hour.multiplier 			= 1;
+			interval_calc.hour.minor 				= 60;
+			
+			// MINUTE
+			interval_calc.minute.type 				= "minute";
+			interval_calc.minute.first 				= _first.minutes;
+			interval_calc.minute.base 				= Math.floor(_first.minutes);
+			interval_calc.minute.last 				= _last.minutes;
+			interval_calc.minute.number 			= timespan.minutes;
+			interval_calc.minute.multiplier 		= 1;
+			interval_calc.minute.minor 				= 60;
+			
+			// SECOND
+			interval_calc.second.type 				= "decade";
+			interval_calc.second.first 				= _first.seconds;
+			interval_calc.second.base 				= Math.floor(_first.seconds);
+			interval_calc.second.last 				= _last.seconds;
+			interval_calc.second.number 			= timespan.seconds;
+			interval_calc.second.multiplier 		= 1;
+			interval_calc.second.minor 				= 10;
+		}
+		
+		var getDateFractions = function(the_date, is_utc) {
+			
+			var _time = {};
+			_time.days			=		the_date		/	dateFractionBrowser.day;
+			_time.weeks 		=		_time.days		/	dateFractionBrowser.week;
+			_time.months 		=		_time.days		/	dateFractionBrowser.month;
+			_time.years 		=		_time.months 	/	dateFractionBrowser.year;
+			_time.hours 		=		_time.days		*	dateFractionBrowser.hour;
+			_time.minutes 		=		_time.days		*	dateFractionBrowser.minute;
+			_time.seconds 		=		_time.days		*	dateFractionBrowser.second;
+			_time.decades 		=		_time.years		/	dateFractionBrowser.decade;
+			_time.centuries 	=		_time.years		/	dateFractionBrowser.century;
+			_time.milleniums 	=		_time.years		/	dateFractionBrowser.millenium;
+			_time.ages			=		_time.years		/	dateFractionBrowser.age;
+			_time.epochs		=		_time.years		/	dateFractionBrowser.epoch;
+			_time.eras			=		_time.years		/	dateFractionBrowser.era;
+			_time.eons			=		_time.years		/	dateFractionBrowser.eon;
+			
+			/*
+			trace("AGES "		 + 		_time.ages);
+			trace("EPOCHS "		 + 		_time.epochs);
+			trace("MILLENIUMS "  + 		_time.milleniums);
+			trace("CENTURIES "	 + 		_time.centuries);
+			trace("DECADES "	 + 		_time.decades);
+			trace("YEARS "		 + 		_time.years);
+			trace("MONTHS "		 + 		_time.months);
+			trace("WEEKS "		 + 		_time.weeks);
+			trace("DAYS "		 + 		_time.days);
+			trace("HOURS "		 + 		_time.hours);
+			trace("MINUTES "	 + 		_time.minutes);
+			trace("SECONDS "	 + 		_time.seconds);
+			*/
+			return _time;
+		}
+		
+		/* POSITION
+		================================================== */
+		var positionOnTimeline = function(the_interval, first, last) {
+			
+			var _type = the_interval.type;
+			var _multiplier = the_interval.multiplier;
+			
+			var _first = getDateFractions(first);
+			var _last;
+			
+			var tsd;
+			var ted;
+			/* CALCULATE POSITION ON TIMELINE
+			================================================== */
+			tsd = first.months;
+			
+			if (type.of(last) == "date") {
+				
+				/* LAST
+				================================================== */
+				_last = getDateFractions(last);
+				ted = last.months;
+				
+				if (_type == "eon") {
+					tsd = _first.eons;
+					ted = _last.eons;
+				} else if (_type == "era") {
+					tsd = _first.eras;
+					ted = _last.eras;
+				} else if (_type == "epoch") {
+					tsd = _first.epochs;
+					ted = _last.epochs;
+				} else if (_type == "age") {
+					tsd = _first.ages;
+					ted = _last.ages;
+				} else if (_type == "millenium") {
+					tsd = first.milleniums;
+					ted = last.milleniums;
+				} else if (_type == "century") {
+					tsd = _first.centuries;
+					ted = _last.centuries;
+				} else if (_type == "decade") {
+					tsd = _first.decades;
+					ted = _last.decades;
+				} else if (_type == "year") {
+					tsd = _first.years;
+					ted = _last.years;
+				} else if (_type == "month") {
+					tsd = _first.months;
+					ted = _last.months;
+				} else if (_type == "week") {
+					tsd = _first.weeks;
+					ted = _last.weeks;
+				} else if (_type == "day") {
+					tsd = _first.days;
+					ted = _last.days;
+				} else if (_type == "hour") {
+					tsd = _first.hours;
+					ted = _last.hours;
+				} else if (_type == "minute") {
+					tsd = _first.minutes;
+					ted = _last.minutes;
+				}
+				
+				_pos = 		( tsd	 - 	interval.base	 ) * (config.nav.interval_width		/	 config.nav.multiplier.current);
+				_pos_end = 	( ted	 - 	interval.base	 ) * (config.nav.interval_width		/	 config.nav.multiplier.current);
+				
+			} else {
+				if (_type == "eon") {
+					tsd = _first.eons;
+					ted = _first.eons;
+				} else if (_type == "era") {
+					tsd = _first.eras;
+					ted = _first.eras;
+				} else if (_type == "epoch") {
+					tsd = _first.epochs;
+					ted = _first.epochs;
+				} else if (_type == "age") {
+					tsd = _first.ages;
+					ted = _first.ages;
+				} else if (_type == "millenium") {
+					tsd = first.milleniums;
+					ted = first.milleniums;
+				} else if (_type == "century") {
+					tsd = _first.centuries;
+					ted = _first.centuries;
+				} else if (_type == "decade") {
+					tsd = _first.decades;
+					ted = _first.decades;
+				} else if (_type == "year") {
+					tsd = _first.years;
+					ted = _first.years;
+				} else if (_type == "month") {
+					tsd = _first.months;
+					ted = _first.months;
+				} else if (_type == "week") {
+					tsd = _first.weeks;
+					ted = _first.weeks;
+				} else if (_type == "day") {
+					tsd = _first.days;
+					ted = _first.days;
+				} else if (_type == "hour") {
+					tsd = _first.hours;
+					ted = _first.hours;
+				} else if (_type == "minute") {
+					tsd = _first.minutes;
+					ted = _first.minutes;
+				}
+				
+				_pos = 		( tsd	 - 	interval.base	 ) * (config.nav.interval_width		/	 config.nav.multiplier.current);
+				_pos_end = 	_pos;
+				
+			}
+			
+			return pos = {begin:_pos ,end:_pos_end};
+			
+		}
+		
+		var positionMarkers = function(is_animated) {
+			
+			var _type = interval.type;
+			var _multiplier = interval.multiplier;
+			
+			// ROWS
+			var row = 						2; //row
+			var lpos = 						0; // last marker pos;
+			var row_depth = 				0;
+			var _line_last_height_pos = 	150;
+			var _line_height = 				6;
+			var cur_mark = 					0;
+			
+			VMM.Lib.removeClass(".flag", "row1");
+			VMM.Lib.removeClass(".flag", "row2");
+			VMM.Lib.removeClass(".flag", "row3");
+			
+			for(var i = 0; i < markers.length; i++) {
+				
+				var _line; // EVENT LENGTH
+				var _marker = 				markers[i].marker;
+				var _marker_flag = 			markers[i].flag;
+				var _marker_line_event = 	markers[i].lineevent;
+				var _pos = 					positionOnTimeline(interval, data[i].startdate, data[i].enddate);
+				var _pos_offset = 			-2;
+				
+				pos = 						_pos.begin;
+				_pos_end = 					_pos.end;
+				
+				// COMPENSATE FOR DATES BEING POITIONED IN THE MIDDLE
+				pos = 						Math.round(pos +  _pos_offset);
+				_pos_end = 					Math.round(_pos_end + _pos_offset);
+				_line = 					Math.round(_pos_end - pos);
+				
+				// APPLY POSITION TO MARKER
+				if (is_animated) {
+					VMM.Lib.stop(_marker);
+					VMM.Lib.animate(_marker, config.duration/2, config.ease, {"left": pos});
+				} else {
+					VMM.Lib.css(_marker, "left", pos);
+				}
+				
+				if (i == current_marker) {
+					cur_mark = pos;
+				}
+				
+				// EVENT LENGTH LINE
+				if (_line > 5) {
+					VMM.Lib.css(_marker_line_event, "height", _line_height);
+					VMM.Lib.css(_marker_line_event, "width", _line);
+					VMM.Lib.css(_marker_line_event, "top", _line_last_height_pos);
+				}
+				
+				// CONTROL ROW POSITION
+				if (pos - lpos < (config.nav.marker.width + config.spacing)) {
+					if (row < config.nav.rows.length - 1) {
+						row ++;
+						
+					} else {
+						row = 0;
+						row_depth ++;
+					}
+				} else {
+					row_depth = 0;
+					row = 0;
+				}
+				
+				// SET LAST MARKER POSITION
+				lpos = pos;
+				
+				if (is_animated) {
+					VMM.Lib.stop(_marker_flag);
+					VMM.Lib.animate(_marker_flag, config.duration, config.ease, {"top": config.nav.rows[row]});
+				} else {
+					VMM.Lib.css(_marker_flag, "top", config.nav.rows[row]);
+				}
+				
+				// IS THE MARKER A REPRESENTATION OF A START SCREEN?
+				if (config.start_page && markers[i].type == "start") {
+					VMM.Lib.visible(_marker, false);
+				}
+				
+			}
+			
+			for(var j = 0; j < era_markers.length; j++) {
+				var _line;
+				var era = 				era_markers[j];
+				var era_elem = 			era.content;
+				var pos = 				positionOnTimeline(interval, era.startdate, era.enddate);
+				var era_length = 		pos.end - pos.begin;
+				var era_height = 		25;
+				
+				// APPLY POSITION TO MARKER
+				VMM.Lib.css(era_elem, "left", pos.begin);
+				VMM.Lib.css(era_elem, "width", era_length);
+			}
+			
+			
+			// ANIMATE THE TIMELINE TO ADJUST TO CHANGES
+			VMM.Lib.stop($timenav);
+			VMM.Lib.animate($timenav, config.duration/2, config.ease, {"left": (config.width/2) - (cur_mark)});
 
-      // TODO: determine zoom-around-date from touch positions?
+		
+		}
+		
+		var positionInterval = function(the_intervals, is_animated, is_minor) {
+			
+			var _type = interval.type;
+			var _multiplier = interval.multiplier;
+			var last_position = 0;
+			var last_position_major = 0;
+			
+			for(var i = 0; i < the_intervals.length; i++) {
+				var _interval = the_intervals[i].interval_element;
+				var _interval_date = the_intervals[i].interval_date;
+				var _interval_visible = the_intervals[i].interval_visible;
+				var _pos = positionOnTimeline(interval, _interval_date);
+				var pos = _pos.begin;
+				var is_visible = true;
+				var pos_offset = 50;
+				
+				// APPLY POSITION TO MARKER
+				if (is_animated) {
+					VMM.Lib.animate(_interval, config.duration/2, config.ease, {"left": pos});
+				} else {
+					VMM.Lib.css(_interval, "left", pos);
+				}
+				
+				// CONDENSE WHAT IS DISPLAYED
+				if (config.nav.multiplier.current > 16 && is_minor) {
+					is_visible = false;
+				} else {
+					if ((pos - last_position) < 65 ) {
+						if ((pos - last_position) < 35 ) {
+							if (i%4 == 0) {
+								if (pos == 0) {
+									is_visible = false;
+								}
+							} else {
+								is_visible = false;
+							}
+						} else {
+							if (!VMM.Util.isEven(i)) {
+								is_visible = false;
+							}
+						}
+					}
+				}
+				
+				if (_interval_visible) {
+					if (!is_visible) {
+						if (is_animated) {
+							VMM.Lib.animate(_interval, config.duration*2, config.ease, {"opacity": 0});
+						} else {
+							VMM.Lib.css(_interval, "opacity", 0);
+						}
+						the_intervals[i].interval_visible = false;
+					}
+				} else {
+					if (is_visible) {
+						if (is_animated) {
+							VMM.Lib.animate(_interval, config.duration*2, config.ease, {"opacity": 100});
+						} else {
+							VMM.Lib.css(_interval, "opacity", 100);
+						}
+						the_intervals[i].interval_visible = true;
+					}
+				}
+				
+				last_position = pos;
+				
+				if (pos > config.nav.minor_width) {
+					config.nav.minor_width = pos;
+				}
+				
+			}
+			
+			VMM.Lib.css($timeintervalminor_minor, "left", -(config.width/2));
+			VMM.Lib.width($timeintervalminor_minor, (config.nav.minor_width)+(config.width) );
+		}
+		
+		var createIntervalElements = function(_interval, _array, _element_parent) {
+			
+			var inc_time = 0;
+			var _first_run = true;
+			var _last_pos = 0;
+			var _largest_pos = 0;
+			
+			VMM.attachElement(_element_parent, "");
+			_interval.date = new Date(data[0].startdate.getFullYear(), 0, 1, 0,0,0);
+			
+			for(var i = 0; i < Math.ceil(_interval.number) + 1; i++) {
+				var _idd;
+				var _pos;
+				var pos;
+				var _element = VMM.appendAndGetElement(_element_parent, "<div>", _interval.classname);
+				var _date;
+				var _visible = false;
+				
+				if (_interval.type == "eon") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 500000000) * 500000000	);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 500000000));
+				} else if (_interval.type == "era") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 100000000) * 100000000	);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 100000000));
+				} else if (_interval.type == "epoch") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 10000000) * 10000000	);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 10000000));
+				} else if (_interval.type == "age") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 1000000) * 1000000	);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 1000000));
+				} else if (_interval.type == "millenium") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 1000) * 1000	);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 1000));
+				} else if (_interval.type == "century") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 100) * 100		);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 100));
+				} else if (_interval.type == "decade") {
+					if (_first_run) {
+						_interval.date.setFullYear(		Math.floor(data[0].startdate.getFullYear() / 10) * 10		);
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + (inc_time * 10));
+				} else if (interval.type == "year") {
+					if (_first_run) {
+						
+					}
+					_interval.date.setFullYear(_interval.date.getFullYear() + inc_time);
+				} else if (_interval.type == "month") {
+					if (_first_run) {
+						_interval.date.setMonth(data[0].startdate.getMonth());
+					}
+					_interval.date.setMonth(_interval.date.getMonth() + inc_time);
+				} else if (_interval.type == "week") {
+					if (_first_run) {
+						_interval.date.setMonth(		data[0].startdate.getMonth()		);
+						_interval.date.setDate(		Math.floor(data[0].startdate.getDate() *7)			);
+					}
+					_interval.date.setDate(_interval.date.getDate() + (inc_time * 7) );
+				} else if (_interval.type == "day") {
+					if (_first_run) {
+						_interval.date.setMonth(		data[0].startdate.getMonth()			);
+						_interval.date.setDate(		data[0].startdate.getDate()				);
+					}
+					_interval.date.setDate(_interval.date.getDate() + inc_time);
+				} else if (_interval.type == "hour") {
+					if (_first_run) {
+						_interval.date.setMonth(		data[0].startdate.getMonth()			);
+						_interval.date.setDate(		data[0].startdate.getDate()				);
+						_interval.date.setHours(		data[0].startdate.getHours()			);
+					}
+					_interval.date.setHours(_interval.date.getHours() + inc_time);
+				} else if (_interval.type == "minute") {
+					if (_first_run) {
+						_interval.date.setMonth(		data[0].startdate.getMonth()			);
+						_interval.date.setDate(		data[0].startdate.getDate()				);
+						_interval.date.setHours(		data[0].startdate.getHours()			);
+						_interval.date.setMinutes(	data[0].startdate.getMinutes()			);
+					}
+					_interval.date.setMinutes(_interval.date.getMinutes() + inc_time);
+				} else if (_interval.type == "second") {
+					if (_first_run) {
+						_interval.date.setMonth(		data[0].startdate.getMonth()			);
+						_interval.date.setDate(		data[0].startdate.getDate()				);
+						_interval.date.setHours(		data[0].startdate.getHours()			);
+						_interval.date.setMinutes(	data[0].startdate.getMinutes()			);
+						_interval.date.setSeconds(	data[0].startdate.getSeconds()			);
+					}
+					_interval.date.setSeconds(_interval.date.getSeconds() + inc_time);
+				}
+				
+				_idd = VMM.Util.date.prettyDate(_interval.date, true);
+				
+				inc_time = 1;
+				
+				_first_run = false;
+				
+				_pos = positionOnTimeline(_interval, _interval.date);
+				pos = _pos.begin;
+				
+				VMM.appendElement(_element, _idd);
+				
+				VMM.Lib.css(_element, "text-indent", -(VMM.Lib.width(_element)/2));
+				VMM.Lib.css(_element, "opacity", "0");
 
-      this.setVisibleChartRange(start, end);
-      timeline.trigger("rangechange");
+				_last_pos = pos;
+				
+				if (pos > _largest_pos) {
+					_largest_pos = pos;
+				}
+				
+				_date = new Date(_interval.date);
+				
+				var _obj = {
+					interval_element: 	_element,
+					interval_date: 		_date,
+					interval_visible: 	_visible, 
+					type: 				_interval.interval_type
+				};
+				
+				_array.push(_obj);
+			}
+			
+			VMM.Lib.width($timeintervalminor_minor, _largest_pos);
+			
+			positionInterval(_array);
+			
+			
+		}
+		
+		/* BUILD
+		================================================== */
+		var build = function() {
+			
+			VMM.attachElement(layout, "");
+			
+			$timenav = 					VMM.appendAndGetElement(layout, "<div>", "timenav");
+			$content = 					VMM.appendAndGetElement($timenav, "<div>", "content");
+			$time = 					VMM.appendAndGetElement($timenav, "<div>", "time");
+			$timeintervalminor = 		VMM.appendAndGetElement($time, "<div>", "time-interval-minor");
+			$timeintervalminor_minor = 	VMM.appendAndGetElement($timeintervalminor, "<div>", "minor");
+			$timeintervalmajor = 		VMM.appendAndGetElement($time, "<div>", "time-interval-major");
+			$timeinterval = 			VMM.appendAndGetElement($time, "<div>", "time-interval");
+			$timebackground = 			VMM.appendAndGetElement(layout, "<div>", "timenav-background");
+			$timenavline = 				VMM.appendAndGetElement($timebackground, "<div>", "timenav-line");
+			$timenavindicator = 		VMM.appendAndGetElement($timebackground, "<div>", "timenav-indicator");
+			$timeintervalbackground = 	VMM.appendAndGetElement($timebackground, "<div>", "timenav-interval-background", "<div class='top-highlight'></div>");
+			$toolbar = 					VMM.appendAndGetElement(layout, "<div>", "toolbar");
+			
+			buildInterval();
+			buildMarkers();
+			calculateMultiplier();
+			positionMarkers();
+			positionInterval(interval_array, false, true);
+			positionInterval(interval_major_array);
+			//reSize(true);
+			
+			if (config.start_page) {
+				$backhome = VMM.appendAndGetElement($toolbar, "<div>", "back-home", "<div class='icon'></div>");
+				VMM.bindEvent(".back-home", onBackHome, "click");
+				VMM.Lib.css($toolbar, "top", 27);
+				VMM.Lib.attribute($backhome, "title", VMM.Timeline.Config.language.messages.return_to_title);
+				VMM.Lib.attribute($backhome, "rel", "tooltip");
+				
+			}
+			
+			$zoomin = 					VMM.appendAndGetElement($toolbar, "<div>", "zoom-in", "<div class='icon'></div>");
+			$zoomout = 					VMM.appendAndGetElement($toolbar, "<div>", "zoom-out", "<div class='icon'></div>");
+			
+			VMM.Lib.attribute($zoomin, "title", VMM.Timeline.Config.language.messages.expand_timeline);
+			VMM.Lib.attribute($zoomin, "rel", "tooltip");
+			VMM.Lib.attribute($zoomout, "title", VMM.Timeline.Config.language.messages.contract_timeline);
+			VMM.Lib.attribute($zoomout, "rel", "tooltip");
 
-      links.Timeline.preventDefault(event);
-    }
-  }
-};
+			$toolbar.tooltip({selector: "div[rel=tooltip]", placement: "right"})
+			
+			// MAKE TIMELINE TOUCHABLE
+			if (VMM.Browser.device == "mobile" || VMM.Browser.device == "tablet") {
+				VMM.TouchSlider.createPanel($timebackground, $timenav, config.width, config.spacing, false);
+				VMM.bindEvent($timenav, onTouchUpdate, "TOUCHUPDATE");
+			} else {
+				VMM.DragSlider.createPanel(layout, $timenav, config.width, config.spacing, false);
+			}
+			
+			
+			VMM.bindEvent(".zoom-in", onZoomIn, "click");
+			VMM.bindEvent(".zoom-out", onZoomOut, "click");
+			VMM.fireEvent(layout, "LOADED");
+			_active = true;
+			
+			reSize(true);
+			
+		};
+		
+		var buildInterval = function() {
+			
+			// CALCULATE INTERVAL
+			timespan = getDateFractions((data[data.length - 1].enddate) - (data[0].startdate), true);
+			trace(timespan);
+			calculateInterval();
 
-/**
- * Event handler for touchend event on mobile devices
- */
-links.Timeline.prototype.onTouchEnd = function(event) {
-  var params = this.eventParams;
-  params.touchDown = false;
-
-  if (params.zoomed) {
-    timeline.trigger("rangechanged");
-  }
-
-  if (params.onTouchMove) {
-    links.Timeline.removeEventListener(document, "touchmove", params.onTouchMove);
-    delete params.onTouchMove;
-
-  }
-  if (params.onTouchEnd) {
-    links.Timeline.removeEventListener(document, "touchend",  params.onTouchEnd);
-    delete params.onTouchEnd;
-  }
-
-  this.onMouseUp(event);
-};
-
-
-/**
- * Start a moving operation inside the provided parent element
- * @param {event} event       The event that occurred (required for
- *                             retrieving the  mouse position)
- */
-links.Timeline.prototype.onMouseDown = function(event) {
-  event = event || window.event;
-
-  var params = this.eventParams,
-    options = this.options,
-    dom = this.dom;
-
-  // only react on left mouse button down
-  var leftButtonDown = event.which ? (event.which == 1) : (event.button == 1);
-  if (!leftButtonDown && !params.touchDown) {
-    return;
-  }
-
-  // check if frame is not resized (causing a mismatch with the end Date)
-  this.recalcSize();
-
-  // get mouse position
-  if (!params.touchDown) {
-    params.mouseX = event.clientX;
-    params.mouseY = event.clientY;
-  }
-  else {
-    params.mouseX = event.targetTouches[0].clientX;
-    params.mouseY = event.targetTouches[0].clientY;
-  }
-  if (params.mouseX === undefined) {params.mouseX = 0;}
-  if (params.mouseY === undefined) {params.mouseY = 0;}
-  params.frameLeft = links.Timeline.getAbsoluteLeft(this.dom.content);
-  params.frameTop = links.Timeline.getAbsoluteTop(this.dom.content);
-  params.previousLeft = 0;
-  params.previousOffset = 0;
-
-  params.moved = false;
-  params.start = new Date(this.start);
-  params.end = new Date(this.end);
-
-  params.target = links.Timeline.getTarget(event);
-  params.itemDragLeft = (params.target === this.dom.items.dragLeft);
-  params.itemDragRight = (params.target === this.dom.items.dragRight);
-
-  if (params.itemDragLeft || params.itemDragRight) {
-    params.itemIndex = this.selection ? this.selection.index : undefined;
-  }
-  else {
-    params.itemIndex = this.getItemIndex(params.target);
-  }
-
-  params.customTime = (params.target === dom.customTime ||
-    params.target.parentNode === dom.customTime) ?
-    this.customTime :
-    undefined;
-
-  params.addItem = (options.editable && event.ctrlKey);
-  if (params.addItem) {
-    // create a new event at the current mouse position
-    var x = params.mouseX - params.frameLeft;
-    var y = params.mouseY - params.frameTop;
-
-    var xstart = this.screenToTime(x);
-    if (options.snapEvents) {
-      this.step.snap(xstart);
-    }
-    var xend = new Date(xstart);
-    var content = "New";
-    var group = this.getGroupFromHeight(y);
-    this.addItem({
-      'start': xstart,
-      'end': xend,
-      'content': content,
-      'group': group.content
-    });
-    params.itemIndex = (this.items.length - 1);
-    this.selectItem(params.itemIndex);
-    params.itemDragRight = true;
-  }
-
-  params.editItem = options.editable ? this.isSelected(params.itemIndex) : undefined;
-  if (params.editItem) {
-    var item = this.items[params.itemIndex];
-    params.itemStart = item.start;
-    params.itemEnd = item.end;
-    params.itemType = item.type;
-    if (params.itemType == 'range') {
-      params.itemLeft = this.timeToScreen(item.start);
-      params.itemRight = this.timeToScreen(item.end);
-    }
-    else {
-      params.itemLeft = this.timeToScreen(item.start);
-    }
-  }
-  else {
-    this.dom.frame.style.cursor = 'move';
-  }
-  if (!params.touchDown) {
-    // add event listeners to handle moving the contents
-    // we store the function onmousemove and onmouseup in the timeline, so we can
-    // remove the eventlisteners lateron in the function mouseUp()
-    var me = this;
-    if (!params.onMouseMove) {
-      params.onMouseMove = function (event) {me.onMouseMove(event);};
-      links.Timeline.addEventListener(document, "mousemove", params.onMouseMove);
-    }
-    if (!params.onMouseUp) {
-      params.onMouseUp = function (event) {me.onMouseUp(event);};
-      links.Timeline.addEventListener(document, "mouseup", params.onMouseUp);
-    }
-
-    links.Timeline.preventDefault(event);
-  }
+			/* DETERMINE DEFAULT INTERVAL TYPE
+				millenium, ages, epoch, era and eon are not working yet
+			================================================== */
+			/*
+			if (timespan.eons				>		data.length / config.nav.density) {
+				interval					=		interval_calc.eon;
+				interval_major				=		interval_calc.eon;
+				interval_macro				=		interval_calc.era;
+			} else if (timespan.eras		>		data.length / config.nav.density) {
+				interval					=		interval_calc.era;
+				interval_major				=		interval_calc.eon;
+				interval_macro				=		interval_calc.epoch;
+			} else if (timespan.epochs		>		data.length / config.nav.density) {
+				interval					=		interval_calc.epoch;
+				interval_major				=		interval_calc.era;
+				interval_macro				=		interval_calc.age;
+			} else if (timespan.ages		>		data.length / config.nav.density) {
+				interval					=		interval_calc.ages;
+				interval_major				=		interval_calc.epoch;
+				interval_macro				=		interval_calc.millenium;
+			} else if (timespan.milleniums			>		data.length / config.nav.density) {
+				interval					=		interval_calc.millenium;
+				interval_major				=		interval_calc.age;
+				interval_macro				=		interval_calc.century;
+			} else 
+			*/
+			if (timespan.centuries			>		data.length / config.nav.density) {
+				interval					=		interval_calc.century;
+				interval_major				=		interval_calc.millenium;
+				interval_macro				=		interval_calc.decade;
+			} else if (timespan.decades		>		data.length / config.nav.density) {
+				interval					=		interval_calc.decade;
+				interval_major				=		interval_calc.century;
+				interval_macro				=		interval_calc.year;
+			} else if (timespan.years		>		data.length / config.nav.density) {	
+				interval					=		interval_calc.year;
+				interval_major				=		interval_calc.decade;
+				interval_macro				=		interval_calc.month;
+			} else if (timespan.months		>		data.length / config.nav.density) {
+				interval					=		interval_calc.month;
+				interval_major				=		interval_calc.year;
+				interval_macro				=		interval_calc.day;
+			} else if (timespan.days		>		data.length / config.nav.density) {
+				interval					=		interval_calc.day;
+				interval_major				=		interval_calc.month;
+				interval_macro				=		interval_calc.hour;
+			} else if (timespan.hours		>		data.length / config.nav.density) {
+				interval					=		interval_calc.hour;
+				interval_major				=		interval_calc.day;
+				interval_macro				=		interval_calc.minute;
+			} else if (timespan.minutes		>		data.length / config.nav.density) {
+				interval					=		interval_calc.minute;
+				interval_major				=		interval_calc.hour;
+				interval_macro				=		interval_calc.second;
+			} else if (timespan.seconds		>		data.length / config.nav.density) {
+				interval					=		interval_calc.second;
+				interval_major				=		interval_calc.minute;
+				interval_macro				=		interval_calc.second;
+			} else {
+				trace("NO IDEA WHAT THE TYPE SHOULD BE");
+				interval					=		interval_calc.day;
+				interval_major				=		interval_calc.month;
+				interval_macro				=		interval_calc.hour;
+			}
+			
+			trace("INTERVAL TYPE: " + interval.type);
+			trace("INTERVAL MAJOR TYPE: " + interval_major.type);
+			
+			createIntervalElements(interval, interval_array, $timeinterval);
+			createIntervalElements(interval_major, interval_major_array, $timeintervalmajor);
+			
+		}
+		
+		var buildMarkers = function() {
+			
+			var row = 					2; //row
+			var lpos = 					0; // last marker pos;
+			var row_depth = 			0;
+			markers = 					[];
+			era_markers = 				[];
+			
+			for(var i = 0; i < data.length; i++) {
+				
+				var _marker, _marker_flag, _marker_content, _marker_dot, _marker_line, _marker_line_event;
+				
+				_marker = 				VMM.appendAndGetElement($content, "<div>", "marker");
+				_marker_flag = 			VMM.appendAndGetElement(_marker, "<div>", "flag");
+				_marker_content = 		VMM.appendAndGetElement(_marker_flag, "<div>", "flag-content");
+				_marker_dot = 			VMM.appendAndGetElement(_marker, "<div>", "dot");
+				_marker_line = 			VMM.appendAndGetElement(_marker, "<div>", "line");
+				_marker_line_event = 	VMM.appendAndGetElement(_marker_line, "<div>", "event-line");
+				
+				
+				// THUMBNAIL
+				if (data[i].asset != null && data[i].asset != "") {
+					VMM.appendElement(_marker_content, VMM.MediaElement.thumbnail(data[i].asset, 24, 24));
+				} else {
+					//VMM.appendElement(_marker_content, "<div class='thumbnail thumb-plaintext'></div>");
+					VMM.appendElement(_marker_content, "<div style='margin-right:7px;height:50px;width:2px;float:left;'></div>");
+				}
+				
+				// ADD DATE AND TITLE
+				VMM.appendElement(_marker_content, "<h3>" + VMM.Util.unlinkify(data[i].title) + "</h3><h4>" + data[i].date + "</h4>");
+				
+				// ADD ID
+				VMM.Lib.attr(_marker, "id", (data[i].uniqueid).toString());
+				
+				// MARKER CLICK
+				VMM.bindEvent(_marker_flag, onMarkerClick, "", {number: i});
+				VMM.bindEvent(_marker_flag, onMarkerHover, "mouseenter mouseleave", {number: i, elem:_marker_flag});
+				
+				var _marker_obj = {
+					marker: 			_marker,
+					flag: 				_marker_flag,
+					lineevent: 			_marker_line_event,
+					type: 				"marker"
+				};
+				
+				
+				if (data[i].type == "start") {
+					trace("BUILD MARKER HAS START PAGE")
+					config.start_page = true;
+					_marker_obj.type = "start";
+				}
+				
+				markers.push(_marker_obj);
+				
+				
+				
+			}
+			
+			// CREATE ERAS
+			for(var j = 0; j < eras.length; j++) {
+				
+				var era = {
+					content: 			VMM.appendAndGetElement($content, "<div>", "era"),
+					startdate: 			VMM.Util.parseDate(eras[j].startDate),
+					enddate: 			VMM.Util.parseDate(eras[j].endDate),
+					title: 				eras[j].headline,
+					uniqueid: 			VMM.Util.unique_ID(4),
+					color: 				eras[j].color
+				};
+				
+				VMM.Lib.attr(era.content, "id", era.uniqueid);
+				VMM.Lib.css(era.content, "background", era.color);
+				VMM.appendElement(era.content, "<h3>" + VMM.Util.unlinkify(era.title) + "</h3>");
+				
+				era_markers.push(era);
+				
+			}
+			
+		}
+		
+	};
+	
 }
 
-
-/**
- * Perform moving operating.
- * This function activated from within the funcion links.Timeline.onMouseDown().
- * @param {event}   event  Well, eehh, the event
- */
-links.Timeline.prototype.onMouseMove = function (event) {
-  event = event || window.event;
-
-  var params = this.eventParams,
-    size = this.size,
-    dom = this.dom,
-    options = this.options;
-
-  // calculate change in mouse position
-  if (!params.touchDown) {
-    var mouseX = event.clientX;
-    var mouseY = event.clientY;
-  }
-  else {
-    var mouseX = event.targetTouches[0].clientX;
-    var mouseY = event.targetTouches[0].clientY;
-  }
-  if (mouseX === undefined) {mouseX = 0;}
-  if (mouseY === undefined) {mouseY = 0;}
-
-  if (params.mouseX === undefined) {
-    params.mouseX = mouseX;
-  }
-  if (params.mouseY === undefined) {
-    params.mouseY = mouseY;
-  }
-
-  var diffX = parseFloat(mouseX) - params.mouseX;
-  var diffY = parseFloat(mouseY) - params.mouseY;
-
-  params.moved = true;
-
-  if (params.customTime) {
-    var x = this.timeToScreen(params.customTime);
-    var xnew = x + diffX;
-    this.customTime = this.screenToTime(xnew);
-    this.redrawCustomTime();
-
-    // fire a timechange event
-    this.trigger('timechange');
-  }
-  else if (params.editItem) {
-    var item = this.items[params.itemIndex],
-      domItem = item.dom,
-      left,
-      right;
-
-    if (params.itemDragLeft) {
-      // move the start of the item
-      left = params.itemLeft + diffX;
-      right = params.itemRight;
-
-      item.start = this.screenToTime(left);
-      if (options.snapEvents) {
-        this.step.snap(item.start);
-        left = this.timeToScreen(item.start);
-      }
-
-      if (left > right) {
-        left = right;
-        item.start = this.screenToTime(left);
-      }
-    }
-    else if (params.itemDragRight) {
-      // move the end of the item
-      left = params.itemLeft;
-      right = params.itemRight + diffX;
-
-      item.end = this.screenToTime(right);
-      if (options.snapEvents) {
-        this.step.snap(item.end);
-        right = this.timeToScreen(item.end);
-      }
-
-      if (right < left) {
-        right = left;
-        item.end = this.screenToTime(right);
-      }
-    }
-    else {
-      // move the item
-      left = params.itemLeft + diffX;
-      item.start = this.screenToTime(left);
-      if (options.snapEvents) {
-        this.step.snap(item.start);
-        left = this.timeToScreen(item.start);
-      }
-
-      if (item.end) {
-        right = left + (params.itemRight - params.itemLeft);
-        item.end = this.screenToTime(right);
-      }
-    }
-
-    this.repositionItem(item, left, right);
-
-    if (this.groups.length == 0) {
-      // TODO: does not work well in FF, forces redraw with every mouse move it seems
-      this.stackEvents(options.animate);
-      if (!options.animate) {
-        this.redrawFrame();
-      }
-      // Note: when animate==true, no redraw is needed here, its done by stackEvents animation
-    }
-    else {
-      // move item from one group to another when needed
-      if (options.groupsChangeable) {
-        var y = mouseY - params.frameTop;
-        var group = this.getGroupFromHeight(y);
-        if (item.group !== group) {
-          // move item to the other group
-
-          //item.group = group;
-          var index = this.items.indexOf(item);
-          this.changeItem(index, {'group': group.content});
-
-          item.top = group.top;
-          this.repositionItem(item);
-        }
-      }
-    }
-
-    this.redrawDeleteButton();
-    this.redrawDragAreas();
-  }
-  else if (options.moveable) {
-    var interval = (params.end.valueOf() - params.start.valueOf());
-    var diffMillisecs = Math.round(parseFloat(-diffX) / size.contentWidth * interval);
-    var newStart = new Date(params.start.valueOf() + diffMillisecs);
-    var newEnd = new Date(params.end.valueOf() + diffMillisecs);
-    this.applyRange(newStart, newEnd);
-
-    // if the applied range is moved due to a fixed min or max,
-    // change the diffMillisecs accordingly
-    var appliedDiff = (this.start.valueOf() - newStart.valueOf());
-    if (appliedDiff) {
-      diffMillisecs += appliedDiff;
-    }
-
-    this.recalcConversion();
-
-    // move the items by changing the left position of their frame.
-    // this is much faster than repositioning all elements individually via the
-    // redrawFrame() function (which is done once at mouseup)
-    // note that we round diffX to prevent wrong positioning on millisecond scale
-    var previousLeft = params.previousLeft || 0;
-    var currentLeft = parseFloat(dom.items.frame.style.left) || 0;
-    var previousOffset = params.previousOffset || 0;
-    var frameOffset = previousOffset + (currentLeft - previousLeft);
-    var frameLeft = -diffMillisecs / interval * size.contentWidth + frameOffset;
-    params.previousOffset = frameOffset;
-    params.previousLeft = frameLeft;
-
-    dom.items.frame.style.left = (frameLeft) + "px";
-
-    this.redrawCurrentTime();
-    this.redrawCustomTime();
-    this.redrawAxis();
-
-    // fire a rangechange event
-    this.trigger('rangechange');
-  }
-
-  links.Timeline.preventDefault(event);
-}
-
-
-/**
- * Stop moving operating.
- * This function activated from within the funcion links.Timeline.onMouseDown().
- * @param {event}  event   The event
- */
-links.Timeline.prototype.onMouseUp = function (event) {
-  var params = this.eventParams,
-    options = this.options;
-
-  event = event || window.event;
-
-  this.dom.frame.style.cursor = 'auto';
-
-  // remove event listeners here, important for Safari
-  if (params.onMouseMove) {
-    links.Timeline.removeEventListener(document, "mousemove", params.onMouseMove);
-    delete params.onMouseMove;
-  }
-  if (params.onMouseUp) {
-    links.Timeline.removeEventListener(document, "mouseup",   params.onMouseUp);
-    delete params.onMouseUp;
-  }
-  //links.Timeline.preventDefault(event);
-
-  if (params.customTime) {
-    // fire a timechanged event
-    this.trigger('timechanged');
-  }
-  else if (params.editItem) {
-    var item = this.items[params.itemIndex];
-
-    if (params.moved || params.addItem) {
-      this.applyChange = true;
-      this.applyAdd = true;
-
-      this.updateData(params.itemIndex, {
-        'start': item.start,
-        'end': item.end
-      });
-
-      // fire an add or change event.
-      // Note that the change can be canceled from within an event listener if
-      // this listener calls the method cancelChange().
-      this.trigger(params.addItem ? 'add' : 'change');
-
-      if (params.addItem) {
-        if (this.applyAdd) {
-          this.updateData(params.itemIndex, {
-            'start': item.start,
-            'end': item.end,
-            'content': item.content,
-            'group': item.group ? item.group.content : undefined
-          });
-        }
-        else {
-          // undo an add
-          this.deleteItem(params.itemIndex);
-        }
-      }
-      else {
-        if (this.applyChange) {
-          this.updateData(params.itemIndex, {
-            'start': item.start,
-            'end': item.end
-          });
-        }
-        else {
-          // undo a change
-          delete this.applyChange;
-          delete this.applyAdd;
-
-          var item = this.items[params.itemIndex],
-            domItem = item.dom;
-
-          item.start = params.itemStart;
-          item.end = params.itemEnd;
-          this.repositionItem(item, params.itemLeft, params.itemRight);
-        }
-      }
-
-      this.recalcSize();
-      this.stackEvents(options.animate);
-      if (!options.animate) {
-        this.redrawFrame();
-      }
-      this.redrawDeleteButton();
-      this.redrawDragAreas();
-    }
-  }
-  else {
-    if (!params.moved && !params.zoomed) {
-      // mouse did not move -> user has selected an item
-
-      if (options.editable && (params.target === this.dom.items.deleteButton)) {
-        // delete item
-        if (this.selection) {
-          this.confirmDeleteItem(this.selection.index);
-        }
-        this.redrawFrame();
-      }
-      else if (options.selectable) {
-        // select/unselect item
-        if (params.itemIndex !== undefined) {
-          if (!this.isSelected(params.itemIndex)) {
-            this.selectItem(params.itemIndex);
-            this.redrawDeleteButton();
-            this.redrawDragAreas();
-            this.trigger('select');
-          }
-        }
-        else {
-          this.unselectItem();
-          this.redrawDeleteButton();
-          this.redrawDragAreas();
-        }
-      }
-    }
-    else {
-      // timeline is moved
-      this.redrawFrame();
-
-      if ((params.moved && options.moveable) || (params.zoomed && options.zoomable) ) {
-        // fire a rangechanged event
-        this.trigger('rangechanged');
-      }
-    }
-  }
-}
-
-/**
- * Double click event occurred for an item
- * @param {event}  event
- */
-links.Timeline.prototype.onDblClick = function (event) {
-  var params = this.eventParams,
-    options = this.options,
-    dom = this.dom,
-    size = this.size;
-  event = event || window.event;
-
-  if (!options.editable) {
-    return;
-  }
-
-  if (params.itemIndex !== undefined) {
-    // fire the edit event
-    this.trigger('edit');
-  }
-  else {
-    // create a new item
-    var x = event.clientX - links.Timeline.getAbsoluteLeft(dom.content);
-    var y = event.clientY - links.Timeline.getAbsoluteTop(dom.content);
-
-    // create a new event at the current mouse position
-    var xstart = this.screenToTime(x);
-    var xend = this.screenToTime(x  + size.frameWidth / 10); // add 10% of timeline width
-    if (options.snapEvents) {
-      this.step.snap(xstart);
-      this.step.snap(xend);
-    }
-
-    var content = "New";
-    var group = this.getGroupFromHeight(y);   // (group may be undefined)
-    this.addItem({
-      'start': xstart,
-      'end': xend,
-      'content': content,
-      'group': group.content
-    });
-    params.itemIndex = (this.items.length - 1);
-    this.selectItem(params.itemIndex);
-
-    this.applyAdd = true;
-
-    // fire an add event.
-    // Note that the change can be canceled from within an event listener if
-    // this listener calls the method cancelAdd().
-    this.trigger('add');
-
-    if (!this.applyAdd) {
-      // undo an add
-      this.deleteItem(params.itemIndex);
-    }
-
-    this.redrawDeleteButton();
-    this.redrawDragAreas();
-  }
-
-  links.Timeline.preventDefault(event);
-}
-
-
-/**
- * Event handler for mouse wheel event, used to zoom the timeline
- * Code from http://adomas.org/javascript-mouse-wheel/
- * @param {event}  event   The event
- */
-links.Timeline.prototype.onMouseWheel = function(event) {
-  if (!this.options.zoomable)
-    return;
-
-  if (!event) { /* For IE. */
-    event = window.event;
-  }
-
-  // retrieve delta
-  var delta = 0;
-  if (event.wheelDelta) { /* IE/Opera. */
-    delta = event.wheelDelta/120;
-  } else if (event.detail) { /* Mozilla case. */
-    // In Mozilla, sign of delta is different than in IE.
-    // Also, delta is multiple of 3.
-    delta = -event.detail/3;
-  }
-
-  // If delta is nonzero, handle it.
-  // Basically, delta is now positive if wheel was scrolled up,
-  // and negative, if wheel was scrolled down.
-  if (delta) {
-    // TODO: on FireFox, the window is not redrawn within repeated scroll-events
-    // -> use a delayed redraw? Make a zoom queue?
-
-    var timeline = this;
-    var zoom = function () {
-      // check if frame is not resized (causing a mismatch with the end date)
-      timeline.recalcSize();
-
-      // perform the zoom action. Delta is normally 1 or -1
-      var zoomFactor = delta / 5.0;
-      var frameLeft = links.Timeline.getAbsoluteLeft(timeline.dom.content);
-      var zoomAroundDate =
-        (event.clientX != undefined && frameLeft != undefined) ?
-        timeline.screenToTime(event.clientX - frameLeft) :
-        undefined;
-
-      timeline.zoom(zoomFactor, zoomAroundDate);
-
-      // fire a rangechange and a rangechanged event
-      timeline.trigger("rangechange");
-      timeline.trigger("rangechanged");
-
-      /* TODO: smooth scrolling on FF
-      timeline.zooming = false;
-
-      if (timeline.zoomingQueue) {
-        setTimeout(timeline.zoomingQueue, 100);
-        timeline.zoomingQueue = undefined;
-      }
-
-      timeline.zoomCount = (timeline.zoomCount || 0) + 1;
-      console.log('zoomCount', timeline.zoomCount)
-      */
-    };
-
-    zoom();
-
-    /* TODO: smooth scrolling on FF
-    if (!timeline.zooming || true) {
-
-      timeline.zooming = true;
-      setTimeout(zoom, 100);
-    }
-    else {
-      timeline.zoomingQueue = zoom;
-    }
-    //*/
-  }
-
-  // Prevent default actions caused by mouse wheel.
-  // That might be ugly, but we handle scrolls somehow
-  // anyway, so don't bother here...
-  links.Timeline.preventDefault(event);
-}
-
-
-/**
- * Zoom the timeline the given zoomfactor in or out. Start and end date will
- * be adjusted, and the timeline will be redrawn. You can optionally give a
- * date around which to zoom.
- * For example, try zoomfactor = 0.1 or -0.1
- * @param {float}  zoomFactor      Zooming amount. Positive value will zoom in,
- *                                 negative value will zoom out
- * @param {Date}   zoomAroundDate  Date around which will be zoomed. Optional
- */
-links.Timeline.prototype.zoom = function(zoomFactor, zoomAroundDate) {
-  // if zoomAroundDate is not provided, take it half between start Date and end Date
-  if (zoomAroundDate == undefined) {
-    zoomAroundDate = new Date((this.start.valueOf() + this.end.valueOf()) / 2);
-  }
-
-  // prevent zoom factor larger than 1 or smaller than -1 (larger than 1 will
-  // result in a start>=end )
-  if (zoomFactor >= 1) {
-    zoomFactor = 0.9;
-  }
-  if (zoomFactor <= -1) {
-    zoomFactor = -0.9;
-  }
-
-  // adjust a negative factor such that zooming in with 0.1 equals zooming
-  // out with a factor -0.1
-  if (zoomFactor < 0) {
-    zoomFactor = zoomFactor / (1 + zoomFactor);
-  }
-
-  // zoom start Date and end Date relative to the zoomAroundDate
-  var startDiff = parseFloat(this.start.valueOf() - zoomAroundDate.valueOf());
-  var endDiff = parseFloat(this.end.valueOf() - zoomAroundDate.valueOf());
-
-  // calculate new dates
-  var newStart = new Date(this.start.valueOf() - startDiff * zoomFactor);
-  var newEnd   = new Date(this.end.valueOf() - endDiff * zoomFactor);
-
-  this.applyRange(newStart, newEnd, zoomAroundDate);
-
-  this.recalcSize();
-  var animate = this.options.animate ? this.options.animateZoom : false;
-  this.stackEvents(animate);
-  if (!animate || this.groups.length > 0) {
-    this.redrawFrame();
-  }
-  /* TODO
-  else {
-    this.redrawFrame();
-    this.recalcSize();
-    this.stackEvents(animate);
-    this.redrawFrame();
-  }*/
-}
-
-
-/**
- * Move the timeline the given movefactor to the left or right. Start and end
- * date will be adjusted, and the timeline will be redrawn.
- * For example, try moveFactor = 0.1 or -0.1
- * @param {float}  moveFactor      Moving amount. Positive value will move right,
- *                                 negative value will move left
- */
-links.Timeline.prototype.move = function(moveFactor) {
-  // zoom start Date and end Date relative to the zoomAroundDate
-  var diff = parseFloat(this.end.valueOf() - this.start.valueOf());
-
-  // apply new dates
-  var newStart = new Date(this.start.valueOf() + diff * moveFactor);
-  var newEnd   = new Date(this.end.valueOf() + diff * moveFactor);
-  this.applyRange(newStart, newEnd);
-
-  this.recalcConversion();
-  this.redrawFrame();
-}
-
-/**
- * Reposition given item
- * @param {Object} item
- * @param {Number} left
- * @param {Number} right
- */
-links.Timeline.prototype.repositionItem = function (item, left, right) {
-  var domItem = item.dom;
-  switch(item.type) {
-    case 'range':
-      domItem.style.left = left + "px";
-      //domItem.style.width = Math.max(right - left - 2 * item.borderWidth, 1) + "px";  // TODO: borderwidth
-      domItem.style.width = Math.max(right - left, 1) + "px";
-      break;
-
-    case 'box':
-      domItem.style.left = (left - item.width / 2) + "px";
-      domItem.line.style.left = (left - item.lineWidth / 2) + "px";
-      domItem.dot.style.left = (left - item.dotWidth / 2) + "px";
-      break;
-
-    case 'dot':
-      domItem.style.left = (left - item.dotWidth / 2) + "px";
-      break;
-  }
-
-  if (this.groups.length > 0) {
-    domItem.style.top = item.top + 'px';
-  }
-}
-
-/**
- * Apply a visible range. The range is limited to feasible maximum and minimum
- * range.
- * @param {Date} start
- * @param {Date} end
- * @param {Date}   zoomAroundDate  Optional. Date around which will be zoomed.
- */
-links.Timeline.prototype.applyRange = function (start, end, zoomAroundDate) {
-  // calculate new start and end value
-  var startValue = start.valueOf();
-  var endValue = end.valueOf();
-  var interval = (endValue - startValue);
-
-  // determine maximum and minimum interval
-  var options = this.options;
-  var year = 1000 * 60 * 60 * 24 * 365;
-  var intervalMin = Number(options.intervalMin) || 10;
-  if (intervalMin < 10) {
-    intervalMin = 10;
-  }
-  var intervalMax = Number(options.intervalMax) || 10000 * year;
-  if (intervalMax > 10000 * year) {
-    intervalMax = 10000 * year;
-  }
-  if (intervalMax < intervalMin) {
-    intervalMax = intervalMin;
-  }
-
-  // determine min and max date value
-  var min = options.min ? options.min.valueOf() : undefined;
-  var max = options.max ? options.max.valueOf() : undefined;
-  if (min && max) {
-    if (min >= max) {
-      // empty range
-      var day = 1000 * 60 * 60 * 24;
-      max = min + day;
-    }
-    if (intervalMax > (max - min)) {
-      intervalMax = (max - min);
-    }
-    if (intervalMin > (max - min)) {
-      intervalMin = (max - min);
-    }
-  }
-
-  // prevent empty interval
-  if (startValue >= endValue) {
-    endValue += 1000 * 60 * 60 * 24;
-  }
-
-  // prevent too small scale
-  // TODO: IE has problems with milliseconds
-  if (interval < intervalMin) {
-    var diff = (intervalMin - interval);
-    var f = zoomAroundDate ? (zoomAroundDate.valueOf() - startValue) / interval : 0.5;
-    startValue -= Math.round(diff * f);
-    endValue   += Math.round(diff * (1 - f));
-  }
-
-  // prevent too large scale
-  if (interval > intervalMax) {
-    var diff = (interval - intervalMax);
-    var f = zoomAroundDate ? (zoomAroundDate.valueOf() - startValue) / interval : 0.5;
-    startValue += Math.round(diff * f);
-    endValue   -= Math.round(diff * (1 - f));
-  }
-
-  // prevent to small start date
-  if (min) {
-    var diff = (startValue - min);
-    if (diff < 0) {
-      startValue -= diff;
-      endValue -= diff;
-    }
-  }
-
-  // prevent to large end date
-  if (max) {
-    var diff = (max - endValue);
-    if (diff < 0) {
-      startValue += diff;
-      endValue += diff;
-    }
-  }
-
-  // apply new dates
-  this.start = new Date(startValue);
-  this.end = new Date(endValue);
-}
-
-/**
- * Delete an item after a confirmation.
- * The deletion can be cancelled by executing .cancelDelete() during the
- * triggered event 'delete'.
- * @param {int} index   Index of the item to be deleted
- */
-links.Timeline.prototype.confirmDeleteItem = function(index) {
-  this.applyDelete = true;
-
-  // select the event to be deleted
-  if (!this.isSelected(index)) {
-    this.selectItem(index);
-  }
-
-  // fire a delete event trigger.
-  // Note that the delete event can be canceled from within an event listener if
-  // this listener calls the method cancelChange().
-  this.trigger('delete');
-
-  if (this.applyDelete) {
-    this.deleteItem(index);
-  }
-
-  delete this.applyDelete;
-}
-
-/**
- * Delete an item
- * @param {int} index   Index of the item to be deleted
- */
-links.Timeline.prototype.deleteItem = function(index) {
-  if (index >= this.items.length) {
-    throw "Cannot delete row, index out of range";
-  }
-
-  this.unselectItem();
-
-  // actually delete the item
-  this.items.splice(index, 1);
-
-  // delete the row in the original data table
-  if (this.data) {
-    if (google && google.visualization &&
-        this.data instanceof google.visualization.DataTable) {
-      this.data.removeRow(index);
-    }
-    else if (links.Timeline.isArray(this.data)) {
-      this.data.splice(index, 1);
-    }
-    else {
-      throw "Cannot delete row from data, unknown data type";
-    }
-  }
-
-  this.size.dataChanged = true;
-  this.redrawFrame();
-  this.recalcSize();
-  this.stackEvents(this.options.animate);
-  if (!this.options.animate) {
-    this.redrawFrame();
-  }
-  this.size.dataChanged = false;
-}
-
-
-/**
- * Delete all items
- */
-links.Timeline.prototype.deleteAllItems = function() {
-  this.unselectItem();
-
-  // delete the loaded data
-  this.items = [];
-
-  // delete the groups
-  this.deleteGroups();
-
-  // empty original data table
-  if (this.data) {
-    if (google && google.visualization &&
-        this.data instanceof google.visualization.DataTable) {
-      this.data.removeRows(0, this.data.getNumberOfRows());
-    }
-    else if (links.Timeline.isArray(this.data)) {
-      this.data.splice(0, this.data.length);
-    }
-    else {
-      throw "Cannot delete row from data, unknown data type";
-    }
-  }
-
-  this.size.dataChanged = true;
-  this.redrawFrame();
-  this.recalcSize();
-  this.stackEvents(this.options.animate);
-  if (!this.options.animate) {
-    this.redrawFrame();
-  }
-  this.size.dataChanged = false;
-
-}
-
-
-/**
- * Find the group from a given height in the timeline
- * @param {Number} height   Height in the timeline
- * @param {boolean}
- * @return {Object} group   The group object, or undefined if out of range
- */
-links.Timeline.prototype.getGroupFromHeight = function(height) {
-  var groups = this.groups,
-    options = this.options,
-    size = this.size,
-    y = height - (options.axisOnTop ? size.axis.height : 0);
-
-  if (groups) {
-    var group;
-    /* TODO: cleanup
-    for (var i = 0, iMax = groups.length; i < iMax; i++) {
-      group = groups[i];
-      if (y > group.top && y < group.top + group.height) {
-        return group;
-      }
-    }*/
-    for (var i = groups.length - 1; i >= 0; i--) {
-      group = groups[i];
-      if (y > group.top) {
-        return group;
-      }
-    }
-
-    return group; // return the last group
-  }
-
-  return undefined;
-}
-
-/**
- * Retrieve the properties of an item.
- * @param {Number} index
- * @return {Object} properties   Object containing item properties:<br>
- *                              {Date} start (required),
- *                              {Date} end (optional),
- *                              {String} content (required),
- *                              {String} group (optional)
- */
-links.Timeline.prototype.getItem = function (index) {
-  if (index >= this.items.length) {
-    throw "Cannot get item, index out of range";
-  }
-
-  var item = this.items[index];
-
-  var properties = {};
-  properties.start = new Date(item.start);
-  if (item.end) {
-    properties.end = new Date(item.end);
-  }
-  properties.content = item.content;
-  if (item.group) {
-    properties.group = item.group.content;
-  }
-
-  return properties;
-}
-
-/**
- * Add a new item.
- * @param {Object} itemData     Object containing item properties:<br>
- *                              {Date} start (required),
- *                              {Date} end (optional),
- *                              {String} content (required),
- *                              {String} group (optional)
- */
-links.Timeline.prototype.addItem = function (itemData) {
-  var items = [
-    itemData
-  ];
-
-  this.addItems(items);
-}
-
-/**
- * Add new items.
- * @param {Array} items  An array containing Objects.
- *                       The objects must have the following parameters:
- *                         {Date} start,
- *                         {Date} end,
- *                         {String} content with text or HTML code,
- *                         {String} group
- */
-links.Timeline.prototype.addItems = function (items) {
-  var newItems = items,
-    curItems = this.items,
-    groups = this.groups,
-    groupIndexes = this.groupIndexes;
-
-  // append the items
-  for (var i = 0, iMax = newItems.length; i < iMax; i++) {
-    var itemData = items[i];
-
-    this.addGroup(itemData.group);
-
-    curItems.push(this.createItem(itemData));
-
-    var index = curItems.length - 1;
-    this.updateData(index, itemData);
-  }
-
-  // redraw timeline
-  this.size.dataChanged = true;
-  this.redrawFrame();
-  this.recalcSize();
-  this.stackEvents(false);
-  this.redrawFrame();
-  this.size.dataChanged = false;
-}
-
-/**
- * Create an item object, containing all needed parameters
- * @param {Object} itemData  Object containing parameters start, end
- *                           content, group.
- * @return {Object} item
- */
-links.Timeline.prototype.createItem = function(itemData) {
-  var item = {
-    'start': itemData.start,
-    'end': itemData.end,
-    'content': itemData.content,
-    'type': itemData.end ? 'range' : this.options.style,
-    'group': this.findGroup(itemData.group),
-    'top': 0,
-    'left': 0,
-    'width': 0,
-    'height': 0,
-    'lineWidth' : 0,
-    'dotWidth': 0,
-    'dotHeight': 0
-  };
-  return item;
-}
-
-/**
- * Edit an item
- * @param {Number} index
- * @param {Object} itemData     Object containing item properties:<br>
- *                              {Date} start (required),
- *                              {Date} end (optional),
- *                              {String} content (required),
- *                              {String} group (optional)
- */
-links.Timeline.prototype.changeItem = function (index, itemData) {
-  if (index >= this.items.length) {
-    throw "Cannot change item, index out of range";
-  }
-
-  var style = this.options.style;
-  var item = this.items[index];
-
-  // edit the item
-  if (itemData.start) {
-    item.start = itemData.start;
-  }
-  if (itemData.end) {
-    item.end = itemData.end;
-  }
-  if (itemData.content) {
-    item.content = itemData.content;
-  }
-  if (itemData.group) {
-    item.group = this.addGroup(itemData.group);
-  }
-
-  // update the original data table
-  this.updateData(index, itemData);
-
-  // redraw timeline
-  this.size.dataChanged = true;
-  this.redrawFrame();
-  this.recalcSize();
-  this.stackEvents(false);
-  this.redrawFrame();
-  this.size.dataChanged = false;
-}
-
-
-/**
- * Find a group by its name.
- * @param {String} group
- * @return {Object} a group object or undefined when group is not found
- */
-links.Timeline.prototype.findGroup = function (group) {
-  var index = this.groupIndexes[group];
-  return (index != undefined) ? this.groups[index] : undefined;
-}
-
-/**
- * Delete all groups
- */
-links.Timeline.prototype.deleteGroups = function () {
-  this.groups = [];
-  this.groupIndexes = {};
-}
-
-
-/**
- * Add a group. When the group already exists, no new group is created
- * but the existing group is returned.
- * @param {String} groupName   the name of the group
- * @return {Object} groupObject
- */
-links.Timeline.prototype.addGroup = function (groupName) {
-  var groups = this.groups,
-    groupIndexes = this.groupIndexes,
-    groupObj = undefined;
-
-  var groupIndex = groupIndexes[groupName];
-  if (groupIndex === undefined && groupName !== undefined) {
-    groupObj = {
-      'content': groupName,
-      'labelTop': 0,
-      'lineTop': 0
-      // note: this object will lateron get addition information,
-      //       such as height and width of the group
-    };
-    groups.push(groupObj);
-
-    // sort the groups
-    if (this.options.axisOnTop) {
-      groups.sort(function (a, b) {
-        return a.content > b.content;
-      });
-    }
-    else {
-      groups.sort(function (a, b) {
-        return a.content < b.content;
-      });
-    }
-
-    // rebuilt the groupIndexes
-    for (var i = 0, iMax = groups.length; i < iMax; i++) {
-      groupIndexes[groups[i].content] = i;
-    }
-  }
-  else {
-    groupObj = groups[groupIndex];
-  }
-
-  return groupObj;
-}
-
-/**
- * Cancel a change item
- * This method can be called insed an event listener which catches the "change"
- * event. The changed event position will be undone.
- */
-links.Timeline.prototype.cancelChange = function () {
-  this.applyChange = false;
-}
-
-/**
- * Cancel deletion of an item
- * This method can be called insed an event listener which catches the "delete"
- * event. Deletion of the event will be undone.
- */
-links.Timeline.prototype.cancelDelete = function () {
-  this.applyDelete = false;
-}
-
-
-/**
- * Cancel creation of a new item
- * This method can be called insed an event listener which catches the "new"
- * event. Creation of the new the event will be undone.
- */
-links.Timeline.prototype.cancelAdd = function () {
-  this.applyAdd = false;
-}
-
-
-/**
- * Select an event. The visible chart range will be moved such that the selected
- * event is placed in the middle.
- * For example selection = [{row: 5}];
- * @param {array} sel   An array with a column row, containing the row number
- *                      (the id) of the event to be selected.
- * @return {boolean}    true if selection is succesfully set, else false.
- */
-links.Timeline.prototype.setSelection = function(selection) {
-  if (selection != undefined && selection.length > 0) {
-    if (selection[0].row != undefined) {
-      var index = selection[0].row;
-      if (this.items[index]) {
-        var item = this.items[index];
-        this.selectItem(index);
-
-        // move the visible chart range to the selected event.
-        var start = item.start;
-        var end = item.end;
-        if (end != undefined) {
-          var middle = new Date((end.valueOf() + start.valueOf()) / 2);
-        } else {
-          var middle = new Date(start);
-        }
-        var diff = (this.end.valueOf() - this.start.valueOf()),
-          newStart = new Date(middle.valueOf() - diff/2),
-          newEnd = new Date(middle.valueOf() + diff/2);
-
-        this.setVisibleChartRange(newStart, newEnd);
-
-        return true;
-      }
-    }
-  }
-  else {
-    // unselect current selection
-    this.unselectItem();
-  }
-  return false;
-}
-
-/**
- * Retrieve the currently selected event
- * @return {array} sel  An array with a column row, containing the row number
- *                      of the selected event. If there is no selection, an
- *                      empty array is returned.
- */
-links.Timeline.prototype.getSelection = function() {
-  var sel = [];
-  if (this.selection) {
-    sel.push({"row": this.selection.index});
-  }
-  return sel;
-}
-
-
-/**
- * Select an item by its index
- * @param {Number} index
- */
-links.Timeline.prototype.selectItem = function(index) {
-  this.unselectItem();
-
-  this.selection = undefined;
-
-  if (this.items[index] !== undefined) {
-    var item = this.items[index],
-      domItem = item.dom;
-
-    this.selection = {
-      'index': index,
-      'item': domItem
-    };
-
-    if (this.options.editable) {
-      domItem.style.cursor = 'move';
-    }
-    switch (item.type) {
-      case 'range':
-        domItem.className = "timeline-event timeline-event-selected timeline-event-range";
-        break;
-      case 'box':
-        domItem.className = "timeline-event timeline-event-selected timeline-event-box";
-        domItem.line.className = "timeline-event timeline-event-selected timeline-event-line";
-        domItem.dot.className = "timeline-event timeline-event-selected timeline-event-dot";
-        break;
-      case 'dot':
-        domItem.className = "timeline-event timeline-event-selected";
-        domItem.dot.className = "timeline-event timeline-event-selected timeline-event-dot";
-        break;
-    }
-
-    /* TODO: cleanup this cannot work as this breaks any javscript action inside the item
-    // move the item to the end, such that it will be displayed on top of the other items
-    var parent = domItem.parentNode;
-    if (parent) {
-      parent.removeChild(domItem);
-      parent.appendChild(domItem);
-    }
-    */
-  }
-}
-
-/**
- * Check if an item is currently selected
- * @param {Number} index
- * @return {boolean} true if row is selected, else false
- */
-links.Timeline.prototype.isSelected = function (index) {
-  return (this.selection && this.selection.index === index);
-}
-
-/**
- * Unselect the currently selected event (if any)
- */
-links.Timeline.prototype.unselectItem = function() {
-  if (this.selection) {
-    var item = this.items[this.selection.index];
-
-    if (item && item.dom) {
-      var domItem = item.dom;
-      domItem.style.cursor = '';
-      switch (item.type) {
-        case 'range':
-          domItem.className = "timeline-event timeline-event-range";
-          break;
-        case 'box':
-          domItem.className = "timeline-event timeline-event-box";
-          domItem.line.className = "timeline-event timeline-event-line";
-          domItem.dot.className = "timeline-event timeline-event-dot";
-          break;
-        case 'dot':
-          domItem.className = "";
-          domItem.dot.className = "timeline-event timeline-event-dot";
-          break;
-      }
-    }
-  }
-
-  this.selection = undefined;
-}
-
-
-/**
- * Stack the items such that they don't overlap. The items will have a minimal
- * distance equal to options.eventMargin.
- * @param {boolean} animate     if animate is true, the items are moved to
- *                              their new position animated
- */
-links.Timeline.prototype.stackEvents = function(animate) {
-  if (this.options.stackEvents == false || this.groups.length > 0) {
-    // under this conditions we refuse to stack the events
-    return;
-  }
-
-  if (animate == undefined) {
-    animate = false;
-  }
-
-  var sortedItems = this.stackOrder(this.items);
-  var finalItems = this.stackCalculateFinal(sortedItems, animate);
-
-  if (animate) {
-    // move animated to the final positions
-    var animation = this.animation;
-    if (!animation) {
-      animation = {};
-      this.animation = animation;
-    }
-    animation.finalItems = finalItems;
-
-    var timeline = this;
-    var step = function () {
-      var arrived = timeline.stackMoveOneStep(sortedItems, animation.finalItems);
-
-      timeline.recalcSize();
-      timeline.redrawFrame();
-
-      if (!arrived) {
-        animation.timer = setTimeout(step, 30);
-      }
-      else {
-        delete animation.finalItems;
-        delete animation.timer;
-      }
-    }
-
-    if (!animation.timer) {
-      animation.timer = setTimeout(step, 30);
-    }
-  }
-  else {
-    this.stackMoveToFinal(sortedItems, finalItems);
-    this.recalcSize();
-  }
-}
-
-
-/**
- * Order the items in the array this.items. The order is determined via:
- * - Ranges go before boxes and dots.
- * - The item with the left most location goes first
- * @param {Array} items        Array with items
- * @return {Array} sortedItems Array with sorted items
- */
-links.Timeline.prototype.stackOrder = function(items) {
-  // TODO: store the sorted items, to have less work later on
-  var sortedItems = items.concat([]);
-
-  var f = function (a, b) {
-    if (a.type == 'range' && b.type != 'range') {
-      return -1;
-    }
-
-    if (a.type != 'range' && b.type == 'range') {
-      return 1;
-    }
-
-    return (a.left - b.left);
-  };
-
-  sortedItems.sort(f);
-
-  return sortedItems;
-}
-
-/**
- * Adjust vertical positions of the events such that they don't overlap each
- * other.
- */
-links.Timeline.prototype.stackCalculateFinal = function(items) {
-  var size = this.size,
-    axisTop = size.axis.top,
-    options = this.options,
-    axisOnTop = options.axisOnTop,
-    eventMargin = options.eventMargin,
-    eventMarginAxis = options.eventMarginAxis,
-    finalItems = [];
-
-  // initialize final positions
-  for (var i = 0, iMax = items.length; i < iMax; i++) {
-    var item = items[i],
-      top,
-      left,
-      right,
-      bottom,
-      height = item.height,
-      width = item.width;
-
-    if (axisOnTop) {
-      top = axisTop + eventMarginAxis + eventMargin / 2;
-    }
-    else {
-      top = axisTop - height - eventMarginAxis - eventMargin / 2;
-    }
-    bottom = top + height;
-
-    switch (item.type) {
-      case 'range':
-      case 'dot':
-        left = this.timeToScreen(item.start);
-        right = item.end ? this.timeToScreen(item.end) : left + width;
-        break;
-
-      case 'box':
-        left = this.timeToScreen(item.start) - width / 2;
-        right = left + width;
-        break;
-    }
-
-    finalItems[i] = {
-      'left': left,
-      'top': top,
-      'right': right,
-      'bottom': bottom,
-      'height': height,
-      'item': item
-    };
-  }
-
-  // calculate new, non-overlapping positions
-  //var items = sortedItems;
-  for (var i = 0, iMax = finalItems.length; i < iMax; i++) {
-  //for (var i = finalItems.length - 1; i >= 0; i--) {
-    var finalItem = finalItems[i];
-    var collidingItem = null;
-    do {
-      // TODO: optimize checking for overlap. when there is a gap without items,
-      //  you only need to check for items from the next item on, not from zero
-      collidingItem = this.stackEventsCheckOverlap(finalItems, i, 0, i-1);
-      if (collidingItem != null) {
-        // There is a collision. Reposition the event above the colliding element
-        if (axisOnTop) {
-          finalItem.top = collidingItem.top + collidingItem.height + eventMargin;
-        }
-        else {
-          finalItem.top = collidingItem.top - finalItem.height - eventMargin;
-        }
-        finalItem.bottom = finalItem.top + finalItem.height;
-      }
-    } while (collidingItem);
-  }
-
-  return finalItems;
-}
-
-
-/**
- * Move the events one step in the direction of their final positions
- * @param {Array} currentItems   Array with the real items and their current
- *                               positions
- * @param {Array} finalItems     Array with objects containing the final
- *                               positions of the items
- * @return {boolean} arrived     True if all items have reached their final
- *                               location, else false
- */
-links.Timeline.prototype.stackMoveOneStep = function(currentItems, finalItems) {
-  var arrived = true;
-
-  // apply new positions animated
-  for (i = 0, iMax = currentItems.length; i < iMax; i++) {
-    var finalItem = finalItems[i],
-      item = finalItem.item;
-
-    var topNow = parseInt(item.top);
-    var topFinal = parseInt(finalItem.top);
-    var diff = (topFinal - topNow);
-    if (diff) {
-      var step = (topFinal == topNow) ? 0 : ((topFinal > topNow) ? 1 : -1);
-      if (Math.abs(diff) > 4) step = diff / 4;
-      var topNew = parseInt(topNow + step);
-
-      if (topNew != topFinal) {
-        arrived = false;
-      }
-
-      item.top = topNew;
-      item.bottom = item.top + item.height;
-    }
-    else {
-      item.top = finalItem.top;
-      item.bottom = finalItem.bottom;
-    }
-
-    item.left = finalItem.left;
-    item.right = finalItem.right;
-  }
-
-  return arrived;
-}
-
-
-
-/**
- * Move the events from their current position to the final position
- * @param {Array} currentItems   Array with the real items and their current
- *                               positions
- * @param {Array} finalItems     Array with objects containing the final
- *                               positions of the items
- */
-links.Timeline.prototype.stackMoveToFinal = function(currentItems, finalItems) {
-  // Put the events directly at there final position
-  for (i = 0, iMax = currentItems.length; i < iMax; i++) {
-    var current = currentItems[i],
-      finalItem = finalItems[i];
-
-    current.left = finalItem.left;
-    current.top = finalItem.top;
-    current.right = finalItem.right;
-    current.bottom = finalItem.bottom;
-  }
-}
-
-
-
-/**
- * Check if the destiny position of given item overlaps with any
- * of the other items from index itemStart to itemEnd.
- * @param {Array} items      Array with items
- * @param {int}  itemIndex   Number of the item to be checked for overlap
- * @param {int}  itemStart   First item to be checked.
- * @param {int}  itemEnd     Last item to be checked.
- * @return {Object}          colliding item, or undefined when no collisions
- */
-links.Timeline.prototype.stackEventsCheckOverlap = function(items, itemIndex,
-    itemStart, itemEnd) {
-    eventMargin = this.options.eventMargin,
-    collision = this.collision;
-
-  // we loop from end to start, as we suppose that the chance of a
-  // collision is larger for items at the end, so check these first.
-  var item1 = items[itemIndex];
-  for (var i = itemEnd; i >= itemStart; i--) {
-    var item2 = items[i];
-    if (collision(item1, item2, eventMargin)) {
-      if (i != itemIndex) {
-        return item2;
-      }
-    }
-  }
-}
-
-/**
- * Test if the two provided items collide
- * The items must have parameters left, right, top, and bottom.
- * @param {htmlelement} item1   The first item
- * @param {htmlelement} item2    The second item
- * @param {int}         margin  A minimum required margin. Optional.
- *                              If margin is provided, the two items will be
- *                              marked colliding when they overlap or
- *                              when the margin between the two is smaller than
- *                              the requested margin.
- * @return {boolean}            true if item1 and item2 collide, else false
- */
-links.Timeline.prototype.collision = function(item1, item2, margin) {
-  // set margin if not specified
-  if (margin == undefined) {
-    margin = 0;
-  }
-
-  // calculate if there is overlap (collision)
-  return (item1.left - margin < item2.right &&
-          item1.right + margin > item2.left &&
-          item1.top - margin < item2.bottom &&
-          item1.bottom + margin > item2.top);
-}
-
-
-/**
- * fire an event
- * @param {String} event   The name of an event, for example "rangechange" or "edit"
- */
-links.Timeline.prototype.trigger = function (event) {
-  // built up properties
-  var properties = null;
-  switch (event) {
-    case 'rangechange':
-    case 'rangechanged':
-      properties = {
-        'start': new Date(this.start),
-        'end': new Date(this.end)
-      };
-      break;
-
-    case 'timechange':
-    case 'timechanged':
-      properties = {
-        'time': new Date(this.customTime)
-      };
-      break;
-  }
-
-  // trigger the links event bus
-  links.events.trigger(this, event, properties);
-
-  // trigger the google event bus
-  if (google && google.visualization) {
-    google.visualization.events.trigger(this, event, properties);
-  }
-}
-
-
-
-/** ------------------------------------------------------------------------ **/
-
-
-/**
- * Event listener (singleton)
- */
-links.events = links.events || {
-  'listeners': [],
-
-  /**
-   * Find a single listener by its object
-   * @param {Object} object
-   * @return {Number} index  -1 when not found
-   */
-  'indexOf': function (object) {
-    var listeners = this.listeners;
-    for (var i = 0, iMax = this.listeners.length; i < iMax; i++) {
-      var listener = listeners[i];
-      if (listener && listener.object == object) {
-        return i;
-      }
-    }
-    return -1;
-  },
-
-  /**
-   * Add an event listener
-   * @param {Object} object
-   * @param {String} event       The name of an event, for example 'select'
-   * @param {function} callback  The callback method, called when the
-   *                             event takes place
-   */
-  'addListener': function (object, event, callback) {
-    var index = this.indexOf(object);
-    var listener = this.listeners[index];
-    if (!listener) {
-      listener = {
-        'object': object,
-        'events': {}
-      };
-      this.listeners.push(listener);
-    }
-
-    var callbacks = listener.events[event];
-    if (!callbacks) {
-      callbacks = [];
-      listener.events[event] = callbacks;
-    }
-
-    // add the callback if it does not yet exist
-    if (callbacks.indexOf(callback) == -1) {
-      callbacks.push(callback);
-    }
-  },
-
-  /**
-   * Remove an event listener
-   * @param {Object} object
-   * @param {String} event       The name of an event, for example 'select'
-   * @param {function} callback  The registered callback method
-   */
-  'removeListener': function (object, event, callback) {
-    var index = this.indexOf(object);
-    var listener = this.listeners[index];
-    if (listener) {
-      var callbacks = listener.events[event];
-      if (callbacks) {
-        var index = callbacks.indexOf(callback);
-        if (index != -1) {
-          callbacks.splice(index, 1);
-        }
-
-        // remove the array when empty
-        if (callbacks.length == 0) {
-          delete listener.events[event];
-        }
-      }
-
-      // count the number of registered events. remove listener when empty
-      var count = 0;
-      var events = listener.events;
-      for (var event in events) {
-        if (events.hasOwnProperty(event)) {
-          count++;
-        }
-      }
-      if (count == 0) {
-        delete this.listeners[index];
-      }
-    }
-  },
-
-  /**
-   * Remove all registered event listeners
-   */
-  'removeAllListeners': function () {
-    this.listeners = [];
-  },
-
-  /**
-   * Trigger an event. All registered event handlers will be called
-   * @param {Object} object
-   * @param {String} event
-   * @param {Object} properties (optional)
-   */
-  'trigger': function (object, event, properties) {
-    var index = this.indexOf(object);
-    var listener = this.listeners[index];
-    if (listener) {
-      var callbacks = listener.events[event];
-      if (callbacks) {
-        for (var i = 0, iMax = callbacks.length; i < iMax; i++) {
-          callbacks[i](properties);
-        }
-      }
-    }
-  }
-};
-
-
-/** ------------------------------------------------------------------------ **/
-
-/**
- * @class StepDate
- * The class StepDate is an iterator for dates. You provide a start date and an
- * end date. The class itself determines the best scale (step size) based on the
- * provided start Date, end Date, and minimumStep.
- *
- * If minimumStep is provided, the step size is chosen as close as possible
- * to the minimumStep but larger than minimumStep. If minimumStep is not
- * provided, the scale is set to 1 DAY.
- * The minimumStep should correspond with the onscreen size of about 6 characters
- *
- * Alternatively, you can set a scale by hand.
- * After creation, you can initialize the class by executing start(). Then you
- * can iterate from the start date to the end date via next(). You can check if
- * the end date is reached with the function end(). After each step, you can
- * retrieve the current date via get().
- * The class step has scales ranging from milliseconds, seconds, minutes, hours,
- * days, to years.
- *
- * Version: 0.9
- *
- * @param {Date} start        The start date, for example new Date(2010, 9, 21)
- *                            or new Date(2010, 9,21,23,45,00)
- * @param {Date} end          The end date
- * @param {int}  minimumStep  Optional. Minimum step size in milliseconds
- */
-links.Timeline.StepDate = function(start, end, minimumStep) {
-
-  // variables
-  this.current = new Date();
-  this._start = new Date();
-  this._end = new Date();
-
-  this.autoScale  = true;
-  this.scale = links.Timeline.StepDate.SCALE.DAY;
-  this.step = 1;
-
-  // initialize the range
-  this.setRange(start, end, minimumStep);
-}
-
-/// enum scale
-links.Timeline.StepDate.SCALE = { MILLISECOND : 1,
-                         SECOND : 2,
-                         MINUTE : 3,
-                         HOUR : 4,
-                         DAY : 5,
-                         MONTH : 6,
-                         YEAR : 7};
-
-
-/**
- * Set a new range
- * If minimumStep is provided, the step size is chosen as close as possible
- * to the minimumStep but larger than minimumStep. If minimumStep is not
- * provided, the scale is set to 1 DAY.
- * The minimumStep should correspond with the onscreen size of about 6 characters
- * @param {Date} start        The start date and time.
- * @param {Date} end          The end date and time.
- * @param {int}  minimumStep  Optional. Minimum step size in milliseconds
- */
-links.Timeline.StepDate.prototype.setRange = function(start, end, minimumStep) {
-  if (isNaN(start) || isNaN(end)) {
-    //throw  "No legal start or end date in method setRange";
-    return;
-  }
-
-  this._start      = (start != undefined)  ? new Date(start) : new Date();
-  this._end        = (end != undefined)    ? new Date(end) : new Date();
-
-  if (this.autoScale) {
-    this.setMinimumStep(minimumStep);
-  }
-}
-
-/**
- * Set the step iterator to the start date.
- */
-links.Timeline.StepDate.prototype.start = function() {
-  this.current = new Date(this._start);
-  this.roundToMinor();
-}
-
-/**
- * Round the current date to the first minor date value
- * This must be executed once when the current date is set to start Date
- */
-links.Timeline.StepDate.prototype.roundToMinor = function() {
-  // round to floor
-  // IMPORTANT: we have no breaks in this switch! (this is no bug)
-  switch (this.scale) {
-    case links.Timeline.StepDate.SCALE.YEAR:
-      this.current.setFullYear(this.step * Math.floor(this.current.getFullYear() / this.step));
-      this.current.setMonth(0);
-    case links.Timeline.StepDate.SCALE.MONTH:        this.current.setDate(1);
-    case links.Timeline.StepDate.SCALE.DAY:          this.current.setHours(0);
-    case links.Timeline.StepDate.SCALE.HOUR:         this.current.setMinutes(0);
-    case links.Timeline.StepDate.SCALE.MINUTE:       this.current.setSeconds(0);
-    case links.Timeline.StepDate.SCALE.SECOND:       this.current.setMilliseconds(0);
-    //case links.Timeline.StepDate.SCALE.MILLISECOND: // nothing to do for milliseconds
-  }
-
-  if (this.step != 1) {
-    // round down to the first minor value that is a multiple of the current step size
-    switch (this.scale) {
-      case links.Timeline.StepDate.SCALE.MILLISECOND:  this.current.setMilliseconds(this.current.getMilliseconds() - this.current.getMilliseconds() % this.step);  break;
-      case links.Timeline.StepDate.SCALE.SECOND:       this.current.setSeconds(this.current.getSeconds() - this.current.getSeconds() % this.step);  break;
-      case links.Timeline.StepDate.SCALE.MINUTE:       this.current.setMinutes(this.current.getMinutes() - this.current.getMinutes() % this.step);  break;
-      case links.Timeline.StepDate.SCALE.HOUR:         this.current.setHours(this.current.getHours() - this.current.getHours() % this.step);  break;
-      case links.Timeline.StepDate.SCALE.DAY:          this.current.setDate((this.current.getDate()-1) - (this.current.getDate()-1) % this.step + 1);  break;
-      case links.Timeline.StepDate.SCALE.MONTH:        this.current.setMonth(this.current.getMonth() - this.current.getMonth() % this.step);  break;
-      case links.Timeline.StepDate.SCALE.YEAR:         this.current.setFullYear(this.current.getFullYear() - this.current.getFullYear() % this.step); break;
-      default:                      break;
-    }
-  }
-}
-
-/**
- * Check if the end date is reached
- * @return {boolean}  true if the current date has passed the end date
- */
-links.Timeline.StepDate.prototype.end = function () {
-  return (this.current.getTime() > this._end.getTime());
-}
-
-/**
- * Do the next step
- */
-links.Timeline.StepDate.prototype.next = function() {
-  var prev = this.current.getTime();
-
-  // Two cases, needed to prevent issues with switching daylight savings
-  // (end of March and end of October)
-  if (this.current.getMonth() < 6)   {
-    switch (this.scale)
-    {
-      case links.Timeline.StepDate.SCALE.MILLISECOND:
-
-      this.current = new Date(this.current.getTime() + this.step); break;
-      case links.Timeline.StepDate.SCALE.SECOND:       this.current = new Date(this.current.getTime() + this.step * 1000); break;
-      case links.Timeline.StepDate.SCALE.MINUTE:       this.current = new Date(this.current.getTime() + this.step * 1000 * 60); break;
-      case links.Timeline.StepDate.SCALE.HOUR:
-        this.current = new Date(this.current.getTime() + this.step * 1000 * 60 * 60);
-        // in case of skipping an hour for daylight savings, adjust the hour again (else you get: 0h 5h 9h ... instead of 0h 4h 8h ...)
-        var h = this.current.getHours();
-        this.current.setHours(h - (h % this.step));
-        break;
-      case links.Timeline.StepDate.SCALE.DAY:          this.current.setDate(this.current.getDate() + this.step); break;
-      case links.Timeline.StepDate.SCALE.MONTH:        this.current.setMonth(this.current.getMonth() + this.step); break;
-      case links.Timeline.StepDate.SCALE.YEAR:         this.current.setFullYear(this.current.getFullYear() + this.step); break;
-      default:                      break;
-    }
-  }
-  else {
-    switch (this.scale)
-    {
-      case links.Timeline.StepDate.SCALE.MILLISECOND:
-
-      this.current = new Date(this.current.getTime() + this.step); break;
-      case links.Timeline.StepDate.SCALE.SECOND:       this.current.setSeconds(this.current.getSeconds() + this.step); break;
-      case links.Timeline.StepDate.SCALE.MINUTE:       this.current.setMinutes(this.current.getMinutes() + this.step); break;
-      case links.Timeline.StepDate.SCALE.HOUR:         this.current.setHours(this.current.getHours() + this.step); break;
-      case links.Timeline.StepDate.SCALE.DAY:          this.current.setDate(this.current.getDate() + this.step); break;
-      case links.Timeline.StepDate.SCALE.MONTH:        this.current.setMonth(this.current.getMonth() + this.step); break;
-      case links.Timeline.StepDate.SCALE.YEAR:         this.current.setFullYear(this.current.getFullYear() + this.step); break;
-      default:                      break;
-    }
-  }
-
-  if (this.step != 1) {
-    // round down to the correct major value
-    switch (this.scale) {
-      case links.Timeline.StepDate.SCALE.MILLISECOND:  if(this.current.getMilliseconds() < this.step) this.current.setMilliseconds(0);  break;
-      case links.Timeline.StepDate.SCALE.SECOND:       if(this.current.getSeconds() < this.step) this.current.setSeconds(0);  break;
-      case links.Timeline.StepDate.SCALE.MINUTE:       if(this.current.getMinutes() < this.step) this.current.setMinutes(0);  break;
-      case links.Timeline.StepDate.SCALE.HOUR:         if(this.current.getHours() < this.step) this.current.setHours(0);  break;
-      case links.Timeline.StepDate.SCALE.DAY:          if(this.current.getDate() < this.step+1) this.current.setDate(1); break;
-      case links.Timeline.StepDate.SCALE.MONTH:        if(this.current.getMonth() < this.step) this.current.setMonth(0);  break;
-      case links.Timeline.StepDate.SCALE.YEAR:         break; // nothing to do for year
-      default:                break;
-    }
-  }
-
-  // safety mechanism: if current time is still unchanged, move to the end
-  if (this.current.getTime() == prev) {
-    this.current = new Date(this._end);
-  }
-}
-
-
-/**
- * Get the current datetime
- * @return {Date}  current The current date
- */
-links.Timeline.StepDate.prototype.getCurrent = function() {
-  return this.current;
-}
-
-/**
- * Set a custom scale. Autoscaling will be disabled.
- * For example setScale(SCALE.MINUTES, 5) will result
- * in minor steps of 5 minutes, and major steps of an hour.
- *
- * @param {Step.SCALE} newScale  A scale. Choose from SCALE.MILLISECOND,
- *                               SCALE.SECOND, SCALE.MINUTE, SCALE.HOUR,
- *                               SCALE.DAY, SCALE.MONTH, SCALE.YEAR.
- * @param {int}        newStep   A step size, by default 1. Choose for
- *                               example 1, 2, 5, or 10.
- */
-links.Timeline.StepDate.prototype.setScale = function(newScale, newStep) {
-  this.scale = newScale;
-
-  if (newStep > 0)
-    this.step = newStep;
-
-  this.autoScale = false;
-}
-
-/**
- * Enable or disable autoscaling
- * @param {boolean} enable  If true, autoascaling is set true
- */
-links.Timeline.StepDate.prototype.setAutoScale = function (enable) {
-  this.autoScale = enable;
-}
-
-
-/**
- * Automatically determine the scale that bests fits the provided minimum step
- * @param {int} minimumStep  The minimum step size in milliseconds
- */
-links.Timeline.StepDate.prototype.setMinimumStep = function(minimumStep) {
-  if (minimumStep == undefined)
-    return;
-
-  var stepYear       = (1000 * 60 * 60 * 24 * 30 * 12);
-  var stepMonth      = (1000 * 60 * 60 * 24 * 30);
-  var stepDay        = (1000 * 60 * 60 * 24);
-  var stepHour       = (1000 * 60 * 60);
-  var stepMinute     = (1000 * 60);
-  var stepSecond     = (1000);
-  var stepMillisecond= (1);
-
-  // find the smallest step that is larger than the provided minimumStep
-  if (stepYear*1000 > minimumStep)        {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 1000;}
-  if (stepYear*500 > minimumStep)         {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 500;}
-  if (stepYear*100 > minimumStep)         {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 100;}
-  if (stepYear*50 > minimumStep)          {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 50;}
-  if (stepYear*10 > minimumStep)          {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 10;}
-  if (stepYear*5 > minimumStep)           {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 5;}
-  if (stepYear > minimumStep)             {this.scale = links.Timeline.StepDate.SCALE.YEAR;        this.step = 1;}
-  if (stepMonth*3 > minimumStep)          {this.scale = links.Timeline.StepDate.SCALE.MONTH;       this.step = 3;}
-  if (stepMonth > minimumStep)            {this.scale = links.Timeline.StepDate.SCALE.MONTH;       this.step = 1;}
-  if (stepDay*5 > minimumStep)            {this.scale = links.Timeline.StepDate.SCALE.DAY;         this.step = 5;}
-  if (stepDay*2 > minimumStep)            {this.scale = links.Timeline.StepDate.SCALE.DAY;         this.step = 2;}
-  if (stepDay > minimumStep)              {this.scale = links.Timeline.StepDate.SCALE.DAY;         this.step = 1;}
-  if (stepHour*4 > minimumStep)           {this.scale = links.Timeline.StepDate.SCALE.HOUR;        this.step = 4;}
-  if (stepHour > minimumStep)             {this.scale = links.Timeline.StepDate.SCALE.HOUR;        this.step = 1;}
-  if (stepMinute*15 > minimumStep)        {this.scale = links.Timeline.StepDate.SCALE.MINUTE;      this.step = 15;}
-  if (stepMinute*10 > minimumStep)        {this.scale = links.Timeline.StepDate.SCALE.MINUTE;      this.step = 10;}
-  if (stepMinute*5 > minimumStep)         {this.scale = links.Timeline.StepDate.SCALE.MINUTE;      this.step = 5;}
-  if (stepMinute > minimumStep)           {this.scale = links.Timeline.StepDate.SCALE.MINUTE;      this.step = 1;}
-  if (stepSecond*15 > minimumStep)        {this.scale = links.Timeline.StepDate.SCALE.SECOND;      this.step = 15;}
-  if (stepSecond*10 > minimumStep)        {this.scale = links.Timeline.StepDate.SCALE.SECOND;      this.step = 10;}
-  if (stepSecond*5 > minimumStep)         {this.scale = links.Timeline.StepDate.SCALE.SECOND;      this.step = 5;}
-  if (stepSecond > minimumStep)           {this.scale = links.Timeline.StepDate.SCALE.SECOND;      this.step = 1;}
-  if (stepMillisecond*200 > minimumStep)  {this.scale = links.Timeline.StepDate.SCALE.MILLISECOND; this.step = 200;}
-  if (stepMillisecond*100 > minimumStep)  {this.scale = links.Timeline.StepDate.SCALE.MILLISECOND; this.step = 100;}
-  if (stepMillisecond*50 > minimumStep)   {this.scale = links.Timeline.StepDate.SCALE.MILLISECOND; this.step = 50;}
-  if (stepMillisecond*10 > minimumStep)   {this.scale = links.Timeline.StepDate.SCALE.MILLISECOND; this.step = 10;}
-  if (stepMillisecond*5 > minimumStep)    {this.scale = links.Timeline.StepDate.SCALE.MILLISECOND; this.step = 5;}
-  if (stepMillisecond > minimumStep)      {this.scale = links.Timeline.StepDate.SCALE.MILLISECOND; this.step = 1;}
-}
-
-/**
- * Snap a date to a rounded value. The snap intervals are dependent on the
- * current scale and step.
- * @param {Date} date   the date to be snapped
- */
-links.Timeline.StepDate.prototype.snap = function(date) {
-  if (this.scale == links.Timeline.StepDate.SCALE.YEAR) {
-    var year = date.getFullYear() + Math.round(date.getMonth() / 12);
-    date.setFullYear(Math.round(year / this.step) * this.step);
-    date.setMonth(0);
-    date.setDate(0);
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-  }
-  else if (this.scale == links.Timeline.StepDate.SCALE.MONTH) {
-    if (date.getDate() > 15) {
-      date.setDate(1);
-      date.setMonth(date.getMonth() + 1);
-      // important: first set Date to 1, after that change the month.
-    }
-    else {
-      date.setDate(1);
-    }
-
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-  }
-  else if (this.scale == links.Timeline.StepDate.SCALE.DAY) {
-    switch (this.step) {
-      case 5:
-      case 2:
-        date.setHours(Math.round(date.getHours() / 24) * 24); break;
-      default:
-        date.setHours(Math.round(date.getHours() / 12) * 12); break;
-    }
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-  }
-  else if (this.scale == links.Timeline.StepDate.SCALE.HOUR) {
-    switch (this.step) {
-      case 4:
-        date.setMinutes(Math.round(date.getMinutes() / 60) * 60); break;
-      default:
-        date.setMinutes(Math.round(date.getMinutes() / 30) * 30); break;
-    }
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-  } else if (this.scale == links.Timeline.StepDate.SCALE.MINUTE) {
-    switch (this.step) {
-      case 15:
-      case 10:
-        date.setMinutes(Math.round(date.getMinutes() / 5) * 5);
-        date.setSeconds(0);
-        break;
-      case 5:
-        date.setSeconds(Math.round(date.getSeconds() / 60) * 60); break;
-      default:
-        date.setSeconds(Math.round(date.getSeconds() / 30) * 30); break;
-    }
-    date.setMilliseconds(0);
-  }
-  else if (this.scale == links.Timeline.StepDate.SCALE.SECOND) {
-    switch (this.step) {
-      case 15:
-      case 10:
-        date.setSeconds(Math.round(date.getSeconds() / 5) * 5);
-        date.setMilliseconds(0);
-        break;
-      case 5:
-        date.setMilliseconds(Math.round(date.getMilliseconds() / 1000) * 1000); break;
-      default:
-        date.setMilliseconds(Math.round(date.getMilliseconds() / 500) * 500); break;
-    }
-  }
-  else if (this.scale == links.Timeline.StepDate.SCALE.MILLISECOND) {
-    var step = this.step > 5 ? this.step / 2 : 1;
-    date.setMilliseconds(Math.round(date.getMilliseconds() / step) * step);
-  }
-}
-
-/**
- * Check if the current step is a major step (for example when the step
- * is DAY, a major step is each first day of the MONTH)
- * @return true if current date is major, else false.
- */
-links.Timeline.StepDate.prototype.isMajor = function() {
-  switch (this.scale)
-  {
-    case links.Timeline.StepDate.SCALE.MILLISECOND:
-      return (this.current.getMilliseconds() == 0);
-    case links.Timeline.StepDate.SCALE.SECOND:
-      return (this.current.getSeconds() == 0);
-    case links.Timeline.StepDate.SCALE.MINUTE:
-      return (this.current.getHours() == 0) && (this.current.getMinutes() == 0);
-      // Note: this is no bug. Major label is equal for both minute and hour scale
-    case links.Timeline.StepDate.SCALE.HOUR:
-      return (this.current.getHours() == 0);
-    case links.Timeline.StepDate.SCALE.DAY:
-      return (this.current.getDate() == 1);
-    case links.Timeline.StepDate.SCALE.MONTH:
-      return (this.current.getMonth() == 0);
-    case links.Timeline.StepDate.SCALE.YEAR:
-      return false
-    default:
-      return false;
-  }
-}
-
-
-/**
- * Returns formatted text for the minor axislabel, depending on the current
- * date and the scale. For example when scale is MINUTE, the current time is
- * formatted as "hh:mm".
- * @param {Date}       optional custom date. if not provided, current date is taken
- * @return {string}    minor axislabel
- */
-links.Timeline.StepDate.prototype.getLabelMinor = function(date) {
-  var MONTHS_SHORT = new Array("Jan", "Feb", "Mar",
-                                "Apr", "May", "Jun",
-                                "Jul", "Aug", "Sep",
-                                "Oct", "Nov", "Dec");
-
-  if (date == undefined) {
-    date = this.current;
-  }
-
-  switch (this.scale)
-  {
-    case links.Timeline.StepDate.SCALE.MILLISECOND:  return String(date.getMilliseconds());
-    case links.Timeline.StepDate.SCALE.SECOND:       return String(date.getSeconds());
-    case links.Timeline.StepDate.SCALE.MINUTE:       return this.addZeros(date.getHours(), 2) + ":" +
-                                                       this.addZeros(date.getMinutes(), 2);
-    case links.Timeline.StepDate.SCALE.HOUR:         return this.addZeros(date.getHours(), 2) + ":" +
-                                                       this.addZeros(date.getMinutes(), 2);
-    case links.Timeline.StepDate.SCALE.DAY:          return String(date.getDate());
-    case links.Timeline.StepDate.SCALE.MONTH:        return MONTHS_SHORT[date.getMonth()];   // month is zero based
-    case links.Timeline.StepDate.SCALE.YEAR:         return String(date.getFullYear());
-    default:                                         return "";
-  }
-}
-
-
-/**
- * Returns formatted text for the major axislabel, depending on the current
- * date and the scale. For example when scale is MINUTE, the major scale is
- * hours, and the hour will be formatted as "hh".
- * @param {Date}       optional custom date. if not provided, current date is taken
- * @return {string}    major axislabel
- */
-links.Timeline.StepDate.prototype.getLabelMajor = function(date) {
-  var MONTHS = new Array("January", "February", "March",
-                         "April", "May", "June",
-                         "July", "August", "September",
-                         "October", "November", "December");
-  var DAYS = new Array("Sunday", "Monday", "Tuesday",
-                       "Wednesday", "Thursday", "Friday", "Saturday");
-
-  if (date == undefined) {
-    date = this.current;
-  }
-
-  switch (this.scale) {
-    case links.Timeline.StepDate.SCALE.MILLISECOND:
-      return  this.addZeros(date.getHours(), 2) + ":" +
-              this.addZeros(date.getMinutes(), 2) + ":" +
-              this.addZeros(date.getSeconds(), 2);
-    case links.Timeline.StepDate.SCALE.SECOND:
-      return  date.getDate() + " " +
-              MONTHS[date.getMonth()] + " " +
-              this.addZeros(date.getHours(), 2) + ":" +
-              this.addZeros(date.getMinutes(), 2);
-    case links.Timeline.StepDate.SCALE.MINUTE:
-      return  DAYS[date.getDay()] + " " +
-              date.getDate() + " " +
-              MONTHS[date.getMonth()] + " " +
-              date.getFullYear();
-    case links.Timeline.StepDate.SCALE.HOUR:
-      return  DAYS[date.getDay()] + " " +
-              date.getDate() + " " +
-              MONTHS[date.getMonth()] + " " +
-              date.getFullYear();
-    case links.Timeline.StepDate.SCALE.DAY:
-      return  MONTHS[date.getMonth()] + " " +
-              date.getFullYear();
-    case links.Timeline.StepDate.SCALE.MONTH:
-      return String(date.getFullYear());
-    default:
-      return "";
-  }
-}
-
-/**
- * Add leading zeros to the given value to match the desired length.
- * For example addZeros(123, 5) returns "00123"
- * @param {int} value   A value
- * @param {int} len     Desired final length
- * @return {string}     value with leading zeros
- */
-links.Timeline.StepDate.prototype.addZeros = function(value, len) {
-  var str = "" + value;
-  while (str.length < len) {
-    str = "0" + str;
-  }
-  return str;
-}
-
-
-
-/** ------------------------------------------------------------------------ **/
-
-/**
- * Image Loader service.
- * can be used to get a callback when a certain image is loaded
- *
- */
-links.imageloader = (function () {
-  var urls = {};  // the loaded urls
-  var callbacks = {}; // the urls currently being loaded. Each key contains
-                      // an array with callbacks
-
-  /**
-   * Check if an image url is loaded
-   * @param {String} url
-   * @return {boolean} loaded   True when loaded, false when not loaded
-   *                            or when being loaded
-   */
-  function isLoaded (url) {
-    if (urls[url] == true) {
-      return true;
-    }
-
-    var image = new Image();
-    image.src = url;
-    if (image.complete) {
-      return true;
-    }
-
-    return false;
-  };
-
-
-  /**
-   * Check if an image url is being loaded
-   * @param {String} url
-   * @return {boolean} loading   True when being loaded, false when not loading
-   *                             or when already loaded
-   */
-  function isLoading (url) {
-    return (callbacks[url] != undefined);
-  }
-
-  /**
-   * Load given image url
-   * @param {String} url
-   * @param {function} callback
-   * @param {boolean} sendCallbackWhenAlreadyLoaded  optional
-   */
-  function load (url, callback, sendCallbackWhenAlreadyLoaded) {
-    if (sendCallbackWhenAlreadyLoaded == undefined) {
-      sendCallbackWhenAlreadyLoaded = true;
-    }
-
-    if (isLoaded(url)) {
-      if (sendCallbackWhenAlreadyLoaded) {
-        callback(url);
-      }
-      return;
-    }
-
-    if (isLoading(url) && !sendCallbackWhenAlreadyLoaded) {
-      return;
-    }
-
-    var c = callbacks[url];
-    if (!c) {
-      var image = new Image();
-      image.src = url;
-
-      c = [];
-      callbacks[url] = c;
-
-      image.onload = function (event) {
-        urls[url] = true;
-        delete callbacks[url];
-
-        for (var i = 0; i < c.length; i++) {
-          c[i](url);
-        }
-      }
-    }
-
-    if (c.indexOf(callback) == -1) {
-      c.push(callback);
-    }
-  };
-
-  return {
-    'isLoaded': isLoaded,
-    'isLoading': isLoading,
-    'load': load
-  };
-})();
-
-
-/** ------------------------------------------------------------------------ **/
-
-
-/**
- * Add and event listener. Works for all browsers
- * @param {DOM Element} element    An html element
- * @param {string}      action     The action, for example "click",
- *                                 without the prefix "on"
- * @param {function}    listener   The callback function to be executed
- * @param {boolean}     useCapture
- */
-links.Timeline.addEventListener = function (element, action, listener, useCapture) {
-  if (element.addEventListener) {
-    if (useCapture === undefined)
-      useCapture = false;
-
-    if (action === "mousewheel" && navigator.userAgent.indexOf("Firefox") >= 0) {
-      action = "DOMMouseScroll";  // For Firefox
-    }
-
-    element.addEventListener(action, listener, useCapture);
-  } else {
-    element.attachEvent("on" + action, listener);  // IE browsers
-  }
-};
-
-/**
- * Remove an event listener from an element
- * @param {DOM element}  element   An html dom element
- * @param {string}       action    The name of the event, for example "mousedown"
- * @param {function}     listener  The listener function
- * @param {boolean}      useCapture
- */
-links.Timeline.removeEventListener = function(element, action, listener, useCapture) {
-  if (element.removeEventListener) {
-    // non-IE browsers
-    if (useCapture === undefined)
-      useCapture = false;
-
-    if (action === "mousewheel" && navigator.userAgent.indexOf("Firefox") >= 0) {
-      action = "DOMMouseScroll";  // For Firefox
-    }
-
-    element.removeEventListener(action, listener, useCapture);
-  } else {
-    // IE browsers
-    element.detachEvent("on" + action, listener);
-  }
-};
-
-
-/**
- * Get HTML element which is the target of the event
- * @param {MouseEvent} event
- * @return {HTML DOM} target element
- */
-links.Timeline.getTarget = function (event) {
-  // code from http://www.quirksmode.org/js/events_properties.html
-  if (!event) {
-    var event = window.event;
-  }
-
-  var target;
-
-  if (event.target) {
-    target = event.target;
-  }
-  else if (event.srcElement) {
-    target = event.srcElement;
-  }
-
-  if (target.nodeType !== undefined && target.nodeType == 3) {
-    // defeat Safari bug
-    target = target.parentNode;
-  }
-
-  return target;
-}
-
-/**
- * Stop event propagation
- */
-links.Timeline.stopPropagation = function (event) {
-  if (!event)
-    var event = window.event;
-
-  if (event.stopPropagation) {
-    event.stopPropagation();  // non-IE browsers
-  }
-  else {
-    event.cancelBubble = true;  // IE browsers
-  }
-}
-
-
-/**
- * Cancels the event if it is cancelable, without stopping further propagation of the event.
- */
-links.Timeline.preventDefault = function (event) {
-  if (!event)
-    var event = window.event;
-
-  if (event.preventDefault) {
-    event.preventDefault();  // non-IE browsers
-  }
-  else {
-    event.returnValue = false;  // IE browsers
-  }
-}
-
-
-/**
- * Retrieve the absolute left value of a DOM element
- * @param {DOM element} elem    A dom element, for example a div
- * @return {number} left        The absolute left position of this element
- *                              in the browser page.
- */
-links.Timeline.getAbsoluteLeft = function(elem) {
-  var left = 0;
-  while( elem != null ) {
-    left += elem.offsetLeft;
-    left -= elem.scrollLeft;
-    elem = elem.offsetParent;
-  }
-  if (!document.body.scrollLeft && window.pageXOffset) {
-      // FF
-      left -= window.pageXOffset;
-  }
-  return left;
-}
-
-/**
- * Retrieve the absolute top value of a DOM element
- * @param {DOM element} elem    A dom element, for example a div
- * @return {number} top        The absolute top position of this element
- *                              in the browser page.
- */
-links.Timeline.getAbsoluteTop = function(elem) {
-  var top = 0;
-  while( elem != null ) {
-    top += elem.offsetTop;
-    top -= elem.scrollTop;
-    elem = elem.offsetParent;
-  }
-  if (!document.body.scrollTop && window.pageYOffset) {
-      // FF
-      top -= window.pageYOffset;
-  }
-  return top;
-}
-
-/**
- * Check if given object is a Javascript Array
- * @param {any type} obj
- * @return {Boolean} isArray    true if the given object is an array
- */
-// See http://stackoverflow.com/questions/2943805/javascript-instanceof-typeof-in-gwt-jsni
-links.Timeline.isArray = function (obj) {
-  if (obj instanceof Array) {
-    return true;
-  }
-  return (Object.prototype.toString.call(obj) === '[object Array]');
+/*********************************************** 
+     Begin VMM.Timeline.DataObj.js 
+***********************************************/ 
+
+/* 	TIMELINE SOURCE DATA PROCESSOR
+================================================== */
+
+if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.DataObj == 'undefined') {
+	
+	VMM.Timeline.DataObj = {
+		
+		data_obj: {},
+		
+		model_array: [],
+		
+		getData: function(raw_data) {
+			VMM.Timeline.DataObj.data_obj = {};
+			data = VMM.Timeline.DataObj.data_obj;
+
+			if (type.of(raw_data) == "object") {
+				trace("DATA SOURCE: JSON OBJECT");
+				VMM.Timeline.DataObj.parseJSON(raw_data);
+			} else if (type.of(raw_data) == "string") {
+				if (raw_data.match("%23")) {
+					trace("DATA SOURCE: TWITTER SEARCH");
+					VMM.Timeline.DataObj.model_Tweets.getData("%23medill");
+					
+				} else if (	raw_data.match("spreadsheet") ) {
+					VMM.fireEvent(global, "MESSEGE", VMM.Timeline.Config.language.messages.loading_timeline);
+					trace("DATA SOURCE: GOOGLE SPREADSHEET");
+					VMM.Timeline.DataObj.model_GoogleSpreadsheet.getData(raw_data);
+					
+				} else {
+					VMM.fireEvent(global, "MESSEGE", VMM.Timeline.Config.language.messages.loading_timeline);
+					trace("DATA SOURCE: JSON");
+					trace("raw data" + raw_data);
+					VMM.getJSON(raw_data, VMM.Timeline.DataObj.parseJSON);
+				}
+			} else if (type.of(raw_data) == "html") {
+				trace("DATA SOURCE: HTML");
+				VMM.Timeline.DataObj.parseHTML(raw_data);
+			} else {
+				trace("DATA SOURCE: UNKNOWN");
+			}
+			
+		},
+		
+		parseHTML: function(d) {
+			trace("parseHTML");
+			trace("WARNING: THIS IS STILL ALPHA AND WILL NOT WORK WITH ID's other than #timeline");
+			var _data_obj = VMM.Timeline.DataObj.data_template_obj;
+			
+			/*	Timeline start slide
+			================================================== */
+			if (VMM.Lib.find("#timeline section", "time")[0]) {
+				_data_obj.timeline.startDate = VMM.Lib.html(VMM.Lib.find("#timeline section", "time")[0]);
+				_data_obj.timeline.headline = VMM.Lib.html(VMM.Lib.find("#timeline section", "h2"));
+				_data_obj.timeline.text = VMM.Lib.html(VMM.Lib.find("#timeline section", "article"));
+				
+				var found_main_media = false;
+				
+				if (VMM.Lib.find("#timeline section", "figure img").length != 0) {
+					found_main_media = true;
+					_data_obj.timeline.asset.media = VMM.Lib.attr(VMM.Lib.find("#timeline section", "figure img"), "src");
+				} else if (VMM.Lib.find("#timeline section", "figure a").length != 0) {
+					found_main_media = true;
+					_data_obj.timeline.asset.media = VMM.Lib.attr(VMM.Lib.find("#timeline section", "figure a"), "href");
+				} else {
+					//trace("NOT FOUND");
+				}
+
+				if (found_main_media) {
+					if (VMM.Lib.find("#timeline section", "cite").length != 0) {
+						_data_obj.timeline.asset.credit = VMM.Lib.html(VMM.Lib.find("#timeline section", "cite"));
+					}
+					if (VMM.Lib.find(this, "figcaption").length != 0) {
+						_data_obj.timeline.asset.caption = VMM.Lib.html(VMM.Lib.find("#timeline section", "figcaption"));
+					}
+				}
+			}
+			
+			/*	Timeline Date Slides
+			================================================== */
+			VMM.Lib.each("#timeline li", function(i, elem){
+				
+				var valid_date = false;
+				
+				var _date = {
+					"type":"default",
+					"startDate":"",
+		            "headline":"",
+		            "text":"",
+		            "asset":
+		            {
+		                "media":"",
+		                "credit":"",
+		                "caption":""
+		            },
+		            "tags":"Optional"
+				};
+				
+				if (VMM.Lib.find(this, "time") != 0) {
+					
+					valid_date = true;
+					
+					_date.startDate = VMM.Lib.html(VMM.Lib.find(this, "time")[0]);
+
+					if (VMM.Lib.find(this, "time")[1]) {
+						_date.endDate = VMM.Lib.html(VMM.Lib.find(this, "time")[1]);
+					}
+
+					_date.headline = VMM.Lib.html(VMM.Lib.find(this, "h3"));
+
+					_date.text = VMM.Lib.html(VMM.Lib.find(this, "article"));
+
+					var found_media = false;
+					if (VMM.Lib.find(this, "figure img").length != 0) {
+						found_media = true;
+						_date.asset.media = VMM.Lib.attr(VMM.Lib.find(this, "figure img"), "src");
+					} else if (VMM.Lib.find(this, "figure a").length != 0) {
+						found_media = true;
+						_date.asset.media = VMM.Lib.attr(VMM.Lib.find(this, "figure a"), "href");
+					} else {
+						//trace("NOT FOUND");
+					}
+
+					if (found_media) {
+						if (VMM.Lib.find(this, "cite").length != 0) {
+							_date.asset.credit = VMM.Lib.html(VMM.Lib.find(this, "cite"));
+						}
+						if (VMM.Lib.find(this, "figcaption").length != 0) {
+							_date.asset.caption = VMM.Lib.html(VMM.Lib.find(this, "figcaption"));
+						}
+					}
+					
+					trace(_date);
+					_data_obj.timeline.date.push(_date);
+					
+				}
+				
+			});
+			
+			VMM.fireEvent(global, "DATAREADY", _data_obj);
+			
+		},
+		
+		parseJSON: function(d) {
+			if (d.timeline.type == "default") {
+				
+				trace("DATA SOURCE: JSON STANDARD TIMELINE");
+				VMM.fireEvent(global, "DATAREADY", d);
+				
+			} else if (d.timeline.type == "twitter") {
+				
+				trace("DATA SOURCE: JSON TWEETS");
+				VMM.Timeline.DataObj.model_Tweets.buildData(d);
+				
+			} else {
+				
+				trace("DATA SOURCE: UNKNOWN JSON");
+				trace(type.of(d.timeline));
+				
+			};
+		},
+		
+		/*	MODEL OBJECTS 
+			New Types of Data can be formatted for the timeline here
+		================================================== */
+		
+		model_Tweets: {
+			
+			type: "twitter",
+			
+			buildData: function(raw_data) {
+				VMM.bindEvent(global, VMM.Timeline.DataObj.model_Tweets.onTwitterDataReady, "TWEETSLOADED");
+				VMM.ExternalAPI.twitter.getTweets(raw_data.timeline.tweets);
+			},
+			
+			getData: function(raw_data) {
+				VMM.bindEvent(global, VMM.Timeline.DataObj.model_Tweets.onTwitterDataReady, "TWEETSLOADED");
+				VMM.ExternalAPI.twitter.getTweetSearch(raw_data);
+			},
+			
+			onTwitterDataReady: function(e, d) {
+				var _data_obj = VMM.Timeline.DataObj.data_template_obj;
+
+				for(var i = 0; i < d.tweetdata.length; i++) {
+
+					var _date = {
+						"type":"tweets",
+						"startDate":"",
+			            "headline":"",
+			            "text":"",
+			            "asset":
+			            {
+			                "media":"",
+			                "credit":"",
+			                "caption":""
+			            },
+			            "tags":"Optional"
+					};
+					// pass in the 'created_at' string returned from twitter //
+					// stamp arrives formatted as Tue Apr 07 22:52:51 +0000 2009 //
+					
+					//var twit_date = VMM.ExternalAPI.twitter.parseTwitterDate(d.tweetdata[i].raw.created_at);
+					//trace(twit_date);
+					
+					_date.startDate = d.tweetdata[i].raw.created_at;
+					
+					if (type.of(d.tweetdata[i].raw.from_user_name)) {
+						_date.headline = d.tweetdata[i].raw.from_user_name + " (<a href='https://twitter.com/" + d.tweetdata[i].raw.from_user + "'>" + "@" + d.tweetdata[i].raw.from_user + "</a>)" ;						
+					} else {
+						_date.headline = d.tweetdata[i].raw.user.name + " (<a href='https://twitter.com/" + d.tweetdata[i].raw.user.screen_name + "'>" + "@" + d.tweetdata[i].raw.user.screen_name + "</a>)" ;
+					}
+					
+					_date.asset.media = d.tweetdata[i].content;
+					_data_obj.timeline.date.push(_date);
+					
+				};
+				
+				VMM.fireEvent(global, "DATAREADY", _data_obj);
+			}
+		},
+		
+		model_GoogleSpreadsheet: {
+			//	TEMPLATE CAN BE FOUND HERE
+			//	https://docs.google.com/previewtemplate?id=0AppSVxABhnltdEhzQjQ4MlpOaldjTmZLclQxQWFTOUE&mode=public
+			type: "google spreadsheet",
+			
+			
+			getData: function(raw_data) {
+				
+				var _key = VMM.Util.getUrlVars(raw_data)["key"];
+				var _url = "https://spreadsheets.google.com/feeds/list/" + _key + "/od6/public/values?alt=json";
+				
+				VMM.getJSON(_url, VMM.Timeline.DataObj.model_GoogleSpreadsheet.buildData);
+			},
+			
+			buildData: function(d) {
+				VMM.fireEvent(global, "MESSEGE", "Parsing Data");
+				var _data_obj = VMM.Timeline.DataObj.data_template_obj;
+
+				for(var i = 0; i < d.feed.entry.length; i++) {
+					var dd = d.feed.entry[i];
+					
+					if (dd.gsx$titleslide.$t.match("start")) {
+						_data_obj.timeline.startDate = 			dd.gsx$startdate.$t;
+						_data_obj.timeline.headline = 			dd.gsx$headline.$t;
+						_data_obj.timeline.asset.media = 		dd.gsx$media.$t;
+						_data_obj.timeline.asset.caption = 		dd.gsx$mediacaption.$t;
+						_data_obj.timeline.asset.credit = 		dd.gsx$mediacredit.$t;
+						_data_obj.timeline.text = 				dd.gsx$text.$t;
+						_data_obj.timeline.type = 				"google spreadsheet";
+					} else {
+						var _date = {
+							"type": 							"google spreadsheet",
+							"startDate": 						dd.gsx$startdate.$t,
+							"endDate": 							dd.gsx$enddate.$t,
+				            "headline": 						dd.gsx$headline.$t,
+				            "text": 							dd.gsx$text.$t,
+				            "asset": {
+								"media": 						dd.gsx$media.$t, 
+								"credit": 						dd.gsx$mediacredit.$t, 
+								"caption": 						dd.gsx$mediacaption.$t 
+							},
+				            "tags": 							"Optional"
+						};
+						_data_obj.timeline.date.push(_date);
+					}
+				};
+				
+				VMM.fireEvent(global, "DATAREADY", _data_obj);
+				
+			}
+			
+		},
+		
+		/*	TEMPLATE OBJECTS
+		================================================== */
+		data_template_obj: {  "timeline": { "headline":"", "description":"", "asset": { "media":"", "credit":"", "caption":"" }, "date": [] } },
+		date_obj: {"startDate":"2012,2,2,11,30", "headline":"", "text":"", "asset": {"media":"http://youtu.be/vjVfu8-Wp6s", "credit":"", "caption":"" }, "tags":"Optional"}
+	
+	};
+	
 }
