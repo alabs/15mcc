@@ -202,29 +202,31 @@ es:
     attributes:
       content:
         author_myself: ""
-        author_name: "Autor (nombre)"
-        author_link: "Autor (URL)"
-        title: "Título"
-        tag_list: "Etiquetas"
-        happened_at: "¿Cuándo ha ocurrido?"
-        terms: "Acepto las condiciones de uso"
+        author_name: "Autor (nombre) [*]"
+        author_link: "Autor (URL) [*]"
+        title: "Título [*]"
+        tag_list: "Etiquetas [*]"
+        happened_at: "¿Cuándo ha ocurrido? [*]"
         address: "Calle"
+        city: "Ciudad [*]"
+        country: "País [*]"
+      text:
+        body: "Texto [*]"
         city: "Ciudad"
         country: "País"
-      text:
-        body: "Texto"
       video:
-        url: "Dirección URL"
+        url: "Dirección URL [*]"
       user:
-        login: "Usuario o correo electrónico"
-        username: "Nombre de usuario"
-        email: "Correo electrónico"
+        login: "Usuario o correo electrónico [*]"
+        username: "Nombre de usuario [*]"
+        email: "Correo electrónico [*]"
         biography: "Biografía"
-        password: "Contraseña"
-        current_password: "Contraseña actual"
+        password_new: "Contraseña"
+        password: "Contraseña [*]"
+        current_password: "Contraseña actual [*]"
         password_confirmation: "Confirmación de contraseña"
-        terms: "Acepto las condiciones de uso"
-        name: "Nombre"
+        terms: "Acepto las condiciones de uso [*]"
+        name: "Nombre [*]"
         homepage: "URL de tu web" 
     errors:
       models:
