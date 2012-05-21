@@ -1,11 +1,11 @@
 <% @title = @text.title %>
-<div class="row" style="margin:20px;">
+<div class="row margin">
 
   <%= render :partial => "partials/content_header", :locals => { :content => @text, :type => "text" } %>
 
-    <p>
+    <div style="margin-left:50px; margin-right:50px;">
       <%= @text.to_html(@text.body).html_safe %> 
-    </p>
+    </div>
 
   <div class="span4">
     <%= render :partial => "partials/social_buttons", :locals => { :content => @text } %>
