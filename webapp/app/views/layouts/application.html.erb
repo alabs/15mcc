@@ -62,9 +62,24 @@
                       <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                      <li><%= link_to 'mapa', maps_path %></li>
-                      <li><%= link_to 'línea de tiempo', timeline_path %></li>
-                      <li><%= link_to 'etiquetas', tags_path %></li>
+                      <li>
+                        <%= link_to maps_path do %>
+                          <%= image_tag "icons/glyphicons_340_globe_small.png" %>
+                          mapa
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to timeline_path do %>
+                          <%= image_tag "icons/glyphicons_068_ruller_small.png" %>
+                          línea de tiempo
+                        <% end %>
+                      </li>
+                      <li>
+                        <%= link_to tags_path do %>
+                          <i class="icon-tags"></i>
+                          etiquetas
+                        <% end %>
+                      </li>
                     </ul>
                   </li>
                   <li class="dropdown" id="subir">
@@ -75,7 +90,8 @@
                     <ul class="dropdown-menu">
                       <li>
                         <%= link_to new_text_path do %>
-                          <i class="icon-align-left"></i> texto
+                          <%= image_tag "icons/glyphicons_039_notes_small.png" %>
+                           texto
                         <% end %>
                       </li>
                       <li>
