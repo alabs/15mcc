@@ -2,7 +2,7 @@
 
   <div class="row">
     <% if content.user %>
-      <div class="span2">
+      <div class="span1">
         <%= link_to(image_tag(content.user.avatar.url(:normal)), profile_path(content.user.username)) %>
       </div>
       <div class="span8">
@@ -10,7 +10,7 @@
         <%= link_to content.user.username, profile_path(content.user.username) %>
       </div>
     <% else %>
-      <div class="span2">
+      <div class="span1">
         <%= image_tag "missing.png"%>
       </div>
       <div class="span8">
@@ -18,15 +18,27 @@
         Anónimo 
       </div>
     <% end %>
-    <div class="span1">
+    <div class="span2">
       <% case type %>
         <% when "text" %>
-          <%= image_tag "icons/glyphicons_029_notes_2.png" %>
+          <%= image_tag "icons/glyphicons_039_notes.png" %>
+          <%= image_tag "icons/glyphicons_159_picture_grey.png" %>
+          <%= image_tag "icons/glyphicons_184_volume_up_grey.png" %>
+          <%= image_tag "icons/glyphicons_008_film_grey.png" %>
         <% when "image" %>
+          <%= image_tag "icons/glyphicons_039_notes_grey.png" %>
           <%= image_tag "icons/glyphicons_159_picture.png" %>
+          <%= image_tag "icons/glyphicons_184_volume_up_grey.png" %>
+          <%= image_tag "icons/glyphicons_008_film_grey.png" %>
         <% when "audio" %>
+          <%= image_tag "icons/glyphicons_039_notes_grey.png" %>
+          <%= image_tag "icons/glyphicons_159_picture_grey.png" %>
           <%= image_tag "icons/glyphicons_184_volume_up.png" %>
+          <%= image_tag "icons/glyphicons_008_film_grey.png" %>
         <% when "video" %>
+          <%= image_tag "icons/glyphicons_039_notes_grey.png" %>
+          <%= image_tag "icons/glyphicons_159_picture_grey.png" %>
+          <%= image_tag "icons/glyphicons_184_volume_up_grey.png" %>
           <%= image_tag "icons/glyphicons_008_film.png" %>
       <% end %> 
     </div>
