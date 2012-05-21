@@ -32,27 +32,16 @@
           });
         </script>
       <% end %>
-      <div id="header">
+      <div id="header" style="margin-top: -12px;">
         <div class="container" id="main-header">
           <div class="row">
-            <div class="span2" id="ribbon">
-              <%= image_tag('ribbon2.png') %>
-            </div>
-            <div class="span10" id="logo">
-              <div id="logo-banco">
-                <%= link_to image_tag('logo-banco.png'), root_path %>
-              </div>
-              <div id="light" style="position: absolute; right: 80px;">
-                <%= link_to image_tag('lightbulb.png'), root_path %>
-              </div>
+            <div class="span12" id="header-image" style="margin-bottom: -60px;">
+              <%= link_to image_tag('header.png'), root_path %>
             </div>
           </div><!-- row -->
         </div><!-- container -->
           <div class="container">
             <div class="row">
-        <div class="container-fluid" id="mainnav">
-          &nbsp;
-        </div><!-- mainnav -->
               <div class="span6" id="mainnavbar">
                 <ul class="nav nav-pills">
                   <li><%= link_to 'QUÉ ES ESTO', page_path("que-es-esto") %></li>
