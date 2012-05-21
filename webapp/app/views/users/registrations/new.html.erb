@@ -27,7 +27,7 @@
 
       <%= f.password_field :password_confirmation, :required => true %>
 
-      <%= f.check_box :terms, :label => "Acepto las <a href='/pages/condiciones-de-uso' target='_blank'>condiciones de uso</a>", :required => true %>
+      <%= f.check_box :terms, :label => "Acepto las <a href='/pages/condiciones-de-uso' target='_blank'>condiciones de uso</a> [*]", :required => true %>
 
     <div class="form-actions"><%= f.submit "Registrarse", :class => "btn btn-primary" %></div>
   <% end %>
