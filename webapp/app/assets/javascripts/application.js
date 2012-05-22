@@ -4,7 +4,6 @@
 //= require maps
 //= require priority
 //= require search
-//= require time
 //= require user
 //= require welcome
 //= require admin/users

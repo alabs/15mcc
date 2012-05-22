@@ -10,7 +10,7 @@
 
 // visualizaciones y demas
 //= require gmaps4rails/googlemaps.js
-// require timeline
+//= require timeline-js
 //= require jwplayer
 // require mercury
 
