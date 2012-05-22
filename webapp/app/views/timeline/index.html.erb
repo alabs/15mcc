@@ -1,21 +1,22 @@
 <% @title = "Línea de tiempo" %>
 <div class="row margin">
-  <div class="span11" style="height:500px;">
+  <div class="span11" style="height:700px;">
     <h1>Línea de tiempo</h1>
     <hr />
     <div id="timeline"></div>
-    <div id="timeline-embed"></div>
 
+<script type="text/javascript" src="https://raw.github.com/VeriteCo/Timeline/master/compiled/js/timeline.js"></script>
 <script type="text/javascript">
-
-
-                </script>
+$(document).ready(function() {
+var timeline = new VMM.Timeline();
+  timeline.init("/timeline.json");
+});
+</script>
                 <style>
                 #timeline {
                     width: 77%;
                     }
                 </style>
 
-                <script type="text/javascript" src="https://raw.github.com/VeriteCo/Timeline/master/compiled/js/timeline-embed.js"></script>
   </div>
 </div>
