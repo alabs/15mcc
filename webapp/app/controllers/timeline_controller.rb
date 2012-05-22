@@ -10,28 +10,36 @@ class TimelineController < ApplicationController
     @timeline["timeline"]["text"] = "Linea del tiempo del banco de ideas de 15m.cc (http://bancodeideas.15m.cc)"
     @timeline["timeline"]["date"] = []
     Text.all.each do |c| 
-      @timeline["timeline"]["date"] << {
-        "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => c.body,
-        "asset" => { "media" => "", "credit" => "", "caption" => "" }
-      }
+      if c.happened_at then
+        @timeline["timeline"]["date"] << {
+          "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => c.body,
+          "asset" => { "media" => "", "credit" => "", "caption" => "" }
+        }
+      end
     end
     Image.all.each do |c| 
-      @timeline["timeline"]["date"] << {
-        "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => "",
-        "asset" => { "media" => c.img.url(:small), "credit" => "", "caption" => "" }
-      }
+      if c.happened_at then
+        @timeline["timeline"]["date"] << {
+          "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => "",
+          "asset" => { "media" => c.img.url(:small), "credit" => "", "caption" => "" }
+        }
+      end
     end
     Video.all.each do |c| 
-      @timeline["timeline"]["date"] << {
-        "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => "",
-        "asset" => { "media" => c.embed_url, "credit" => "", "caption" => "" }
-      }
+      if c.happened_at then
+        @timeline["timeline"]["date"] << {
+          "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => "",
+          "asset" => { "media" => c.embed_url, "credit" => "", "caption" => "" }
+        }
+      end
     end
     Audio.all.each do |c| 
-      @timeline["timeline"]["date"] << {
-        "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => "",
-        "asset" => { "media" => "", "credit" => "", "caption" => "" }
-      }
+      if c.happened_at then
+        @timeline["timeline"]["date"] << {
+          "startDate" => c.happened_at.strftime("%Y, %m, %d"), "headline" => c.title, "text" => "",
+          "asset" => { "media" => "", "credit" => "", "caption" => "" }
+        }
+      end
     end
     respond_to do |format|
       format.html # index.html.erb
