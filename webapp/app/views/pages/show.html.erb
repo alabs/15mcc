@@ -3,7 +3,7 @@
   <p style="margin-left: 20px;"><%= link_to "Editar página", "/editor" + request.path, id: "edit_link", data: { save_url: mercury_update_page_path(@page.slug) }, :class => "label" %></p>  
 <% end %>
 
-<div id="page_body" class="mt1 span10 mercury-region" data-type="editable" style="margin: 0px 20px;">
+<div id="page_body" class="mt1 span10 mercury-region" data-type="editable" style="margin-left: 30px;">
   <%= raw @page.body %>
 </div>
 
