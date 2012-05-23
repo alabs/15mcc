@@ -46,7 +46,8 @@ gem 'mongoid-simple-tags'
 gem 'mongoid-paperclip', :require => 'mongoid_paperclip'
 
 # Para los videos alojados en servicios externos
-gem 'acts_as_unvlogable'
+#gem 'acts_as_unvlogable'
+gem 'acts_as_unvlogable', :git => 'http://github.com/alabs/acts_as_unvlogable'
 
 group :development do
   gem 'pry-rails' # a better ruby console
