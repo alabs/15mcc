@@ -30,12 +30,13 @@
       <i class="icon-circle-arrow-down"></i>
       Descargar
     <% end %>
-
-    <%= render :partial => "partials/change_priority", :locals => { :content => @video } %>
-
+    
     <a class="btn" data-toggle="modal" href="#abuse-modal">
       <i class="icon-exclamation-sign"></i>
       Denunciar</a>
+
+    <%= render :partial => "partials/change_priority", :locals => { :content => @video } %>
+
   </div>
 
   <%= render :partial => "partials/metadata", :locals => { :content => @video, :map => @map } %>
