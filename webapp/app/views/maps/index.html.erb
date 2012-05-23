@@ -1,8 +1,8 @@
 <% @title = "Mapa geográfico" %>
-<div class="row" style="margin:20px;">
-  <div class="span11">
+<div class="row" style="margin:20px 0px;">
+  <div class="span10">
     <h1>Mapa geográfico</h1>
-    <hr />
+    <hr style="margin-right:10px;"/>
     <div id="general-map">
       <%= gmaps("markers" => { "data" => @map, "options" => { "randomize" => true } } ) %>
     </div>
