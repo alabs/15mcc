@@ -9,7 +9,11 @@ class Image < Content
   before_save :preprocessing
 
   #paperclip
-  has_mongoid_attached_file :img,:styles => {:small => ['260x180', :jpg],:marker => ['20x20', :jpg]}
+  has_mongoid_attached_file :img,:styles => {
+    :large => ['500x300', :jpg],
+    :small => ['260x180', :jpg],
+    :marker => ['20x20', :jpg]
+  }
 
   def gmaps4rails_infowindow
     "

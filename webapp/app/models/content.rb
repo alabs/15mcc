@@ -81,6 +81,14 @@ class Content
     end
   end
 
+  def print_timeline_headline
+    "<a href='#{ self.get_absolute_url }'> #{ self.title }"
+  end
+
+  def print_timeline_startdate
+    self.happened_at.strftime("%Y, %m, %d")
+  end
+
   def get_absolute_url
     user = self.user ? self.user.username : "anonymous" 
     '/profile/' + user + url_path + self.id.to_s
