@@ -1,5 +1,5 @@
 <% @title = "Etiqueta " + @tag %>
-<div class="row" style="margin-top:20px;">
+<div class="row" style="margin-top:20px;margin-left:10px;">
   <div class="span9">
     <h1>Etiqueta <%= @tag %></h1>
     <hr />
@@ -21,7 +21,7 @@
     <div class="clearfix"></div>
 
     <% if !@images.none? %>
-      <h2> Imágenes </h2>
+      <h2 style="margin-top:20px;"> Imágenes </h2>
     <ul class="span10">
       <% @images.each do |image| %>
       <li class="thumbnail span3">
@@ -36,21 +36,23 @@
     <% end %>
 
     <% if !@audios.none? %>
-      <h2> Audios </h2>
+      <h2 style="margin-top:20px;"> Audios </h2>
     <ul class="span10">
       <% @audios.each do |audio| %>
         <% user = audio.user ? audio.user.username : "anonymous" %>
-        <li><h5><%= link_to audio.title, audio_path(audio, :username => user) %></h5>
+        <li><h5><%= link_to audio.title, audio_path(audio, :username => user) %></h5></li>
       <% end %>
+    </ul>
     <% end %>
 
     <% if not @texts.none? %>
-      <h2> Textos </h2>
+      <h2 style="margin-top:20px;"> Textos </h2>
     <ul class="span10">
       <% @texts.each do |text| %>
         <% user = text.user ? text.user.username : "anonymous" %>
-        <li><h5><%= link_to text.title, text_path(text, :username => user) %></h5>
+        <li><h5><%= link_to text.title, text_path(text, :username => user) %></h5></li>
       <% end %>
+    </ul>
     <% end %>
 
     <% if @texts.none? and @images.none? and @audios.none? and @videos.none? %>
