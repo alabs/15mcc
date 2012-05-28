@@ -30,7 +30,7 @@ es:
     confirmations:
       send_instructions: 'Recibirás un email con instrucciones para confirmar tu cuenta en poco minutos.'
       send_paranoid_instructions: 'Si tu email ya existe en nuestra base de datos, recibirás un email con instrucciones para confirmar tu cuenta en poco minutos.'
-      confirmed: 'Tu cuenta ha sido confirmada. Ya has accedido a tu cuenta.'
+      confirmed: 'Tu cuenta ha sido confirmada.'
     registrations:
       signed_up_but_unconfirmed: 'Te hemos enviado un correo con el enlace de confirmación. Por favor ábrelo para activar tu cuenta.'
       signed_up_but_inactive: 'Te has registrado correctamente. Sin embargo, no estás conectado todavía porque tu cuenta está inactiva.'
