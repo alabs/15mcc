@@ -124,8 +124,11 @@
             <td><%= image.city %></td>
             <td><%= image.country %></td>
             <td>
-              <%= link_to 'Editar', edit_image_path(image, :username => user) %>
-              <%= link_to 'Eliminar', image_path(image, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_image_path(image, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), image_path(image, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
             <td><%= link_to image_tag(image.img.url(:small)), image_path(image, :username => user) %></td>
           </tr>
@@ -173,8 +176,11 @@
             <td><%= video.city %></td>
             <td><%= video.country %></td>
             <td>
-              <%= link_to 'Editar', edit_video_path(video, :username => user) %>
-              <%= link_to 'Eliminar', video_path(video, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_video_path(video, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), video_path(video, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
             <td><%= link_to image_tag(video.thumbnail), video_path(video, :username => user) %></td>
           </tr>
@@ -222,8 +228,11 @@
             <td><%= text.city %></td>
             <td><%= text.country %></td>
             <td>
-              <%= link_to 'Editar', edit_text_path(text, :username => user) %>
-              <%= link_to 'Eliminar', text_path(text, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_text_path(text, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), text_path(text, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
           </tr>
         <% end %>
@@ -268,8 +277,11 @@
             <td><%= audio.city %></td>
             <td><%= audio.country %></td>
             <td>
-              <%= link_to 'Editar', edit_audio_path(audio, :username => user) %>
-              <%= link_to 'Eliminar', audio_path(audio, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_audio_path(audio, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), audio_path(audio, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
           </tr>
         <% end %>
