@@ -1,23 +1,23 @@
 <% @title = @user.name %>
 <div class="row" style="margin-top: 15px;">
-  <div class="span12">
+  <div class="span9 offset1">
     &lt; <%= link_to 'Volver', '#', :id => 'goback' %>
   </div>
 </div>
 
 <div class="row">
-  <div class="span2" id="profile-avatar">
+  <div class="span2 offset1" id="profile-avatar">
     <%= image_tag @user.avatar.url(:normal) %>
     <% if current_user == @user %>
       <span class="label"><%= link_to 'Editar mi cuenta', edit_user_registration_path %></span>
     <% end %>
   </div>
-  <div class="span7" id="user-info">
+  <div class="span5" id="user-info">
     <div class="row">
       <h1><%= @user.name %></h1>
     </div>
     <div class="row">
-      <span><%= @user.username %></span>
+      <h4><%= @user.username %></h4>
     </div>
     <div class="row">
       <p><%= @user.biography %></p>
@@ -27,23 +27,23 @@
     </div>
   </div>
   <div class="span2" id="user-stats">
-    <span style="background-color:#000;color:#fff;padding:5px;padding-right:62px;margin-bottom:10px;">Has subido</span>
+    <span style="font-weight: bold;background-color:#000;color:#fff;padding:5px;padding-right:62px;margin-bottom:10px;">Has subido</span>
     <table class="table table-striped table-bordered table-condensed">
       <tbody>
         <tr>
-          <td><%= @images.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @images.size %></td>
           <td>fotos</td>
         </tr>
         <tr>
-          <td><%= @videos.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @videos.size %></td>
           <td>videos</td>
         </tr>
         <tr>
-          <td><%= @texts.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @texts.size %></td>
           <td>textos</td>
         </tr>
         <tr>
-          <td><%= @audios.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @audios.size %></td>
           <td>audios</td>
         </tr>
       </tbody>
@@ -51,10 +51,14 @@
   </div>
 </div>
 
-<hr class="hr-profile" />
+<div class="row">
+  <div class="offset1 span9">
+    <hr class="hr-profile" />
+  </div>
+</div>
 
 <div class="row">
-  <div class="span3 offset1">
+  <div class="span3 offset1" style="font-size: 1.3em;">
     <strong>Tus materiales subidos</strong>
   </div>
   <div class="span7" id="profile-main-links">
@@ -66,8 +70,8 @@
   </div>
 </div>
 
-<div id="user-timeline" class="row span11">
-  <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json">  </div>
+<div id="user-timeline" class="row offset1 span9">
+  <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json"></div>
 </div>
 
 <div id="user-map" class="span11 mt1 hide">
@@ -83,9 +87,9 @@
 
 <div class="row">
 
-  <div class="span12" id="profile-images">
+  <div class="offset1 span9" id="profile-images">
 
-  <h2>1. Fotos</h2>
+  <h3>1. Fotos</h3>
   <% if @images.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
@@ -126,9 +130,9 @@
 
 <div class="row">
 
-  <div class="span12" id="profile-videos">
+  <div class="offset1 span9" id="profile-videos">
   
-  <h2>2. Videos</h2>
+  <h3>2. Videos</h3>
   <% if @videos.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
@@ -170,9 +174,9 @@
 
 <div class="row">
 
-  <div class="span12" id="profile-texts">
+  <div class="offset1 span9" id="profile-texts">
 
-  <h2>3. Textos</h2>
+  <h3>3. Textos</h3>
   <% if @texts.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
@@ -210,9 +214,9 @@
   
 <div class="row">
 
-  <div class="span12" id="profile-images">
+  <div class="offset1 span9" id="profile-audios">
 
-  <h2>4. Audios</h2>
+  <h3>4. Audios</h3>
   <% if @audios.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
