@@ -11,43 +11,43 @@
 // mindmap 
 // jquery.simplemm.js
 
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for (var i=0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-}
-
-function displayLoggedinUserLinks() {
-  var username = readCookie('username');
-  //console.log("15M.CC DEBUG: " + username);
-  var loginLink = $("#login-link");
-  var logoutLink = $("#logout-link");
-  if (username == null) {
-    loginLink.show();
-    logoutLink.hide();
-  } else {
-    // user is logged in and we have his/her username
-    loginLink.hide();
-    // send HTML
-    // if(userGreetings){ userGreetings.update("<span id='username'>username</span>"); }
-    var aa = readCookie('a');
-    if (aa == 1) {
-      $(".admin-link").show();
-    }
-    logoutLink.show();
-  }
-  return true;
-}
+//function readCookie(name) {
+//  var nameEQ = name + "=";
+//  var ca = document.cookie.split(';');
+//  for (var i=0; i < ca.length; i++) {
+//    var c = ca[i];
+//    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+//    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+//  }
+//  return null;
+//}
+//
+//function displayLoggedinUserLinks() {
+//  var username = readCookie('username');
+//  //console.log("15M.CC DEBUG: " + username);
+//  var loginLink = $("#login-link");
+//  var logoutLink = $("#logout-link");
+//  if (username == null) {
+//    loginLink.show();
+//    logoutLink.hide();
+//  } else {
+//    // user is logged in and we have his/her username
+//    loginLink.hide();
+//    // send HTML
+//    // if(userGreetings){ userGreetings.update("<span id='username'>username</span>"); }
+//    var aa = readCookie('a');
+//    if (aa == 1) {
+//      $(".admin-link").show();
+//    }
+//    logoutLink.show();
+//  }
+//  return true;
+//}
 
 $(function(){
 
   // mostrar enlaces dinámicos
-  displayLoggedinUserLinks();
+  //displayLoggedinUserLinks();
 
   // cierra las alertas automaticamente a los 5 segundos
   setTimeout("$('#flash-message').slideUp('slow');",7000);
