@@ -1,23 +1,27 @@
 <% @title = @user.name %>
 <div class="row" style="margin-top: 15px;">
-  <div class="span12">
+  <div class="span9 offset1">
     &lt; <%= link_to 'Volver', '#', :id => 'goback' %>
   </div>
 </div>
 
 <div class="row">
-  <div class="span2" id="profile-avatar">
+  <div class="span2 offset1" id="profile-avatar">
     <%= image_tag @user.avatar.url(:normal) %>
-    <% if current_user == @user %>
-      <span class="label"><%= link_to 'Editar mi cuenta', edit_user_registration_path %></span>
-    <% end %>
   </div>
-  <div class="span7" id="user-info">
+  <div class="span5" id="user-info">
     <div class="row">
-      <h1><%= @user.name %></h1>
+      <div class="span4" style="margin-left: 0px;">
+        <h1><%= @user.name %></h1>
+      </div>
+      <% if current_user == @user %>
+      <div class="span1">
+        <%= link_to image_tag('edit-user.png'), edit_user_registration_path, :title => 'Editar mi cuenta' %>
+      </div>
+      <% end %>
     </div>
     <div class="row">
-      <span><%= @user.username %></span>
+      <h4><%= @user.username %></h4>
     </div>
     <div class="row">
       <p><%= @user.biography %></p>
@@ -27,23 +31,23 @@
     </div>
   </div>
   <div class="span2" id="user-stats">
-    <span style="background-color:#000;color:#fff;padding:5px;padding-right:62px;margin-bottom:10px;">Has subido</span>
+    <span style="font-weight: bold;background-color:#000;color:#fff;padding:5px;padding-right:62px;margin-bottom:10px;">Has subido</span>
     <table class="table table-striped table-bordered table-condensed">
       <tbody>
         <tr>
-          <td><%= @images.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @images.size %></td>
           <td>fotos</td>
         </tr>
         <tr>
-          <td><%= @videos.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @videos.size %></td>
           <td>videos</td>
         </tr>
         <tr>
-          <td><%= @texts.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @texts.size %></td>
           <td>textos</td>
         </tr>
         <tr>
-          <td><%= @audios.size %></td>
+          <td style="font-weight:bold;text-align:center;"><%= @audios.size %></td>
           <td>audios</td>
         </tr>
       </tbody>
@@ -51,10 +55,14 @@
   </div>
 </div>
 
-<hr class="hr-profile" />
+<div class="row">
+  <div class="offset1 span9">
+    <hr class="hr-profile" />
+  </div>
+</div>
 
 <div class="row">
-  <div class="span3 offset1">
+  <div class="span3 offset1" style="font-size: 1.3em;">
     <strong>Tus materiales subidos</strong>
   </div>
   <div class="span7" id="profile-main-links">
@@ -66,12 +74,12 @@
   </div>
 </div>
 
-<div id="user-timeline" class="row span11">
-  <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json">  </div>
+<div id="user-timeline" class="row offset1 span9">
+  <div id="timeline" data-url="/profile/<%= @user.username %>/timeline.json"></div>
 </div>
 
 <div id="user-map" class="span11 mt1 hide">
-  <div style="margin-top:5em;" class="span12">
+  <div class="span10" style="margin-bottom:25px;">
     <%= gmaps4rails(@map) %>
   </div>
 </div>
@@ -80,22 +88,31 @@
   <!-- TODO: tags -->
 </div>
 
+<br />
+<br />
 
 <div class="row">
 
-  <div class="span12" id="profile-images">
+  <div class="offset1 span9" id="profile-images">
 
-  <h2>1. Fotos</h2>
+  <div class="row">
+    <div class="span2">
+      <h3 style="margin-bottom:-25px;">1. Fotos</h3>
+    </div>
+    <div class="offset8 span1">
+      <p style="font-weight:bold; font-size: 1.5em;text-align:right;"><%= link_to "[+]", new_image_path, :title => 'Añadir foto' %></p>
+    </div>
+  </div>
   <% if @images.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
-          <th>Título</th>
-          <th>Fecha</th>
-          <th>Ciudad</th>
-          <th>País</th>
-          <th>Acciones</th>
-          <th>Vista previa</th>
+          <th style="width:30%;">Título</th>
+          <th style="width:10%;">Fecha</th>
+          <th style="width:10%;">Ciudad</th>
+          <th style="width:10%;">País</th>
+          <th style="width:20%;">Acciones</th>
+          <th style="width:20%;">Vista previa</th>
         </tr>
       </thead>
       <tbody>
@@ -107,11 +124,13 @@
             <td><%= image.city %></td>
             <td><%= image.country %></td>
             <td>
-              <%= link_to 'Mostrar', image_path(image, :username => user) %>
-              <%= link_to 'Editar', edit_image_path(image, :username => user) %>
-              <%= link_to 'Eliminar', image_path(image, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_image_path(image, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), image_path(image, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
-            <td></td>
+            <td><%= link_to image_tag(image.img.url(:small)), image_path(image, :username => user) %></td>
           </tr>
         <% end %>
       </tbody>
@@ -126,19 +145,26 @@
 
 <div class="row">
 
-  <div class="span12" id="profile-videos">
+  <div class="offset1 span9" id="profile-videos">
   
-  <h2>2. Videos</h2>
+  <div class="row">
+    <div class="span2">
+      <h3 style="margin-bottom:-25px;">2. Videos</h3>
+    </div>
+    <div class="offset8 span1">
+      <p style="font-weight:bold; font-size: 1.5em;text-align:right;"><%= link_to "[+]", new_video_path, :title => 'Añadir video' %></p>
+    </div>
+  </div>
   <% if @videos.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
-          <th>Título</th>
-          <th>Fecha</th>
-          <th>Ciudad</th>
-          <th>País</th>
-          <th>Acciones</th>
-          <th>Vista previa</th>
+          <th style="width:30%;">Título</th>
+          <th style="width:10%;">Fecha</th>
+          <th style="width:10%;">Ciudad</th>
+          <th style="width:10%;">País</th>
+          <th style="width:20%;">Acciones</th>
+          <th style="width:20%;">Vista previa</th>
         </tr>
       </thead>
       <tbody>
@@ -150,11 +176,13 @@
             <td><%= video.city %></td>
             <td><%= video.country %></td>
             <td>
-              <%= link_to 'Mostrar', video_path(video, :username => user) %>
-              <%= link_to 'Editar', edit_video_path(video, :username => user) %>
-              <%= link_to 'Eliminar', video_path(video, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_video_path(video, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), video_path(video, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
-            <td></td>
+            <td><%= link_to image_tag(video.thumbnail), video_path(video, :username => user) %></td>
           </tr>
         <% end %>
       </tbody>
@@ -170,18 +198,25 @@
 
 <div class="row">
 
-  <div class="span12" id="profile-texts">
+  <div class="offset1 span9" id="profile-texts">
 
-  <h2>3. Textos</h2>
+  <div class="row">
+    <div class="span2">
+      <h3 style="margin-bottom:-25px;">3. Textos</h3>
+    </div>
+    <div class="offset8 span1">
+      <p style="font-weight:bold; font-size: 1.5em;text-align:right;"><%= link_to "[+]", new_text_path, :title => 'Añadir texto' %></p>
+    </div>
+  </div>
   <% if @texts.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
-          <th>Título</th>
-          <th>Fecha</th>
-          <th>Ciudad</th>
-          <th>País</th>
-          <th>Acciones</th>
+          <th style="width:50%;">Título</th>
+          <th style="width:10%;">Fecha</th>
+          <th style="width:10%;">Ciudad</th>
+          <th style="width:10%;">País</th>
+          <th style="width:20%;">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -193,9 +228,11 @@
             <td><%= text.city %></td>
             <td><%= text.country %></td>
             <td>
-              <%= link_to 'Mostrar', text_path(text, :username => user) %>
-              <%= link_to 'Editar', edit_text_path(text, :username => user) %>
-              <%= link_to 'Eliminar', text_path(text, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_text_path(text, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), text_path(text, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
           </tr>
         <% end %>
@@ -210,18 +247,25 @@
   
 <div class="row">
 
-  <div class="span12" id="profile-images">
+  <div class="offset1 span9" id="profile-audios">
 
-  <h2>4. Audios</h2>
+  <div class="row">
+    <div class="span2">
+      <h3 style="margin-bottom:-25px;">4. Audios</h3>
+    </div>
+    <div class="offset8 span1">
+      <p style="font-weight:bold; font-size: 1.5em;text-align:right;"><%= link_to "[+]", new_audio_path, :title => 'Añadir audio' %></p>
+    </div>
+  </div>
   <% if @audios.size > 0 %>
     <table class="table table-striped table-bordered table-condensed">
       <thead>
         <tr>
-          <th>Título</th>
-          <th>Fecha</th>
-          <th>Ciudad</th>
-          <th>País</th>
-          <th>Acciones</th>
+          <th style="width:50%;">Título</th>
+          <th style="width:10%;">Fecha</th>
+          <th style="width:10%;">Ciudad</th>
+          <th style="width:10%;">País</th>
+          <th style="width:20%;">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -233,9 +277,11 @@
             <td><%= audio.city %></td>
             <td><%= audio.country %></td>
             <td>
-              <%= link_to 'Mostrar', audio_path(audio, :username => user) %>
-              <%= link_to 'Editar', edit_audio_path(audio, :username => user) %>
-              <%= link_to 'Eliminar', audio_path(audio, :username => user), confirm: '¿Estas segura?', method: :delete %>
+              &nbsp;
+              &nbsp;
+              <%= link_to image_tag('edit-user.png', :title => 'Editar'), edit_audio_path(audio, :username => user) %>
+              &nbsp;
+              <%= link_to image_tag('trash.png', :title => 'Eliminar'), audio_path(audio, :username => user), :confirm => '¿Estas segura?', :method => :delete %>
             </td>
           </tr>
         <% end %>

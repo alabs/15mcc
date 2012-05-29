@@ -145,7 +145,7 @@ module BootstrapFormBuilder
       "</div>").html_safe
     end
 
-    basic_helpers = %w{text_field text_area select email_field password_field check_box}
+    basic_helpers = %w{url_field text_field text_area select email_field password_field check_box}
 
     multipart_helpers = %w{date_select datetime_select}
 
