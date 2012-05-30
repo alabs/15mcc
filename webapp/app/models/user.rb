@@ -10,6 +10,7 @@ class User
   has_many :images
   has_many :texts
   has_many :videos
+  has_many :audios
 
   attr_accessible :username, :email, :password, :password_confirmation, :terms, :biography, :avatar, :name, :homepage
   attr_accessible :username, :email, :role, :banned, :as => :admin
