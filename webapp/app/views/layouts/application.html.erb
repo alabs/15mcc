@@ -103,27 +103,23 @@
                 </ul>
               </div>
               <div class="span6" id="topmenu">
-                <div id="login-link" style="display:none;">
+                <div id="login-link">
                   <ul>
-                    <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
-                    <li>/</li>
-                    <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
+                    <% unless user_signed_in? %>
+                      <li><%= link_to 'nuevo usuario', new_user_registration_path %></li>
+                      <li>/</li>
+                      <li><%= link_to 'iniciar sesión', new_user_session_path %></li>
+                    <% else %>
+                      <li><%= link_to current_user.username, "/profile/#{current_user.username}" %>
+                      <% if current_user.role == 'admin' %>
+                        <li class="admin-link">/</li>
+                        <li class="admin-link"><%= link_to 'administrar', admin_users_path %>
+                      <% end %>
+                      <li>/</li>
+                      <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
+                    <% end %>
                   </ul>
                 </div><!-- login-link -->
-                <div id="logout-link" style="display:none;">
-                  <% if user_signed_in? %>
-                  <ul>
-                    <% username = cookies[:username] %>
-                    <li><%= link_to username, "/profile/#{username}" %>
-                    <% if current_user.role == 'admin' %>
-                      <li class="admin-link" style="display:none;">/</li>
-                      <li class="admin-link"style="display:none;"><%= link_to 'administrar', admin_users_path %>
-                    <% end %>
-                    <li>/</li>
-                    <li><%= link_to 'desconectar', destroy_user_session_path, :method => 'delete' %></li>
-                  </ul>
-                <% end %>
-                </div><!-- logout-link -->
                 <div class="control-group">
                   <div class="controls">
                     <div class="input-prepend">
