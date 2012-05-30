@@ -5,6 +5,7 @@
   </div>
 </div>
 
+
 <div class="row">
   <div class="span2 offset1" id="profile-avatar">
     <%= image_tag @user.avatar.url(:normal) %>
@@ -74,10 +75,9 @@
   </div>
 </div>
 
-<div id="user-timeline" class="row offset1 span9">
+<div id="user-timeline" class="row offset1 span9" style="height:450px;">
 
     <div id="timeline-embed"></div>
-
 <script type="text/javascript">
     var timeline_config = {
                 width:          "100%",
