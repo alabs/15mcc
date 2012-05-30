@@ -1,6 +1,6 @@
 <% @title = "Línea de tiempo" %>
 <div class="row margin">
-  <div class="span11" style="height:750px;">
+  <div class="span10" style="height:750px;">
     <h1>Línea de tiempo</h1>
     <hr />
     <div id="timeline-embed"></div>
@@ -8,13 +8,13 @@
 <script type="text/javascript">
     var timeline_config = {
                 width:          "100%",
-                height:         "100%",
+                height:         "90%",
                 source:         '/timeline.json'
                 //hash_bookmark:  true
                 //font:           'Bevan-PotanoSans',                     //OPTIONAL FONTS
                 //maptype:        'watercolor',                           //OPTIONAL MAP STYLE
                 //css:            'path_to_css/timeline.css',             //OPTIONAL
-                //js:             'path_to_js/timeline.js'                //OPTIONAL
+//                js:             '/assets/timeline.es.js'                //OPTIONAL
         }
 
 $(document).ready(function() {
@@ -25,14 +25,9 @@ $(document).ready(function() {
 });
 
 </script>
-<script type="text/javascript" src="/assets/timeline-embed.js"></script>
-<script type="text/javascript" src="/assets/timeline.es.js"></script>
+
+  <%= javascript_include_tag "timeline-embed" %>
+  <%= javascript_include_tag "timeline.es" %>
  
-<!-- script type="text/javascript">
-$(document).ready(function() {
-var timeline = new VMM.Timeline();
-  timeline.init("/timeline.json");
-});
-</script -->
   </div>
 </div>
