@@ -16,36 +16,35 @@ class PagesController < ApplicationController
   # el usuario
   def profile
     @user = User.where(:username => params[:username]).first
-    
+
     authorize! :profile, Page
     unless @user
-      render :text => "404 Not Found", :status => 404
+      render_404
       return
     end
 
-    @texts = Text.where(:user_id => @user.id).all
-    @images = Image.where(:user_id => @user.id).all
-    @videos = Video.where(:user_id => @user.id).all
-    @audios = Audio.where(:user_id => @user.id).all
+    #@tagcloud = @user.content.all_tags
+    @tagloud = []
+    # obtenemos un listado de todos los tags de todos los tipos de contenidos
+    contents = @user.videos + @user.images + @user.texts
+    tag_list = []
+    tag_list = contents.each {|c| c.tags.each {|t| tag_list << t} }
+    Content.all_tags.each do |c|
+      if tag_list.include? c[:name] then
+        @tagcloud << {:name => c[:name], :count => c[:count]}
+      end  
+    end  
+
+    logger.info "       DEBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    logger.info @tagcloud
+    logger.info "       DEBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+
+    @texts = @user.texts.all
+    @images = @user.images.all
+    @videos = @user.videos.all
+    @audios = @user.audios.all
 
     @map = (@texts + @images + @videos + @audios).to_gmaps4rails
-  end
-
-  def timeline
-    @user = User.where(:username => params[:username]).first
-    authorize! :timeline, Page
-
-    texts = Text.where(:user_id => @user.id).all
-    images = Image.where(:user_id => @user.id).all
-    videos = Video.where(:user_id => @user.id).all
-    audios = Audio.where(:user_id => @user.id).all
-    @contents = texts | images | videos | audios
-    @contents.map {|c| c.write_attribute(:klass, c.class.to_s) }
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @contents }
-    end
   end
 
   def show 

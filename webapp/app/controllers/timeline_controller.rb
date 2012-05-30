@@ -2,16 +2,66 @@ class TimelineController < ApplicationController
 
   # GET /timeline
   def index
-    @timeline = {}
-    @timeline["timeline"] = {}
-    @timeline["timeline"]["headline"] = "Linea del tiempo"
-    @timeline["timeline"]["type"] = "default"
-#    @timeline["timeline"]["startDate"] = "2011,9,1"
-    @timeline["timeline"]["text"] = "del banco de ideas de 15m.cc (http://bancodeideas.15m.cc)"
-    @timeline["timeline"]["asset"] = {}
-    @timeline["timeline"]["asset"]["media"] = "/assets/logo.png" 
-    @timeline["timeline"]["date"] = []
-    Text.all.each do |c| 
+    # JSON para el timeline general
+    config = {
+      :text => "del banco de ideas de 15m.cc (http://bancodeideas.15m.cc)",
+      :media => "/assets/logo.png",
+    }
+    @timeline = create_timeline(config)
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @timeline }
+    end
+  end
+
+  # GET /profile/[:username]/timeline.json
+  def show
+    @user = User.where(:username => params[:username]).first
+    # JSON para el timeline del usuario que se pasa en el params
+    config = {
+      :user => @user,
+      :text => "del usuario <b>" + @user.username + "</b> en el banco de ideas de 15m.cc (http://bancodeideas.15m.cc)",
+      :media => @user.avatar.url(:normal),
+    }
+    @timeline = create_timeline(config)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @timeline }
+    end
+  end
+
+  private
+
+  def create_timeline(config)
+    # Se le pasa un diccionario con los siguientes valores 
+    # :user => el usuario si es que tiene, si no tiene mostrara el timeline general
+    # :headline => titulo de la linea del tiempo
+    # :text => descripcion de la linea del tiempo
+    # :media => la imagen que se muestra al iniciar la linea temporal. Debe ser la seccion de la URL "/assets/imagen.png" 
+    if config[:user] then
+      #audios = Audio.where(:user_id => @user.id).all
+      images = Image.where(:user_id => config[:user].id).all
+      texts = Text.where(:user_id => config[:user].id).all
+      videos = Video.where(:user_id => config[:user].id).all
+    else
+      #audios = Audio.all
+      images = Image.all
+      texts = Text.all
+      videos = Video.all
+    end
+    @timeline = {
+      "timeline" => {
+        "headline" => "Linea del tiempo",
+        "type" => "default",
+        "text" => config[:text],
+        "asset" => {
+          "media" => config[:media],
+        },
+        "date" => [],
+      }
+    }
+    texts.each do |c| 
       if c.happened_at then
         @timeline["timeline"]["date"] << {
           "startDate" => c.print_timeline_startdate, "headline" => c.print_timeline_headline,
@@ -20,7 +70,7 @@ class TimelineController < ApplicationController
         }
       end
     end
-    Image.all.each do |c| 
+    images.each do |c| 
       if c.happened_at then
         @timeline["timeline"]["date"] << {
           "startDate" => c.print_timeline_startdate, "headline" => c.print_timeline_headline,
@@ -29,7 +79,7 @@ class TimelineController < ApplicationController
         }
       end
     end
-    Video.all.each do |c| 
+    videos.each do |c| 
       if c.happened_at then
         @timeline["timeline"]["date"] << {
           "startDate" => c.print_timeline_startdate, "headline" => c.print_timeline_headline,
@@ -38,21 +88,7 @@ class TimelineController < ApplicationController
         }
       end
     end
-#    Audio.all.each do |c| 
-#      if c.happened_at then
-#        @timeline["timeline"]["date"] << {
-#          "startDate" => c.print_timeline_startdate, "headline" => c.print_timeline_headline,
-#          "text" => "<div class='center'>
-#            <audio controls='controls'><source src='#{c.archive.url}' /></audio><div id='flash-fallback'></div>
-#          </div>",
-#          "asset" => { "media" => c.archive.url, "credit" => "", "caption" => "" }
-#        }
-#      end
-#    end
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @timeline }
-    end
+    return @timeline
   end
 
 end
