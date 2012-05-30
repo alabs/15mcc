@@ -16,11 +16,12 @@ class TimelineController < ApplicationController
 
   # GET /profile/[:username]/timeline.json
   def show
+    @user = User.where(:username => params[:username]).first
     # JSON para el timeline del usuario que se pasa en el params
     config = {
-      :user => params[:username],
-      :text => "del banco de ideas de 15m.cc (http://bancodeideas.15m.cc)",
-      :media => "/assets/logo.png",
+      :user => @user,
+      :text => "del usuario <b>" + @user.username + "</b> en el banco de ideas de 15m.cc (http://bancodeideas.15m.cc)",
+      :media => @user.avatar.url(:normal),
     }
     @timeline = create_timeline(config)
 
@@ -39,11 +40,10 @@ class TimelineController < ApplicationController
     # :text => descripcion de la linea del tiempo
     # :media => la imagen que se muestra al iniciar la linea temporal. Debe ser la seccion de la URL "/assets/imagen.png" 
     if config[:user] then
-      @user = User.where(:username => config[:user]).first
       #audios = Audio.where(:user_id => @user.id).all
-      images = Image.where(:user_id => @user.id).all
-      texts = Text.where(:user_id => @user.id).all
-      videos = Video.where(:user_id => @user.id).all
+      images = Image.where(:user_id => config[:user].id).all
+      texts = Text.where(:user_id => config[:user].id).all
+      videos = Video.where(:user_id => config[:user].id).all
     else
       #audios = Audio.all
       images = Image.all
