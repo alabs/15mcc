@@ -263,11 +263,11 @@ es:
       archive: "Selecciona en tu disco duro el archivo de audio a subir. puedes subir MP3, y WAWs."
     image:
       title: "Usa un título corto y descriptivo de la foto."
-      archive: "Selecciona en tu disco duro el archivo de fotografía a subir. Puedes subir JPG, PNG y TIFFs. Al subirse (y en caso de ser mayores) se convertirán en un máximo de 1600x1600pix y un máximo de 400kb de tamaño"
+      archive: "Selecciona en tu disco duro el archivo de fotografía a subir. Puedes subir JPG, PNG y TIFF. Al subirse (y en caso de ser mayores) se convertirán en un máximo de 1600x1600pix y un máximo de 400kb de tamaño"
     video:
       url: "Introduce la URL (dirección web) del vídeo a referenciar, por ejemplo: http://www.youtube.com/watch?v=yWaszPxC_CY&feature=related. NOTA: (Los vídeos no los alojamos nosotros, sino que los tomamos de otras webs como youtube, vimeo, etc...)"
     content:
-      tags: "Define con etiquetas el contenido del material que estás subiendo. Empieza a esribir y verás como se van 'autocompletando' las etiquetas más frecuentes"
+      tags: "Define con etiquetas el contenido del material que estás subiendo. Empieza a escribir y verás como se van 'autocompletando' las etiquetas más frecuentes"
       time: "Indica la fecha y hora que sucedió lo que muestras / describes en el material que estás subiendo. Si no indicas nada, se asignará automáticamente las 12h del mediodía."
       location: 
         address: "Indica la dirección postal (calle) donde ocurrió lo que muestras / describes en el material que estás subiendo. Si no lo sabes, puedes dejar este campo vacío."
