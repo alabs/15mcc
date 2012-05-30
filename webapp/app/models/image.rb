@@ -5,7 +5,9 @@ class Image < Content
 
   validates_presence_of :title
   validates_uniqueness_of :title
-  validates_presence_of :happened_at
+
+  # esto no se puede activar por el flujo del new_step, create_step, confirm_step, etc
+  # validates_presence_of :happened_at
 
   before_save :preprocessing
 
