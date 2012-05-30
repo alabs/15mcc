@@ -5,6 +5,7 @@ class Image < Content
 
   validates_presence_of :title
   validates_uniqueness_of :title
+  validates_presence_of :happened_at
 
   before_save :preprocessing
 
