@@ -31,23 +31,6 @@ class PagesController < ApplicationController
     @map = (@texts + @images + @videos + @audios).to_gmaps4rails
   end
 
-  def timeline
-    @user = User.where(:username => params[:username]).first
-    authorize! :timeline, Page
-
-    texts = Text.where(:user_id => @user.id).all
-    images = Image.where(:user_id => @user.id).all
-    videos = Video.where(:user_id => @user.id).all
-    audios = Audio.where(:user_id => @user.id).all
-    @contents = texts | images | videos | audios
-    @contents.map {|c| c.write_attribute(:klass, c.class.to_s) }
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @contents }
-    end
-  end
-
   def show 
     @page = Page.find_by_slug(params[:id])
     authorize! :show, @page
