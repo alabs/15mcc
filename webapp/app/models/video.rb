@@ -1,9 +1,11 @@
+# encoding: utf-8
 class Video < Content
 
   include Mongoid::Document
 
   validates_presence_of :url
   validates_uniqueness_of :url
+  validate :check_video_service
 
   before_save :preprocessing
 
@@ -54,4 +56,14 @@ class Video < Content
     '/videos/'
   end
 
+  protected
+
+  def check_video_service
+    begin
+      UnvlogIt.new(self.url)
+    rescue ArgumentError
+      msg = "Solo soportamos vídeos de Youtube, Vimeo, Flickr, Metacafe, Dailymotion, Collegehumor, Blip.tv, Myspace, Ted Talks, 11870.com, Marca.tv, Dalealplay y RuTube"
+      errors.add :url, msg 
+    end
+  end
 end
