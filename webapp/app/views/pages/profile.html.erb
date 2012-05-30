@@ -110,7 +110,19 @@ $(document).ready(function() {
 </div>
 
 <div id="user-tags" class="row hide">
-  <!-- TODO: tags -->
+  <% if @tagcloud %>
+    <ul id="tagcloud" style="margin-left: -10px; width:90%;">
+      <% @tagcloud.each do |tag| %>
+        <li class="<%= tag_weight_css(tag[:count]) %>">
+          <%= link_to tag[:name], tag_show_path(tag[:name]) %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="span10 center">
+      No has etiquetado ningun contenido
+    </div>
+  <% end %>
 </div>
 
 <br />
