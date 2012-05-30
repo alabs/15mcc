@@ -52,7 +52,7 @@
       <tbody>
         <tr> <td>
           <% if content.author_myself == "1" %>
-            <%= link_to content.user.username, profile_path(content.user) %>
+            <%= link_to content.user.username, "/profile/#{content.user.username}" %>
           <% else %>
             <% if content.author_link %> 
              <%= link_to content.author_name, content.author_link, :target => "_blank" %>
