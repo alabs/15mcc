@@ -12,7 +12,7 @@
 <% end %>
 
     <div class="form-field">
-      <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :class => 'span8' do %>
+      <%= f.text_field :happened_at, placeholder: '¿Cuándo ha ocurrido?', :required => "required", :class => 'span8' do %>
         <p class="help-block"><%= I18n.t("help.content.time") %></p>
       <% end %>
     </div>
