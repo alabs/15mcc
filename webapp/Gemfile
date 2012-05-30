@@ -103,4 +103,4 @@ gem 'omniauth-facebook'
 # Para generar nombres de usuario
 gem "random-word-generator"
 
-gem 'rvm-capistrano'
+#gem 'rvm-capistrano'
