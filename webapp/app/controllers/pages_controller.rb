@@ -19,7 +19,7 @@ class PagesController < ApplicationController
     
     authorize! :profile, Page
     unless @user
-      render :text => "404 Not Found", :status => 404
+      render_404
       return
     end
 
