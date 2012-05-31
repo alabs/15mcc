@@ -9,19 +9,19 @@ set :rvm_type, :user
 require 'bundler/capistrano'
 
 # main details
-#set :application, "banco"
-#role :web, "176.31.248.226"
-#role :app, "176.31.248.226"
-set :application, "15mcc"
-role :web, "15mcc.alabs.es"
-role :app, "15mcc.alabs.es"
+set :application, "banco"
+role :web, "176.31.248.226"
+role :app, "176.31.248.226"
+#set :application, "15mcc"
+#role :web, "15mcc.alabs.es"
+#role :app, "15mcc.alabs.es"
 
 set :rails_env, "production"
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
-set :deploy_to, "/var/www/15mcc.alabs.es"
-#set :deploy_to, "/var/www/bancodeideas.15m.cc"
+#set :deploy_to, "/var/www/15mcc.alabs.es"
+set :deploy_to, "/var/www/bancodeideas.15m.cc"
 set :deploy_via, :remote_cache
 set :user, "ruby-data"
 set :use_sudo, false
@@ -36,8 +36,8 @@ set :git_enable_submodules, 1
 set :keep_releases, 5
 
 # # server details
-set :unicorn_pid, "/tmp/unicorn.15mcc.pid"
-#set :unicorn_pid, "/tmp/unicorn.banco.pid"
+#set :unicorn_pid, "/tmp/unicorn.15mcc.pid"
+set :unicorn_pid, "/tmp/unicorn.banco.pid"
 
 after "deploy", "deploy:cleanup"
 
@@ -48,13 +48,13 @@ namespace :unicorn do
   end
   desc "stop unicorn"
   task :stop, :roles => :app, :except => {:no_release => true} do
-    run "kill -s QUIT `cat /tmp/unicorn.15mcc.pid`"
-    #run "kill -s QUIT `cat /tmp/unicorn.banco.pid`"
+    #run "kill -s QUIT `cat /tmp/unicorn.15mcc.pid`"
+    run "kill -s QUIT `cat /tmp/unicorn.banco.pid`"
   end
   desc "restart unicorn"
   task :restart, :roles => :app, :except => {:no_release => true} do
-    run "kill -s USR2 `cat /tmp/unicorn.15mcc.pid`"
-    #run "kill -s USR2 `cat /tmp/unicorn.banco.pid`"
+    #run "kill -s USR2 `cat /tmp/unicorn.15mcc.pid`"
+    run "kill -s USR2 `cat /tmp/unicorn.banco.pid`"
   end
 
   after "deploy:restart", "unicorn:restart"
