@@ -8,7 +8,7 @@ worker_processes 12
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
-listen "/tmp/15mcc.socket", :backlog => 64
+listen "/tmp/banco.socket", :backlog => 64
 
 # Preload our app for more speed
 preload_app true
@@ -16,17 +16,17 @@ preload_app true
 # nuke workers after 30 seconds instead of 60 seconds (the default)
 timeout 30
 
-pid "/tmp/unicorn.15mcc.pid"
+pid "/tmp/unicorn.banco.pid"
 
 # Production specific settings
 if env == "production"
   # Help ensure your application will always spawn in the symlinked
   # "current" directory that Capistrano sets up.
-  working_directory "/var/www/15mcc.alabs.es/current"
+  working_directory "/var/www/bancodeideas.15m.cc/current"
 
   # feel free to point this anywhere accessible on the filesystem
   user 'ruby-data', 'ruby-data'
-  shared_path = "/var/www/15mcc.alabs.es/shared"
+  shared_path = "/var/www/bancodeideas.15m.cc/shared"
 
   stderr_path "#{shared_path}/log/unicorn.stderr.log"
   stdout_path "#{shared_path}/log/unicorn.stdout.log"
@@ -41,7 +41,7 @@ before_fork do |server, worker|
 
   # Before forking, kill the master process that belongs to the .oldbin PID.
   # This enables 0 downtime deploys.
-  old_pid = "/tmp/unicorn.15mcc.pid.oldbin"
+  old_pid = "/tmp/unicorn.banco.pid.oldbin"
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
