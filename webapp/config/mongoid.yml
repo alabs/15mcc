@@ -9,13 +9,12 @@ test:
 # set these environment variables on your prod server
 production:
   host: localhost
-  #database: 15mcc_production
-  database: bancodeideas
+  database: 15mcc_production
   logger: false
   #host: <%= ENV['MONGOID_HOST'] %>
   #port: <%= ENV['MONGOID_PORT'] %>
   #username: <%= ENV['MONGOID_USERNAME'] %>
-  username: 15mcc_production
+  username: banco
   #password: <%= ENV['MONGOID_PASSWORD'] %>
   password: lkkk24lasdadaskhj34as
   #database: <%= ENV['MONGOID_DATABASE'] %>
