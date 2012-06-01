@@ -21,7 +21,8 @@
       </div>
     </div>
     <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @text} %>
-    <div id="form-actions" style="margin-top: 20px;">
+    
+    <div class="form-actions">
       <%= f.submit 'Enviar texto', :class => 'btn primary' %>
       <%= link_to 'Cancelar', texts_path, :class => 'btn danger' %>
     </div>

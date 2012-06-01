@@ -13,7 +13,7 @@
       </div>
 
       <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @audio} %>
-    <div id="form-actions" style="margin-top: 20px;">
+    <div class="form-actions">
       <%= f.submit 'Enviar audio', :class => 'btn primary' %>
       <%= link_to 'Cancelar', audios_path, :class => 'btn danger' %>
     </div>

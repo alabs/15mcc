@@ -92,7 +92,7 @@
         <%= gmaps("map_options" => {"auto_adjust" => true, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
       <% end %>
 
-    <div id="form-actions">
+    <div class="form-actions">
       <%= f.submit 'Enviar imágen', :class => 'btn primary' %>
       <%= link_to 'Cancelar', images_path, :class => 'btn danger' %>
     </div>
