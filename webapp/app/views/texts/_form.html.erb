@@ -21,7 +21,8 @@
       </div>
     </div>
     <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @text} %>
-    <div id="form-actions">
+    <div id="form-actions" style="margin-top: 20px;">
+      <p style="margin-bottom: 15px;"><%= link_to 'Sí, he leído y acepto las condiciones de uso de esta web.', page_path('condiciones-de-uso') %></p>
       <%= f.submit 'Enviar texto', :class => 'btn primary' %>
       <%= link_to 'Cancelar', texts_path, :class => 'btn danger' %>
     </div>
