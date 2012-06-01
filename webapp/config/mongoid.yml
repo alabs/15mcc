@@ -15,7 +15,7 @@ production:
   #host: <%= ENV['MONGOID_HOST'] %>
   #port: <%= ENV['MONGOID_PORT'] %>
   #username: <%= ENV['MONGOID_USERNAME'] %>
-  username: banco
+  username: 15mcc_production
   #password: <%= ENV['MONGOID_PASSWORD'] %>
   password: lkkk24lasdadaskhj34as
   #database: <%= ENV['MONGOID_DATABASE'] %>
