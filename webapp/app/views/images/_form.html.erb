@@ -1,7 +1,7 @@
 <div class="form-stacked main-form">
 <%= form_for(@image, :html => { :multipart => true }) do |f| %>
   <fieldset>
-    <legend>Editar imagen</legend>
+    <legend>Editar foto</legend>
       <%= render :partial => "partials/copyright_notice" %>
       <%= f.text_field :title, required: true, placeholder: 'Título de la imágen', class: 'span8' do %>
           <p class="help-block"><%= I18n.t("help.image.title") %></p>

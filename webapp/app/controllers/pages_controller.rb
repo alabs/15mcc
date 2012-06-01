@@ -49,6 +49,12 @@ class PagesController < ApplicationController
 
   def show 
     @page = Page.find_by_slug(params[:id])
+
+    unless @page
+      render_404
+      return
+    end
+
     authorize! :show, @page
   end
 

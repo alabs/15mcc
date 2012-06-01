@@ -5,7 +5,7 @@
 <div class="form-stacked main-form">
 <%= form_for(@image, :html => { :multipart => true }) do |f| %>
   <fieldset>
-    <legend>Editar imagen</legend>
+    <legend>Editar foto</legend>
       <%= render :partial => "partials/copyright_notice" %>
       <% if @image.errors.any? %>
         <% @image.errors.full_messages.each do |msg| %>
@@ -99,9 +99,6 @@
   </fieldset>
 <% end %>
 </div>
-
-<%= link_to 'Show', @image %> |
-<%= link_to 'Back', images_path %>
 
 </div>
 </div>
