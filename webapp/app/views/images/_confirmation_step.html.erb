@@ -48,7 +48,7 @@
         <%= gmaps("map_options" => {"auto_adjust" => true, "zoom" => 4, "auto_zoom" => false},"markers" => { "data" => @map }) %>
       <% end %>
 
-    <div id="form-actions">
+    <div id="form-actions" style="margin-top: 20px;">
       <%= f.submit 'Enviar imagen', :class => 'btn btn-primary' %>
     </div>
   </fieldset>

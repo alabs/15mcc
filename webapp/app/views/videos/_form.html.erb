@@ -11,7 +11,7 @@
 
         <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @video} %>
       </div>
-      <div id="form-actions">
+      <div id="form-actions" style="margin-top: 20px;">
         <%= f.submit 'Enviar video', :class => 'btn btn-primary' %>
         <%= link_to 'Cancelar', texts_path, :class => 'btn btn-danger' %>
       </div>
