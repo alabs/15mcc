@@ -14,8 +14,8 @@
 
       <%= render :partial => "partials/form_for_content", :locals => {:f => f, :content => @audio} %>
     <div id="form-actions" style="margin-top: 20px;">
-      <%= f.submit 'Enviar audio', :class => 'btn btn-primary' %>
-      <%= link_to 'Cancelar', audios_path, :class => 'btn btn-danger' %>
+      <%= f.submit 'Enviar audio', :class => 'btn primary' %>
+      <%= link_to 'Cancelar', audios_path, :class => 'btn danger' %>
     </div>
     </fieldset>
 <% end %>
