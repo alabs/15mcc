@@ -76,7 +76,7 @@
 </div>
 
 <div id="user-timeline" class="row offset1 span9" style="height:550px;">
-  <%= render :partial => "partials/timeline", :locals => { :source => "/profile/#{ @user.username }/timeline.json" } %>
+  <%= render :partial => "partials/timeline", :locals => { :source => "/profile/#{ @user.username }/timeline.json", :height => "90%" } %>
 </div>
 
 <div id="user-map" class="span11 mt1 hide">
