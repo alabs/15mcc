@@ -14,10 +14,10 @@ class Content
   before_save :reverse_geocode, :geocode
 
   #accessors
-  attr_accessor :terms
+  #attr_accessor :terms
 
   #validations
-  validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
+  #validates_acceptance_of :terms, :message => "Debes aceptar las condiciones de uso"
 
   #fields
   belongs_to :user

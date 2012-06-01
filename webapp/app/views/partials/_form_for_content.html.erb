@@ -80,8 +80,9 @@
       
       <br />
 
-      <div class="form-field">
-        <%= f.check_box :terms, :label => "Acepto las <a href='/pages/condiciones-de-uso' target='_blank'>condiciones de uso</a> [*]", :required => true %>
-      </div>
-
     <% end %>
+
+    <div class="form-field">
+      <p style="margin-bottom: 15px;">Subiendo este contenido, aceptas la <%= link_to 'política de privacidad', page_path('condiciones-de-uso') %> del banco de ideas de 15M.cc.</p>
+    </div>
+
