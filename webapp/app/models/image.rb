@@ -4,7 +4,9 @@ class Image < Content
   include Mongoid::Paperclip
 
   validates_presence_of :title
-  validates_uniqueness_of :title
+  # ya no es necesaria esta validación porque la URL del
+  # recurso siempre es diferente
+  #validates_uniqueness_of :title
 
   # esto no se puede activar por el flujo del new_step, create_step, confirm_step, etc
   # validates_presence_of :happened_at
