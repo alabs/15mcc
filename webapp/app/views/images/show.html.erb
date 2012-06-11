@@ -3,8 +3,8 @@
 
   <%= render :partial => "partials/content_header", :locals => { :content => @image, :type => "image" } %>
 
-  <div class="center">
-    <%= image_tag(@image.img.url) %>
+  <div class="center" style="width: 815px;">
+    <%= image_tag(@image.img.url(:big)) %>
   </div>
 
   <div class="span4">

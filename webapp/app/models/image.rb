@@ -15,6 +15,7 @@ class Image < Content
 
   #paperclip
   has_mongoid_attached_file :img,:styles => {
+    :big => ['750x600', :jpg],
     :large => ['500x300', :jpg],
     :small => ['260x180', :jpg],
     :marker => ['20x20', :jpg]
