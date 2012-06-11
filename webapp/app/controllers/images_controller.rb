@@ -32,67 +32,44 @@ class ImagesController < ApplicationController
   end
 
   # GET /images/new
+  # GET /images/new.json
   def new
     @image = Image.new
+    @map = @image.to_gmaps4rails
     authorize! :create, @image
-  end
-
-  # GET /images/1/new_step
-  def new_step
-    @image = Image.find(params[:id])
-    @map   = @image.to_gmaps4rails
-    @image.step session[:order_step]
-    authorize! :create, @image
-    render 'new'
-  end
-
-  # POST /images/1/create_step
-  def create_step
-    @image = Image.find(params[:id])
-    @map   = @image.to_gmaps4rails
-    @image.step session[:order_step]
-    authorize! :create, @image
-    #
-    if @image.update_attributes(params[:image])
-      #
-      unless @image.last_step?
-        @image.next_step
-        session[:order_step] = @image.current_step
-        redirect_to new_step_image_url(@image.id)
-      #
-      else
-        session[:order_step] = nil
-        redirect_to @image, notice: 'La imagen se ha creado'
-      end
-    #
-    else
-      render action: 'new'
-    end
-  end
-
-  # POST /images
-  def create
-    @image = Image.new(params[:image])
-    authorize! :create, @image
-    #
-    @image.user = current_user || nil
-    #
-    if verify_captcha(@image) and @image.save
-      @image.next_step
-      session[:order_step] = @image.current_step
-      redirect_to new_step_image_url(@image.id)
-    #
-    else
-      session[:order_step] = nil
-      render action: 'new'
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @image }
     end
   end
 
   # GET /images/1/edit
   def edit
     @image = Image.find(params[:id])
+    @map = @image.to_gmaps4rails
     authorize! :update, @image
   end
+
+  # POST /images
+  # POST /images.json
+  def create
+    @image = Image.new(params[:image])
+    authorize! :create, @image
+
+    @image.user = current_user || nil
+
+    respond_to do |format|
+      if verify_captcha(@image) and @image.save
+        format.html { redirect_to @image, notice: 'La foto se ha creado.' }
+        format.json { render json: @image, status: :created, location: @image }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @image.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
 
   # PUT /images/1
   # PUT /images/1.json
