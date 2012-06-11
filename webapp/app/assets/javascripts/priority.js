@@ -9,29 +9,28 @@ function changePriority(el, action){
   switch (action){
     case "add":
       new_action = "remove";
-      img = '/assets/priority-ko.png';
+      el.html('<i class="icon-star"></i> Quitar prioridad')
       break;
     case "remove":
       new_action = "add";
-      img = '/assets/priority-ok.png';
+      el.html('<i class="icon-star-empty"></i> Dar prioridad')
       break;
   }
 
   el.attr('data-priority-action', new_action);
-  el.children().attr('src', img );
   
   switch ( el.attr('data-type') ) {
     case "Text":
-      url = '/texts/';
+      url = '/profile/all/texts/';
       break;
     case "Image":
-      url = '/images/';
+      url = '/profile/all/images/';
       break;
     case "Audio":
-      url = '/audios/';
+      url = '/profile/all/audios/';
       break;
     case "Video":
-      url = '/videos/';
+      url = '/profile/all/videos/';
       break;
   }
 

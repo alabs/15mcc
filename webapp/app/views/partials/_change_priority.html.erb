@@ -1,8 +1,14 @@
 
     <% if can? :priority, content %>
       <% if content.priority == true %>
-        <p><%= link_to image_tag("priority-ok.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "remove", "data-type" => content.class.to_s %></p>
+        <%= link_to "#", :class => "btn priority", "data-id" => content.id, "data-priority-action" => "remove", "data-type" => content.class.to_s  do %>
+          <i class="icon-star"></i>
+          Quitar prioridad
+        <% end %>
       <% else %>
-        <p><%= link_to image_tag("priority-ko.png"), "#", :class => "priority", "data-id" => content.id, "data-priority-action" => "add", "data-type" => content.class.to_s %></p>
+        <%= link_to "#", :class => "btn priority", "data-id" => content.id, "data-priority-action" => "add", "data-type" => content.class.to_s  do %>
+          <i class="icon-star-empty"></i>
+          Dar prioridad
+        <% end %>
       <% end %>
     <% end %>
