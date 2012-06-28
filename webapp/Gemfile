@@ -104,3 +104,6 @@ gem 'omniauth-facebook'
 gem "random-word-generator"
 
 #gem 'rvm-capistrano'
+
+gem "sentry-raven", :git => "https://github.com/coderanger/raven-ruby.git", :ref => "aad856a8a4"
+

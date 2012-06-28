@@ -67,6 +67,7 @@ namespace :deploy do
   task :config_symlink do
     #run "ln -s #{shared_path}/mongoid.yml #{release_path}/config/mongoid.yml"
     run "ln -s #{shared_path}/recaptcha.rb #{release_path}/config/initializers/recaptcha.rb"
+    run "ln -s #{shared_path}/raven.rb #{release_path}/config/initializers/raven.rb"
     #run "ln -sf #{shared_path}/app_config.yml #{release_path}/config/app_config.yml"
   end
 end
