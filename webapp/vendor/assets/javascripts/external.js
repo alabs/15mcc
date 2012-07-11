@@ -9,7 +9,7 @@
 //= require jquery.cookie
 
 // visualizaciones y demas
-//= require gmaps4rails/googlemaps.js
+//= require gmaps4rails/gmaps4rails.googlemaps.js.coffee
 // require timeline-embed
 // require timeline.es
 //= require jwplayer
