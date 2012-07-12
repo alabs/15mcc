@@ -259,7 +259,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   mercury-rails
-  mongoid
+  mongoid (= 2.2.1)
   mongoid-paperclip
   mongoid-simple-tags
   mongoid_fulltext
