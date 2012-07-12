@@ -191,8 +191,6 @@ GEM
       json (~> 1.4)
     recaptcha (0.3.4)
     redcarpet (2.1.0)
-    rvm-capistrano (1.2.0)
-      capistrano (>= 2.0.0)
     sass (3.1.15)
     sass-rails (3.2.4)
       railties (~> 3.2.0)
@@ -266,7 +264,6 @@ DEPENDENCIES
   random-word-generator
   recaptcha
   redcarpet
-  rvm-capistrano
   sass-rails (~> 3.2.3)
   sitemap_generator
   therubyracer
