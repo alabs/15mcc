@@ -4,7 +4,7 @@
     <h1>Mapa geográfico</h1>
     <hr style="margin-right:10px;"/>
     <div id="general-map">
-      <%= gmaps("markers" => { "data" => @map, "options" => { "randomize" => true }, "do_clustering" => true } ) %>
+      <%= gmaps("markers" => { "data" => @map, "options" => { "randomize" => true, "do_clustering" => true, "clusterer_maxZoom" => 15} }  ) %>
     </div>
   </div>
 </div>
