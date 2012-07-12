@@ -58,7 +58,10 @@ class Image < Content
       exif_info = EXIFR::JPEG.new(img.queued_for_write[:original].path)
       #si no tengo datos exif no continuo
       return unless exif_info.exif?
-      self.happened_at = exif_info.date_time
+      # la lógica para pillar el exif y 
+      # los datos del form para happened_at
+      # no es correcta, comento esta llamada
+      # self.happened_at = exif_info.date_time
       #datos gps
       return if exif_info.gps.nil?
       self.coordinates = [exif_info.gps.longitude,exif_info.gps.latitude]
