@@ -93,6 +93,7 @@
           <% end %>
           <label>Mensaje</label>
           <textarea cols="300" rows="10" name="message" rows="10" style="width: 80%;"></textarea>
+          <%= recaptcha_tags :display => {:theme => "white"}, :ajax => true %>
         </div>
         <div class="modal-footer">
           <input type="submit" class="btn btn-primary" value="Enviar" />
