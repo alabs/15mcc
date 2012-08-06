@@ -51,6 +51,7 @@ gem 'acts_as_unvlogable', :git => 'http://github.com/alabs/acts_as_unvlogable'
 
 group :development do
   gem 'pry-rails' # a better ruby console
+  gem 'rvm-capistrano'
   gem 'capistrano'
   # To use debugger
   #gem 'ruby-debug19', :require => 'ruby-debug'
