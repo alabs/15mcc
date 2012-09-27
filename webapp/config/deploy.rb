@@ -10,6 +10,8 @@ require 'bundler/capistrano'
 
 set :bundle_cmd, 'source $HOME/.bashrc && bundle'
 
+set :bundle, '/home/ruby-data/.rvm/gems/ruby-1.9.3-p194/bin/bundle'
+
 set :shell, '/bin/bash'
 
 
