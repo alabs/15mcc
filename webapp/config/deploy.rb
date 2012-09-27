@@ -10,6 +10,8 @@ require 'bundler/capistrano'
 
 set :bundle_cmd, 'source $HOME/.bashrc && bundle'
 
+set :shell, '/bin/bash'
+
 
 # main details
 set :application, "banco"
