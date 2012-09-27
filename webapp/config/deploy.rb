@@ -1,8 +1,8 @@
 # RVM bootstrap
 #$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
-require 'rvm/capistrano'
+#require 'rvm/capistrano'
 set :rvm_ruby_string, '1.9.2'
-set :rvm_type, :user
+#set :rvm_type, :user
 
 set :bundle_cmd, 'source $HOME/.bashrc && bundle'
 
