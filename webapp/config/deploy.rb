@@ -1,7 +1,7 @@
 # RVM bootstrap
 #$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 ##require 'rvm/capistrano'
-set :rvm_ruby_string, '1.9.2-p230@banco'
+set :rvm_ruby_string, '1.9.3'
 #set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//,"") 
 #set :rvm_type, :user
 
