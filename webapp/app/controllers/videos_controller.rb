@@ -116,10 +116,14 @@ class VideosController < ApplicationController
   end
 
   def abuse
-    from = user_signed_in? ? current_user.email : params[:from]
-    url = request.url.gsub(/\/abuse/, '')
-    Mailman.abuse(from, params[:message], url).deliver
-    flash[:notice] = "Tu mensaje a sido enviado a los editores de 15m.cc para ser revisado"
-    redirect_to url
+    if verify_captcha
+      from = user_signed_in? ? current_user.email : params[:from]
+      url = request.url.gsub(/\/abuse/, '')
+      Mailman.abuse(from, params[:message], url).deliver
+      flash[:notice] = "Tu mensaje a sido enviado a los editores de 15m.cc para ser revisado"
+      redirect_to url
+    else
+      redirect_to root_url, :notice => 'Bla bla'
+    end
   end
 end
