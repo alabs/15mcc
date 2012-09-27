@@ -1,7 +1,7 @@
 # RVM bootstrap
 #$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 ##require 'rvm/capistrano'
-set :rvm_ruby_string, '1.9.2@banco'
+set :rvm_ruby_string, '1.9.2'
 #set :rvm_type, :user
 
 set :bundle_cmd, 'source $HOME/.bashrc && bundle'
@@ -37,7 +37,7 @@ set :git_enable_submodules, 1
 set :keep_releases, 5
 
 set :default_environment, {
-    'PATH' => "/home/ruby-data/.rvm/gems/ruby-1.9.2-p320@banco/bin:$PATH"
+    'PATH' => "/home/ruby-data/.rvm/gems/ruby-1.9.2-p320/bin:$PATH"
 }
 
 # # server details
