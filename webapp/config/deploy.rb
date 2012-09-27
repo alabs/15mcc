@@ -1,8 +1,8 @@
 # RVM bootstrap
 #$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 ##require 'rvm/capistrano'
-#set :rvm_ruby_string, '1.9.2'
-set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//,"") 
+set :rvm_ruby_string, '1.9.2@banco'
+#set :rvm_ruby_string, ENV['GEM_HOME'].gsub(/.*\//,"") 
 #set :rvm_type, :user
 
 # bundler bootstrap
@@ -38,9 +38,9 @@ set :deploy_subdir, "webapp"
 set :git_enable_submodules, 1
 set :keep_releases, 5
 
-set :default_environment, {
-    'PATH' => "/home/ruby-data/.rvm/gems/ruby-1.9.2-p320/bin:$PATH"
-}
+#set :default_environment, {
+#    'PATH' => "/home/ruby-data/.rvm/gems/ruby-1.9.2-p320/bin:$PATH"
+#}
 
 # # server details
 #set :unicorn_pid, "/tmp/unicorn.15mcc.pid"
