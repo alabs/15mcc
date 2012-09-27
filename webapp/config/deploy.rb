@@ -36,9 +36,9 @@ set :deploy_subdir, "webapp"
 set :git_enable_submodules, 1
 set :keep_releases, 5
 
-set :default_environment, {
-    'PATH' => "/home/ruby-data/.rvm/bin:$PATH"
-}
+#set :default_environment, {
+#    'PATH' => "/home/ruby-data/.rvm/bin:$PATH"
+#}
 
 # # server details
 #set :unicorn_pid, "/tmp/unicorn.15mcc.pid"
