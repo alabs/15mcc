@@ -116,7 +116,7 @@ class VideosController < ApplicationController
   end
 
   def abuse
-    if verify_captcha
+    if verify_recaptcha
       from = user_signed_in? ? current_user.email : params[:from]
       url = request.url.gsub(/\/abuse/, '')
       Mailman.abuse(from, params[:message], url).deliver
