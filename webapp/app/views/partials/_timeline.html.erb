@@ -1,24 +1,26 @@
 
-  <div id="timeline-embed"></div>
-  <script type="text/javascript">
-      var timeline_config = {
-                  width:          "100%",
-                  height:         "<%= height %>",
-                  source:         "<%= source %>",
-                  //hash_bookmark:  true
-                  //font:           'Bevan-PotanoSans',                     //OPTIONAL FONTS
-                  //maptype:        'watercolor',                           //OPTIONAL MAP STYLE
-                  //css:            'path_to_css/timeline.css',             //OPTIONAL
-                  js:             '/timeline.es.js'                //OPTIONAL
-          }
+<div id="timeline-embed"></div>
 
-  $(document).ready(function() {
+<script type="text/javascript">
+  var timeline_config = {
+    width:          "100%",
+    height:         "600",
+    source:         "<%= source %>",
+    css:            "/assets/timeline.css", 
+    js:             "/assets/timeline-min.js"
+      //hash_bookmark:  true
+      //font:           'Bevan-PotanoSans',                     //OPTIONAL FONTS
+      //maptype:        'watercolor',                           //OPTIONAL MAP STYLE
+  }
+
+$(document).ready(function() {
     $('img.media-image').each( function(){
       var link = $(this).parent().parent().parent().parent().parent().children('.text').children().children('h3').children('a').attr('href');
       $(this).wrap('<a href="' + link + '" />');
+      });
     });
-  });
 
   </script>
 
-  <script type="text/javascript" src="/timeline.js"></script>
+
+  <script src="/assets/storyjs-embed.js"></script>

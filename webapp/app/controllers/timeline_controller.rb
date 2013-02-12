@@ -46,9 +46,9 @@ class TimelineController < ApplicationController
       videos = Video.where(:user_id => config[:user].id).all
     else
       #audios = Audio.all
-      images = Image.all
-      texts = Text.all
-      videos = Video.all
+      images = Image.all.sample 10
+      texts = Text.all.sample 10
+      videos = Video.all.sample 10
     end
     @timeline = {
       "timeline" => {

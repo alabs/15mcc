@@ -11,8 +11,11 @@
 // visualizaciones y demas
 //= require gmaps4rails/gmaps4rails.base.js.coffee
 //= require gmaps4rails/gmaps4rails.googlemaps.js.coffee
-// require timeline
-// require timeline.es
+
+//= require timeline
+//= require timeline.es
+//= require storyjs-embed
+
 //= require jwplayer
 // require mercury
 
