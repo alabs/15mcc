@@ -32,6 +32,10 @@ if env == "production"
   stdout_path "#{shared_path}/log/unicorn.stdout.log"
 end
 
+before_exec do |server|
+  ENV['BUNDLE_GEMFILE'] = "/var/www/bancodeideas.15m.cc/current/Gemfile"
+end
+
 before_fork do |server, worker|
   # the following is highly recomended for Rails + "preload_app true"
   # as there's no need for the master process to hold a connection
