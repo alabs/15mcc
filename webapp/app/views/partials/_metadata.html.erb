@@ -85,19 +85,24 @@
         <a class="close" data-dismiss="modal">x</a>
         <h3>Denunciar contenido inapropiado</h3>
       </div>
-      <form method="post" action="<%= request.url + "/abuse" %>">
+      <% form_url = request.url + "/abuse" %>
+      <%= form_tag(form_url, { :method => :post, :honeypot => true }) do %>
         <div class="modal-body">
           <% unless user_signed_in? %>
             <label>Correo eletrónico</label>
-            <input type="text" name="from" />
+            <input type="email" name="from" required="required" />
           <% end %>
           <label>Mensaje</label>
-          <textarea cols="300" rows="10" name="message" rows="10" style="width: 80%;"></textarea>
+          <textarea cols="300" required="required" rows="10" name="message" rows="10" style="width: 80%;"></textarea>
+          <div style="display:none;">
+            <label>No rellenar este campo</label>
+            <input type="text" name="honeypot" />
+          </div>
           <%= recaptcha_tags :display => {:theme => "white"}, :ajax => true %>
         </div>
         <div class="modal-footer">
           <input type="submit" class="btn btn-primary" value="Enviar" />
           <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
         </div>
-      </form>
+      <% end %>
     </div>

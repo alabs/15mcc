@@ -125,7 +125,7 @@ class ImagesController < ApplicationController
   end
 
   def abuse
-    if verify_recaptcha
+    if verify_recaptcha and params[:honeypot].blank?
       from = user_signed_in? ? current_user.email : params[:from]
       url = request.url.gsub(/\/abuse/, '')
       Mailman.abuse(from, params[:message], url).deliver
